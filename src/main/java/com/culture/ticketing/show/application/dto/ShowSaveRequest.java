@@ -18,14 +18,14 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class ShowSaveRequest {
 
-    @NotBlank
+    @NotBlank(message = "카테고리를 입력해주세요.")
     private String categoryCd;
-    @NotBlank
+    @NotBlank(message = "공연명을 입력해주세요.")
     private String showName;
-    @NotBlank
+    @NotBlank(message = "관람등급을 입력해주세요.")
     private String ageRestrictionCd;
     private String placeName;
-    @NotBlank
+    @NotBlank(message = "공연 장소 주소를 입력해주세요.")
     private String address;
     @NotNull
     @Positive
@@ -42,7 +42,7 @@ public class ShowSaveRequest {
     @Positive
     private int runningTime;
     private String notice;
-    @NotBlank
+    @NotBlank(message = "포스터 이미지를 입력해주세요.")
     private String posterImgUrl;
     private String description;
 
