@@ -24,10 +24,8 @@ public class Show extends BaseEntity {
     private String showName;
     @Enumerated(EnumType.STRING)
     private AgeRestriction ageRestriction;
-    private String placeName;
-    private String address;
-    private BigDecimal latitude;
-    private BigDecimal longitude;
+    @Embedded
+    private Place place;
     private LocalDate showStartDate;
     private LocalDate showEndDate;
     private int runningTime;
