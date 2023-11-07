@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -17,11 +18,11 @@ public class QShow extends EntityPathBase<Show> {
 
     private static final long serialVersionUID = -2022665733L;
 
+    private static final PathInits INITS = PathInits.DIRECT2;
+
     public static final QShow show = new QShow("show");
 
     public final com.culture.ticketing.common.entity.QBaseEntity _super = new com.culture.ticketing.common.entity.QBaseEntity(this);
-
-    public final StringPath address = createString("address");
 
     public final EnumPath<AgeRestriction> ageRestriction = createEnum("ageRestriction", AgeRestriction.class);
 
@@ -32,13 +33,9 @@ public class QShow extends EntityPathBase<Show> {
 
     public final StringPath description = createString("description");
 
-    public final NumberPath<java.math.BigDecimal> latitude = createNumber("latitude", java.math.BigDecimal.class);
-
-    public final NumberPath<java.math.BigDecimal> longitude = createNumber("longitude", java.math.BigDecimal.class);
-
     public final StringPath notice = createString("notice");
 
-    public final StringPath placeName = createString("placeName");
+    public final QPlace place;
 
     public final StringPath posterImgUrl = createString("posterImgUrl");
 
@@ -56,15 +53,24 @@ public class QShow extends EntityPathBase<Show> {
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
     public QShow(String variable) {
-        super(Show.class, forVariable(variable));
+        this(Show.class, forVariable(variable), INITS);
     }
 
     public QShow(Path<? extends Show> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QShow(PathMetadata metadata) {
-        super(Show.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QShow(PathMetadata metadata, PathInits inits) {
+        this(Show.class, metadata, inits);
+    }
+
+    public QShow(Class<? extends Show> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.place = inits.isInitialized("place") ? new QPlace(forProperty("place")) : null;
     }
 
 }
