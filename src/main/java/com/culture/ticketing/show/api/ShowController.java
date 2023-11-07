@@ -6,6 +6,8 @@ import com.culture.ticketing.show.application.dto.ShowSaveRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 import static com.culture.ticketing.common.response.BaseResponse.success;
 
 @RestController
@@ -17,7 +19,7 @@ public class ShowController {
 
     @ResponseBody
     @PostMapping("")
-    public BaseResponse<Void> postShow(@RequestBody ShowSaveRequest request) {
+    public BaseResponse<Void> postShow(@Valid @RequestBody ShowSaveRequest request) {
 
         showService.createShow(request);
 
