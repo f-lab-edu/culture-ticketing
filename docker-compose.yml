@@ -4,7 +4,7 @@ services:
   database:
     container_name: mysql_db
     image: mysql
-    restart: unless-stopped
+    restart: always
     env_file:
       - .env
     ports:
