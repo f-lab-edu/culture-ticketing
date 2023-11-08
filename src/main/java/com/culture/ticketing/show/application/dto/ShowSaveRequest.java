@@ -20,15 +20,6 @@ public class ShowSaveRequest {
     private String showName;
     @NotBlank(message = "관람등급을 입력해주세요.")
     private String ageRestrictionCd;
-    private String placeName;
-    @NotBlank(message = "공연 장소 주소를 입력해주세요.")
-    private String address;
-    @NotNull
-    @Positive
-    private BigDecimal latitude;
-    @NotNull
-    @Positive
-    private BigDecimal longitude;
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate showStartDate;
@@ -41,5 +32,7 @@ public class ShowSaveRequest {
     @NotBlank(message = "포스터 이미지를 입력해주세요.")
     private String posterImgUrl;
     private String description;
+    @NotNull
+    private Long placeId;
 
 }

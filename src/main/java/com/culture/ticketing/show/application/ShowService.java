@@ -1,5 +1,7 @@
 package com.culture.ticketing.show.application;
 
+import com.culture.ticketing.place.application.PlaceService;
+import com.culture.ticketing.place.domain.Place;
 import com.culture.ticketing.show.application.dto.ShowSaveRequest;
 import com.culture.ticketing.show.domain.AgeRestriction;
 import com.culture.ticketing.show.domain.Category;
@@ -13,13 +15,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class ShowService {
 
     private final ShowRepository showRepository;
+    private final PlaceService placeService;
 
-    public ShowService(ShowRepository showRepository) {
+    public ShowService(ShowRepository showRepository, PlaceService placeService) {
         this.showRepository = showRepository;
+        this.placeService = placeService;
     }
 
     @Transactional
     public void createShow(ShowSaveRequest request) {
+
+        Place place = placeService.getPlaceByPlaceId(request.getPlaceId());
 
         Show show = Show.builder()
                 .category(Category.valueOf(request.getCategoryCd()))
@@ -31,6 +37,7 @@ public class ShowService {
                 .notice(request.getNotice())
                 .posterImgUrl(request.getPosterImgUrl())
                 .description(request.getDescription())
+                .place(place)
                 .build();
 
         showRepository.save(show);
