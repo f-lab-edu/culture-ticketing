@@ -1,8 +1,11 @@
 package com.culture.ticketing.place.application.dto;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 
 @Getter
@@ -10,8 +13,13 @@ import java.math.BigDecimal;
 public class PlaceSaveRequest {
 
     private String placeName;
+    @NotBlank(message = "공연 장소 주소를 입력해주세요.")
     private String address;
+    @NotNull
+    @Positive
     private BigDecimal latitude;
+    @NotNull
+    @Positive
     private BigDecimal longitude;
 
 }
