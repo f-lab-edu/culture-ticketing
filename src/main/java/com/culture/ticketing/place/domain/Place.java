@@ -1,17 +1,22 @@
-package com.culture.ticketing.show.domain;
+package com.culture.ticketing.place.domain;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Embeddable;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
-@Embeddable
 @Getter
 @NoArgsConstructor
+@Entity
+@Table(name = "PLACES")
 public class Place {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "place_id", nullable = false, updatable = false)
+    private Long placeId;
     private String placeName;
     private String address;
     private BigDecimal latitude;

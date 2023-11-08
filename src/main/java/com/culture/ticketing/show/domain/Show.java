@@ -1,6 +1,7 @@
 package com.culture.ticketing.show.domain;
 
 import com.culture.ticketing.common.entity.BaseEntity;
+import com.culture.ticketing.place.domain.Place;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,8 +25,6 @@ public class Show extends BaseEntity {
     private String showName;
     @Enumerated(EnumType.STRING)
     private AgeRestriction ageRestriction;
-    @Embedded
-    private Place place;
     private LocalDate showStartDate;
     private LocalDate showEndDate;
     private int runningTime;
@@ -33,19 +32,23 @@ public class Show extends BaseEntity {
     private String posterImgUrl;
     private String description;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "place_id")
+    private Place place;
+
     @Builder
-    public Show(Category category, String showName, AgeRestriction ageRestriction, Place place,
+    public Show(Category category, String showName, AgeRestriction ageRestriction,
                 LocalDate showStartDate, LocalDate showEndDate, int runningTime,
-                String notice, String posterImgUrl, String description) {
+                String notice, String posterImgUrl, String description, Place place) {
         this.category = category;
         this.showName = showName;
         this.ageRestriction = ageRestriction;
-        this.place = place;
         this.showStartDate = showStartDate;
         this.showEndDate = showEndDate;
         this.runningTime = runningTime;
         this.notice = notice;
         this.posterImgUrl = posterImgUrl;
         this.description = description;
+        this.place = place;
     }
 }
