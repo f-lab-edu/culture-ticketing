@@ -17,7 +17,7 @@ public class Show extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "showId", nullable = false, updatable = false)
+    @Column(name = "show_id", nullable = false, updatable = false)
     private Long showId;
     @Enumerated(EnumType.STRING)
     private Category category;
