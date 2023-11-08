@@ -1,8 +1,6 @@
 package com.culture.ticketing.show.application.dto;
 
 import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,9 +11,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class ShowSaveRequest {
 
     @NotBlank(message = "카테고리를 입력해주세요.")

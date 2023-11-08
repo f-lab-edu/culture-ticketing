@@ -6,16 +6,18 @@ import com.culture.ticketing.show.domain.Category;
 import com.culture.ticketing.show.domain.Place;
 import com.culture.ticketing.show.domain.Show;
 import com.culture.ticketing.show.infra.ShowRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ShowService {
 
     private final ShowRepository showRepository;
+
+    public ShowService(ShowRepository showRepository) {
+        this.showRepository = showRepository;
+    }
 
     @Transactional
     public void createShow(ShowSaveRequest request) {
