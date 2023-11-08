@@ -27,4 +27,8 @@ public class PlaceService {
 
         placeRepository.save(place);
     }
+
+    public Place getPlaceByPlaceId(Long placeId) {
+        return placeRepository.findById(placeId).orElseThrow();
+    }
 }
