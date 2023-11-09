@@ -4,11 +4,10 @@ import com.culture.ticketing.common.response.BaseResponse;
 import com.culture.ticketing.place.application.PlaceService;
 import com.culture.ticketing.place.application.dto.PlaceResponse;
 import com.culture.ticketing.place.application.dto.PlaceSaveRequest;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.culture.ticketing.common.response.BaseResponse.success;
 
@@ -31,14 +30,12 @@ public class PlaceController {
     }
 
     @GetMapping("")
-    public BaseResponse<List<PlaceResponse>> getPlaces() {
+    public BaseResponse<Page<PlaceResponse>> getPlaces(@RequestParam(name = "page") int page,
+                                                       @RequestParam(name = "size") int size) {
 
-        List<PlaceResponse> data = placeService.getPlaces().stream()
-                .map(PlaceResponse::new)
-                .collect(Collectors.toList());
+        Page<PlaceResponse> data = placeService.getPlaces(page, size).map(PlaceResponse::new);
 
         return success(data);
-
     }
 
 }
