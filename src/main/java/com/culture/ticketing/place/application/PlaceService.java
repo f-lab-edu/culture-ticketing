@@ -6,6 +6,8 @@ import com.culture.ticketing.place.infra.PlaceRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 public class PlaceService {
@@ -30,5 +32,9 @@ public class PlaceService {
 
     public Place getPlaceByPlaceId(Long placeId) {
         return placeRepository.findById(placeId).orElseThrow();
+    }
+
+    public List<Place> getPlaces() {
+        return placeRepository.findAll();
     }
 }
