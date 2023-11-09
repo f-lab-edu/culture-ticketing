@@ -19,7 +19,6 @@ public class PlaceController {
         this.placeService = placeService;
     }
 
-    @ResponseBody
     @PostMapping("")
     public BaseResponse<Void> postPlace(@Valid @RequestBody PlaceSaveRequest request) {
 
