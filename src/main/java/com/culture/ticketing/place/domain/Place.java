@@ -17,11 +17,13 @@ public class Place {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "place_id", nullable = false, updatable = false)
     private Long placeId;
+    @Column(name = "place_name", nullable = false)
     private String placeName;
+    @Column(name = "address", nullable = false)
     private String address;
-    @Column(precision = 10, scale = 7)
+    @Column(name = "latitude", precision = 10, scale = 7)
     private BigDecimal latitude;
-    @Column(precision = 10, scale = 7)
+    @Column(name = "longitude", precision = 10, scale = 7)
     private BigDecimal longitude;
 
     @Builder

@@ -21,15 +21,24 @@ public class Show extends BaseEntity {
     @Column(name = "show_id", nullable = false, updatable = false)
     private Long showId;
     @Enumerated(EnumType.STRING)
+    @Column(name = "category", nullable = false)
     private Category category;
+    @Column(name = "show_name", nullable = false)
     private String showName;
     @Enumerated(EnumType.STRING)
+    @Column(name = "age_restriction", nullable = false)
     private AgeRestriction ageRestriction;
+    @Column(name = "show_start_date", nullable = false)
     private LocalDate showStartDate;
+    @Column(name = "show_end_date", nullable = false)
     private LocalDate showEndDate;
+    @Column(name = "running_time", nullable = false)
     private int runningTime;
+    @Column(name = "notice")
     private String notice;
+    @Column(name = "poster_img_url", nullable = false)
     private String posterImgUrl;
+    @Column(name = "description")
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
