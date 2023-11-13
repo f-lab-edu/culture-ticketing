@@ -17,12 +17,12 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class ShowSaveRequest {
 
-    @NotBlank(message = "카테고리를 입력해주세요.")
-    private String categoryCd;
+    @NotNull
+    private Category category;
     @NotBlank(message = "공연명을 입력해주세요.")
     private String showName;
-    @NotBlank(message = "관람등급을 입력해주세요.")
-    private String ageRestrictionCd;
+    @NotNull
+    private AgeRestriction ageRestriction;
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate showStartDate;
@@ -40,9 +40,9 @@ public class ShowSaveRequest {
 
     public Show toEntity(Place place) {
         return Show.builder()
-                .category(Category.valueOf(categoryCd))
+                .category(category)
                 .showName(showName)
-                .ageRestriction(AgeRestriction.valueOf(ageRestrictionCd))
+                .ageRestriction(ageRestriction)
                 .showStartDate(showStartDate)
                 .showEndDate(showEndDate)
                 .runningTime(runningTime)
