@@ -1,5 +1,9 @@
 package com.culture.ticketing.show.application.dto;
 
+import com.culture.ticketing.place.domain.Place;
+import com.culture.ticketing.show.domain.AgeRestriction;
+import com.culture.ticketing.show.domain.Category;
+import com.culture.ticketing.show.domain.Show;
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,7 +11,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter
@@ -34,5 +37,20 @@ public class ShowSaveRequest {
     private String description;
     @NotNull
     private Long placeId;
+
+    public Show toEntity(Place place) {
+        return Show.builder()
+                .category(Category.valueOf(categoryCd))
+                .showName(showName)
+                .ageRestriction(AgeRestriction.valueOf(ageRestrictionCd))
+                .showStartDate(showStartDate)
+                .showEndDate(showEndDate)
+                .runningTime(runningTime)
+                .notice(notice)
+                .posterImgUrl(posterImgUrl)
+                .description(description)
+                .place(place)
+                .build();
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.culture.ticketing.place.application.dto;
 
+import com.culture.ticketing.place.domain.Place;
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,5 +22,14 @@ public class PlaceSaveRequest {
     @NotNull
     @Positive
     private BigDecimal longitude;
+
+    public Place toEntity() {
+        return Place.builder()
+                .placeName(placeName)
+                .address(address)
+                .latitude(latitude)
+                .longitude(longitude)
+                .build();
+    }
 
 }

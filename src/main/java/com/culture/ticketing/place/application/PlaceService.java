@@ -17,18 +17,14 @@ public class PlaceService {
 
     @Transactional
     public void createPlace(PlaceSaveRequest request) {
-        Place place = Place.builder()
-                .placeName(request.getPlaceName())
-                .address(request.getAddress())
-                .latitude(request.getLatitude())
-                .longitude(request.getLongitude())
-                .build();
 
+        Place place = request.toEntity();
         placeRepository.save(place);
     }
 
     @Transactional(readOnly = true)
     public Place getPlaceByPlaceId(Long placeId) {
+
         return placeRepository.findById(placeId).orElseThrow();
     }
 }
