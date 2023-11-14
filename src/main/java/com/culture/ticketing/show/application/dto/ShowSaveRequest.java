@@ -4,12 +4,12 @@ import com.culture.ticketing.place.domain.Place;
 import com.culture.ticketing.show.domain.AgeRestriction;
 import com.culture.ticketing.show.domain.Category;
 import com.culture.ticketing.show.domain.Show;
-import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 
