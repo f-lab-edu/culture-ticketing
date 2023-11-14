@@ -16,7 +16,6 @@ public class ShowController {
         this.showService = showService;
     }
 
-    @ResponseBody
     @PostMapping("")
     public void postShow(@Valid @RequestBody ShowSaveRequest request) {
 

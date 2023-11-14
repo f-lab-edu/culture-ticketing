@@ -5,6 +5,9 @@ import com.culture.ticketing.common.response.BaseResponseStatus;
 import com.culture.ticketing.place.application.dto.PlaceSaveRequest;
 import com.culture.ticketing.place.domain.Place;
 import com.culture.ticketing.place.infra.PlaceRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -41,5 +44,12 @@ public class PlaceService {
     public Place getPlaceByPlaceId(Long placeId) {
 
         return placeRepository.findById(placeId).orElseThrow();
+    }
+
+    public Page<Place> getPlaces(int page, int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return placeRepository.findAll(pageable);
     }
 }
