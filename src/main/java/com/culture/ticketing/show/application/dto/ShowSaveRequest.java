@@ -1,34 +1,28 @@
 package com.culture.ticketing.show.application.dto;
 
-import com.sun.istack.NotNull;
+import com.culture.ticketing.place.domain.Place;
+import com.culture.ticketing.show.domain.AgeRestriction;
+import com.culture.ticketing.show.domain.Category;
+import com.culture.ticketing.show.domain.Show;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor
 public class ShowSaveRequest {
 
-    @NotBlank(message = "카테고리를 입력해주세요.")
-    private String categoryCd;
+    @NotNull
+    private Category category;
     @NotBlank(message = "공연명을 입력해주세요.")
     private String showName;
-    @NotBlank(message = "관람등급을 입력해주세요.")
-    private String ageRestrictionCd;
-    private String placeName;
-    @NotBlank(message = "공연 장소 주소를 입력해주세요.")
-    private String address;
     @NotNull
-    @Positive
-    private BigDecimal latitude;
-    @NotNull
-    @Positive
-    private BigDecimal longitude;
+    private AgeRestriction ageRestriction;
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate showStartDate;
@@ -41,5 +35,22 @@ public class ShowSaveRequest {
     @NotBlank(message = "포스터 이미지를 입력해주세요.")
     private String posterImgUrl;
     private String description;
+    @NotNull
+    private Long placeId;
+
+    public Show toEntity(Place place) {
+        return Show.builder()
+                .category(category)
+                .showName(showName)
+                .ageRestriction(ageRestriction)
+                .showStartDate(showStartDate)
+                .showEndDate(showEndDate)
+                .runningTime(runningTime)
+                .notice(notice)
+                .posterImgUrl(posterImgUrl)
+                .description(description)
+                .place(place)
+                .build();
+    }
 
 }
