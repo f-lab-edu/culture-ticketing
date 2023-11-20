@@ -26,4 +26,11 @@ public class ShowSchedule extends BaseEntity {
     private LocalTime showScheduleTime;
     @Column(name = "show_id", nullable = false)
     private Long showId;
+
+    @Builder
+    public ShowSchedule(LocalDate showScheduleDate, LocalTime showScheduleTime, Long showId) {
+        this.showScheduleDate = showScheduleDate;
+        this.showScheduleTime = showScheduleTime;
+        this.showId = showId;
+    }
 }
