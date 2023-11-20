@@ -1,6 +1,8 @@
 package com.culture.ticketing.show.domain;
 
 import com.culture.ticketing.common.entity.BaseEntity;
+import com.culture.ticketing.common.exception.BaseException;
+import com.culture.ticketing.common.response.BaseResponseStatus;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,6 +31,17 @@ public class ShowSchedule extends BaseEntity {
 
     @Builder
     public ShowSchedule(LocalDate showScheduleDate, LocalTime showScheduleTime, Long showId) {
+
+        if (showId == null) {
+            throw new BaseException(BaseResponseStatus.EMPTY_SHOW_ID);
+        }
+        if (showScheduleDate == null) {
+            throw new BaseException(BaseResponseStatus.EMPTY_SHOW_SCHEDULE_DATE);
+        }
+        if (showScheduleTime == null) {
+            throw new BaseException(BaseResponseStatus.EMPTY_SHOW_SCHEDULE_TIME);
+        }
+
         this.showScheduleDate = showScheduleDate;
         this.showScheduleTime = showScheduleTime;
         this.showId = showId;

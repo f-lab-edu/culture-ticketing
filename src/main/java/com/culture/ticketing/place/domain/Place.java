@@ -1,8 +1,11 @@
 package com.culture.ticketing.place.domain;
 
+import com.culture.ticketing.common.exception.BaseException;
+import com.culture.ticketing.common.response.BaseResponseStatus;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -28,6 +31,17 @@ public class Place {
 
     @Builder
     public Place(String placeName, String address, BigDecimal latitude, BigDecimal longitude) {
+
+        if (!StringUtils.hasText(address)) {
+            throw new BaseException(BaseResponseStatus.EMPTY_PLACE_ADDRESS);
+        }
+        if (latitude == null || latitude.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new BaseException(BaseResponseStatus.EMPTY_PLACE_LATITUDE);
+        }
+        if (longitude == null || longitude.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new BaseException(BaseResponseStatus.EMPTY_PLACE_LONGITUDE);
+        }
+
         this.placeName = placeName;
         this.address = address;
         this.latitude = latitude;
