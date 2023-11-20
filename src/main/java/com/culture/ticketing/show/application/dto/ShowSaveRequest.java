@@ -38,7 +38,7 @@ public class ShowSaveRequest {
     @NotNull
     private Long placeId;
 
-    public Show toEntity(Place place) {
+    public Show toEntity() {
         return Show.builder()
                 .category(category)
                 .showName(showName)
@@ -49,7 +49,7 @@ public class ShowSaveRequest {
                 .notice(notice)
                 .posterImgUrl(posterImgUrl)
                 .description(description)
-                .place(place)
+                .placeId(placeId)
                 .build();
     }
 

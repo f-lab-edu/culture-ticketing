@@ -49,9 +49,9 @@ public class ShowService {
         if (request.getPlaceId() == null) {
             throw new BaseException(BaseResponseStatus.EMPTY_SHOW_PLACE_ID);
         }
-        
-        Place place = placeService.getPlaceByPlaceId(request.getPlaceId());
-        Show show = request.toEntity(place);
+
+        placeService.getPlaceByPlaceId(request.getPlaceId());
+        Show show = request.toEntity();
         showRepository.save(show);
     }
 

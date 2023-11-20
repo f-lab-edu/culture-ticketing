@@ -40,15 +40,13 @@ public class Show extends BaseEntity {
     private String posterImgUrl;
     @Column(name = "description")
     private String description;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "place_id")
-    private Place place;
+    @Column(name = "place_id")
+    private Long placeId;
 
     @Builder
     public Show(Category category, String showName, AgeRestriction ageRestriction,
                 LocalDate showStartDate, LocalDate showEndDate, int runningTime,
-                String notice, String posterImgUrl, String description, Place place) {
+                String notice, String posterImgUrl, String description, Long placeId) {
         this.category = category;
         this.showName = showName;
         this.ageRestriction = ageRestriction;
@@ -58,6 +56,6 @@ public class Show extends BaseEntity {
         this.notice = notice;
         this.posterImgUrl = posterImgUrl;
         this.description = description;
-        this.place = place;
+        this.placeId = placeId;
     }
 }
