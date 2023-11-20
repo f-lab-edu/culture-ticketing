@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PlaceService {
@@ -49,9 +51,10 @@ public class PlaceService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PlaceResponse> getPlaces(int page, int size) {
+    public List<PlaceResponse> getPlaces(Long lastPlaceId, int size) {
 
-        Pageable pageable = PageRequest.of(page, size);
-        return placeRepository.findAll(pageable).map(PlaceResponse::new);
+        return placeRepository.findByPlaceIdGreaterThanLimit(lastPlaceId, size).stream()
+                .map(PlaceResponse::new)
+                .collect(Collectors.toList());
     }
 }
