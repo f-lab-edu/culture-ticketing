@@ -31,10 +31,10 @@ public class PlaceService {
         if (!StringUtils.hasText(request.getAddress())) {
             throw new BaseException(BaseResponseStatus.EMPTY_PLACE_ADDRESS);
         }
-        if (request.getLatitude() == null || request.getLatitude().compareTo(BigDecimal.ZERO) > 0) {
+        if (request.getLatitude() == null || request.getLatitude().compareTo(BigDecimal.ZERO) <= 0) {
             throw new BaseException(BaseResponseStatus.EMPTY_PLACE_LATITUDE);
         }
-        if (request.getLongitude() == null || request.getLongitude().compareTo(BigDecimal.ZERO) > 0) {
+        if (request.getLongitude() == null || request.getLongitude().compareTo(BigDecimal.ZERO) <= 0) {
             throw new BaseException(BaseResponseStatus.EMPTY_PLACE_LONGITUDE);
         }
 
