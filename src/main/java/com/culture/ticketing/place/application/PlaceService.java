@@ -5,6 +5,7 @@ import com.culture.ticketing.common.response.BaseResponseStatus;
 import com.culture.ticketing.place.application.dto.PlaceResponse;
 import com.culture.ticketing.place.application.dto.PlaceSaveRequest;
 import com.culture.ticketing.place.domain.Place;
+import com.culture.ticketing.place.exception.PlaceNotFoundException;
 import com.culture.ticketing.place.infra.PlaceRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -44,7 +45,7 @@ public class PlaceService {
     @Transactional(readOnly = true)
     public Place getPlaceByPlaceId(Long placeId) {
 
-        return placeRepository.findById(placeId).orElseThrow();
+        return placeRepository.findById(placeId).orElseThrow(PlaceNotFoundException::new);
     }
 
     @Transactional(readOnly = true)

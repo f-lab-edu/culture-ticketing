@@ -20,6 +20,8 @@ public enum BaseResponseStatus {
     NOT_POSITIVE_SHOW_RUNNING_TIME(400, "공연 러닝 시간을 정확히 입력해주세요."),
     EMPTY_SHOW_PLACE_ID(400, "공연 장소 아이디를 입력해주세요."),
 
+    NOT_FOUND_PLACE(404, "존재하지 않는 장소입니다."),
+
     DATABASE_ERROR(500, "데이터베이스 조회에 실패하였습니다."),
     UNKNOWN_ERROR(500, "알수 없는 에러가 발생하였습니다.");
 
