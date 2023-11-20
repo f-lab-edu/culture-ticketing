@@ -25,12 +25,10 @@ public class PlaceController {
     }
 
     @GetMapping("")
-    public BaseResponse<Page<PlaceResponse>> getPlaces(@RequestParam(name = "page") int page,
+    public Page<PlaceResponse> getPlaces(@RequestParam(name = "page") int page,
                                                        @RequestParam(name = "size") int size) {
 
-        Page<PlaceResponse> data = placeService.getPlaces(page, size).map(PlaceResponse::new);
-
-        return success(data);
+        return placeService.getPlaces(page, size);
     }
 
 }
