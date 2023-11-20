@@ -2,6 +2,7 @@ package com.culture.ticketing.show.domain;
 
 import com.culture.ticketing.common.entity.BaseEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,11 +19,11 @@ public class ShowSchedule extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "show_schedule_id", nullable = false, updatable = false)
-    private Long scheduleId;
+    private Long showScheduleId;
     @Column(name = "show_schedule_date", nullable = false)
-    private LocalDate scheduleDate;
+    private LocalDate showScheduleDate;
     @Column(name = "show_schedule_time", nullable = false)
-    private LocalTime scheduleTime;
+    private LocalTime showScheduleTime;
     @Column(name = "show_id", nullable = false)
     private Long showId;
 }
