@@ -26,7 +26,7 @@ public class ShowScheduleSaveRequest {
         return ShowSchedule.builder()
                 .showId(showId)
                 .showScheduleDate(showScheduleDate)
-                .showScheduleTime(showScheduleTime)
+                .showScheduleTime(showScheduleTime.withSecond(0))
                 .build();
     }
 }

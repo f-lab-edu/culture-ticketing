@@ -4,6 +4,7 @@ import com.culture.ticketing.common.exception.BaseException;
 import com.culture.ticketing.common.response.BaseResponseStatus;
 import com.culture.ticketing.show.application.dto.ShowScheduleSaveRequest;
 import com.culture.ticketing.show.domain.ShowSchedule;
+import com.culture.ticketing.show.exception.DuplicatedShowScheduleException;
 import com.culture.ticketing.show.infra.ShowScheduleRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +35,16 @@ public class ShowScheduleService {
 
         showService.getShowByShowId(request.getShowId());
         ShowSchedule showSchedule = request.toEntity();
+        checkDuplicatedShowSchedule(showSchedule);
         showScheduleRepository.save(showSchedule);
+    }
+
+    public void checkDuplicatedShowSchedule(ShowSchedule showSchedule) {
+        showScheduleRepository.findByShowIdAndShowScheduleDateAndShowScheduleTime(
+                showSchedule.getShowId(),
+                showSchedule.getShowScheduleDate(),
+                showSchedule.getShowScheduleTime()).ifPresent(schedule -> {
+            throw new DuplicatedShowScheduleException();
+        });
     }
 }

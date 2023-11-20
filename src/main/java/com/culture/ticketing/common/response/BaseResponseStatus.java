@@ -22,6 +22,7 @@ public enum BaseResponseStatus {
     EMPTY_SHOW_ID(400, "공연 아이디를 입력해주세요."),
     EMPTY_SHOW_SCHEDULE_DATE(400, "공연 일정 날짜(yyyy-MM-dd)를 입력해주세요."),
     EMPTY_SHOW_SCHEDULE_TIME(400, "공연 일정 시간(hh:mm)을 입력해주세요."),
+    DUPLICATED_SHOW_SCHEDULE(400, "해당 공연에 동일한 일정이 이미 존재합니다."),
 
     NOT_FOUND_PLACE(404, "존재하지 않는 장소입니다."),
     NOT_FOUND_SHOW(404, "존재하지 않는 공연입니다."),
