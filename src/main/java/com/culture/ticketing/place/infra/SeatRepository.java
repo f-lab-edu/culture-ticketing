@@ -9,7 +9,7 @@ import java.util.Optional;
 @Repository
 public interface SeatRepository extends JpaRepository<Seat, Long> {
 
-    Optional<Seat> findByPlaceIdAndCoordinateXAndCoordinateY(Long placeId, int coordinateX, int coordinateY);
+    Optional<Seat> findByAreaIdAndCoordinateXAndCoordinateY(Long areaId, int coordinateX, int coordinateY);
 
-    Optional<Seat> findByPlaceIdAndAreaAndSeatRowAndSeatNumber(Long placeId, String area, int seatRow, int seatNumber);
+    Optional<Seat> findByAreaIdAndSeatRowAndSeatNumber(Long areaId, int seatRow, int seatNumber);
 }

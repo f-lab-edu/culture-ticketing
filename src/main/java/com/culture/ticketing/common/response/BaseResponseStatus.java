@@ -32,6 +32,7 @@ public enum BaseResponseStatus {
     NEGATIVE_SHOW_SEAT_PRICE(400, "공연 좌석 가격을 0 이상으로 입력해주세요."),
     EMPTY_SHOW_SEAT_GRADE_ID(400, "공연 좌석 등급 아이디를 입력해주세요."),
     EMPTY_SEAT_ID(400, "좌석 아이디를 입력해주세요."),
+    EMPTY_AREA_ID(400, "구역 아이디를 입력해주세요."),
 
     NOT_FOUND_PLACE(404, "존재하지 않는 장소입니다."),
     NOT_FOUND_SHOW(404, "존재하지 않는 공연입니다."),

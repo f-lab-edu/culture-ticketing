@@ -15,41 +15,35 @@ import org.springframework.util.StringUtils;
 public class SeatService {
 
     private final SeatRepository seatRepository;
-    private final PlaceService placeService;
 
-    public SeatService(SeatRepository seatRepository, PlaceService placeService) {
+    public SeatService(SeatRepository seatRepository) {
         this.seatRepository = seatRepository;
-        this.placeService = placeService;
     }
 
     @Transactional
     public void createPlaceSeat(PlaceSeatSaveRequest request) {
 
-        if (!StringUtils.hasText(request.getArea())) {
-            throw new BaseException(BaseResponseStatus.EMPTY_SEAT_AREA);
-        }
         if (request.getSeatRow() <= 0) {
             throw new BaseException(BaseResponseStatus.NEGATIVE_SEAT_ROW);
         }
         if (request.getSeatNumber() <= 0) {
             throw new BaseException(BaseResponseStatus.NEGATIVE_SEAT_NUMBER);
         }
-        if (request.getPlaceId() == null) {
+        if (request.getAreaId() == null) {
             throw new BaseException(BaseResponseStatus.EMPTY_PLACE_ID);
         }
 
-        placeService.getPlaceByPlaceId(request.getPlaceId());
         Seat seat = request.toEntity();
         checkDuplicatedSeat(seat);
         seatRepository.save(seat);
     }
 
     private void checkDuplicatedSeat(Seat seat) {
-        seatRepository.findByPlaceIdAndCoordinateXAndCoordinateY(seat.getPlaceId(), seat.getCoordinateX(), seat.getCoordinateY())
+        seatRepository.findByAreaIdAndCoordinateXAndCoordinateY(seat.getAreaId(), seat.getCoordinateX(), seat.getCoordinateY())
                 .ifPresent(s -> {
                     throw new DuplicatedPlaceSeatException();
                 });
-        seatRepository.findByPlaceIdAndAreaAndSeatRowAndSeatNumber(seat.getPlaceId(), seat.getArea(), seat.getSeatRow(), seat.getSeatNumber())
+        seatRepository.findByAreaIdAndSeatRowAndSeatNumber(seat.getAreaId(), seat.getSeatRow(), seat.getSeatNumber())
                 .ifPresent(s -> {
                     throw new DuplicatedPlaceSeatException();
                 });
