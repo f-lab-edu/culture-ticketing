@@ -22,22 +22,22 @@ public class Seat extends BaseEntity {
     @Column(name = "seat_id", nullable = false, updatable = false)
     private Long seatId;
 
-    @Column(name = "coordinateX", nullable = false)
+    @Column(name = "coordinate_x", nullable = false)
     private int coordinateX;
 
-    @Column(name = "coordinateY", nullable = false)
+    @Column(name = "coordinate_y", nullable = false)
     private int coordinateY;
 
     @Column(name = "area", nullable = false)
     private String area;
 
-    @Column(name = "seatRow", nullable = false)
+    @Column(name = "seat_row", nullable = false)
     private int seatRow;
 
-    @Column(name = "seatNumber", nullable = false)
+    @Column(name = "seat_number", nullable = false)
     private int seatNumber;
 
-    @Column(name = "placeId", nullable = false)
+    @Column(name = "place_id", nullable = false)
     private Long placeId;
 
     @Builder
