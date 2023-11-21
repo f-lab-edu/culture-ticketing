@@ -4,6 +4,7 @@ import com.culture.ticketing.common.exception.BaseException;
 import com.culture.ticketing.common.response.BaseResponseStatus;
 import com.culture.ticketing.place.application.PlaceService;
 import com.culture.ticketing.show.application.dto.ShowSaveRequest;
+import com.culture.ticketing.show.application.dto.ShowSeatGradeSaveRequest;
 import com.culture.ticketing.show.domain.Show;
 import com.culture.ticketing.show.exception.ShowNotFoundException;
 import com.culture.ticketing.show.infra.ShowRepository;

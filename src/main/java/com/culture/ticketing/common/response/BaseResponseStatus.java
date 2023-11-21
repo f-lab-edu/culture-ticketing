@@ -28,6 +28,8 @@ public enum BaseResponseStatus {
     NEGATIVE_SEAT_ROW(400, "좌석 행을 1 이상 숫자로 입력해주세요."),
     NEGATIVE_SEAT_NUMBER(400, "좌석 번호를 1 이상 숫자로 입력해주세요."),
     DUPLICATED_SEAT(400, "해당 장소에 동일한 좌석이 이미 존재합니다."),
+    EMPTY_SHOW_SEAT_GRADE(400, "공연 좌석 등급을 입력해주세요."),
+    NEGATIVE_SHOW_SEAT_PRICE(400, "공연 좌석 가격을 0 이상으로 입력해주세요."),
 
     NOT_FOUND_PLACE(404, "존재하지 않는 장소입니다."),
     NOT_FOUND_SHOW(404, "존재하지 않는 공연입니다."),
