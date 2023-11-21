@@ -4,6 +4,7 @@ import com.culture.ticketing.common.exception.BaseException;
 import com.culture.ticketing.common.response.BaseResponseStatus;
 import com.culture.ticketing.place.application.dto.PlaceSeatSaveRequest;
 import com.culture.ticketing.place.domain.Seat;
+import com.culture.ticketing.place.exception.DuplicatedPlaceSeatException;
 import com.culture.ticketing.place.infra.SeatRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +39,18 @@ public class SeatService {
 
         placeService.getPlaceByPlaceId(request.getPlaceId());
         Seat seat = request.toEntity();
+        checkDuplicatedSeat(seat);
         seatRepository.save(seat);
+    }
+
+    public void checkDuplicatedSeat(Seat seat) {
+        seatRepository.findByPlaceIdAndCoordinateXAndCoordinateY(seat.getPlaceId(), seat.getCoordinateX(), seat.getCoordinateY())
+                .ifPresent(s -> {
+                    throw new DuplicatedPlaceSeatException();
+                });
+        seatRepository.findByPlaceIdAndAreaAndSeatRowAndSeatNumber(seat.getPlaceId(), seat.getArea(), seat.getSeatRow(), seat.getSeatNumber())
+                .ifPresent(s -> {
+                    throw new DuplicatedPlaceSeatException();
+                });
     }
 }
