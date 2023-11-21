@@ -38,6 +38,7 @@ public enum BaseResponseStatus {
     NOT_FOUND_SHOW(404, "존재하지 않는 공연입니다."),
     NOT_FOUND_SHOW_SEAT_GRADE(404, "존재하지 않는 공연 좌석 등급입니다."),
     NOT_FOUND_SEAT(404, "존재하지 않는 좌석입니다."),
+    NOT_FOUND_AREA(404, "존재하지 않는 구역입니다."),
 
     DATABASE_ERROR(500, "데이터베이스 조회에 실패하였습니다."),
     UNKNOWN_ERROR(500, "알수 없는 에러가 발생하였습니다.");

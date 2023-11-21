@@ -9,15 +9,16 @@ import com.culture.ticketing.place.exception.SeatNotFoundException;
 import com.culture.ticketing.place.infra.SeatRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 @Service
 public class SeatService {
 
     private final SeatRepository seatRepository;
+    private final AreaService areaService;
 
-    public SeatService(SeatRepository seatRepository) {
+    public SeatService(SeatRepository seatRepository, AreaService areaService) {
         this.seatRepository = seatRepository;
+        this.areaService = areaService;
     }
 
     @Transactional
@@ -33,6 +34,7 @@ public class SeatService {
             throw new BaseException(BaseResponseStatus.EMPTY_PLACE_ID);
         }
 
+        areaService.getAreaByAreaId(request.getAreaId());
         Seat seat = request.toEntity();
         checkDuplicatedSeat(seat);
         seatRepository.save(seat);
