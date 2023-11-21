@@ -39,7 +39,7 @@ public class ShowScheduleService {
         showScheduleRepository.save(showSchedule);
     }
 
-    public void checkDuplicatedShowSchedule(ShowSchedule showSchedule) {
+    private void checkDuplicatedShowSchedule(ShowSchedule showSchedule) {
         showScheduleRepository.findByShowIdAndShowScheduleDateAndShowScheduleTime(
                 showSchedule.getShowId(),
                 showSchedule.getShowScheduleDate(),
