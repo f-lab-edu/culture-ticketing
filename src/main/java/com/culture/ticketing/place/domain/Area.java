@@ -1,7 +1,10 @@
 package com.culture.ticketing.place.domain;
 
 import com.culture.ticketing.common.entity.BaseEntity;
+import com.culture.ticketing.common.exception.BaseException;
+import com.culture.ticketing.common.response.BaseResponseStatus;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,5 +30,15 @@ public class Area extends BaseEntity {
     @Column(name = "place_id", nullable = false)
     private Long placeId;
 
+    @Builder
+    public Area(int coordinateX, int coordinateY, Long placeId) {
 
+        if (placeId == null) {
+            throw new BaseException(BaseResponseStatus.EMPTY_PLACE_ID);
+        }
+
+        this.coordinateX = coordinateX;
+        this.coordinateY = coordinateY;
+        this.placeId = placeId;
+    }
 }

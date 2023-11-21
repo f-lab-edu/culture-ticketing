@@ -1,7 +1,9 @@
 package com.culture.ticketing.place.api;
 
+import com.culture.ticketing.place.application.AreaService;
 import com.culture.ticketing.place.application.PlaceService;
 import com.culture.ticketing.place.application.SeatService;
+import com.culture.ticketing.place.application.dto.PlaceAreaSaveRequest;
 import com.culture.ticketing.place.application.dto.PlaceResponse;
 import com.culture.ticketing.place.application.dto.PlaceSaveRequest;
 import com.culture.ticketing.place.application.dto.PlaceSeatSaveRequest;
@@ -16,10 +18,12 @@ public class PlaceController {
 
     private final PlaceService placeService;
     private final SeatService seatService;
+    private final AreaService areaService;
 
-    public PlaceController(PlaceService placeService, SeatService seatService) {
+    public PlaceController(PlaceService placeService, SeatService seatService, AreaService areaService) {
         this.placeService = placeService;
         this.seatService = seatService;
+        this.areaService = areaService;
     }
 
     @PostMapping("")
@@ -35,6 +39,11 @@ public class PlaceController {
         return placeService.getPlaces(lastPlaceId, size);
     }
 
+    @PostMapping("/areas")
+    public void postPlaceArea(@Valid @RequestBody PlaceAreaSaveRequest request) {
+
+        areaService.createPlaceArea(request);
+    }
     @PostMapping("/seats")
     public void postPlaceSeat(@Valid @RequestBody PlaceSeatSaveRequest request) {
 
