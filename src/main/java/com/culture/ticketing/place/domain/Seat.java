@@ -1,9 +1,13 @@
 package com.culture.ticketing.place.domain;
 
 import com.culture.ticketing.common.entity.BaseEntity;
+import com.culture.ticketing.common.exception.BaseException;
+import com.culture.ticketing.common.response.BaseResponseStatus;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 
@@ -34,5 +38,29 @@ public class Seat extends BaseEntity {
     private int seatNumber;
 
     @Column(name = "placeId", nullable = false)
-    private int placeId;
+    private Long placeId;
+
+    @Builder
+    public Seat(int coordinateX, int coordinateY, String area, int seatRow, int seatNumber, Long placeId) {
+
+        if (!StringUtils.hasText(area)) {
+            throw new BaseException(BaseResponseStatus.EMPTY_SEAT_AREA);
+        }
+        if (seatRow <= 0) {
+            throw new BaseException(BaseResponseStatus.NEGATIVE_SEAT_ROW);
+        }
+        if (seatNumber <= 0) {
+            throw new BaseException(BaseResponseStatus.NEGATIVE_SEAT_NUMBER);
+        }
+        if (placeId == null) {
+            throw new BaseException(BaseResponseStatus.EMPTY_PLACE_ID);
+        }
+
+        this.coordinateX = coordinateX;
+        this.coordinateY = coordinateY;
+        this.area = area;
+        this.seatRow = seatRow;
+        this.seatNumber = seatNumber;
+        this.placeId = placeId;
+    }
 }
