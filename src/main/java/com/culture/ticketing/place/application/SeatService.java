@@ -5,6 +5,7 @@ import com.culture.ticketing.common.response.BaseResponseStatus;
 import com.culture.ticketing.place.application.dto.PlaceSeatSaveRequest;
 import com.culture.ticketing.place.domain.Seat;
 import com.culture.ticketing.place.exception.DuplicatedPlaceSeatException;
+import com.culture.ticketing.place.exception.SeatNotFoundException;
 import com.culture.ticketing.place.infra.SeatRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,5 +53,10 @@ public class SeatService {
                 .ifPresent(s -> {
                     throw new DuplicatedPlaceSeatException();
                 });
+    }
+
+    @Transactional(readOnly = true)
+    public Seat getSeatBySeatId(Long seatId) {
+        return seatRepository.findById(seatId).orElseThrow(SeatNotFoundException::new);
     }
 }

@@ -30,9 +30,13 @@ public enum BaseResponseStatus {
     DUPLICATED_SEAT(400, "해당 장소에 동일한 좌석이 이미 존재합니다."),
     EMPTY_SHOW_SEAT_GRADE(400, "공연 좌석 등급을 입력해주세요."),
     NEGATIVE_SHOW_SEAT_PRICE(400, "공연 좌석 가격을 0 이상으로 입력해주세요."),
+    EMPTY_SHOW_SEAT_GRADE_ID(400, "공연 좌석 등급 아이디를 입력해주세요."),
+    EMPTY_SEAT_ID(400, "좌석 아이디를 입력해주세요."),
 
     NOT_FOUND_PLACE(404, "존재하지 않는 장소입니다."),
     NOT_FOUND_SHOW(404, "존재하지 않는 공연입니다."),
+    NOT_FOUND_SHOW_SEAT_GRADE(404, "존재하지 않는 공연 좌석 등급입니다."),
+    NOT_FOUND_SEAT(404, "존재하지 않는 좌석입니다."),
 
     DATABASE_ERROR(500, "데이터베이스 조회에 실패하였습니다."),
     UNKNOWN_ERROR(500, "알수 없는 에러가 발생하였습니다.");

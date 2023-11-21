@@ -1,6 +1,9 @@
 package com.culture.ticketing.show.domain;
 
+import com.culture.ticketing.common.exception.BaseException;
+import com.culture.ticketing.common.response.BaseResponseStatus;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -27,4 +30,19 @@ public class ShowSeat {
     @ColumnDefault("false")
     @Column(name = "is_hidden", nullable = false)
     private boolean isHidden;
+
+    @Builder
+    public ShowSeat(Long showSeatGradeId, Long seatId, boolean isHidden) {
+
+        if (showSeatGradeId == null) {
+            throw new BaseException(BaseResponseStatus.EMPTY_SHOW_SEAT_GRADE_ID);
+        }
+        if (seatId == null) {
+            throw new BaseException(BaseResponseStatus.EMPTY_SEAT_ID);
+        }
+
+        this.showSeatGradeId = showSeatGradeId;
+        this.seatId = seatId;
+        this.isHidden = isHidden;
+    }
 }

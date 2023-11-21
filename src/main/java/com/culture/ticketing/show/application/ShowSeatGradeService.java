@@ -4,6 +4,7 @@ import com.culture.ticketing.common.exception.BaseException;
 import com.culture.ticketing.common.response.BaseResponseStatus;
 import com.culture.ticketing.show.application.dto.ShowSeatGradeSaveRequest;
 import com.culture.ticketing.show.domain.ShowSeatGrade;
+import com.culture.ticketing.show.exception.ShowSeatGradeNotFoundException;
 import com.culture.ticketing.show.infra.ShowSeatGradeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,5 +37,10 @@ public class ShowSeatGradeService {
         showService.getShowByShowId(request.getShowId());
         ShowSeatGrade showSeatGrade = request.toEntity();
         showSeatGradeRepository.save(showSeatGrade);
+    }
+
+    @Transactional(readOnly = true)
+    public ShowSeatGrade getShowSeatGradeByShowSeatGradeId(Long showSeatGradeId) {
+        return showSeatGradeRepository.findById(showSeatGradeId).orElseThrow(ShowSeatGradeNotFoundException::new);
     }
 }
