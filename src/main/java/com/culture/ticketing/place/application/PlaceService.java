@@ -51,9 +51,9 @@ public class PlaceService {
     }
 
     @Transactional(readOnly = true)
-    public List<PlaceResponse> getPlaces(Long lastPlaceId, int size) {
+    public List<PlaceResponse> getPlaces(Long offset, int size) {
 
-        return placeRepository.findByPlaceIdGreaterThanLimit(lastPlaceId, size).stream()
+        return placeRepository.findByPlaceIdGreaterThanLimit(offset, size).stream()
                 .map(PlaceResponse::new)
                 .collect(Collectors.toList());
     }

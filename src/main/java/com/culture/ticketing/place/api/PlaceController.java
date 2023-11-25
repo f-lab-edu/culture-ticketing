@@ -25,10 +25,10 @@ public class PlaceController {
     }
 
     @GetMapping("")
-    public List<PlaceResponse> getPlaces(@RequestParam(name = "lastPlaceId") Long lastPlaceId,
+    public List<PlaceResponse> getPlaces(@RequestParam(name = "offset") Long offset,
                                          @RequestParam(name = "size") int size) {
 
-        return placeService.getPlaces(lastPlaceId, size);
+        return placeService.getPlaces(offset, size);
     }
 
 }
