@@ -42,6 +42,8 @@ public class ShowService {
 
     @Transactional(readOnly = true)
     public Show getShowByShowId(Long showId) {
-        return showRepository.findById(showId).orElseThrow(ShowNotFoundException::new);
+        return showRepository.findById(showId).orElseThrow(() -> {
+            throw new ShowNotFoundException(showId);
+        });
     }
 }

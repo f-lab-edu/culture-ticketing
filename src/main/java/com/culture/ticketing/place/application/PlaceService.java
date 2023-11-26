@@ -45,7 +45,9 @@ public class PlaceService {
     @Transactional(readOnly = true)
     public Place getPlaceByPlaceId(Long placeId) {
 
-        return placeRepository.findById(placeId).orElseThrow(PlaceNotFoundException::new);
+        return placeRepository.findById(placeId).orElseThrow(() -> {
+            throw new PlaceNotFoundException(placeId);
+        });
     }
 
     @Transactional(readOnly = true)

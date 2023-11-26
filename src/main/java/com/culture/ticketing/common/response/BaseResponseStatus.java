@@ -26,8 +26,8 @@ public enum BaseResponseStatus {
     PLACE_LATITUDE_OUT_OF_RANGE(400, "장소 위도 범위를 벗어난 입력값입니다."),
     PLACE_LONGITUDE_OUT_OF_RANGE(400, "장소 경도 범위를 벗어난 입력값입니다."),
 
-    NOT_FOUND_PLACE(404, "존재하지 않는 장소입니다."),
-    NOT_FOUND_SHOW(404, "존재하지 않는 공연입니다."),
+    NOT_FOUND_PLACE(404, "존재하지 않는 장소입니다. (placeId = %d)"),
+    NOT_FOUND_SHOW(404, "존재하지 않는 공연입니다. (showId = %d)"),
 
     DATABASE_ERROR(500, "데이터베이스 조회에 실패하였습니다."),
     UNKNOWN_ERROR(500, "알수 없는 에러가 발생하였습니다.");
@@ -38,5 +38,9 @@ public enum BaseResponseStatus {
     BaseResponseStatus(int code, String message) {
         this.code = code;
         this.message = message;
+    }
+
+    public String getMessage(Object... args) {
+        return String.format(message, args);
     }
 }

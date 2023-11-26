@@ -5,7 +5,7 @@ import com.culture.ticketing.common.response.BaseResponseStatus;
 
 public class PlaceNotFoundException extends BaseException {
 
-    public PlaceNotFoundException() {
-        super(BaseResponseStatus.NOT_FOUND_PLACE);
+    public PlaceNotFoundException(Long placeId) {
+        super(BaseResponseStatus.NOT_FOUND_PLACE, placeId);
     }
 }

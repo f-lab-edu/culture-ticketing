@@ -5,7 +5,7 @@ import com.culture.ticketing.common.response.BaseResponseStatus;
 
 public class ShowNotFoundException extends BaseException {
 
-    public ShowNotFoundException() {
-        super(BaseResponseStatus.NOT_FOUND_SHOW);
+    public ShowNotFoundException(Long showId) {
+        super(BaseResponseStatus.NOT_FOUND_SHOW, showId);
     }
 }
