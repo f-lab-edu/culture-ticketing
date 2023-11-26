@@ -1,6 +1,7 @@
 package com.culture.ticketing.show.application;
 
 import com.culture.ticketing.show.application.dto.ShowScheduleSaveRequest;
+import com.culture.ticketing.show.domain.Show;
 import com.culture.ticketing.show.domain.ShowSchedule;
 import com.culture.ticketing.show.exception.DuplicatedShowScheduleException;
 import com.culture.ticketing.show.infra.ShowScheduleRepository;
@@ -26,20 +27,18 @@ public class ShowScheduleService {
     public void createShowSchedule(ShowScheduleSaveRequest request) {
 
         Objects.requireNonNull(request.getShowId(), EMPTY_SHOW_ID.getMessage());
-        Objects.requireNonNull(request.getShowScheduleDate(), EMPTY_SHOW_SCHEDULE_DATE.getMessage());
-        Objects.requireNonNull(request.getShowScheduleTime(), EMPTY_SHOW_SCHEDULE_TIME.getMessage());
+        Objects.requireNonNull(request.getShowScheduleDateTime(), EMPTY_SHOW_SCHEDULE_DATE_TIME.getMessage());
 
-        showService.findShowById(request.getShowId());
+        Show show = showService.findShowById(request.getShowId());
         ShowSchedule showSchedule = request.toEntity();
-        checkDuplicatedShowSchedule(showSchedule);
+        checkDuplicatedShowSchedule(show, showSchedule);
         showScheduleRepository.save(showSchedule);
     }
 
-    public void checkDuplicatedShowSchedule(ShowSchedule showSchedule) {
-        showScheduleRepository.findByShowIdAndShowScheduleDateAndShowScheduleTime(
-                showSchedule.getShowId(),
-                showSchedule.getShowScheduleDate(),
-                showSchedule.getShowScheduleTime()).ifPresent(schedule -> {
+    public void checkDuplicatedShowSchedule(Show show, ShowSchedule showSchedule) {
+        showScheduleRepository.findByShowAndDuplicatedShowScheduleDateTime(
+                show,
+                showSchedule.getShowScheduleDateTime()).ifPresent(schedule -> {
             throw new DuplicatedShowScheduleException();
         });
     }
