@@ -35,13 +35,13 @@ public class ShowService {
         Preconditions.checkArgument(StringUtils.hasText(request.getPosterImgUrl()), EMPTY_SHOW_POSTER_IMG_URL.getMessage());
         Preconditions.checkArgument(request.getRunningTime() > 0, NOT_POSITIVE_SHOW_RUNNING_TIME.getMessage());
 
-        placeService.getPlaceByPlaceId(request.getPlaceId());
+        placeService.findPlaceById(request.getPlaceId());
         Show show = request.toEntity();
         showRepository.save(show);
     }
 
     @Transactional(readOnly = true)
-    public Show getShowByShowId(Long showId) {
+    public Show findShowById(Long showId) {
         return showRepository.findById(showId).orElseThrow(() -> {
             throw new ShowNotFoundException(showId);
         });

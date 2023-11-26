@@ -29,7 +29,7 @@ public class ShowScheduleService {
         Objects.requireNonNull(request.getShowScheduleDate(), EMPTY_SHOW_SCHEDULE_DATE.getMessage());
         Objects.requireNonNull(request.getShowScheduleTime(), EMPTY_SHOW_SCHEDULE_TIME.getMessage());
 
-        showService.getShowByShowId(request.getShowId());
+        showService.findShowById(request.getShowId());
         ShowSchedule showSchedule = request.toEntity();
         checkDuplicatedShowSchedule(showSchedule);
         showScheduleRepository.save(showSchedule);

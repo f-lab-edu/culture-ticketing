@@ -47,7 +47,7 @@ public class PlaceService {
     }
 
     @Transactional(readOnly = true)
-    public Place getPlaceByPlaceId(Long placeId) {
+    public Place findPlaceById(Long placeId) {
 
         return placeRepository.findById(placeId).orElseThrow(() -> {
             throw new PlaceNotFoundException(placeId);
@@ -55,7 +55,7 @@ public class PlaceService {
     }
 
     @Transactional(readOnly = true)
-    public List<PlaceResponse> getPlaces(Long lastPlaceId, int size) {
+    public List<PlaceResponse> findPlaces(Long lastPlaceId, int size) {
 
         return placeRepository.findByPlaceIdGreaterThanLimit(lastPlaceId, size).stream()
                 .map(PlaceResponse::new)

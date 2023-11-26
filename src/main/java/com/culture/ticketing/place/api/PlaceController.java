@@ -28,7 +28,7 @@ public class PlaceController {
     public List<PlaceResponse> getPlaces(@RequestParam(name = "lastPlaceId") Long lastPlaceId,
                                          @RequestParam(name = "size") int size) {
 
-        return placeService.getPlaces(lastPlaceId, size);
+        return placeService.findPlaces(lastPlaceId, size);
     }
 
 }
