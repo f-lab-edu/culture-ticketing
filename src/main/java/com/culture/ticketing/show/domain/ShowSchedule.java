@@ -8,12 +8,19 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
 
-import static com.culture.ticketing.common.response.BaseResponseStatus.*;
+import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_ID;
+import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_SCHEDULE_DATE;
+import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_SCHEDULE_TIME;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

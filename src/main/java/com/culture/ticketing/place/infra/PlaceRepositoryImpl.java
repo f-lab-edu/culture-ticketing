@@ -6,7 +6,7 @@ import com.culture.ticketing.place.domain.Place;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static com.culture.ticketing.place.domain.QPlace.*;
+import static com.culture.ticketing.place.domain.QPlace.place;
 
 public class PlaceRepositoryImpl extends BaseRepositoryImpl implements PlaceRepositoryCustom {
 

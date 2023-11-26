@@ -1,7 +1,5 @@
 package com.culture.ticketing.show.application;
 
-import com.culture.ticketing.common.exception.BaseException;
-import com.culture.ticketing.common.response.BaseResponseStatus;
 import com.culture.ticketing.show.application.dto.ShowScheduleSaveRequest;
 import com.culture.ticketing.show.domain.ShowSchedule;
 import com.culture.ticketing.show.exception.DuplicatedShowScheduleException;

@@ -6,11 +6,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-import static com.culture.ticketing.common.response.BaseResponseStatus.*;
+import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_PLACE_ADDRESS;
+import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_PLACE_LATITUDE;
+import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_PLACE_LONGITUDE;
+import static com.culture.ticketing.common.response.BaseResponseStatus.PLACE_LATITUDE_OUT_OF_RANGE;
+import static com.culture.ticketing.common.response.BaseResponseStatus.PLACE_LONGITUDE_OUT_OF_RANGE;
 
 @Getter
 @NoArgsConstructor
