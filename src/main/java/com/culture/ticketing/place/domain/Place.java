@@ -1,7 +1,6 @@
 package com.culture.ticketing.place.domain;
 
-import com.culture.ticketing.common.exception.BaseException;
-import com.culture.ticketing.common.response.BaseResponseStatus;
+import com.google.common.base.Preconditions;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +8,9 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Objects;
+
+import static com.culture.ticketing.common.response.BaseResponseStatus.*;
 
 @Getter
 @NoArgsConstructor
@@ -32,15 +34,13 @@ public class Place {
     @Builder
     public Place(String placeName, String address, BigDecimal latitude, BigDecimal longitude) {
 
-        if (!StringUtils.hasText(address)) {
-            throw new BaseException(BaseResponseStatus.EMPTY_PLACE_ADDRESS);
-        }
-        if (latitude == null || latitude.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new BaseException(BaseResponseStatus.EMPTY_PLACE_LATITUDE);
-        }
-        if (longitude == null || longitude.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new BaseException(BaseResponseStatus.EMPTY_PLACE_LONGITUDE);
-        }
+        Objects.requireNonNull(latitude, EMPTY_PLACE_LATITUDE.getMessage());
+        Objects.requireNonNull(longitude, EMPTY_PLACE_LONGITUDE.getMessage());
+        Preconditions.checkArgument(StringUtils.hasText(address), EMPTY_PLACE_ADDRESS.getMessage());
+        Preconditions.checkArgument(latitude.compareTo(BigDecimal.valueOf(-90)) >= 0
+                && latitude.compareTo(BigDecimal.valueOf(90)) <= 0, PLACE_LATITUDE_OUT_OF_RANGE.getMessage());
+        Preconditions.checkArgument(longitude.compareTo(BigDecimal.valueOf(-180)) >= 0
+                && longitude.compareTo(BigDecimal.valueOf(180)) <= 0, PLACE_LONGITUDE_OUT_OF_RANGE.getMessage());
 
         this.placeName = placeName;
         this.address = address;

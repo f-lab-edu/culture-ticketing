@@ -9,6 +9,10 @@ import com.culture.ticketing.show.infra.ShowScheduleRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
+import static com.culture.ticketing.common.response.BaseResponseStatus.*;
+
 @Service
 public class ShowScheduleService {
 
@@ -23,15 +27,9 @@ public class ShowScheduleService {
     @Transactional
     public void createShowSchedule(ShowScheduleSaveRequest request) {
 
-        if (request.getShowId() == null) {
-            throw new BaseException(BaseResponseStatus.EMPTY_SHOW_ID);
-        }
-        if (request.getShowScheduleDate() == null) {
-            throw new BaseException(BaseResponseStatus.EMPTY_SHOW_SCHEDULE_DATE);
-        }
-        if (request.getShowScheduleTime() == null) {
-            throw new BaseException(BaseResponseStatus.EMPTY_SHOW_SCHEDULE_TIME);
-        }
+        Objects.requireNonNull(request.getShowId(), EMPTY_SHOW_ID.getMessage());
+        Objects.requireNonNull(request.getShowScheduleDate(), EMPTY_SHOW_SCHEDULE_DATE.getMessage());
+        Objects.requireNonNull(request.getShowScheduleTime(), EMPTY_SHOW_SCHEDULE_TIME.getMessage());
 
         showService.getShowByShowId(request.getShowId());
         ShowSchedule showSchedule = request.toEntity();

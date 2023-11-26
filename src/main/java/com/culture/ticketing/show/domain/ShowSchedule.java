@@ -11,6 +11,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Objects;
+
+import static com.culture.ticketing.common.response.BaseResponseStatus.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -32,15 +35,9 @@ public class ShowSchedule extends BaseEntity {
     @Builder
     public ShowSchedule(LocalDate showScheduleDate, LocalTime showScheduleTime, Long showId) {
 
-        if (showId == null) {
-            throw new BaseException(BaseResponseStatus.EMPTY_SHOW_ID);
-        }
-        if (showScheduleDate == null) {
-            throw new BaseException(BaseResponseStatus.EMPTY_SHOW_SCHEDULE_DATE);
-        }
-        if (showScheduleTime == null) {
-            throw new BaseException(BaseResponseStatus.EMPTY_SHOW_SCHEDULE_TIME);
-        }
+        Objects.requireNonNull(showId, EMPTY_SHOW_ID.getMessage());
+        Objects.requireNonNull(showScheduleDate, EMPTY_SHOW_SCHEDULE_DATE.getMessage());
+        Objects.requireNonNull(showScheduleTime, EMPTY_SHOW_SCHEDULE_TIME.getMessage());
 
         this.showScheduleDate = showScheduleDate;
         this.showScheduleTime = showScheduleTime;
