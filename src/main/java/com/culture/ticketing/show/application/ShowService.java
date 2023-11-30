@@ -1,6 +1,7 @@
 package com.culture.ticketing.show.application;
 
 import com.culture.ticketing.place.application.PlaceService;
+import com.culture.ticketing.place.exception.PlaceNotFoundException;
 import com.culture.ticketing.show.application.dto.ShowSaveRequest;
 import com.culture.ticketing.show.domain.Show;
 import com.culture.ticketing.show.exception.ShowNotFoundException;
@@ -35,7 +36,10 @@ public class ShowService {
         Preconditions.checkArgument(StringUtils.hasText(request.getPosterImgUrl()), EMPTY_SHOW_POSTER_IMG_URL.getMessage());
         Preconditions.checkArgument(request.getRunningTime() > 0, NOT_POSITIVE_SHOW_RUNNING_TIME.getMessage());
 
-        placeService.findPlaceById(request.getPlaceId());
+        if (!placeService.existsById(request.getPlaceId())) {
+            throw new PlaceNotFoundException(request.getPlaceId());
+        }
+
         Show show = request.toEntity();
         showRepository.save(show);
     }
