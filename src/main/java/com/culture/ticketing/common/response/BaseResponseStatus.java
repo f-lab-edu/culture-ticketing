@@ -20,10 +20,11 @@ public enum BaseResponseStatus {
     NOT_POSITIVE_SHOW_RUNNING_TIME(400, "공연 러닝 시간을 정확히 입력해주세요."),
     EMPTY_SHOW_PLACE_ID(400, "공연 장소 아이디를 입력해주세요."),
     EMPTY_SHOW_ID(400, "공연 아이디를 입력해주세요."),
-    EMPTY_SHOW_SCHEDULE_DATE_TIME(400, "공연 일정 일시(yyyy-MM-dd hh:mm)를 입력해주세요."),
-    DUPLICATED_SHOW_SCHEDULE(400, "해당 공연에 동일한 일정이 이미 존재합니다."),
+    EMPTY_ROUND_DATE_TIME(400, "시작 회차 일시를 입력해주세요."),
+    DUPLICATED_ROUND_DATE_TIME(400, "해당 공연에 일정이 동일한 회차가 이미 존재합니다."),
     PLACE_LATITUDE_OUT_OF_RANGE(400, "장소 위도 범위를 벗어난 입력값입니다."),
     PLACE_LONGITUDE_OUT_OF_RANGE(400, "장소 경도 범위를 벗어난 입력값입니다."),
+    OUT_OF_RANGE_ROUND_DATE_TIME(400, "공연 가능한 회차 날짜 범위를 벗어난 입력값입니다."),
 
     NOT_FOUND_PLACE(404, "존재하지 않는 장소입니다. (placeId = %d)"),
     NOT_FOUND_SHOW(404, "존재하지 않는 공연입니다. (showId = %d)"),

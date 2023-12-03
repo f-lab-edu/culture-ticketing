@@ -16,30 +16,34 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_ID;
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_SCHEDULE_DATE_TIME;
+import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_ROUND_DATE_TIME;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "show_schedule")
-public class ShowSchedule extends BaseEntity {
+@Table(name = "round")
+public class Round extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "show_schedule_id", nullable = false, updatable = false)
-    private Long showScheduleId;
-    @Column(name = "show_schedule_date_time", nullable = false)
-    private LocalDateTime showScheduleDateTime;
+    @Column(name = "round_id", nullable = false, updatable = false)
+    private Long roundId;
+    @Column(name = "round_start_date_time", nullable = false)
+    private LocalDateTime roundStartDateTime;
+    @Column(name = "round_end_date_time", nullable = false)
+    private LocalDateTime roundEndDateTime;
     @Column(name = "show_id", nullable = false)
     private Long showId;
 
     @Builder
-    public ShowSchedule(LocalDateTime showScheduleDateTime, Long showId) {
+    public Round(LocalDateTime roundStartDateTime, LocalDateTime roundEndDateTime, Long showId) {
 
         Objects.requireNonNull(showId, EMPTY_SHOW_ID.getMessage());
-        Objects.requireNonNull(showScheduleDateTime, EMPTY_SHOW_SCHEDULE_DATE_TIME.getMessage());
+        Objects.requireNonNull(roundStartDateTime, EMPTY_ROUND_DATE_TIME.getMessage());
+        Objects.requireNonNull(roundEndDateTime, EMPTY_ROUND_DATE_TIME.getMessage());
 
-        this.showScheduleDateTime = showScheduleDateTime;
+        this.roundStartDateTime = roundStartDateTime;
+        this.roundEndDateTime = roundEndDateTime;
         this.showId = showId;
     }
 }
