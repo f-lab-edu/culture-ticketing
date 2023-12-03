@@ -51,10 +51,9 @@ public class RoundService {
     private void checkOutOfRangeRoundDateTime(Round round, Show show) {
         LocalDateTime showStartDateTime = LocalDateTime.of(show.getShowStartDate(), LocalTime.MIN);
         LocalDateTime showEndDateTime = LocalDateTime.of(show.getShowEndDate(), LocalTime.MAX);
-        if (round.getRoundStartDateTime().isAfter(showStartDateTime)
-                && round.getRoundEndDateTime().isBefore(showEndDateTime)) {
+        if (round.getRoundStartDateTime().isBefore(showStartDateTime)
+                || round.getRoundEndDateTime().isAfter(showEndDateTime)) {
             throw new OutOfRangeRoundDateTime();
         }
-
     }
 }
