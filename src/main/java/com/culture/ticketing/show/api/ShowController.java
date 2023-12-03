@@ -1,7 +1,9 @@
 package com.culture.ticketing.show.api;
 
+import com.culture.ticketing.show.application.PerformerService;
 import com.culture.ticketing.show.application.RoundService;
 import com.culture.ticketing.show.application.ShowService;
+import com.culture.ticketing.show.application.dto.PerformerSaveRequest;
 import com.culture.ticketing.show.application.dto.RoundSaveRequest;
 import com.culture.ticketing.show.application.dto.ShowSaveRequest;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +16,12 @@ public class ShowController {
 
     private final ShowService showService;
     private final RoundService roundService;
+    private final PerformerService performerService;
 
-    public ShowController(ShowService showService, RoundService roundService) {
+    public ShowController(ShowService showService, RoundService roundService, PerformerService performerService) {
         this.showService = showService;
         this.roundService = roundService;
+        this.performerService = performerService;
     }
 
     @PostMapping("")
@@ -30,5 +34,11 @@ public class ShowController {
     public void postRound(@Valid @RequestBody RoundSaveRequest request) {
 
         roundService.createRound(request);
+    }
+
+    @PostMapping("/performers")
+    public void postPerformer(@Valid @RequestBody PerformerSaveRequest request) {
+
+        performerService.createPerformer(request);
     }
 }

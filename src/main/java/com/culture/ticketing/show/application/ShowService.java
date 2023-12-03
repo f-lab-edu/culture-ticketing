@@ -52,4 +52,9 @@ public class ShowService {
             throw new ShowNotFoundException(showId);
         });
     }
+
+    @Transactional(readOnly = true)
+    public boolean existsById(Long showId) {
+        return showRepository.existsById(showId);
+    }
 }

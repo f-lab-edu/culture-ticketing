@@ -25,6 +25,7 @@ public enum BaseResponseStatus {
     PLACE_LATITUDE_OUT_OF_RANGE(400, "장소 위도 범위를 벗어난 입력값입니다."),
     PLACE_LONGITUDE_OUT_OF_RANGE(400, "장소 경도 범위를 벗어난 입력값입니다."),
     OUT_OF_RANGE_ROUND_DATE_TIME(400, "공연 가능한 회차 날짜 범위를 벗어난 입력값입니다."),
+    EMPTY_PERFORMER_NAME(400, "출연자 이름을 입력해주세요."),
 
     NOT_FOUND_PLACE(404, "존재하지 않는 장소입니다. (placeId = %d)"),
     NOT_FOUND_SHOW(404, "존재하지 않는 공연입니다. (showId = %d)"),
