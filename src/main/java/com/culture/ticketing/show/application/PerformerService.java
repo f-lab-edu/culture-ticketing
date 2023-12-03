@@ -43,7 +43,7 @@ public class PerformerService {
     }
 
     @Transactional(readOnly = true)
-    public List<PerformerResponse> findPerformers(Long showId) {
+    public List<PerformerResponse> findPerformersByShowId(Long showId) {
         return performerRepository.findByShowId(showId).stream()
                 .map(PerformerResponse::new)
                 .collect(Collectors.toList());

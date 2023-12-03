@@ -46,9 +46,9 @@ public class ShowController {
     }
 
     @GetMapping("/{showId}/performers")
-    public List<PerformerResponse> getPerformers(@PathVariable(value = "showId") Long showId) {
+    public List<PerformerResponse> getPerformersByShowId(@PathVariable(value = "showId") Long showId) {
 
-        return performerService.findPerformers(showId);
+        return performerService.findPerformersByShowId(showId);
     }
 
     @GetMapping("")
