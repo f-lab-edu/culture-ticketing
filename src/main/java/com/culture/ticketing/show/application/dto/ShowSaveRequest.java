@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor
@@ -27,6 +28,10 @@ public class ShowSaveRequest {
     private String posterImgUrl;
     private String description;
     @NotNull
+    private LocalDate showStartDate;
+    @NotNull
+    private LocalDate showEndDate;
+    @NotNull
     private Long placeId;
 
     public Show toEntity() {
@@ -38,6 +43,8 @@ public class ShowSaveRequest {
                 .notice(notice)
                 .posterImgUrl(posterImgUrl)
                 .description(description)
+                .showStartDate(showStartDate)
+                .showEndDate(showEndDate)
                 .placeId(placeId)
                 .build();
     }

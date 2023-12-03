@@ -45,15 +45,14 @@ public class PlaceService {
     }
 
     @Transactional(readOnly = true)
-    public Place getPlaceByPlaceId(Long placeId) {
-
-        return placeRepository.findById(placeId).orElseThrow(PlaceNotFoundException::new);
+    public boolean existsById(Long placeId) {
+        return placeRepository.existsById(placeId);
     }
 
     @Transactional(readOnly = true)
-    public List<PlaceResponse> getPlaces(Long offset, int size) {
+    public List<PlaceResponse> getPlaces(Long lastPlaceId, int size) {
 
-        return placeRepository.findByPlaceIdGreaterThanLimit(offset, size).stream()
+        return placeRepository.findByPlaceIdGreaterThanLimit(lastPlaceId, size).stream()
                 .map(PlaceResponse::new)
                 .collect(Collectors.toList());
     }
