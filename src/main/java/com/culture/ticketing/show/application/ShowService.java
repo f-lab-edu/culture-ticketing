@@ -32,6 +32,8 @@ public class ShowService {
         Objects.requireNonNull(request.getCategory(), EMPTY_SHOW_CATEGORY.getMessage());
         Objects.requireNonNull(request.getAgeRestriction(), EMPTY_SHOW_AGE_RESTRICTION.getMessage());
         Objects.requireNonNull(request.getPlaceId(), EMPTY_SHOW_PLACE_ID.getMessage());
+        Objects.requireNonNull(request.getShowStartDate(), EMPTY_SHOW_START_DATE.getMessage());
+        Objects.requireNonNull(request.getShowEndDate(), EMPTY_SHOW_END_DATE.getMessage());
         Preconditions.checkArgument(StringUtils.hasText(request.getShowName()), EMPTY_SHOW_NAME.getMessage());
         Preconditions.checkArgument(StringUtils.hasText(request.getPosterImgUrl()), EMPTY_SHOW_POSTER_IMG_URL.getMessage());
         Preconditions.checkArgument(request.getRunningTime() > 0, NOT_POSITIVE_SHOW_RUNNING_TIME.getMessage());
