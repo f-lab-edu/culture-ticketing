@@ -19,6 +19,17 @@ public enum BaseResponseStatus {
     EMPTY_SHOW_POSTER_IMG_URL(400, "공연 포스터 이미지 url을 입력해주세요."),
     NOT_POSITIVE_SHOW_RUNNING_TIME(400, "공연 러닝 시간을 정확히 입력해주세요."),
     EMPTY_SHOW_PLACE_ID(400, "공연 장소 아이디를 입력해주세요."),
+    EMPTY_SHOW_ID(400, "공연 아이디를 입력해주세요."),
+    EMPTY_ROUND_DATE_TIME(400, "시작 회차 일시를 입력해주세요."),
+    DUPLICATED_ROUND_DATE_TIME(400, "해당 공연에 일정이 동일한 회차가 이미 존재합니다."),
+    PLACE_LATITUDE_OUT_OF_RANGE(400, "장소 위도 범위를 벗어난 입력값입니다."),
+    PLACE_LONGITUDE_OUT_OF_RANGE(400, "장소 경도 범위를 벗어난 입력값입니다."),
+    OUT_OF_RANGE_ROUND_DATE_TIME(400, "공연 가능한 회차 날짜 범위를 벗어난 입력값입니다."),
+    EMPTY_PERFORMER_NAME(400, "출연자 이름을 입력해주세요."),
+    SHOW_PERFORMER_NOT_MATCH(400, "해당 공연의 출연자가 아닌 값이 포함되어 있습니다. (performerIds = %s)"),
+
+    NOT_FOUND_PLACE(404, "존재하지 않는 장소입니다. (placeId = %d)"),
+    NOT_FOUND_SHOW(404, "존재하지 않는 공연입니다. (showId = %d)"),
 
     DATABASE_ERROR(500, "데이터베이스 조회에 실패하였습니다."),
     UNKNOWN_ERROR(500, "알수 없는 에러가 발생하였습니다.");
@@ -29,5 +40,9 @@ public enum BaseResponseStatus {
     BaseResponseStatus(int code, String message) {
         this.code = code;
         this.message = message;
+    }
+
+    public String getMessage(Object... args) {
+        return String.format(message, args);
     }
 }
