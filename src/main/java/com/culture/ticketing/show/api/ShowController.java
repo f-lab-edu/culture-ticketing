@@ -8,6 +8,7 @@ import com.culture.ticketing.show.application.dto.PerformerResponse;
 import com.culture.ticketing.show.application.dto.PerformerSaveRequest;
 import com.culture.ticketing.show.application.dto.RoundSaveRequest;
 import com.culture.ticketing.show.application.dto.ShowSaveRequest;
+import com.culture.ticketing.show.domain.Category;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -53,8 +54,9 @@ public class ShowController {
 
     @GetMapping("")
     public List<ShowResponse> getShows(@RequestParam(name = "offset") Long offset,
-                                       @RequestParam(name = "size") int size) {
+                                       @RequestParam(name = "size") int size,
+                                       @RequestParam(name = "category", required = false) Category category) {
 
-        return showService.findShows(offset, size);
+        return showService.findShows(offset, size, category);
     }
 }

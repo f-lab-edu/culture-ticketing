@@ -5,6 +5,7 @@ import com.culture.ticketing.place.domain.Place;
 import com.culture.ticketing.place.exception.PlaceNotFoundException;
 import com.culture.ticketing.show.application.dto.ShowResponse;
 import com.culture.ticketing.show.application.dto.ShowSaveRequest;
+import com.culture.ticketing.show.domain.Category;
 import com.culture.ticketing.show.domain.Show;
 import com.culture.ticketing.show.exception.ShowNotFoundException;
 import com.culture.ticketing.show.infra.PerformerRepository;
@@ -66,9 +67,9 @@ public class ShowService {
         return showRepository.existsById(showId);
     }
 
-    public List<ShowResponse> findShows(Long offset, int size) {
+    public List<ShowResponse> findShows(Long offset, int size, Category category) {
 
-        List<Show> shows = showRepository.findByShowIdGreaterThanLimit(offset, size);
+        List<Show> shows = showRepository.findByShowIdGreaterThanLimitAndCategory(offset, size, category);
 
         Map<Long, Place> placeMapByPlaceId = placeService.findByIdIn(shows.stream()
                         .map(Show::getPlaceId)

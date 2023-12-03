@@ -1,6 +1,8 @@
 package com.culture.ticketing.show.infra;
 
+import com.culture.ticketing.show.domain.Category;
 import com.culture.ticketing.show.domain.Show;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import javax.persistence.EntityManager;
@@ -19,11 +21,17 @@ public class ShowRepositoryImpl implements ShowRepositoryCustom {
     }
 
     @Override
-    public List<Show> findByShowIdGreaterThanLimit(Long showId, int size) {
+    public List<Show> findByShowIdGreaterThanLimitAndCategory(Long showId, int size, Category category) {
 
         return queryFactory.selectFrom(show)
-                .where(show.showId.gt(showId))
+                .where(show.showId.gt(showId),
+                        categoryEq(category))
                 .limit(size)
                 .fetch();
     }
+
+    private BooleanExpression categoryEq(Category category) {
+        return category != null ? show.category.eq(category) : null;
+    }
+
 }
