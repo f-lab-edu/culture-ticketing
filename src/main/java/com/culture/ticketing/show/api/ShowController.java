@@ -3,12 +3,14 @@ package com.culture.ticketing.show.api;
 import com.culture.ticketing.show.application.PerformerService;
 import com.culture.ticketing.show.application.RoundService;
 import com.culture.ticketing.show.application.ShowService;
+import com.culture.ticketing.show.application.dto.PerformerResponse;
 import com.culture.ticketing.show.application.dto.PerformerSaveRequest;
 import com.culture.ticketing.show.application.dto.RoundSaveRequest;
 import com.culture.ticketing.show.application.dto.ShowSaveRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/shows")
@@ -40,5 +42,11 @@ public class ShowController {
     public void postPerformer(@Valid @RequestBody PerformerSaveRequest request) {
 
         performerService.createPerformer(request);
+    }
+
+    @GetMapping("/{showId}/performers")
+    public List<PerformerResponse> getPerformers(@PathVariable(value = "showId") Long showId) {
+
+        return performerService.findPerformers(showId);
     }
 }

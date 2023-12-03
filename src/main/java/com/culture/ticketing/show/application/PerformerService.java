@@ -1,5 +1,6 @@
 package com.culture.ticketing.show.application;
 
+import com.culture.ticketing.show.application.dto.PerformerResponse;
 import com.culture.ticketing.show.application.dto.PerformerSaveRequest;
 import com.culture.ticketing.show.domain.Performer;
 import com.culture.ticketing.show.exception.ShowNotFoundException;
@@ -9,7 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_PERFORMER_NAME;
 import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_ID;
@@ -37,5 +40,12 @@ public class PerformerService {
 
         Performer performer = request.toEntity();
         performerRepository.save(performer);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PerformerResponse> findPerformers(Long showId) {
+        return performerRepository.findByShowId(showId).stream()
+                .map(PerformerResponse::new)
+                .collect(Collectors.toList());
     }
 }
