@@ -78,6 +78,7 @@ public class ShowService {
         return shows.stream()
                 .map(show -> ShowResponse.builder()
                         .showId(show.getShowId())
+                        .showName(show.getShowName())
                         .posterImgUrl(show.getPosterImgUrl())
                         .showStartDate(show.getShowStartDate())
                         .showEndDate(show.getShowEndDate())
