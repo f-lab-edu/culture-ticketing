@@ -5,11 +5,7 @@ import com.culture.ticketing.common.response.BaseResponseStatus;
 import com.culture.ticketing.place.application.dto.PlaceResponse;
 import com.culture.ticketing.place.application.dto.PlaceSaveRequest;
 import com.culture.ticketing.place.domain.Place;
-import com.culture.ticketing.place.exception.PlaceNotFoundException;
 import com.culture.ticketing.place.infra.PlaceRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -50,10 +46,15 @@ public class PlaceService {
     }
 
     @Transactional(readOnly = true)
-    public List<PlaceResponse> getPlaces(Long lastPlaceId, int size) {
+    public List<PlaceResponse> getPlaces(Long offset, int size) {
 
-        return placeRepository.findByPlaceIdGreaterThanLimit(lastPlaceId, size).stream()
+        return placeRepository.findByPlaceIdGreaterThanLimit(offset, size).stream()
                 .map(PlaceResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<Place> findByIdIn(List<Long> placeIds) {
+        return placeRepository.findAllById(placeIds);
     }
 }

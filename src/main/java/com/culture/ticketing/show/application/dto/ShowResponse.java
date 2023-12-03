@@ -1,19 +1,25 @@
 package com.culture.ticketing.show.application.dto;
 
-import com.culture.ticketing.show.domain.Show;
+import lombok.Builder;
 import lombok.Getter;
+
+import java.time.LocalDate;
 
 @Getter
 public class ShowResponse {
 
-    private Long showId;
-    private String posterImgUrl;
-    private String scheduleStartDate;
-    private String scheduleEndDate;
-    private String placeName;
+    private final Long showId;
+    private final String posterImgUrl;
+    private final LocalDate showStartDate;
+    private final LocalDate showEndDate;
+    private final String placeName;
 
-    public ShowResponse(Show show) {
-        this.showId = show.getShowId();
-        this.posterImgUrl = show.getPosterImgUrl();
+    @Builder
+    public ShowResponse(Long showId, String posterImgUrl, LocalDate showStartDate, LocalDate showEndDate, String placeName) {
+        this.showId = showId;
+        this.posterImgUrl = posterImgUrl;
+        this.showStartDate = showStartDate;
+        this.showEndDate = showEndDate;
+        this.placeName = placeName;
     }
 }

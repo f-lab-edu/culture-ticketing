@@ -1,11 +1,13 @@
 package com.culture.ticketing.show.application;
 
 import com.culture.ticketing.place.application.PlaceService;
+import com.culture.ticketing.place.domain.Place;
 import com.culture.ticketing.place.exception.PlaceNotFoundException;
 import com.culture.ticketing.show.application.dto.ShowResponse;
 import com.culture.ticketing.show.application.dto.ShowSaveRequest;
 import com.culture.ticketing.show.domain.Show;
 import com.culture.ticketing.show.exception.ShowNotFoundException;
+import com.culture.ticketing.show.infra.PerformerRepository;
 import com.culture.ticketing.show.infra.ShowRepository;
 import com.google.common.base.Preconditions;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -22,10 +25,12 @@ import static com.culture.ticketing.common.response.BaseResponseStatus.*;
 public class ShowService {
 
     private final ShowRepository showRepository;
+    private final PerformerRepository performerRepository;
     private final PlaceService placeService;
 
-    public ShowService(ShowRepository showRepository, PlaceService placeService) {
+    public ShowService(ShowRepository showRepository, PerformerRepository performerRepository, PlaceService placeService) {
         this.showRepository = showRepository;
+        this.performerRepository = performerRepository;
         this.placeService = placeService;
     }
 
@@ -62,8 +67,22 @@ public class ShowService {
     }
 
     public List<ShowResponse> findShows(Long offset, int size) {
-        return showRepository.findByShowIdGreaterThanLimit(offset, size).stream()
-                .map(ShowResponse::new)
+
+        List<Show> shows = showRepository.findByShowIdGreaterThanLimit(offset, size);
+
+        Map<Long, Place> placeMapByPlaceId = placeService.findByIdIn(shows.stream()
+                        .map(Show::getPlaceId)
+                        .collect(Collectors.toList())).stream()
+                .collect(Collectors.toMap(Place::getPlaceId, place -> place));
+
+        return shows.stream()
+                .map(show -> ShowResponse.builder()
+                        .showId(show.getShowId())
+                        .posterImgUrl(show.getPosterImgUrl())
+                        .showStartDate(show.getShowStartDate())
+                        .showEndDate(show.getShowEndDate())
+                        .placeName(placeMapByPlaceId.get(show.getPlaceId()).getPlaceName())
+                        .build())
                 .collect(Collectors.toList());
     }
 }
