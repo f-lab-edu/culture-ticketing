@@ -20,7 +20,14 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.culture.ticketing.common.response.BaseResponseStatus.*;
+import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_CATEGORY;
+import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_AGE_RESTRICTION;
+import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_PLACE_ID;
+import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_START_DATE;
+import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_END_DATE;
+import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_NAME;
+import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_POSTER_IMG_URL;
+import static com.culture.ticketing.common.response.BaseResponseStatus.NOT_POSITIVE_SHOW_RUNNING_TIME;
 
 @Service
 public class ShowService {

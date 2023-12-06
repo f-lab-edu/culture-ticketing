@@ -28,7 +28,7 @@ public class PlaceController {
     public List<PlaceResponse> getPlaces(@RequestParam(name = "offset") Long offset,
                                          @RequestParam(name = "size") int size) {
 
-        return placeService.getPlaces(offset, size);
+        return placeService.findPlaces(offset, size);
     }
 
 }
