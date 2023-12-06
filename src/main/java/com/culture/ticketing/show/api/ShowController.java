@@ -19,37 +19,15 @@ import java.util.List;
 public class ShowController {
 
     private final ShowService showService;
-    private final RoundService roundService;
-    private final PerformerService performerService;
 
-    public ShowController(ShowService showService, RoundService roundService, PerformerService performerService) {
+    public ShowController(ShowService showService) {
         this.showService = showService;
-        this.roundService = roundService;
-        this.performerService = performerService;
     }
 
     @PostMapping("")
     public void postShow(@Valid @RequestBody ShowSaveRequest request) {
 
         showService.createShow(request);
-    }
-
-    @PostMapping("/rounds")
-    public void postRound(@Valid @RequestBody RoundSaveRequest request) {
-
-        roundService.createRound(request);
-    }
-
-    @PostMapping("/performers")
-    public void postPerformer(@Valid @RequestBody PerformerSaveRequest request) {
-
-        performerService.createPerformer(request);
-    }
-
-    @GetMapping("/{showId}/performers")
-    public List<PerformerResponse> getPerformersByShowId(@PathVariable(value = "showId") Long showId) {
-
-        return performerService.findPerformersByShowId(showId);
     }
 
     @GetMapping("")
