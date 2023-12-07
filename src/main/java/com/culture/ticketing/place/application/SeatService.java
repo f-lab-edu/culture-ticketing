@@ -4,7 +4,6 @@ import com.culture.ticketing.place.application.dto.PlaceSeatSaveRequest;
 import com.culture.ticketing.place.domain.Seat;
 import com.culture.ticketing.place.exception.AreaNotFoundException;
 import com.culture.ticketing.place.exception.DuplicatedPlaceSeatException;
-import com.culture.ticketing.place.exception.SeatNotFoundException;
 import com.culture.ticketing.place.infra.SeatRepository;
 import com.google.common.base.Preconditions;
 import org.springframework.stereotype.Service;
@@ -31,8 +30,8 @@ public class SeatService {
     public void createPlaceSeat(PlaceSeatSaveRequest request) {
 
         Objects.requireNonNull(request.getAreaId(), EMPTY_PLACE_ID.getMessage());
-        Preconditions.checkArgument(request.getSeatRow() <= 0, NEGATIVE_SEAT_ROW.getMessage());
-        Preconditions.checkArgument(request.getSeatNumber() <= 0, NEGATIVE_SEAT_NUMBER.getMessage());
+        Preconditions.checkArgument(request.getSeatRow() > 0, NEGATIVE_SEAT_ROW.getMessage());
+        Preconditions.checkArgument(request.getSeatNumber() > 0, NEGATIVE_SEAT_NUMBER.getMessage());
 
         if (!areaService.existsById(request.getAreaId())) {
             throw new AreaNotFoundException(request.getAreaId());
