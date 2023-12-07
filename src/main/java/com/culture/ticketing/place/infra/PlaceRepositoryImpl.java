@@ -15,11 +15,11 @@ public class PlaceRepositoryImpl extends BaseRepositoryImpl implements PlaceRepo
     }
 
     @Override
-    public List<Place> findByPlaceIdGreaterThanLimit(Long lastPlaceId, int size) {
+    public List<Place> findByPlaceIdGreaterThanLimit(Long placeId, int size) {
 
         return queryFactory
                 .selectFrom(place)
-                .where(place.placeId.gt(lastPlaceId))
+                .where(place.placeId.gt(placeId))
                 .limit(size)
                 .fetch();
     }

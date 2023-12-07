@@ -1,5 +1,7 @@
 package com.culture.ticketing.place.application;
 
+import com.culture.ticketing.common.exception.BaseException;
+import com.culture.ticketing.common.response.BaseResponseStatus;
 import com.culture.ticketing.place.application.dto.PlaceResponse;
 import com.culture.ticketing.place.application.dto.PlaceSaveRequest;
 import com.culture.ticketing.place.domain.Place;
@@ -51,10 +53,15 @@ public class PlaceService {
     }
 
     @Transactional(readOnly = true)
-    public List<PlaceResponse> findPlaces(Long lastPlaceId, int size) {
+    public List<PlaceResponse> findPlaces(Long offset, int size) {
 
-        return placeRepository.findByPlaceIdGreaterThanLimit(lastPlaceId, size).stream()
+        return placeRepository.findByPlaceIdGreaterThanLimit(offset, size).stream()
                 .map(PlaceResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<Place> findByIdIn(List<Long> placeIds) {
+        return placeRepository.findAllById(placeIds);
     }
 }

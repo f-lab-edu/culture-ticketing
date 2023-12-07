@@ -1,14 +1,11 @@
 package com.culture.ticketing.show.api;
 
-import com.culture.ticketing.show.application.PerformerService;
-import com.culture.ticketing.show.application.RoundService;
-import com.culture.ticketing.show.application.ShowSeatGradeService;
 import com.culture.ticketing.show.application.ShowService;
-import com.culture.ticketing.show.application.dto.PerformerResponse;
-import com.culture.ticketing.show.application.dto.PerformerSaveRequest;
-import com.culture.ticketing.show.application.dto.RoundSaveRequest;
+import com.culture.ticketing.show.application.ShowSeatGradeService;
 import com.culture.ticketing.show.application.dto.ShowSaveRequest;
+import com.culture.ticketing.show.application.dto.ShowResponse;
 import com.culture.ticketing.show.application.dto.ShowSeatGradeSaveRequest;
+import com.culture.ticketing.show.domain.Category;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,14 +16,10 @@ import java.util.List;
 public class ShowController {
 
     private final ShowService showService;
-    private final RoundService roundService;
-    private final PerformerService performerService;
     private final ShowSeatGradeService showSeatGradeService;
 
-    public ShowController(ShowService showService, RoundService roundService, PerformerService performerService, ShowSeatGradeService showSeatGradeService) {
+    public ShowController(ShowService showService, ShowSeatGradeService showSeatGradeService) {
         this.showService = showService;
-        this.roundService = roundService;
-        this.performerService = performerService;
         this.showSeatGradeService = showSeatGradeService;
     }
 
@@ -36,22 +29,12 @@ public class ShowController {
         showService.createShow(request);
     }
 
-    @PostMapping("/rounds")
-    public void postRound(@Valid @RequestBody RoundSaveRequest request) {
+    @GetMapping("")
+    public List<ShowResponse> getShows(@RequestParam(name = "offset") Long offset,
+                                       @RequestParam(name = "size") int size,
+                                       @RequestParam(name = "category", required = false) Category category) {
 
-        roundService.createRound(request);
-    }
-
-    @PostMapping("/performers")
-    public void postPerformer(@Valid @RequestBody PerformerSaveRequest request) {
-
-        performerService.createPerformer(request);
-    }
-
-    @GetMapping("/{showId}/performers")
-    public List<PerformerResponse> getPerformers(@PathVariable(value = "showId") Long showId) {
-
-        return performerService.findPerformers(showId);
+        return showService.findShows(offset, size, category);
     }
 
     @PostMapping("/seat-grades")
