@@ -1,16 +1,20 @@
 package com.culture.ticketing.show.application;
 
-import com.culture.ticketing.common.exception.BaseException;
-import com.culture.ticketing.common.response.BaseResponseStatus;
 import com.culture.ticketing.place.application.PlaceService;
+import com.culture.ticketing.place.exception.PlaceNotFoundException;
 import com.culture.ticketing.show.application.dto.ShowSaveRequest;
 import com.culture.ticketing.show.application.dto.ShowSeatGradeSaveRequest;
 import com.culture.ticketing.show.domain.Show;
 import com.culture.ticketing.show.exception.ShowNotFoundException;
 import com.culture.ticketing.show.infra.ShowRepository;
+import com.google.common.base.Preconditions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+
+import java.util.Objects;
+
+import static com.culture.ticketing.common.response.BaseResponseStatus.*;
 
 @Service
 public class ShowService {
@@ -26,32 +30,32 @@ public class ShowService {
     @Transactional
     public void createShow(ShowSaveRequest request) {
 
-        if (request.getCategory() == null) {
-            throw new BaseException(BaseResponseStatus.EMPTY_SHOW_CATEGORY);
-        }
-        if (request.getAgeRestriction() == null) {
-            throw new BaseException(BaseResponseStatus.EMPTY_SHOW_AGE_RESTRICTION);
-        }
-        if (!StringUtils.hasText(request.getShowName())) {
-            throw new BaseException(BaseResponseStatus.EMPTY_SHOW_NAME);
-        }
-        if (request.getRunningTime() <= 0) {
-            throw new BaseException(BaseResponseStatus.NOT_POSITIVE_SHOW_RUNNING_TIME);
-        }
-        if (!StringUtils.hasText(request.getPosterImgUrl())) {
-            throw new BaseException(BaseResponseStatus.EMPTY_SHOW_POSTER_IMG_URL);
-        }
-        if (request.getPlaceId() == null) {
-            throw new BaseException(BaseResponseStatus.EMPTY_SHOW_PLACE_ID);
+        Objects.requireNonNull(request.getCategory(), EMPTY_SHOW_CATEGORY.getMessage());
+        Objects.requireNonNull(request.getAgeRestriction(), EMPTY_SHOW_AGE_RESTRICTION.getMessage());
+        Objects.requireNonNull(request.getPlaceId(), EMPTY_SHOW_PLACE_ID.getMessage());
+        Objects.requireNonNull(request.getShowStartDate(), EMPTY_SHOW_START_DATE.getMessage());
+        Objects.requireNonNull(request.getShowEndDate(), EMPTY_SHOW_END_DATE.getMessage());
+        Preconditions.checkArgument(StringUtils.hasText(request.getShowName()), EMPTY_SHOW_NAME.getMessage());
+        Preconditions.checkArgument(StringUtils.hasText(request.getPosterImgUrl()), EMPTY_SHOW_POSTER_IMG_URL.getMessage());
+        Preconditions.checkArgument(request.getRunningTime() > 0, NOT_POSITIVE_SHOW_RUNNING_TIME.getMessage());
+
+        if (!placeService.existsById(request.getPlaceId())) {
+            throw new PlaceNotFoundException(request.getPlaceId());
         }
 
-        placeService.getPlaceByPlaceId(request.getPlaceId());
         Show show = request.toEntity();
         showRepository.save(show);
     }
 
     @Transactional(readOnly = true)
-    public Show getShowByShowId(Long showId) {
-        return showRepository.findById(showId).orElseThrow(ShowNotFoundException::new);
+    public Show findShowById(Long showId) {
+        return showRepository.findById(showId).orElseThrow(() -> {
+            throw new ShowNotFoundException(showId);
+        });
+    }
+
+    @Transactional(readOnly = true)
+    public boolean existsById(Long showId) {
+        return showRepository.existsById(showId);
     }
 }
