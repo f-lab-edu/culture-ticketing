@@ -23,8 +23,8 @@ public class AreaService {
     }
 
     @Transactional(readOnly = true)
-    public Area getAreaByAreaId(Long areaId) {
-        return areaRepository.findById(areaId).orElseThrow(AreaNotFoundException::new);
+    public boolean existsById(Long areaId) {
+        return areaRepository.existsById(areaId);
     }
 
     @Transactional

@@ -1,14 +1,20 @@
 package com.culture.ticketing.place.application;
 
-import com.culture.ticketing.common.exception.BaseException;
-import com.culture.ticketing.common.response.BaseResponseStatus;
 import com.culture.ticketing.place.application.dto.PlaceSeatSaveRequest;
 import com.culture.ticketing.place.domain.Seat;
+import com.culture.ticketing.place.exception.AreaNotFoundException;
 import com.culture.ticketing.place.exception.DuplicatedPlaceSeatException;
 import com.culture.ticketing.place.exception.SeatNotFoundException;
 import com.culture.ticketing.place.infra.SeatRepository;
+import com.google.common.base.Preconditions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
+
+import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_PLACE_ID;
+import static com.culture.ticketing.common.response.BaseResponseStatus.NEGATIVE_SEAT_NUMBER;
+import static com.culture.ticketing.common.response.BaseResponseStatus.NEGATIVE_SEAT_ROW;
 
 @Service
 public class SeatService {
@@ -24,17 +30,14 @@ public class SeatService {
     @Transactional
     public void createPlaceSeat(PlaceSeatSaveRequest request) {
 
-        if (request.getSeatRow() <= 0) {
-            throw new BaseException(BaseResponseStatus.NEGATIVE_SEAT_ROW);
-        }
-        if (request.getSeatNumber() <= 0) {
-            throw new BaseException(BaseResponseStatus.NEGATIVE_SEAT_NUMBER);
-        }
-        if (request.getAreaId() == null) {
-            throw new BaseException(BaseResponseStatus.EMPTY_PLACE_ID);
+        Objects.requireNonNull(request.getAreaId(), EMPTY_PLACE_ID.getMessage());
+        Preconditions.checkArgument(request.getSeatRow() <= 0, NEGATIVE_SEAT_ROW.getMessage());
+        Preconditions.checkArgument(request.getSeatNumber() <= 0, NEGATIVE_SEAT_NUMBER.getMessage());
+
+        if (!areaService.existsById(request.getAreaId())) {
+            throw new AreaNotFoundException(request.getAreaId());
         }
 
-        areaService.getAreaByAreaId(request.getAreaId());
         Seat seat = request.toEntity();
         checkDuplicatedSeat(seat);
         seatRepository.save(seat);

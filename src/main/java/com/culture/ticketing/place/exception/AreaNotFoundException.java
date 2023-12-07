@@ -5,7 +5,7 @@ import com.culture.ticketing.common.response.BaseResponseStatus;
 
 public class AreaNotFoundException extends BaseException {
 
-    public AreaNotFoundException() {
-        super(BaseResponseStatus.NOT_FOUND_AREA);
+    public AreaNotFoundException(Long areaId) {
+        super(BaseResponseStatus.NOT_FOUND_AREA, areaId);
     }
 }
