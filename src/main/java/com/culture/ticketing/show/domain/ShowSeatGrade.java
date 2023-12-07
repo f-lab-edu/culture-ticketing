@@ -1,8 +1,7 @@
 package com.culture.ticketing.show.domain;
 
 import com.culture.ticketing.common.entity.BaseEntity;
-import com.culture.ticketing.common.exception.BaseException;
-import com.culture.ticketing.common.response.BaseResponseStatus;
+import com.google.common.base.Preconditions;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,6 +9,11 @@ import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
+import java.util.Objects;
+
+import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_ID;
+import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_SEAT_GRADE;
+import static com.culture.ticketing.common.response.BaseResponseStatus.NEGATIVE_SHOW_SEAT_PRICE;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -34,15 +38,9 @@ public class ShowSeatGrade extends BaseEntity {
     @Builder
     public ShowSeatGrade(String seatGrade, int price, Long showId) {
 
-        if (!StringUtils.hasText(seatGrade)) {
-            throw new BaseException(BaseResponseStatus.EMPTY_SHOW_SEAT_GRADE);
-        }
-        if (price < 0) {
-            throw new BaseException(BaseResponseStatus.NEGATIVE_SHOW_SEAT_PRICE);
-        }
-        if (showId == null) {
-            throw new BaseException(BaseResponseStatus.EMPTY_SHOW_ID);
-        }
+        Objects.requireNonNull(showId, EMPTY_SHOW_ID.getMessage());
+        Preconditions.checkArgument(StringUtils.hasText(seatGrade), EMPTY_SHOW_SEAT_GRADE.getMessage());
+        Preconditions.checkArgument(price > 0, NEGATIVE_SHOW_SEAT_PRICE.getMessage());
 
         this.seatGrade = seatGrade;
         this.price = price;

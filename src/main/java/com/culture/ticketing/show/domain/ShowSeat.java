@@ -1,7 +1,5 @@
 package com.culture.ticketing.show.domain;
 
-import com.culture.ticketing.common.exception.BaseException;
-import com.culture.ticketing.common.response.BaseResponseStatus;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,6 +7,10 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.util.Objects;
+
+import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SEAT_ID;
+import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_SEAT_GRADE_ID;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -34,12 +36,8 @@ public class ShowSeat {
     @Builder
     public ShowSeat(Long showSeatGradeId, Long seatId, boolean isHidden) {
 
-        if (showSeatGradeId == null) {
-            throw new BaseException(BaseResponseStatus.EMPTY_SHOW_SEAT_GRADE_ID);
-        }
-        if (seatId == null) {
-            throw new BaseException(BaseResponseStatus.EMPTY_SEAT_ID);
-        }
+        Objects.requireNonNull(showSeatGradeId, EMPTY_SHOW_SEAT_GRADE_ID.getMessage());
+        Objects.requireNonNull(seatId, EMPTY_SEAT_ID.getMessage());
 
         this.showSeatGradeId = showSeatGradeId;
         this.seatId = seatId;
