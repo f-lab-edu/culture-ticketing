@@ -1,13 +1,19 @@
 package com.culture.ticketing.show.application;
 
 import com.culture.ticketing.common.exception.BaseException;
-import com.culture.ticketing.common.response.BaseResponseStatus;
 import com.culture.ticketing.place.application.SeatService;
+import com.culture.ticketing.place.exception.SeatNotFoundException;
 import com.culture.ticketing.show.application.dto.ShowSeatSaveRequest;
 import com.culture.ticketing.show.domain.ShowSeat;
+import com.culture.ticketing.show.exception.ShowSeatGradeNotFoundException;
 import com.culture.ticketing.show.infra.ShowSeatRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
+
+import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SEAT_ID;
+import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_SEAT_GRADE_ID;
 
 @Service
 public class ShowSeatService {
@@ -25,15 +31,16 @@ public class ShowSeatService {
     @Transactional
     public void createShowSeat(ShowSeatSaveRequest request) {
 
-        if (request.getShowSeatGradeId() == null) {
-            throw new BaseException(BaseResponseStatus.EMPTY_SHOW_SEAT_GRADE_ID);
+        Objects.requireNonNull(request.getShowSeatGradeId(), EMPTY_SHOW_SEAT_GRADE_ID.getMessage());
+        Objects.requireNonNull(request.getSeatId(), EMPTY_SEAT_ID.getMessage());
+
+        if (seatService.existsById(request.getSeatId())) {
+            throw new SeatNotFoundException(request.getSeatId());
         }
-        if (request.getSeatId() == null) {
-            throw new BaseException(BaseResponseStatus.EMPTY_SEAT_ID);
+        if (showSeatGradeService.existsById(request.getShowSeatGradeId())) {
+            throw new ShowSeatGradeNotFoundException(request.getShowSeatGradeId());
         }
 
-        showSeatGradeService.getShowSeatGradeByShowSeatGradeId(request.getShowSeatGradeId());
-        seatService.getSeatBySeatId(request.getSeatId());
         ShowSeat showSeat = request.toEntity();
         showSeatRepository.save(showSeat);
     }

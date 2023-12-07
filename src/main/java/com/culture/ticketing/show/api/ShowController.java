@@ -1,10 +1,8 @@
 package com.culture.ticketing.show.api;
 
 import com.culture.ticketing.show.application.ShowService;
-import com.culture.ticketing.show.application.ShowSeatGradeService;
 import com.culture.ticketing.show.application.dto.ShowSaveRequest;
 import com.culture.ticketing.show.application.dto.ShowResponse;
-import com.culture.ticketing.show.application.dto.ShowSeatGradeSaveRequest;
 import com.culture.ticketing.show.domain.Category;
 import org.springframework.web.bind.annotation.*;
 

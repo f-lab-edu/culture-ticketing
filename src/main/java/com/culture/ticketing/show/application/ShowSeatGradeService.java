@@ -45,7 +45,7 @@ public class ShowSeatGradeService {
     }
 
     @Transactional(readOnly = true)
-    public ShowSeatGrade getShowSeatGradeByShowSeatGradeId(Long showSeatGradeId) {
-        return showSeatGradeRepository.findById(showSeatGradeId).orElseThrow(ShowSeatGradeNotFoundException::new);
+    public boolean existsById(Long showSeatGradeId) {
+        return showSeatGradeRepository.existsById(showSeatGradeId);
     }
 }

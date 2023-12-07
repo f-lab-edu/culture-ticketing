@@ -5,7 +5,7 @@ import com.culture.ticketing.common.response.BaseResponseStatus;
 
 public class ShowSeatGradeNotFoundException extends BaseException {
 
-    public ShowSeatGradeNotFoundException() {
-        super(BaseResponseStatus.NOT_FOUND_SHOW_SEAT_GRADE);
+    public ShowSeatGradeNotFoundException(Long showSeatGradeId) {
+        super(BaseResponseStatus.NOT_FOUND_SHOW_SEAT_GRADE, showSeatGradeId);
     }
 }

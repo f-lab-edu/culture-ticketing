@@ -41,7 +41,7 @@ public enum BaseResponseStatus {
     EMPTY_PERFORMER_NAME(400, "출연자 이름을 입력해주세요."),
     SHOW_PERFORMER_NOT_MATCH(400, "해당 공연의 출연자가 아닌 값이 포함되어 있습니다. (performerIds = %s)"),
 
-    NOT_FOUND_SHOW_SEAT_GRADE(404, "존재하지 않는 공연 좌석 등급입니다."),
+    NOT_FOUND_SHOW_SEAT_GRADE(404, "존재하지 않는 공연 좌석 등급입니다. (showSeatGradeId = %d)"),
     NOT_FOUND_SEAT(404, "존재하지 않는 좌석입니다. (seatId = %d)"),
     NOT_FOUND_AREA(404, "존재하지 않는 구역입니다. (areaId = %d)"),
     NOT_FOUND_PLACE(404, "존재하지 않는 장소입니다. (placeId = %d)"),
