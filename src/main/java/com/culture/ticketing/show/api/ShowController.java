@@ -16,11 +16,9 @@ import java.util.List;
 public class ShowController {
 
     private final ShowService showService;
-    private final ShowSeatGradeService showSeatGradeService;
 
-    public ShowController(ShowService showService, ShowSeatGradeService showSeatGradeService) {
+    public ShowController(ShowService showService) {
         this.showService = showService;
-        this.showSeatGradeService = showSeatGradeService;
     }
 
     @PostMapping("")
@@ -37,9 +35,4 @@ public class ShowController {
         return showService.findShows(offset, size, category);
     }
 
-    @PostMapping("/seat-grades")
-    public void postShowSeatGrade(@Valid @RequestBody ShowSeatGradeSaveRequest request) {
-
-        showSeatGradeService.createShowSeatGrade(request);
-    }
 }

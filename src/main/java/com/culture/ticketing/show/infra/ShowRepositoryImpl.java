@@ -8,7 +8,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static com.culture.ticketing.show.domain.QShow.*;
+import static com.culture.ticketing.show.domain.QShow.show;
 
 public class ShowRepositoryImpl implements ShowRepositoryCustom {
 

@@ -54,7 +54,7 @@ public class SeatService {
     }
 
     @Transactional(readOnly = true)
-    public Seat getSeatBySeatId(Long seatId) {
-        return seatRepository.findById(seatId).orElseThrow(SeatNotFoundException::new);
+    public boolean existsById(Long seatId) {
+        return seatRepository.existsById(seatId);
     }
 }
