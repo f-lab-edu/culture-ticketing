@@ -87,14 +87,7 @@ public class ShowService {
                 .collect(Collectors.toMap(Place::getPlaceId, Function.identity()));
 
         return shows.stream()
-                .map(show -> ShowResponse.builder()
-                        .showId(show.getShowId())
-                        .showName(show.getShowName())
-                        .posterImgUrl(show.getPosterImgUrl())
-                        .showStartDate(show.getShowStartDate())
-                        .showEndDate(show.getShowEndDate())
-                        .placeName(placeMapByPlaceId.get(show.getPlaceId()).getPlaceName())
-                        .build())
+                .map(show -> ShowResponse.create(show, placeMapByPlaceId.get(show.getPlaceId())))
                 .collect(Collectors.toList());
     }
 }
