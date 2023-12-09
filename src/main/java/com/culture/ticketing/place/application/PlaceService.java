@@ -1,11 +1,8 @@
 package com.culture.ticketing.place.application;
 
-import com.culture.ticketing.common.exception.BaseException;
-import com.culture.ticketing.common.response.BaseResponseStatus;
 import com.culture.ticketing.place.application.dto.PlaceResponse;
 import com.culture.ticketing.place.application.dto.PlaceSaveRequest;
 import com.culture.ticketing.place.domain.Place;
-import com.culture.ticketing.place.exception.PlaceNotFoundException;
 import com.culture.ticketing.place.infra.PlaceRepository;
 import com.google.common.base.Preconditions;
 import org.springframework.stereotype.Service;
@@ -61,7 +58,7 @@ public class PlaceService {
     }
 
     @Transactional(readOnly = true)
-    public List<Place> findByIdIn(List<Long> placeIds) {
+    public List<Place> findPlacesByIds(List<Long> placeIds) {
         return placeRepository.findAllById(placeIds);
     }
 }
