@@ -78,9 +78,11 @@ public class ShowService {
 
         List<Show> shows = showRepository.findByShowIdGreaterThanLimitAndCategory(offset, size, category);
 
-        Map<Long, Place> placeMapByPlaceId = placeService.findPlacesByIds(shows.stream()
-                        .map(Show::getPlaceId)
-                        .collect(Collectors.toList())).stream()
+        List<Long> placeIds = shows.stream()
+                .map(Show::getPlaceId)
+                .collect(Collectors.toList());
+
+        Map<Long, Place> placeMapByPlaceId = placeService.findPlacesByIds(placeIds).stream()
                 .collect(Collectors.toMap(Place::getPlaceId, place -> place));
 
         return shows.stream()
