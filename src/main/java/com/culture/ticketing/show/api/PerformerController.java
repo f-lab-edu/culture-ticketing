@@ -24,13 +24,13 @@ public class PerformerController {
         this.performerService = performerService;
     }
 
-    @PostMapping("")
+    @PostMapping
     public void postPerformer(@Valid @RequestBody PerformerSaveRequest request) {
 
         performerService.createPerformer(request);
     }
 
-    @GetMapping("")
+    @GetMapping
     public List<PerformerResponse> getPerformersByShowId(@RequestParam(value = "showId") Long showId) {
 
         return performerService.findPerformersByShowId(showId);

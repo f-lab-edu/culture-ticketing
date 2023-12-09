@@ -24,13 +24,13 @@ public class ShowController {
         this.showService = showService;
     }
 
-    @PostMapping("")
+    @PostMapping
     public void postShow(@Valid @RequestBody ShowSaveRequest request) {
 
         showService.createShow(request);
     }
 
-    @GetMapping("")
+    @GetMapping
     public List<ShowResponse> getShows(@RequestParam(name = "offset") Long offset,
                                        @RequestParam(name = "size") int size,
                                        @RequestParam(name = "category", required = false) Category category) {

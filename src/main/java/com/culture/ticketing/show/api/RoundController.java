@@ -19,7 +19,7 @@ public class RoundController {
         this.roundService = roundService;
     }
 
-    @PostMapping("")
+    @PostMapping
     public void postRound(@Valid @RequestBody RoundSaveRequest request) {
 
         roundService.createRound(request);
