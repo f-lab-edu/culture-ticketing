@@ -18,6 +18,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_CATEGORY;
@@ -83,7 +84,7 @@ public class ShowService {
                 .collect(Collectors.toList());
 
         Map<Long, Place> placeMapByPlaceId = placeService.findPlacesByIds(placeIds).stream()
-                .collect(Collectors.toMap(Place::getPlaceId, place -> place));
+                .collect(Collectors.toMap(Place::getPlaceId, Function.identity()));
 
         return shows.stream()
                 .map(show -> ShowResponse.builder()
