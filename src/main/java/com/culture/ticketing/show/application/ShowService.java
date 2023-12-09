@@ -87,7 +87,11 @@ public class ShowService {
                 .collect(Collectors.toMap(Place::getPlaceId, Function.identity()));
 
         return shows.stream()
-                .map(show -> ShowResponse.create(show, placeMapByPlaceId.get(show.getPlaceId())))
+                .map(show -> ShowResponse.create(show, placeMapByPlaceId.computeIfAbsent(
+                        show.getPlaceId(),
+                        placeId -> {
+                            throw new PlaceNotFoundException(placeId);
+                        })))
                 .collect(Collectors.toList());
     }
 }
