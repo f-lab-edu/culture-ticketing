@@ -8,7 +8,6 @@ import com.culture.ticketing.show.application.dto.ShowSaveRequest;
 import com.culture.ticketing.show.domain.Category;
 import com.culture.ticketing.show.domain.Show;
 import com.culture.ticketing.show.exception.ShowNotFoundException;
-import com.culture.ticketing.show.infra.PerformerRepository;
 import com.culture.ticketing.show.infra.ShowRepository;
 import com.google.common.base.Preconditions;
 import org.springframework.stereotype.Service;
@@ -34,12 +33,10 @@ import static com.culture.ticketing.common.response.BaseResponseStatus.NOT_POSIT
 public class ShowService {
 
     private final ShowRepository showRepository;
-    private final PerformerRepository performerRepository;
     private final PlaceService placeService;
 
-    public ShowService(ShowRepository showRepository, PerformerRepository performerRepository, PlaceService placeService) {
+    public ShowService(ShowRepository showRepository, PlaceService placeService) {
         this.showRepository = showRepository;
-        this.performerRepository = performerRepository;
         this.placeService = placeService;
     }
 
