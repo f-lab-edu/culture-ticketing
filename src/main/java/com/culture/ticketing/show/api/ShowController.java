@@ -15,7 +15,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/shows")
+@RequestMapping("/api/v1/shows")
 public class ShowController {
 
     private final ShowService showService;

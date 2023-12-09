@@ -15,7 +15,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/performers")
+@RequestMapping("/api/v1/performers")
 public class PerformerController {
 
     private final PerformerService performerService;
