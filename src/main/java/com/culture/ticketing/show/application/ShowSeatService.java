@@ -1,11 +1,15 @@
 package com.culture.ticketing.show.application;
 
-import com.culture.ticketing.place.application.SeatService;
 import com.culture.ticketing.place.domain.Seat;
 import com.culture.ticketing.place.exception.SeatNotFoundException;
+import com.culture.ticketing.place.infra.SeatRepository;
 import com.culture.ticketing.show.application.dto.ShowSeatSaveRequest;
+import com.culture.ticketing.show.domain.ShowArea;
 import com.culture.ticketing.show.domain.ShowSeat;
+import com.culture.ticketing.show.domain.ShowSeatGrade;
 import com.culture.ticketing.show.exception.ShowSeatGradeNotFoundException;
+import com.culture.ticketing.show.infra.ShowAreaRepository;
+import com.culture.ticketing.show.infra.ShowSeatGradeRepository;
 import com.culture.ticketing.show.infra.ShowSeatRepository;
 import com.google.common.base.Preconditions;
 import org.springframework.stereotype.Service;
@@ -22,13 +26,15 @@ import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHO
 public class ShowSeatService {
 
     private final ShowSeatRepository showSeatRepository;
-    private final ShowSeatGradeService showSeatGradeService;
-    private final SeatService seatService;
+    private final ShowSeatGradeRepository showSeatGradeRepository;
+    private final ShowAreaRepository showAreaRepository;
+    private final SeatRepository seatRepository;
 
-    public ShowSeatService(ShowSeatRepository showSeatRepository, ShowSeatGradeService showSeatGradeService, SeatService seatService) {
+    public ShowSeatService(ShowSeatRepository showSeatRepository, ShowSeatGradeRepository showSeatGradeRepository, ShowAreaRepository showAreaRepository, SeatRepository seatRepository) {
         this.showSeatRepository = showSeatRepository;
-        this.showSeatGradeService = showSeatGradeService;
-        this.seatService = seatService;
+        this.showSeatGradeRepository = showSeatGradeRepository;
+        this.showAreaRepository = showAreaRepository;
+        this.seatRepository = seatRepository;
     }
 
     @Transactional
@@ -38,10 +44,14 @@ public class ShowSeatService {
         Objects.requireNonNull(request.getSeatIds(), EMPTY_SEAT_ID.getMessage());
         Preconditions.checkArgument(request.getSeatIds().size() != 0, EMPTY_SEAT_ID.getMessage());
 
-        if (showSeatGradeService.existsById(request.getShowSeatGradeId())) {
+        ShowSeatGrade showSeatGrade = showSeatGradeRepository.findById(request.getShowSeatGradeId()).orElseThrow(() -> {
             throw new ShowSeatGradeNotFoundException(request.getShowSeatGradeId());
-        }
-        List<Seat> foundSeats = seatService.findSeatsByIds(request.getSeatIds());
+        });
+        List<ShowArea> showAreas = showAreaRepository.findByShowId(showSeatGrade.getShowId());
+        List<Long> areaIds = showAreas.stream()
+                .map(ShowArea::getAreaId)
+                .collect(Collectors.toList());
+        List<Seat> foundSeats = seatRepository.findBySeatIdInAndAreaIdIn(request.getSeatIds(), areaIds);
         if (request.getSeatIds().size() != foundSeats.size()) {
             String notMatchingSeatIds = request.getSeatIds().stream()
                     .filter(seatId -> foundSeats.stream().noneMatch(seat -> seat.getSeatId().equals(seatId)))
