@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -29,18 +28,13 @@ public class ShowSeat {
     @Column(name = "seat_id", nullable = false)
     private Long seatId;
 
-    @ColumnDefault("false")
-    @Column(name = "is_hidden", nullable = false)
-    private boolean isHidden;
-
     @Builder
-    public ShowSeat(Long showSeatGradeId, Long seatId, boolean isHidden) {
+    public ShowSeat(Long showSeatGradeId, Long seatId) {
 
         Objects.requireNonNull(showSeatGradeId, EMPTY_SHOW_SEAT_GRADE_ID.getMessage());
         Objects.requireNonNull(seatId, EMPTY_SEAT_ID.getMessage());
 
         this.showSeatGradeId = showSeatGradeId;
         this.seatId = seatId;
-        this.isHidden = isHidden;
     }
 }

@@ -5,7 +5,7 @@ import com.culture.ticketing.common.response.BaseResponseStatus;
 
 public class SeatNotFoundException extends BaseException {
 
-    public SeatNotFoundException(Long seatId) {
-        super(BaseResponseStatus.NOT_FOUND_SEAT, seatId);
+    public SeatNotFoundException(String seatId) {
+        super(BaseResponseStatus.NOT_FOUND_SEATS, seatId);
     }
 }

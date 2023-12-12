@@ -9,6 +9,7 @@ import com.google.common.base.Preconditions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 
 import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_PLACE_ID;
@@ -54,7 +55,7 @@ public class SeatService {
     }
 
     @Transactional(readOnly = true)
-    public boolean existsById(Long seatId) {
-        return seatRepository.existsById(seatId);
+    public List<Seat> findSeatsByIds(List<Long> seatIds) {
+        return seatRepository.findAllById(seatIds);
     }
 }
