@@ -21,24 +21,20 @@ public class Area extends BaseEntity {
     @Column(name = "area_id", nullable = false, updatable = false)
     private Long areaId;
 
-    @Column(name = "coordinate_x", nullable = false)
-    private int coordinateX;
-
-    @Column(name = "coordinate_y", nullable = false)
-    private int coordinateY;
+    @Column(name = "area_name", nullable = false)
+    private String areaName;
 
     @Column(name = "place_id", nullable = false)
     private Long placeId;
 
     @Builder
-    public Area(int coordinateX, int coordinateY, Long placeId) {
+    public Area(String areaName, Long placeId) {
 
         if (placeId == null) {
             throw new BaseException(BaseResponseStatus.EMPTY_PLACE_ID);
         }
 
-        this.coordinateX = coordinateX;
-        this.coordinateY = coordinateY;
+        this.areaName = areaName;
         this.placeId = placeId;
     }
 }

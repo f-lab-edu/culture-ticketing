@@ -8,4 +8,8 @@ public class AreaNotFoundException extends BaseException {
     public AreaNotFoundException(Long areaId) {
         super(BaseResponseStatus.NOT_FOUND_AREA, areaId);
     }
+
+    public AreaNotFoundException(String areaIds) {
+        super(BaseResponseStatus.NOT_FOUND_AREAS, areaIds);
+    }
 }

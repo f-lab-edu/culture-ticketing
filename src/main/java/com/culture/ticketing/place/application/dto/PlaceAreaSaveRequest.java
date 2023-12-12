@@ -10,15 +10,14 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class PlaceAreaSaveRequest {
 
-    private int coordinateX;
-    private int coordinateY;
+    private String areaName;
     @NotNull
     private Long placeId;
 
     public Area toEntity() {
         return Area.builder()
-                .coordinateX(coordinateX)
-                .coordinateY(coordinateY)
+                .areaName(areaName)
+                .placeId(placeId)
                 .build();
     }
 }
