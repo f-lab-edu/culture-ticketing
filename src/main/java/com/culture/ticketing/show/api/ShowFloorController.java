@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/show-floors")
+@RequestMapping("/api/v1/show-floors")
 public class ShowFloorController {
 
     private final ShowFloorService showFloorService;

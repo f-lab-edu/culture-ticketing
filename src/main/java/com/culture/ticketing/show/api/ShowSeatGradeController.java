@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/show-seat-grades")
+@RequestMapping("/api/v1/show-seat-grades")
 public class ShowSeatGradeController {
 
     private final ShowSeatGradeService showSeatGradeService;

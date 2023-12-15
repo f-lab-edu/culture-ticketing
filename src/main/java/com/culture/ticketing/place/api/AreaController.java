@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/areas")
+@RequestMapping("/api/v1/areas")
 public class AreaController {
 
     private final AreaService areaService;
