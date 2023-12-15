@@ -3,13 +3,12 @@ package com.culture.ticketing.show.infra;
 import com.culture.ticketing.common.infra.BaseRepositoryImpl;
 import com.culture.ticketing.show.domain.Category;
 import com.culture.ticketing.show.domain.Show;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static com.culture.ticketing.show.domain.QShow.*;
+import static com.culture.ticketing.common.utils.QueryUtils.ifNotNull;
+import static com.culture.ticketing.show.domain.QShow.show;
 
 public class ShowRepositoryImpl extends BaseRepositoryImpl implements ShowRepositoryCustom {
 
@@ -22,7 +21,7 @@ public class ShowRepositoryImpl extends BaseRepositoryImpl implements ShowReposi
 
         return queryFactory.selectFrom(show)
                 .where(show.showId.gt(showId),
-                        dynamicEquals(show.category, category))
+                        ifNotNull(show.category::eq, category))
                 .limit(size)
                 .fetch();
     }
