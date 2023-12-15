@@ -14,5 +14,5 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
 
     Optional<Seat> findByAreaIdAndSeatRowAndSeatNumber(Long areaId, int seatRow, int seatNumber);
 
-    List<Seat> findBySeatIdInAndAreaIdIn(List<Long> seatIds, List<Long> areaIds);
+    List<Seat> findBySeatIdIn(List<Long> seatIds);
 }
