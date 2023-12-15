@@ -19,7 +19,7 @@ public class ShowSeatController {
         this.showSeatService = showSeatService;
     }
 
-    @PostMapping("")
+    @PostMapping
     public void postShowSeat(@Valid @RequestBody ShowSeatSaveRequest request) {
 
         showSeatService.createShowSeat(request);

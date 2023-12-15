@@ -19,7 +19,7 @@ public class ShowSeatGradeController {
         this.showSeatGradeService = showSeatGradeService;
     }
 
-    @PostMapping("")
+    @PostMapping
     public void postShowSeatGrade(@Valid @RequestBody ShowSeatGradeSaveRequest request) {
 
         showSeatGradeService.createShowSeatGrade(request);

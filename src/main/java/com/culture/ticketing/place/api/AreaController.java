@@ -19,7 +19,7 @@ public class AreaController {
         this.areaService = areaService;
     }
 
-    @PostMapping("")
+    @PostMapping
     public void postArea(@Valid @RequestBody PlaceAreaSaveRequest request) {
 
         areaService.createPlaceArea(request);

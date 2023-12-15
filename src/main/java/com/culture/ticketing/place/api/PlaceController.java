@@ -18,13 +18,13 @@ public class PlaceController {
         this.placeService = placeService;
     }
 
-    @PostMapping("")
+    @PostMapping
     public void postPlace(@Valid @RequestBody PlaceSaveRequest request) {
 
         placeService.createPlace(request);
     }
 
-    @GetMapping("")
+    @GetMapping
     public List<PlaceResponse> getPlaces(@RequestParam(name = "offset") Long offset,
                                          @RequestParam(name = "size") int size) {
 

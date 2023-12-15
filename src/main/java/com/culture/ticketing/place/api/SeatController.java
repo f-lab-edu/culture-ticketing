@@ -19,7 +19,7 @@ public class SeatController {
         this.seatService = seatService;
     }
 
-    @PostMapping("")
+    @PostMapping
     public void postPlaceSeat(@Valid @RequestBody PlaceSeatSaveRequest request) {
 
         seatService.createPlaceSeat(request);
