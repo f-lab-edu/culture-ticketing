@@ -36,7 +36,7 @@ public class ShowSeatGradeService {
         Preconditions.checkArgument(StringUtils.hasText(request.getSeatGrade()), EMPTY_SHOW_SEAT_GRADE.getMessage());
         Preconditions.checkArgument(request.getPrice() > 0, NEGATIVE_SHOW_SEAT_PRICE.getMessage());
 
-        if (showService.existsById(request.getShowId())) {
+        if (!showService.existsById(request.getShowId())) {
             throw new ShowNotFoundException(request.getShowId());
         }
 

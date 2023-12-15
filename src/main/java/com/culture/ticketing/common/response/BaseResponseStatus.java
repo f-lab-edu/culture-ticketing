@@ -40,7 +40,8 @@ public enum BaseResponseStatus {
     OUT_OF_RANGE_ROUND_DATE_TIME(400, "공연 가능한 회차 날짜 범위를 벗어난 입력값입니다."),
     EMPTY_PERFORMER_NAME(400, "출연자 이름을 입력해주세요."),
     SHOW_PERFORMER_NOT_MATCH(400, "해당 공연의 출연자가 아닌 값이 포함되어 있습니다. (performerIds = %s)"),
-    EMPTY_SHOW_AREA_NAME(400, "공연 구역명을 입력해주세요."),
+    EMPTY_SHOW_FLOOR_NAME(400, "공연 플로어 구역명을 입력해주세요."),
+    NEGATIVE_SHOW_FLOOR_COUNT(400, "공연 플로어 인원수를 1 이상 숫자로 입력해주세요."),
 
     NOT_FOUND_SHOW_SEAT_GRADE(404, "존재하지 않는 공연 좌석 등급입니다. (showSeatGradeId = %d)"),
     NOT_FOUND_SEATS(404, "존재하지 않는 좌석입니다. (seatIds = %s)"),
