@@ -6,11 +6,9 @@ import javax.persistence.EntityManager;
 
 public class BaseRepositoryImpl {
 
-    protected final EntityManager em;
     protected final JPAQueryFactory queryFactory;
 
     public BaseRepositoryImpl(EntityManager em) {
-        this.em = em;
         this.queryFactory = new JPAQueryFactory(em);
     }
 }

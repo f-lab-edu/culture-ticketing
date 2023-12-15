@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/performers")
+@RequestMapping("/api/v1/performers")
 public class PerformerController {
 
     private final PerformerService performerService;
@@ -23,13 +23,13 @@ public class PerformerController {
         this.performerService = performerService;
     }
 
-    @PostMapping("")
+    @PostMapping
     public void postPerformer(@Valid @RequestBody PerformerSaveRequest request) {
 
         performerService.createPerformer(request);
     }
 
-    @GetMapping("")
+    @GetMapping
     public List<PerformerResponse> getPerformersByShowId(@RequestParam(value = "showId") Long showId) {
 
         return performerService.findPerformersByShowId(showId);

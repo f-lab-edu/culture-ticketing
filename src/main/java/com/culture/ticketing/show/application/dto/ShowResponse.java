@@ -1,5 +1,7 @@
 package com.culture.ticketing.show.application.dto;
 
+import com.culture.ticketing.place.domain.Place;
+import com.culture.ticketing.show.domain.Show;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -23,5 +25,16 @@ public class ShowResponse {
         this.showStartDate = showStartDate;
         this.showEndDate = showEndDate;
         this.placeName = placeName;
+    }
+
+    public static ShowResponse create(Show show, Place place) {
+        return ShowResponse.builder()
+                .showId(show.getShowId())
+                .showName(show.getShowName())
+                .posterImgUrl(show.getPosterImgUrl())
+                .showStartDate(show.getShowStartDate())
+                .showEndDate(show.getShowEndDate())
+                .placeName(place.getPlaceName())
+                .build();
     }
 }

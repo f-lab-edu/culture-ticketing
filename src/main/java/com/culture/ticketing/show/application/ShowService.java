@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_CATEGORY;
@@ -75,20 +76,19 @@ public class ShowService {
 
         List<Show> shows = showRepository.findByShowIdGreaterThanLimitAndCategory(offset, size, category);
 
-        Map<Long, Place> placeMapByPlaceId = placeService.findByIdIn(shows.stream()
-                        .map(Show::getPlaceId)
-                        .collect(Collectors.toList())).stream()
-                .collect(Collectors.toMap(Place::getPlaceId, place -> place));
+        List<Long> placeIds = shows.stream()
+                .map(Show::getPlaceId)
+                .collect(Collectors.toList());
+
+        Map<Long, Place> placeMapByPlaceId = placeService.findPlacesByIds(placeIds).stream()
+                .collect(Collectors.toMap(Place::getPlaceId, Function.identity()));
 
         return shows.stream()
-                .map(show -> ShowResponse.builder()
-                        .showId(show.getShowId())
-                        .showName(show.getShowName())
-                        .posterImgUrl(show.getPosterImgUrl())
-                        .showStartDate(show.getShowStartDate())
-                        .showEndDate(show.getShowEndDate())
-                        .placeName(placeMapByPlaceId.get(show.getPlaceId()).getPlaceName())
-                        .build())
+                .map(show -> ShowResponse.create(show, placeMapByPlaceId.computeIfAbsent(
+                        show.getPlaceId(),
+                        placeId -> {
+                            throw new PlaceNotFoundException(placeId);
+                        })))
                 .collect(Collectors.toList());
     }
 }
