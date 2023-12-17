@@ -9,7 +9,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/places")
+@RequestMapping("/api/v1/places")
 public class PlaceController {
 
     private final PlaceService placeService;
@@ -18,17 +18,17 @@ public class PlaceController {
         this.placeService = placeService;
     }
 
-    @PostMapping("")
+    @PostMapping
     public void postPlace(@Valid @RequestBody PlaceSaveRequest request) {
 
         placeService.createPlace(request);
     }
 
-    @GetMapping("")
-    public List<PlaceResponse> getPlaces(@RequestParam(name = "lastPlaceId") Long lastPlaceId,
+    @GetMapping
+    public List<PlaceResponse> getPlaces(@RequestParam(name = "offset") Long offset,
                                          @RequestParam(name = "size") int size) {
 
-        return placeService.findPlaces(lastPlaceId, size);
+        return placeService.findPlaces(offset, size);
     }
 
 }

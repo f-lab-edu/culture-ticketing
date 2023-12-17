@@ -3,7 +3,6 @@ package com.culture.ticketing.place.application;
 import com.culture.ticketing.place.application.dto.PlaceResponse;
 import com.culture.ticketing.place.application.dto.PlaceSaveRequest;
 import com.culture.ticketing.place.domain.Place;
-import com.culture.ticketing.place.exception.PlaceNotFoundException;
 import com.culture.ticketing.place.infra.PlaceRepository;
 import com.google.common.base.Preconditions;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_PLA
 import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_PLACE_LONGITUDE;
 import static com.culture.ticketing.common.response.BaseResponseStatus.PLACE_LATITUDE_OUT_OF_RANGE;
 import static com.culture.ticketing.common.response.BaseResponseStatus.PLACE_LONGITUDE_OUT_OF_RANGE;
-
 
 @Service
 public class PlaceService {
@@ -52,10 +50,15 @@ public class PlaceService {
     }
 
     @Transactional(readOnly = true)
-    public List<PlaceResponse> findPlaces(Long lastPlaceId, int size) {
+    public List<PlaceResponse> findPlaces(Long offset, int size) {
 
-        return placeRepository.findByPlaceIdGreaterThanLimit(lastPlaceId, size).stream()
+        return placeRepository.findByPlaceIdGreaterThanLimit(offset, size).stream()
                 .map(PlaceResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<Place> findPlacesByIds(List<Long> placeIds) {
+        return placeRepository.findAllById(placeIds);
     }
 }
