@@ -27,7 +27,7 @@ public class ShowResponse {
         this.placeName = placeName;
     }
 
-    public static ShowResponse create(Show show, Place place) {
+    public static ShowResponse from(Show show, Place place) {
         return ShowResponse.builder()
                 .showId(show.getShowId())
                 .showName(show.getShowName())
