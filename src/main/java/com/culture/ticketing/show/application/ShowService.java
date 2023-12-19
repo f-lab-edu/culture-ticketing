@@ -83,12 +83,19 @@ public class ShowService {
         Map<Long, Place> placeMapByPlaceId = placeService.findPlacesByIds(placeIds).stream()
                 .collect(Collectors.toMap(Place::getPlaceId, Function.identity()));
 
+        checkPlaceExistInShows(shows, placeMapByPlaceId);
+
         return shows.stream()
-                .map(show -> ShowResponse.from(show, placeMapByPlaceId.computeIfAbsent(
-                        show.getPlaceId(),
-                        placeId -> {
-                            throw new PlaceNotFoundException(placeId);
-                        })))
+                .map(show -> ShowResponse.from(show, placeMapByPlaceId.get(show.getPlaceId())))
                 .collect(Collectors.toList());
+    }
+
+    private void checkPlaceExistInShows(List<Show> shows, Map<Long, Place> placeMapByPlaceId) {
+
+        for (Show show : shows) {
+            if (!placeMapByPlaceId.containsKey(show.getPlaceId())) {
+                throw new PlaceNotFoundException(show.getPlaceId());
+            }
+        }
     }
 }
