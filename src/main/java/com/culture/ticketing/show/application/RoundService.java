@@ -8,12 +8,10 @@ import com.culture.ticketing.show.domain.RoundPerformer;
 import com.culture.ticketing.show.domain.Show;
 import com.culture.ticketing.show.exception.DuplicatedRoundDateTimeException;
 import com.culture.ticketing.show.exception.OutOfRangeRoundDateTime;
-import com.culture.ticketing.show.exception.ShowNotFoundException;
 import com.culture.ticketing.show.exception.ShowPerformerNotMatchException;
 import com.culture.ticketing.show.infra.PerformerRepository;
 import com.culture.ticketing.show.infra.RoundPerformerRepository;
 import com.culture.ticketing.show.infra.RoundRepository;
-import com.culture.ticketing.show.infra.ShowRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,14 +35,14 @@ public class RoundService {
     private final RoundRepository roundRepository;
     private final RoundPerformerRepository roundPerformerRepository;
     private final PerformerRepository performerRepository;
-    private final ShowRepository showRepository;
+    private final ShowService showService;
 
     public RoundService(RoundRepository roundRepository, RoundPerformerRepository roundPerformerRepository,
-                        PerformerRepository performerRepository, ShowRepository showRepository) {
+                        PerformerRepository performerRepository, ShowService showService) {
         this.roundRepository = roundRepository;
         this.roundPerformerRepository = roundPerformerRepository;
         this.performerRepository = performerRepository;
-        this.showRepository = showRepository;
+        this.showService = showService;
     }
 
     @Transactional
@@ -53,9 +51,7 @@ public class RoundService {
         Objects.requireNonNull(request.getShowId(), EMPTY_SHOW_ID.getMessage());
         Objects.requireNonNull(request.getRoundStartDateTime(), EMPTY_ROUND_DATE_TIME.getMessage());
 
-        Show show = showRepository.findById(request.getShowId()).orElseThrow(() -> {
-            throw new ShowNotFoundException(request.getShowId());
-        });
+        Show show = showService.findShowById(request.getShowId());
         Round round = request.toEntity(show);
 
         checkOutOfRangeRoundDateTime(round, show);
