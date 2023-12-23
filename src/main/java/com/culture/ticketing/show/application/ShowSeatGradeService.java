@@ -1,18 +1,18 @@
 package com.culture.ticketing.show.application;
 
-import com.culture.ticketing.common.exception.BaseException;
-import com.culture.ticketing.common.response.BaseResponseStatus;
+import com.culture.ticketing.show.application.dto.ShowSeatGradeResponse;
 import com.culture.ticketing.show.application.dto.ShowSeatGradeSaveRequest;
 import com.culture.ticketing.show.domain.ShowSeatGrade;
 import com.culture.ticketing.show.exception.ShowNotFoundException;
-import com.culture.ticketing.show.exception.ShowSeatGradeNotFoundException;
 import com.culture.ticketing.show.infra.ShowSeatGradeRepository;
 import com.google.common.base.Preconditions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_ID;
 import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_SEAT_GRADE;
@@ -47,5 +47,13 @@ public class ShowSeatGradeService {
     @Transactional(readOnly = true)
     public boolean existsById(Long showSeatGradeId) {
         return showSeatGradeRepository.existsById(showSeatGradeId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ShowSeatGradeResponse> findShowSeatGradesByShowId(Long showId) {
+
+        return showSeatGradeRepository.findByShowId(showId).stream()
+                .map(ShowSeatGradeResponse::new)
+                .collect(Collectors.toList());
     }
 }
