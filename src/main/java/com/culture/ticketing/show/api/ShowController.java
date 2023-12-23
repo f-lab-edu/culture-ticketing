@@ -1,6 +1,7 @@
 package com.culture.ticketing.show.api;
 
 import com.culture.ticketing.show.application.ShowService;
+import com.culture.ticketing.show.application.dto.ShowDetailResponse;
 import com.culture.ticketing.show.application.dto.ShowSaveRequest;
 import com.culture.ticketing.show.application.dto.ShowResponse;
 import com.culture.ticketing.show.domain.Category;
@@ -31,5 +32,11 @@ public class ShowController {
                                        @RequestParam(name = "category", required = false) Category category) {
 
         return showService.findShows(offset, size, category);
+    }
+
+    @GetMapping("/{showId}")
+    public ShowDetailResponse getShowById(@PathVariable("showId") Long showId) {
+
+        return showService.findShowDetailResponseById(showId);
     }
 }

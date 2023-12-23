@@ -3,6 +3,7 @@ package com.culture.ticketing.show.application;
 import com.culture.ticketing.place.application.PlaceService;
 import com.culture.ticketing.place.domain.Place;
 import com.culture.ticketing.place.exception.PlaceNotFoundException;
+import com.culture.ticketing.show.application.dto.ShowDetailResponse;
 import com.culture.ticketing.show.application.dto.ShowResponse;
 import com.culture.ticketing.show.application.dto.ShowSaveRequest;
 import com.culture.ticketing.show.domain.Category;
@@ -58,6 +59,15 @@ public class ShowService {
 
         Show show = request.toEntity();
         showRepository.save(show);
+    }
+
+    @Transactional(readOnly = true)
+    public ShowDetailResponse findShowDetailResponseById(Long showId) {
+
+        Show show = findShowById(showId);
+        Place place = placeService.findPlaceById(show.getPlaceId());
+
+        return ShowDetailResponse.from(show, place);
     }
 
     @Transactional(readOnly = true)
