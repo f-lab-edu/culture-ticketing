@@ -3,6 +3,7 @@ package com.culture.ticketing.place.application;
 import com.culture.ticketing.place.application.dto.PlaceResponse;
 import com.culture.ticketing.place.application.dto.PlaceSaveRequest;
 import com.culture.ticketing.place.domain.Place;
+import com.culture.ticketing.place.exception.PlaceNotFoundException;
 import com.culture.ticketing.place.infra.PlaceRepository;
 import com.google.common.base.Preconditions;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,13 @@ public class PlaceService {
 
         Place place = request.toEntity();
         placeRepository.save(place);
+    }
+
+    @Transactional(readOnly = true)
+    public Place findPlaceById(Long placeId) {
+        return placeRepository.findById(placeId).orElseThrow(() -> {
+            throw new PlaceNotFoundException(placeId);
+        });
     }
 
     @Transactional(readOnly = true)
