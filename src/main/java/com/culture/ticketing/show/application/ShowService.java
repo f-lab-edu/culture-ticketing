@@ -3,6 +3,7 @@ package com.culture.ticketing.show.application;
 import com.culture.ticketing.place.application.PlaceService;
 import com.culture.ticketing.place.domain.Place;
 import com.culture.ticketing.place.exception.PlaceNotFoundException;
+import com.culture.ticketing.show.application.dto.RoundResponse;
 import com.culture.ticketing.show.application.dto.ShowDetailResponse;
 import com.culture.ticketing.show.application.dto.ShowResponse;
 import com.culture.ticketing.show.application.dto.ShowSaveRequest;
@@ -35,10 +36,12 @@ public class ShowService {
 
     private final ShowRepository showRepository;
     private final PlaceService placeService;
+    private final RoundService roundService;
 
-    public ShowService(ShowRepository showRepository, PlaceService placeService) {
+    public ShowService(ShowRepository showRepository, PlaceService placeService, RoundService roundService) {
         this.showRepository = showRepository;
         this.placeService = placeService;
+        this.roundService = roundService;
     }
 
     @Transactional
@@ -64,17 +67,13 @@ public class ShowService {
     @Transactional(readOnly = true)
     public ShowDetailResponse findShowDetailResponseById(Long showId) {
 
-        Show show = findShowById(showId);
-        Place place = placeService.findPlaceById(show.getPlaceId());
-
-        return ShowDetailResponse.from(show, place);
-    }
-
-    @Transactional(readOnly = true)
-    public Show findShowById(Long showId) {
-        return showRepository.findById(showId).orElseThrow(() -> {
+        Show show = showRepository.findById(showId).orElseThrow(() -> {
             throw new ShowNotFoundException(showId);
         });
+        Place place = placeService.findPlaceById(show.getPlaceId());
+        List<RoundResponse> rounds = roundService.findRoundsByShowId(show.getShowId());
+
+        return ShowDetailResponse.from(show, place, rounds);
     }
 
     @Transactional(readOnly = true)

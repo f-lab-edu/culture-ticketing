@@ -2,11 +2,13 @@ package com.culture.ticketing.show.application.dto;
 
 import com.culture.ticketing.place.application.dto.PlaceResponse;
 import com.culture.ticketing.place.domain.Place;
+import com.culture.ticketing.show.domain.Round;
 import com.culture.ticketing.show.domain.Show;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 public class ShowDetailResponse {
@@ -22,10 +24,11 @@ public class ShowDetailResponse {
     private final String notice;
     private final String description;
     private final PlaceResponse place;
+    private final List<RoundResponse> rounds;
 
     @Builder
     public ShowDetailResponse(Long showId, String showName, String posterImgUrl, String categoryName, LocalDate showStartDate, LocalDate showEndDate,
-                              String ageRestrictionName, int runningTime, String notice, String description, PlaceResponse place) {
+                              String ageRestrictionName, int runningTime, String notice, String description, PlaceResponse place, List<RoundResponse> rounds) {
         this.showId = showId;
         this.showName = showName;
         this.posterImgUrl = posterImgUrl;
@@ -37,9 +40,10 @@ public class ShowDetailResponse {
         this.notice = notice;
         this.description = description;
         this.place = place;
+        this.rounds = rounds;
     }
 
-    public static ShowDetailResponse from(Show show, Place place) {
+    public static ShowDetailResponse from(Show show, Place place, List<RoundResponse> rounds) {
         return ShowDetailResponse.builder()
                 .showId(show.getShowId())
                 .showName(show.getShowName())
@@ -52,6 +56,7 @@ public class ShowDetailResponse {
                 .notice(show.getNotice())
                 .description(show.getDescription())
                 .place(new PlaceResponse(place))
+                .rounds(rounds)
                 .build();
     }
 }
