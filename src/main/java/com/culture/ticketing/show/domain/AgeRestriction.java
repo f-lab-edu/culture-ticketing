@@ -6,9 +6,13 @@ public enum AgeRestriction {
     FIFTEEN("15세 이상 관람가"),
     ADULT("청소년 관람불가");
 
-    private String ageRestrictionName;
+    private final String ageRestrictionName;
 
     AgeRestriction(String ageRestrictionName) {
         this.ageRestrictionName = ageRestrictionName;
+    }
+
+    public String getAgeRestrictionName() {
+        return this.ageRestrictionName;
     }
 }
