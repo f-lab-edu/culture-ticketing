@@ -1,9 +1,13 @@
 package com.culture.ticketing.show.api;
 
+import com.culture.ticketing.show.application.RoundService;
+import com.culture.ticketing.show.application.ShowSeatGradeService;
 import com.culture.ticketing.show.application.ShowService;
+import com.culture.ticketing.show.application.dto.RoundResponse;
 import com.culture.ticketing.show.application.dto.ShowDetailResponse;
 import com.culture.ticketing.show.application.dto.ShowSaveRequest;
 import com.culture.ticketing.show.application.dto.ShowResponse;
+import com.culture.ticketing.show.application.dto.ShowSeatGradeResponse;
 import com.culture.ticketing.show.domain.Category;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,9 +19,13 @@ import java.util.List;
 public class ShowController {
 
     private final ShowService showService;
+    private final RoundService roundService;
+    private final ShowSeatGradeService showSeatGradeService;
 
-    public ShowController(ShowService showService) {
+    public ShowController(ShowService showService, RoundService roundService, ShowSeatGradeService showSeatGradeService) {
         this.showService = showService;
+        this.roundService = roundService;
+        this.showSeatGradeService = showSeatGradeService;
     }
 
     @PostMapping
@@ -37,6 +45,10 @@ public class ShowController {
     @GetMapping("/{showId}")
     public ShowDetailResponse getShowById(@PathVariable("showId") Long showId) {
 
-        return showService.findShowDetailResponseById(showId);
+        ShowResponse showDetail = showService.findShowDetailById(showId);
+        List<RoundResponse> rounds = roundService.findRoundsByShowId(showId);
+        List<ShowSeatGradeResponse> showSeatGrades = showSeatGradeService.findShowSeatGradesByShowId(showId);
+
+        return new ShowDetailResponse(showDetail, rounds, showSeatGrades);
     }
 }
