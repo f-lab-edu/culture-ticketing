@@ -14,6 +14,7 @@ import com.culture.ticketing.show.infra.RoundRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -89,5 +90,15 @@ public class RoundService {
                     .collect(Collectors.joining(","));
             throw new ShowPerformerNotMatchException(notMatchingPerformerIds);
         }
+    }
+
+    public List<LocalDate> findRoundExistDatesByShowId(Long showId) {
+
+        List<Round> rounds = roundRepository.findByShowId(showId);
+
+        return rounds.stream()
+                .map(round -> round.getRoundStartDateTime().toLocalDate())
+                .distinct()
+                .collect(Collectors.toList());
     }
 }
