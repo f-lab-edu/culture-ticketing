@@ -10,10 +10,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Objects;
 
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_PLACE_ID;
-import static com.culture.ticketing.common.response.BaseResponseStatus.NEGATIVE_SEAT_NUMBER;
-import static com.culture.ticketing.common.response.BaseResponseStatus.NEGATIVE_SEAT_ROW;
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -43,9 +39,9 @@ public class Seat extends BaseEntity {
     @Builder
     public Seat(int coordinateX, int coordinateY, int seatRow, int seatNumber, Long areaId) {
 
-        Objects.requireNonNull(areaId, EMPTY_PLACE_ID.getMessage());
-        Preconditions.checkArgument(seatRow > 0, NEGATIVE_SEAT_ROW.getMessage());
-        Preconditions.checkArgument(seatNumber > 0, NEGATIVE_SEAT_NUMBER.getMessage());
+        Objects.requireNonNull(areaId, "장소 아이디를 입력해주세요.");
+        Preconditions.checkArgument(seatRow > 0, "좌석 행을 1 이상 숫자로 입력해주세요.");
+        Preconditions.checkArgument(seatNumber > 0, "좌석 번호를 1 이상 숫자로 입력해주세요.");
 
         this.coordinateX = coordinateX;
         this.coordinateY = coordinateY;

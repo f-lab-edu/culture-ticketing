@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Objects;
 
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_PLACE_ID;
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -37,7 +35,7 @@ public class Area extends BaseEntity {
     @Builder
     public Area(String areaName, int coordinateX, int coordinateY, Long placeId) {
 
-        Objects.requireNonNull(placeId, EMPTY_PLACE_ID.getMessage());
+        Objects.requireNonNull(placeId, "장소 아이디를 입력해주세요.");
 
         this.areaName = areaName;
         this.coordinateX = coordinateX;

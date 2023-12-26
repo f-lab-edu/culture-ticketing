@@ -9,8 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_PLACE_ID;
-
 @Service
 public class AreaService {
 
@@ -30,7 +28,7 @@ public class AreaService {
     @Transactional
     public void createPlaceArea(PlaceAreaSaveRequest request) {
 
-        Objects.requireNonNull(request.getPlaceId(), EMPTY_PLACE_ID.getMessage());
+        Objects.requireNonNull(request.getPlaceId(), "장소 아이디를 입력해주세요.");
 
         if (!placeService.existsById(request.getPlaceId())) {
             throw new PlaceNotFoundException(request.getPlaceId());

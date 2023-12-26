@@ -16,9 +16,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Objects;
 
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_PERFORMER_NAME;
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_ID;
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -41,8 +38,8 @@ public class Performer extends BaseEntity {
     @Builder
     public Performer(String performerName, String performerImgUrl, String role, Long showId) {
 
-        Objects.requireNonNull(showId, EMPTY_SHOW_ID.getMessage());
-        Preconditions.checkArgument(StringUtils.hasText(performerName), EMPTY_PERFORMER_NAME.getMessage());
+        Objects.requireNonNull(showId, "공연 아이디를 입력해주세요.");
+        Preconditions.checkArgument(StringUtils.hasText(performerName), "출연자 이름을 입력해주세요.");
 
         this.performerName = performerName;
         this.performerImgUrl = performerImgUrl;

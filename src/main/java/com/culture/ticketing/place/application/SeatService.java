@@ -11,10 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_PLACE_ID;
-import static com.culture.ticketing.common.response.BaseResponseStatus.NEGATIVE_SEAT_NUMBER;
-import static com.culture.ticketing.common.response.BaseResponseStatus.NEGATIVE_SEAT_ROW;
-
 @Service
 public class SeatService {
 
@@ -29,9 +25,9 @@ public class SeatService {
     @Transactional
     public void createPlaceSeat(PlaceSeatSaveRequest request) {
 
-        Objects.requireNonNull(request.getAreaId(), EMPTY_PLACE_ID.getMessage());
-        Preconditions.checkArgument(request.getSeatRow() > 0, NEGATIVE_SEAT_ROW.getMessage());
-        Preconditions.checkArgument(request.getSeatNumber() > 0, NEGATIVE_SEAT_NUMBER.getMessage());
+        Objects.requireNonNull(request.getAreaId(), "장소 아이디를 입력해주세요.");
+        Preconditions.checkArgument(request.getSeatRow() > 0, "좌석 행을 1 이상 숫자로 입력해주세요.");
+        Preconditions.checkArgument(request.getSeatNumber() > 0, "좌석 번호를 1 이상 숫자로 입력해주세요.");
 
         if (!areaService.existsById(request.getAreaId())) {
             throw new AreaNotFoundException(request.getAreaId());
