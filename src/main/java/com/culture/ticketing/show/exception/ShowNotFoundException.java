@@ -1,11 +1,8 @@
 package com.culture.ticketing.show.exception;
 
-import com.culture.ticketing.common.exception.BaseException;
-import com.culture.ticketing.common.response.BaseResponseStatus;
-
-public class ShowNotFoundException extends BaseException {
+public class ShowNotFoundException extends RuntimeException {
 
     public ShowNotFoundException(Long showId) {
-        super(BaseResponseStatus.NOT_FOUND_SHOW, showId);
+        super(String.format("존재하지 않는 공연입니다. (showId = %d)", showId));
     }
 }
