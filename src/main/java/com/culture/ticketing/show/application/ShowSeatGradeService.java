@@ -1,11 +1,8 @@
 package com.culture.ticketing.show.application;
 
-import com.culture.ticketing.common.exception.BaseException;
-import com.culture.ticketing.common.response.BaseResponseStatus;
 import com.culture.ticketing.show.application.dto.ShowSeatGradeSaveRequest;
 import com.culture.ticketing.show.domain.ShowSeatGrade;
 import com.culture.ticketing.show.exception.ShowNotFoundException;
-import com.culture.ticketing.show.exception.ShowSeatGradeNotFoundException;
 import com.culture.ticketing.show.infra.ShowSeatGradeRepository;
 import com.google.common.base.Preconditions;
 import org.springframework.stereotype.Service;

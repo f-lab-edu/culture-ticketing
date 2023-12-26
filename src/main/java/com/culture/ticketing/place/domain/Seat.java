@@ -1,14 +1,11 @@
 package com.culture.ticketing.place.domain;
 
 import com.culture.ticketing.common.entity.BaseEntity;
-import com.culture.ticketing.common.exception.BaseException;
-import com.culture.ticketing.common.response.BaseResponseStatus;
 import com.google.common.base.Preconditions;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.util.Objects;

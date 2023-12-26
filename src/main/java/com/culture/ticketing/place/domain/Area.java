@@ -1,8 +1,6 @@
 package com.culture.ticketing.place.domain;
 
 import com.culture.ticketing.common.entity.BaseEntity;
-import com.culture.ticketing.common.exception.BaseException;
-import com.culture.ticketing.common.response.BaseResponseStatus;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
