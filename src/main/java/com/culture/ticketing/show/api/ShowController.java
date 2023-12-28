@@ -32,4 +32,5 @@ public class ShowController {
 
         return showService.findShows(offset, size, category);
     }
+
 }

@@ -20,15 +20,6 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_CATEGORY;
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_AGE_RESTRICTION;
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_PLACE_ID;
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_START_DATE;
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_END_DATE;
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_NAME;
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_POSTER_IMG_URL;
-import static com.culture.ticketing.common.response.BaseResponseStatus.NOT_POSITIVE_SHOW_RUNNING_TIME;
-
 @Service
 public class ShowService {
 
@@ -43,14 +34,14 @@ public class ShowService {
     @Transactional
     public void createShow(ShowSaveRequest request) {
 
-        Objects.requireNonNull(request.getCategory(), EMPTY_SHOW_CATEGORY.getMessage());
-        Objects.requireNonNull(request.getAgeRestriction(), EMPTY_SHOW_AGE_RESTRICTION.getMessage());
-        Objects.requireNonNull(request.getPlaceId(), EMPTY_SHOW_PLACE_ID.getMessage());
-        Objects.requireNonNull(request.getShowStartDate(), EMPTY_SHOW_START_DATE.getMessage());
-        Objects.requireNonNull(request.getShowEndDate(), EMPTY_SHOW_END_DATE.getMessage());
-        Preconditions.checkArgument(StringUtils.hasText(request.getShowName()), EMPTY_SHOW_NAME.getMessage());
-        Preconditions.checkArgument(StringUtils.hasText(request.getPosterImgUrl()), EMPTY_SHOW_POSTER_IMG_URL.getMessage());
-        Preconditions.checkArgument(request.getRunningTime() > 0, NOT_POSITIVE_SHOW_RUNNING_TIME.getMessage());
+        Objects.requireNonNull(request.getCategory(), "공연 카테고리를 입력해주세요.");
+        Objects.requireNonNull(request.getAgeRestriction(), "공연 카테고리를 입력해주세요.");
+        Objects.requireNonNull(request.getPlaceId(), "공연 장소 아이디를 입력해주세요.");
+        Objects.requireNonNull(request.getShowStartDate(), "공연 시작 날짜를 입력해주세요.");
+        Objects.requireNonNull(request.getShowEndDate(), "공연 종료 날짜를 입력해주세요.");
+        Preconditions.checkArgument(StringUtils.hasText(request.getShowName()), "공연 이름을 입력해주세요.");
+        Preconditions.checkArgument(StringUtils.hasText(request.getPosterImgUrl()), "공연 포스터 이미지 url을 입력해주세요.");
+        Preconditions.checkArgument(request.getRunningTime() > 0, "공연 러닝 시간을 0 초과로 입력해주세요.");
 
         if (!placeService.existsById(request.getPlaceId())) {
             throw new PlaceNotFoundException(request.getPlaceId());
@@ -83,12 +74,19 @@ public class ShowService {
         Map<Long, Place> placeMapByPlaceId = placeService.findPlacesByIds(placeIds).stream()
                 .collect(Collectors.toMap(Place::getPlaceId, Function.identity()));
 
+        checkPlaceExistInShows(shows, placeMapByPlaceId);
+
         return shows.stream()
-                .map(show -> ShowResponse.create(show, placeMapByPlaceId.computeIfAbsent(
-                        show.getPlaceId(),
-                        placeId -> {
-                            throw new PlaceNotFoundException(placeId);
-                        })))
+                .map(show -> ShowResponse.from(show, placeMapByPlaceId.get(show.getPlaceId())))
                 .collect(Collectors.toList());
+    }
+
+    private void checkPlaceExistInShows(List<Show> shows, Map<Long, Place> placeMapByPlaceId) {
+
+        for (Show show : shows) {
+            if (!placeMapByPlaceId.containsKey(show.getPlaceId())) {
+                throw new PlaceNotFoundException(show.getPlaceId());
+            }
+        }
     }
 }
