@@ -61,15 +61,6 @@ public class ShowService {
     }
 
     @Transactional(readOnly = true)
-    public ShowResponse findShowDetailById(Long showId) {
-
-        Show show = findShowById(showId);
-        Place place = placeService.findPlaceById(show.getPlaceId());
-
-        return ShowResponse.from(show, place);
-    }
-
-    @Transactional(readOnly = true)
     public Show findShowById(Long showId) {
 
         return showRepository.findById(showId).orElseThrow(() -> {
