@@ -51,7 +51,7 @@ public class PerformerService {
                 .collect(Collectors.toList());
     }
 
-    public void checkShowPerformerMatch(Long showId, Collection<Long> performerIds) {
+    public void checkShowPerformersExists(Long showId, Collection<Long> performerIds) {
 
         List<Performer> foundPerformers = findShowPerformers(showId, performerIds);
         if (foundPerformers.size() != performerIds.size()) {

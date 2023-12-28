@@ -28,7 +28,7 @@ public class RoundPerformerService {
 
         Round round = roundService.findById(roundId);
 
-        performerService.checkShowPerformerMatch(round.getShowId(), performerIds);
+        performerService.checkShowPerformersExists(round.getShowId(), performerIds);
 
         List<RoundPerformer> roundPerformers = performerIds.stream()
                 .map(performerId -> RoundPerformer.builder()

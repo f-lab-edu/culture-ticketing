@@ -4,12 +4,15 @@ import com.culture.ticketing.place.application.dto.PlaceSeatSaveRequest;
 import com.culture.ticketing.place.domain.Seat;
 import com.culture.ticketing.place.exception.AreaNotFoundException;
 import com.culture.ticketing.place.exception.DuplicatedPlaceSeatException;
+import com.culture.ticketing.place.exception.SeatNotFoundException;
 import com.culture.ticketing.place.infra.SeatRepository;
 import com.google.common.base.Preconditions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_PLACE_ID;
 import static com.culture.ticketing.common.response.BaseResponseStatus.NEGATIVE_SEAT_NUMBER;
@@ -51,5 +54,18 @@ public class SeatService {
                 .ifPresent(s -> {
                     throw new DuplicatedPlaceSeatException();
                 });
+    }
+
+    @Transactional(readOnly = true)
+    public void checkSeatsExists(List<Long> seatIds) {
+
+        List<Seat> foundSeats = seatRepository.findBySeatIdIn(seatIds);
+        if (seatIds.size() != foundSeats.size()) {
+            String notMatchingSeatIds = seatIds.stream()
+                    .filter(seatId -> foundSeats.stream().noneMatch(seat -> seat.getSeatId().equals(seatId)))
+                    .map(Objects::toString)
+                    .collect(Collectors.joining(","));
+            throw new SeatNotFoundException(notMatchingSeatIds);
+        }
     }
 }
