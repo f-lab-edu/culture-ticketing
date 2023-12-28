@@ -4,14 +4,18 @@ import com.culture.ticketing.show.application.dto.PerformerResponse;
 import com.culture.ticketing.show.application.dto.PerformerSaveRequest;
 import com.culture.ticketing.show.domain.Performer;
 import com.culture.ticketing.show.exception.ShowNotFoundException;
+import com.culture.ticketing.show.exception.ShowPerformerNotMatchException;
 import com.culture.ticketing.show.infra.PerformerRepository;
 import com.google.common.base.Preconditions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_PERFORMER_NAME;
@@ -47,5 +51,26 @@ public class PerformerService {
         return performerRepository.findByShowId(showId).stream()
                 .map(PerformerResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    public void checkShowPerformerMatch(Long showId, Collection<Long> performerIds) {
+
+        List<Performer> foundPerformers = findShowPerformers(showId, performerIds);
+        if (foundPerformers.size() != performerIds.size()) {
+            String notMatchingPerformerIds = performerIds.stream()
+                    .filter(performerId -> foundPerformers.stream().noneMatch(performer -> performer.getPerformerId().equals(performerId)))
+                    .map(Objects::toString)
+                    .collect(Collectors.joining(","));
+            throw new ShowPerformerNotMatchException(notMatchingPerformerIds);
+        }
+    }
+
+    public Map<Long, Performer> findPerformersMapById(Long showId, Collection<Long> performerIds) {
+        return findShowPerformers(showId, performerIds).stream()
+                .collect(Collectors.toMap(Performer::getPerformerId, Function.identity()));
+    }
+
+    public List<Performer> findShowPerformers(Long showId, Collection<Long> performerIds) {
+        return performerRepository.findByShowIdAndPerformerIdIn(showId, performerIds);
     }
 }
