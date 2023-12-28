@@ -39,4 +39,10 @@ public class RoundPerformerService {
 
         roundPerformerRepository.saveAll(roundPerformers);
     }
+
+    @Transactional(readOnly = true)
+    public List<RoundPerformer> findByRoundIds(List<Long> roundIds) {
+
+        return roundPerformerRepository.findByRoundIdIn(roundIds);
+    }
 }

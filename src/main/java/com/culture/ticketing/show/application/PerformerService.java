@@ -13,9 +13,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_PERFORMER_NAME;
@@ -63,11 +61,6 @@ public class PerformerService {
                     .collect(Collectors.joining(","));
             throw new ShowPerformerNotMatchException(notMatchingPerformerIds);
         }
-    }
-
-    public Map<Long, Performer> findPerformersMapById(Long showId, Collection<Long> performerIds) {
-        return findShowPerformers(showId, performerIds).stream()
-                .collect(Collectors.toMap(Performer::getPerformerId, Function.identity()));
     }
 
     public List<Performer> findShowPerformers(Long showId, Collection<Long> performerIds) {

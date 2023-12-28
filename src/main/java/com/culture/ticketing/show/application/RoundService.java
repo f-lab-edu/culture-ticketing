@@ -1,37 +1,26 @@
 package com.culture.ticketing.show.application;
 
-import com.culture.ticketing.show.application.dto.RoundResponse;
-import com.culture.ticketing.show.domain.Performer;
 import com.culture.ticketing.show.domain.Round;
-import com.culture.ticketing.show.domain.RoundPerformer;
 import com.culture.ticketing.show.domain.Show;
 import com.culture.ticketing.show.exception.DuplicatedRoundDateTimeException;
 import com.culture.ticketing.show.exception.OutOfRangeRoundDateTime;
 import com.culture.ticketing.show.exception.RoundNotFoundException;
-import com.culture.ticketing.show.infra.RoundPerformerRepository;
 import com.culture.ticketing.show.infra.RoundRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 
 @Service
 public class RoundService {
 
     private final RoundRepository roundRepository;
-    private final RoundPerformerRepository roundPerformerRepository;
-    private final PerformerService performerService;
 
-    public RoundService(RoundRepository roundRepository, RoundPerformerRepository roundPerformerRepository, PerformerService performerService) {
+    public RoundService(RoundRepository roundRepository) {
         this.roundRepository = roundRepository;
-        this.roundPerformerRepository = roundPerformerRepository;
-        this.performerService = performerService;
     }
 
     @Transactional(readOnly = true)
@@ -69,25 +58,8 @@ public class RoundService {
     }
 
     @Transactional(readOnly = true)
-    public List<RoundResponse> findRoundsByShowId(Long showId) {
+    public List<Round> findByShowId(Long showId) {
 
-        List<Round> rounds = roundRepository.findByShowId(showId);
-        List<Long> roundIds = rounds.stream()
-                .map(Round::getRoundId)
-                .collect(Collectors.toList());
-
-        List<RoundPerformer> roundPerformers = roundPerformerRepository.findByRoundIdIn(roundIds);
-        List<Long> performerIds = roundPerformers.stream()
-                .map(RoundPerformer::getPerformerId)
-                .collect(Collectors.toList());
-
-        Map<Long, Performer> performerMapById = performerService.findPerformersMapById(showId, performerIds);
-
-        Map<Long, List<Performer>> performersMapByRoundId = roundPerformerRepository.findByRoundIdIn(roundIds).stream()
-                .collect(Collectors.groupingBy(RoundPerformer::getRoundId, Collectors.mapping(roundPerformer -> performerMapById.get(roundPerformer.getPerformerId()), Collectors.toList())));
-
-        return rounds.stream()
-                .map(round -> RoundResponse.from(round, performersMapByRoundId.getOrDefault(round.getRoundId(), Collections.emptyList())))
-                .collect(Collectors.toList());
+        return roundRepository.findByShowId(showId);
     }
 }

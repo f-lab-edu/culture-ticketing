@@ -9,11 +9,11 @@ import java.util.List;
 public class ShowDetailResponse {
 
     private final ShowResponse show;
-    private final List<RoundResponse> rounds;
+    private final List<RoundWithPerformersResponse> rounds;
     private final List<ShowSeatGradeResponse> showSeatGrades;
 
     @Builder
-    public ShowDetailResponse(ShowResponse show, List<RoundResponse> rounds, List<ShowSeatGradeResponse> showSeatGrades) {
+    public ShowDetailResponse(ShowResponse show, List<RoundWithPerformersResponse> rounds, List<ShowSeatGradeResponse> showSeatGrades) {
         this.show = show;
         this.rounds = rounds;
         this.showSeatGrades = showSeatGrades;
