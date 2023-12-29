@@ -1,11 +1,8 @@
 package com.culture.ticketing.show.exception;
 
-import com.culture.ticketing.common.exception.BaseException;
-import com.culture.ticketing.common.response.BaseResponseStatus;
-
-public class ShowSeatGradeNotFoundException extends BaseException {
+public class ShowSeatGradeNotFoundException extends RuntimeException {
 
     public ShowSeatGradeNotFoundException(Long showSeatGradeId) {
-        super(BaseResponseStatus.NOT_FOUND_SHOW_SEAT_GRADE, showSeatGradeId);
+        super(String.format("존재하지 않는 공연 좌석 등급입니다. (showSeatGradeId = %d)", showSeatGradeId));
     }
 }

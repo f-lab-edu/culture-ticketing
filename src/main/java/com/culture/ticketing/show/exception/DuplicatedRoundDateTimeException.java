@@ -1,11 +1,8 @@
 package com.culture.ticketing.show.exception;
 
-import com.culture.ticketing.common.exception.BaseException;
-import com.culture.ticketing.common.response.BaseResponseStatus;
-
-public class DuplicatedRoundDateTimeException extends BaseException {
+public class DuplicatedRoundDateTimeException extends RuntimeException {
 
     public DuplicatedRoundDateTimeException() {
-        super(BaseResponseStatus.DUPLICATED_ROUND_DATE_TIME);
+        super("해당 공연에 일정이 동일한 회차가 이미 존재합니다.");
     }
 }

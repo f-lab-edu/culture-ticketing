@@ -15,12 +15,6 @@ import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_PLACE_ADDRESS;
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_PLACE_LATITUDE;
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_PLACE_LONGITUDE;
-import static com.culture.ticketing.common.response.BaseResponseStatus.PLACE_LATITUDE_OUT_OF_RANGE;
-import static com.culture.ticketing.common.response.BaseResponseStatus.PLACE_LONGITUDE_OUT_OF_RANGE;
-
 @Getter
 @NoArgsConstructor
 @Entity
@@ -43,13 +37,13 @@ public class Place {
     @Builder
     public Place(String placeName, String address, BigDecimal latitude, BigDecimal longitude) {
 
-        Objects.requireNonNull(latitude, EMPTY_PLACE_LATITUDE.getMessage());
-        Objects.requireNonNull(longitude, EMPTY_PLACE_LONGITUDE.getMessage());
-        Preconditions.checkArgument(StringUtils.hasText(address), EMPTY_PLACE_ADDRESS.getMessage());
+        Objects.requireNonNull(latitude, "정확한 장소 위도를 입력해주세요.");
+        Objects.requireNonNull(longitude, "정확한 장소 경도를 입력해주세요.");
+        Preconditions.checkArgument(StringUtils.hasText(address), "장소 주소를 입력해주세요.");
         Preconditions.checkArgument(latitude.compareTo(BigDecimal.valueOf(-90)) >= 0
-                && latitude.compareTo(BigDecimal.valueOf(90)) <= 0, PLACE_LATITUDE_OUT_OF_RANGE.getMessage());
+                && latitude.compareTo(BigDecimal.valueOf(90)) <= 0, "장소 위도 범위를 벗어난 입력값입니다.");
         Preconditions.checkArgument(longitude.compareTo(BigDecimal.valueOf(-180)) >= 0
-                && longitude.compareTo(BigDecimal.valueOf(180)) <= 0, PLACE_LONGITUDE_OUT_OF_RANGE.getMessage());
+                && longitude.compareTo(BigDecimal.valueOf(180)) <= 0, "장소 경도 범위를 벗어난 입력값입니다.");
 
         this.placeName = placeName;
         this.address = address;

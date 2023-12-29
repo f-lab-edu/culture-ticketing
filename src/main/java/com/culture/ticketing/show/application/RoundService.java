@@ -6,7 +6,7 @@ import com.culture.ticketing.show.domain.Round;
 import com.culture.ticketing.show.domain.RoundPerformer;
 import com.culture.ticketing.show.domain.Show;
 import com.culture.ticketing.show.exception.DuplicatedRoundDateTimeException;
-import com.culture.ticketing.show.exception.OutOfRangeRoundDateTime;
+import com.culture.ticketing.show.exception.OutOfRangeRoundDateTimeException;
 import com.culture.ticketing.show.exception.ShowPerformerNotMatchException;
 import com.culture.ticketing.show.infra.PerformerRepository;
 import com.culture.ticketing.show.infra.RoundPerformerRepository;
@@ -21,8 +21,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import static com.culture.ticketing.common.response.BaseResponseStatus.*;
 
 @Service
 public class RoundService {
@@ -43,8 +41,8 @@ public class RoundService {
     @Transactional
     public void createRound(RoundSaveRequest request) {
 
-        Objects.requireNonNull(request.getShowId(), EMPTY_SHOW_ID.getMessage());
-        Objects.requireNonNull(request.getRoundStartDateTime(), EMPTY_ROUND_DATE_TIME.getMessage());
+        Objects.requireNonNull(request.getShowId(), "공연 아이디를 입력해주세요.");
+        Objects.requireNonNull(request.getRoundStartDateTime(), "회차 시작 일시를 입력해주세요.");
 
         Show show = showService.findShowById(request.getShowId());
         Round round = request.toEntity(show);
@@ -76,7 +74,7 @@ public class RoundService {
         LocalDateTime showEndDateTime = LocalDateTime.of(show.getShowEndDate(), LocalTime.MAX);
         if (round.getRoundStartDateTime().isBefore(showStartDateTime)
                 || round.getRoundEndDateTime().isAfter(showEndDateTime)) {
-            throw new OutOfRangeRoundDateTime();
+            throw new OutOfRangeRoundDateTimeException();
         }
     }
 

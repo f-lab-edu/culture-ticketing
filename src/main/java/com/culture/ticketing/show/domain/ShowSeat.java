@@ -8,9 +8,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Objects;
 
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SEAT_ID;
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_SEAT_GRADE_ID;
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -31,8 +28,8 @@ public class ShowSeat {
     @Builder
     public ShowSeat(Long showSeatGradeId, Long seatId) {
 
-        Objects.requireNonNull(showSeatGradeId, EMPTY_SHOW_SEAT_GRADE_ID.getMessage());
-        Objects.requireNonNull(seatId, EMPTY_SEAT_ID.getMessage());
+        Objects.requireNonNull(showSeatGradeId, "공연 좌석 등급 아이디를 입력해주세요.");
+        Objects.requireNonNull(seatId, "좌석 아이디를 입력해주세요.");
 
         this.showSeatGradeId = showSeatGradeId;
         this.seatId = seatId;
