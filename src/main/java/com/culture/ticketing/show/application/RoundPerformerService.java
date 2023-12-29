@@ -6,8 +6,8 @@ import com.culture.ticketing.show.infra.RoundPerformerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,7 +24,7 @@ public class RoundPerformerService {
     }
 
     @Transactional
-    public void createRoundPerformers(Long roundId, Collection<Long> performerIds) {
+    public void createRoundPerformers(Long roundId, Set<Long> performerIds) {
 
         Round round = roundService.findById(roundId);
 

@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,15 +54,14 @@ public class SeatService {
     }
 
     @Transactional(readOnly = true)
-    public void checkSeatsExists(List<Long> seatIds) {
+    public void checkSeatsExists(Set<Long> seatIds) {
 
         List<Seat> foundSeats = seatRepository.findBySeatIdIn(seatIds);
         if (seatIds.size() != foundSeats.size()) {
-            String notMatchingSeatIds = seatIds.stream()
-                    .filter(seatId -> foundSeats.stream().noneMatch(seat -> seat.getSeatId().equals(seatId)))
-                    .map(Objects::toString)
-                    .collect(Collectors.joining(","));
-            throw new SeatNotFoundException(notMatchingSeatIds);
+            for (Seat foundSeat : foundSeats) {
+                seatIds.remove(foundSeat.getSeatId());
+            }
+            throw new SeatNotFoundException(seatIds.toString());
         }
     }
 }

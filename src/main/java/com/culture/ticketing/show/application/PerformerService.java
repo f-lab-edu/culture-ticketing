@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,15 +48,14 @@ public class PerformerService {
                 .collect(Collectors.toList());
     }
 
-    public void checkShowPerformersExists(Long showId, Collection<Long> performerIds) {
+    public void checkShowPerformersExists(Long showId, Set<Long> performerIds) {
 
         List<Performer> foundPerformers = findShowPerformers(showId, performerIds);
         if (foundPerformers.size() != performerIds.size()) {
-            String notMatchingPerformerIds = performerIds.stream()
-                    .filter(performerId -> foundPerformers.stream().noneMatch(performer -> performer.getPerformerId().equals(performerId)))
-                    .map(Objects::toString)
-                    .collect(Collectors.joining(","));
-            throw new ShowPerformerNotMatchException(notMatchingPerformerIds);
+            for (Performer performer : foundPerformers) {
+                performerIds.remove(performer.getPerformerId());
+            }
+            throw new ShowPerformerNotMatchException(performerIds.toString());
         }
     }
 
