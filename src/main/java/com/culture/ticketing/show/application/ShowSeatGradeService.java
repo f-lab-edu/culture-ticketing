@@ -32,7 +32,7 @@ public class ShowSeatGradeService {
         Preconditions.checkArgument(StringUtils.hasText(request.getSeatGrade()), "공연 좌석 등급을 입력해주세요.");
         Preconditions.checkArgument(request.getPrice() >= 0, "공연 좌석 가격을 0 이상으로 입력해주세요.");
 
-        if (!showService.existsById(request.getShowId())) {
+        if (showService.notExistsById(request.getShowId())) {
             throw new ShowNotFoundException(request.getShowId());
         }
 
@@ -41,8 +41,8 @@ public class ShowSeatGradeService {
     }
 
     @Transactional(readOnly = true)
-    public boolean existsById(Long showSeatGradeId) {
-        return showSeatGradeRepository.existsById(showSeatGradeId);
+    public boolean notExistsById(Long showSeatGradeId) {
+        return !showSeatGradeRepository.existsById(showSeatGradeId);
     }
 
     @Transactional(readOnly = true)

@@ -33,7 +33,7 @@ public class PerformerService {
         Objects.requireNonNull(request.getShowId(), "공연 아이디를 입력해주세요.");
         Preconditions.checkArgument(StringUtils.hasText(request.getPerformerName()), "출연자 이름을 입력해주세요.");
 
-        if (!showService.existsById(request.getShowId())) {
+        if (showService.notExistsById(request.getShowId())) {
             throw new ShowNotFoundException(request.getShowId());
         }
 

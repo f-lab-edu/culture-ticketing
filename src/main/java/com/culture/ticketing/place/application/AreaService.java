@@ -21,8 +21,8 @@ public class AreaService {
     }
 
     @Transactional(readOnly = true)
-    public boolean existsById(Long areaId) {
-        return areaRepository.existsById(areaId);
+    public boolean notExistsById(Long areaId) {
+        return !areaRepository.existsById(areaId);
     }
 
     @Transactional
@@ -30,7 +30,7 @@ public class AreaService {
 
         Objects.requireNonNull(request.getPlaceId(), "장소 아이디를 입력해주세요.");
 
-        if (!placeService.existsById(request.getPlaceId())) {
+        if (placeService.notExistsById(request.getPlaceId())) {
             throw new PlaceNotFoundException(request.getPlaceId());
         }
 

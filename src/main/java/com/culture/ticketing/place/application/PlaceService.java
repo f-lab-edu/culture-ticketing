@@ -47,8 +47,8 @@ public class PlaceService {
     }
 
     @Transactional(readOnly = true)
-    public boolean existsById(Long placeId) {
-        return placeRepository.existsById(placeId);
+    public boolean notExistsById(Long placeId) {
+        return !placeRepository.existsById(placeId);
     }
 
     @Transactional(readOnly = true)

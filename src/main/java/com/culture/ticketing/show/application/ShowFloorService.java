@@ -29,7 +29,7 @@ public class ShowFloorService {
         Preconditions.checkArgument(StringUtils.hasText(request.getShowFloorName()), "공연 플로어 구역명을 입력해주세요.");
         Preconditions.checkArgument(request.getCount() > 0, "공연 플로어 인원수를 1 이상 숫자로 입력해주세요.");
 
-        if (!showSeatGradeService.existsById(request.getShowSeatGradeId())) {
+        if (showSeatGradeService.notExistsById(request.getShowSeatGradeId())) {
             throw new ShowSeatGradeNotFoundException(request.getShowSeatGradeId());
         }
 

@@ -43,7 +43,7 @@ public class ShowService {
         Preconditions.checkArgument(StringUtils.hasText(request.getPosterImgUrl()), "공연 포스터 이미지 url을 입력해주세요.");
         Preconditions.checkArgument(request.getRunningTime() > 0, "공연 러닝 시간을 0 초과로 입력해주세요.");
 
-        if (!placeService.existsById(request.getPlaceId())) {
+        if (placeService.notExistsById(request.getPlaceId())) {
             throw new PlaceNotFoundException(request.getPlaceId());
         }
 
@@ -60,8 +60,8 @@ public class ShowService {
     }
 
     @Transactional(readOnly = true)
-    public boolean existsById(Long showId) {
-        return showRepository.existsById(showId);
+    public boolean notExistsById(Long showId) {
+        return !showRepository.existsById(showId);
     }
 
     public List<ShowResponse> findShows(Long offset, int size, Category category) {

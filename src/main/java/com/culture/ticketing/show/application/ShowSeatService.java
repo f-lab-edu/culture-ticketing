@@ -32,7 +32,7 @@ public class ShowSeatService {
         Objects.requireNonNull(request.getSeatIds(), "좌석 아이디를 입력해주세요.");
         Preconditions.checkArgument(request.getSeatIds().size() != 0, "좌석 아이디를 입력해주세요.");
 
-        if (!showSeatGradeService.existsById(request.getShowSeatGradeId())) {
+        if (showSeatGradeService.notExistsById(request.getShowSeatGradeId())) {
             throw new ShowSeatGradeNotFoundException(request.getShowSeatGradeId());
         }
 
