@@ -3,6 +3,7 @@ package com.culture.ticketing.place.application;
 import com.culture.ticketing.place.application.dto.PlaceResponse;
 import com.culture.ticketing.place.application.dto.PlaceSaveRequest;
 import com.culture.ticketing.place.domain.Place;
+import com.culture.ticketing.place.exception.PlaceNotFoundException;
 import com.culture.ticketing.place.infra.PlaceRepository;
 import com.google.common.base.Preconditions;
 import org.springframework.stereotype.Service;
@@ -34,13 +35,19 @@ public class PlaceService {
         Preconditions.checkArgument(request.getLongitude().compareTo(BigDecimal.valueOf(-180)) >= 0
                 && request.getLongitude().compareTo(BigDecimal.valueOf(180)) <= 0, "장소 경도 범위를 벗어난 입력값입니다.");
 
-        Place place = request.toEntity();
-        placeRepository.save(place);
+        placeRepository.save(request.toEntity());
     }
 
     @Transactional(readOnly = true)
-    public boolean existsById(Long placeId) {
-        return placeRepository.existsById(placeId);
+    public Place findPlaceById(Long placeId) {
+        return placeRepository.findById(placeId).orElseThrow(() -> {
+            throw new PlaceNotFoundException(placeId);
+        });
+    }
+
+    @Transactional(readOnly = true)
+    public boolean notExistsById(Long placeId) {
+        return !placeRepository.existsById(placeId);
     }
 
     @Transactional(readOnly = true)
