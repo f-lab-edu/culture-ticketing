@@ -35,8 +35,7 @@ public class PlaceService {
         Preconditions.checkArgument(request.getLongitude().compareTo(BigDecimal.valueOf(-180)) >= 0
                 && request.getLongitude().compareTo(BigDecimal.valueOf(180)) <= 0, "장소 경도 범위를 벗어난 입력값입니다.");
 
-        Place place = request.toEntity();
-        placeRepository.save(place);
+        placeRepository.save(request.toEntity());
     }
 
     @Transactional(readOnly = true)

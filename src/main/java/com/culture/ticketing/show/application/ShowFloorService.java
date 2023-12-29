@@ -33,7 +33,6 @@ public class ShowFloorService {
             throw new ShowSeatGradeNotFoundException(request.getShowSeatGradeId());
         }
 
-        ShowFloor showFloor = request.toEntity();
-        showFloorRepository.save(showFloor);
+        showFloorRepository.save(request.toEntity());
     }
 }

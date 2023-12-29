@@ -36,8 +36,7 @@ public class ShowSeatGradeService {
             throw new ShowNotFoundException(request.getShowId());
         }
 
-        ShowSeatGrade showSeatGrade = request.toEntity();
-        showSeatGradeRepository.save(showSeatGrade);
+        showSeatGradeRepository.save(request.toEntity());
     }
 
     @Transactional(readOnly = true)

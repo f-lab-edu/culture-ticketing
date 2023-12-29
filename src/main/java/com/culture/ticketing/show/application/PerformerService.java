@@ -37,8 +37,7 @@ public class PerformerService {
             throw new ShowNotFoundException(request.getShowId());
         }
 
-        Performer performer = request.toEntity();
-        performerRepository.save(performer);
+        performerRepository.save(request.toEntity());
     }
 
     @Transactional(readOnly = true)

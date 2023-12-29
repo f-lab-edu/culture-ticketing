@@ -34,7 +34,6 @@ public class AreaService {
             throw new PlaceNotFoundException(request.getPlaceId());
         }
 
-        Area area = request.toEntity();
-        areaRepository.save(area);
+        areaRepository.save(request.toEntity());
     }
 }

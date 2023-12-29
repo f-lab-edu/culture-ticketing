@@ -47,8 +47,7 @@ public class ShowService {
             throw new PlaceNotFoundException(request.getPlaceId());
         }
 
-        Show show = request.toEntity();
-        showRepository.save(show);
+        showRepository.save(request.toEntity());
     }
 
     @Transactional(readOnly = true)
