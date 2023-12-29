@@ -12,9 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Objects;
 
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SEAT_ID;
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_SEAT_GRADE_ID;
-
 @Service
 public class ShowSeatService {
 
@@ -31,9 +28,9 @@ public class ShowSeatService {
     @Transactional
     public void createShowSeat(ShowSeatSaveRequest request) {
 
-        Objects.requireNonNull(request.getShowSeatGradeId(), EMPTY_SHOW_SEAT_GRADE_ID.getMessage());
-        Objects.requireNonNull(request.getSeatIds(), EMPTY_SEAT_ID.getMessage());
-        Preconditions.checkArgument(request.getSeatIds().size() != 0, EMPTY_SEAT_ID.getMessage());
+        Objects.requireNonNull(request.getShowSeatGradeId(), "공연 좌석 등급 아이디를 입력해주세요.");
+        Objects.requireNonNull(request.getSeatIds(), "좌석 아이디를 입력해주세요.");
+        Preconditions.checkArgument(request.getSeatIds().size() != 0, "좌석 아이디를 입력해주세요.");
 
         if (!showSeatGradeService.existsById(request.getShowSeatGradeId())) {
             throw new ShowSeatGradeNotFoundException(request.getShowSeatGradeId());

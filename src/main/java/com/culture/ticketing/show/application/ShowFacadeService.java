@@ -21,9 +21,6 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_ROUND_DATE_TIME;
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_ID;
-
 @Service
 public class ShowFacadeService {
 
@@ -59,8 +56,8 @@ public class ShowFacadeService {
     @Transactional
     public void createRoundWithPerformers(RoundWithPerformersSaveRequest request) {
 
-        Objects.requireNonNull(request.getShowId(), EMPTY_SHOW_ID.getMessage());
-        Objects.requireNonNull(request.getRoundStartDateTime(), EMPTY_ROUND_DATE_TIME.getMessage());
+        Objects.requireNonNull(request.getShowId(), "공연 아이디를 입력해주세요.");
+        Objects.requireNonNull(request.getRoundStartDateTime(), "시작 회차 일시를 입력해주세요.");
 
         Show show = showService.findShowById(request.getShowId());
 

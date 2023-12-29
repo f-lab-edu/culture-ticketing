@@ -3,8 +3,8 @@ package com.culture.ticketing.show.application;
 import com.culture.ticketing.show.domain.Round;
 import com.culture.ticketing.show.domain.Show;
 import com.culture.ticketing.show.exception.DuplicatedRoundDateTimeException;
-import com.culture.ticketing.show.exception.OutOfRangeRoundDateTime;
 import com.culture.ticketing.show.exception.RoundNotFoundException;
+import com.culture.ticketing.show.exception.OutOfRangeRoundDateTimeException;
 import com.culture.ticketing.show.infra.RoundRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-
 
 @Service
 public class RoundService {
@@ -53,7 +52,7 @@ public class RoundService {
         LocalDateTime showEndDateTime = LocalDateTime.of(show.getShowEndDate(), LocalTime.MAX);
         if (round.getRoundStartDateTime().isBefore(showStartDateTime)
                 || round.getRoundEndDateTime().isAfter(showEndDateTime)) {
-            throw new OutOfRangeRoundDateTime();
+            throw new OutOfRangeRoundDateTimeException();
         }
     }
 

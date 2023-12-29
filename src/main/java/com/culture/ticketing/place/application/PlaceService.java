@@ -15,12 +15,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_PLACE_ADDRESS;
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_PLACE_LATITUDE;
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_PLACE_LONGITUDE;
-import static com.culture.ticketing.common.response.BaseResponseStatus.PLACE_LATITUDE_OUT_OF_RANGE;
-import static com.culture.ticketing.common.response.BaseResponseStatus.PLACE_LONGITUDE_OUT_OF_RANGE;
-
 @Service
 public class PlaceService {
 
@@ -33,13 +27,13 @@ public class PlaceService {
     @Transactional
     public void createPlace(PlaceSaveRequest request) {
 
-        Objects.requireNonNull(request.getLatitude(), EMPTY_PLACE_LATITUDE.getMessage());
-        Objects.requireNonNull(request.getLongitude(), EMPTY_PLACE_LONGITUDE.getMessage());
-        Preconditions.checkArgument(StringUtils.hasText(request.getAddress()), EMPTY_PLACE_ADDRESS.getMessage());
+        Objects.requireNonNull(request.getLatitude(), "정확한 장소 위도를 입력해주세요.");
+        Objects.requireNonNull(request.getLongitude(), "정확한 장소 경도를 입력해주세요.");
+        Preconditions.checkArgument(StringUtils.hasText(request.getAddress()), "장소 주소를 입력해주세요.");
         Preconditions.checkArgument(request.getLatitude().compareTo(BigDecimal.valueOf(-90)) >= 0
-                && request.getLatitude().compareTo(BigDecimal.valueOf(90)) <= 0, PLACE_LATITUDE_OUT_OF_RANGE.getMessage());
+                && request.getLatitude().compareTo(BigDecimal.valueOf(90)) <= 0, "장소 위도 범위를 벗어난 입력값입니다.");
         Preconditions.checkArgument(request.getLongitude().compareTo(BigDecimal.valueOf(-180)) >= 0
-                && request.getLongitude().compareTo(BigDecimal.valueOf(180)) <= 0, PLACE_LONGITUDE_OUT_OF_RANGE.getMessage());
+                && request.getLongitude().compareTo(BigDecimal.valueOf(180)) <= 0, "장소 경도 범위를 벗어난 입력값입니다.");
 
         Place place = request.toEntity();
         placeRepository.save(place);

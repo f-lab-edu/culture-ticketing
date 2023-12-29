@@ -15,9 +15,6 @@ import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_ID;
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_ROUND_DATE_TIME;
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -38,9 +35,9 @@ public class Round extends BaseEntity {
     @Builder
     public Round(LocalDateTime roundStartDateTime, LocalDateTime roundEndDateTime, Long showId) {
 
-        Objects.requireNonNull(showId, EMPTY_SHOW_ID.getMessage());
-        Objects.requireNonNull(roundStartDateTime, EMPTY_ROUND_DATE_TIME.getMessage());
-        Objects.requireNonNull(roundEndDateTime, EMPTY_ROUND_DATE_TIME.getMessage());
+        Objects.requireNonNull(showId, "공연 아이디를 입력해주세요.");
+        Objects.requireNonNull(roundStartDateTime, "회차 시작 일시를 입력해주세요.");
+        Objects.requireNonNull(roundEndDateTime, "회차 종료 일시를 입력해주세요.");
 
         this.roundStartDateTime = roundStartDateTime;
         this.roundEndDateTime = roundEndDateTime;

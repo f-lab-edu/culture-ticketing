@@ -1,11 +1,8 @@
 package com.culture.ticketing.show.exception;
 
-import com.culture.ticketing.common.exception.BaseException;
-import com.culture.ticketing.common.response.BaseResponseStatus;
-
-public class ShowPerformerNotMatchException extends BaseException {
+public class ShowPerformerNotMatchException extends RuntimeException {
 
     public ShowPerformerNotMatchException(String performerIds) {
-        super(BaseResponseStatus.SHOW_PERFORMER_NOT_MATCH, performerIds);
+        super(String.format("해당 공연의 출연자가 아닌 값이 포함되어 있습니다. (performerIds = %s)", performerIds));
     }
 }
