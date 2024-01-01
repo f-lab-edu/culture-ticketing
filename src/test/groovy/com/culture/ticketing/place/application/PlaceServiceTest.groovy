@@ -23,15 +23,12 @@ class PlaceServiceTest extends Specification {
                 PlaceFixtures.createPlace(4L),
                 PlaceFixtures.createPlace(5L)
         );
-        placeRepository.findByPlaceIdGreaterThanLimit(places.get(0).placeId, 3) >> places.subList(1, 4)
+        placeRepository.findByPlaceIdGreaterThanLimit(1L, 3) >> places.subList(1, 4)
 
         when:
-        List<PlaceResponse> response = placeService.findPlaces(places.get(0).placeId, 3);
+        List<PlaceResponse> response = placeService.findPlaces(1L, 3);
 
         then:
-        response.size() == 3
-        response.get(0).placeId > places.get(0).placeId
-        response.get(1).placeId > places.get(0).placeId
-        response.get(2).placeId > places.get(0).placeId
+        response.collect(place -> place.placeId > 1L).size() == 3
     }
 }

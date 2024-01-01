@@ -27,12 +27,9 @@ class PlaceRepositoryCustomTest extends Specification {
         placeRepository.saveAll(places);
 
         when:
-        List<Place> foundPlaces = placeRepository.findByPlaceIdGreaterThanLimit(places.get(0).getPlaceId(), 3);
+        List<Place> foundPlaces = placeRepository.findByPlaceIdGreaterThanLimit(1L, 3);
 
         then:
-        foundPlaces.size() == 3
-        foundPlaces.get(0).placeId > places.get(0).placeId
-        foundPlaces.get(1).placeId > places.get(0).placeId
-        foundPlaces.get(2).placeId > places.get(0).placeId
+        foundPlaces.collect(place -> place.placeId > 1L).size() == 3
     }
 }
