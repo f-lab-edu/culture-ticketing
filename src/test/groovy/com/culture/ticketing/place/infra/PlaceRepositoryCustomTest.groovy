@@ -1,5 +1,6 @@
 package com.culture.ticketing.place.infra
 
+import com.culture.ticketing.place.PlaceFixtures
 import com.culture.ticketing.place.domain.Place
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
@@ -16,16 +17,13 @@ class PlaceRepositoryCustomTest extends Specification {
     def "장소_목록_조회_테스트_특정한_아이디보다_크고_사이즈_제한"() {
 
         given:
-        List<Place> places = new ArrayList<>();
-        for (int i = 1; i <= 5; i++) {
-            Place place = Place.builder()
-                    .placeName("장소" + i)
-                    .address("서울특별시 " + i)
-                    .latitude(new BigDecimal(i))
-                    .longitude(new BigDecimal(i))
-                    .build();
-            places.add(place);
-        }
+        List<Place> places = List.of(
+                PlaceFixtures.createPlace(1L),
+                PlaceFixtures.createPlace(2L),
+                PlaceFixtures.createPlace(3L),
+                PlaceFixtures.createPlace(4L),
+                PlaceFixtures.createPlace(5L)
+        );
         placeRepository.saveAll(places);
 
         when:

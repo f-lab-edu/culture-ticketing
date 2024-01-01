@@ -1,5 +1,6 @@
 package com.culture.ticketing.place.application
 
+import com.culture.ticketing.place.PlaceFixtures
 import com.culture.ticketing.place.application.dto.PlaceResponse
 import com.culture.ticketing.place.domain.Place
 import com.culture.ticketing.place.infra.PlaceRepository
@@ -15,17 +16,13 @@ class PlaceServiceTest extends Specification {
     def "장소_목록_조회"() {
 
         given:
-        List<Place> places = new ArrayList<>();
-        for (int i = 1; i <= 5; i++) {
-            Place place = Place.builder()
-                    .placeId(i)
-                    .placeName("장소" + i)
-                    .address("서울특별시 " + i)
-                    .latitude(new BigDecimal(i))
-                    .longitude(new BigDecimal(i))
-                    .build();
-            places.add(place);
-        }
+        List<Place> places = List.of(
+                PlaceFixtures.createPlace(1L),
+                PlaceFixtures.createPlace(2L),
+                PlaceFixtures.createPlace(3L),
+                PlaceFixtures.createPlace(4L),
+                PlaceFixtures.createPlace(5L)
+        );
         placeRepository.findByPlaceIdGreaterThanLimit(places.get(0).placeId, 3) >> places.subList(1, 4)
 
         when:

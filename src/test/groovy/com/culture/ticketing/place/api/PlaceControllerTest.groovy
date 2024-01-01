@@ -1,5 +1,6 @@
 package com.culture.ticketing.place.api
 
+import com.culture.ticketing.place.PlaceFixtures
 import com.culture.ticketing.place.application.PlaceService
 import com.culture.ticketing.place.application.dto.PlaceResponse
 import com.culture.ticketing.place.domain.Place
@@ -29,17 +30,13 @@ class PlaceControllerTest extends Specification {
     def "장소_목록 조회"() {
 
         given:
-        List<PlaceResponse> places = new ArrayList<>();
-        for (int i = 1; i <= 5; i++) {
-            Place place = Place.builder()
-                    .placeId(i)
-                    .placeName("장소" + i)
-                    .address("서울특별시 " + i)
-                    .latitude(new BigDecimal(i))
-                    .longitude(new BigDecimal(i))
-                    .build();
-            places.add(new PlaceResponse(place));
-        }
+        List<PlaceResponse> places = List.of(
+                new PlaceResponse(PlaceFixtures.createPlace(1L)),
+                new PlaceResponse(PlaceFixtures.createPlace(2L)),
+                new PlaceResponse(PlaceFixtures.createPlace(3L)),
+                new PlaceResponse(PlaceFixtures.createPlace(4L)),
+                new PlaceResponse(PlaceFixtures.createPlace(5L))
+        )
         placeService.findPlaces(places.get(0).placeId, 3) >> places.subList(1, 4)
 
         expect:
