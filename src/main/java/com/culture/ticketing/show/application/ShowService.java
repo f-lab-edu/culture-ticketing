@@ -63,6 +63,7 @@ public class ShowService {
         return !showRepository.existsById(showId);
     }
 
+    @Transactional(readOnly = true)
     public List<ShowResponse> findShows(Long offset, int size, Category category) {
 
         List<Show> shows = showRepository.findByShowIdGreaterThanLimitAndCategory(offset, size, category);

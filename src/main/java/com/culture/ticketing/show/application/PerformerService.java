@@ -48,6 +48,7 @@ public class PerformerService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public void checkShowPerformersExists(Long showId, Set<Long> performerIds) {
 
         List<Performer> foundPerformers = findShowPerformers(showId, performerIds);
@@ -59,6 +60,7 @@ public class PerformerService {
         }
     }
 
+    @Transactional(readOnly = true)
     public List<Performer> findShowPerformers(Long showId, Collection<Long> performerIds) {
         return performerRepository.findByShowIdAndPerformerIdIn(showId, performerIds);
     }
