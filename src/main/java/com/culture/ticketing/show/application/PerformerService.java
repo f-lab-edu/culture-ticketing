@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -51,12 +52,13 @@ public class PerformerService {
     @Transactional(readOnly = true)
     public void checkShowPerformersExists(Long showId, Set<Long> performerIds) {
 
-        List<Performer> foundPerformers = findShowPerformers(showId, performerIds);
-        if (foundPerformers.size() != performerIds.size()) {
+        Set<Long> copyPerformerIds = new HashSet<>(performerIds);
+        List<Performer> foundPerformers = findShowPerformers(showId, copyPerformerIds);
+        if (foundPerformers.size() != copyPerformerIds.size()) {
             for (Performer performer : foundPerformers) {
-                performerIds.remove(performer.getPerformerId());
+                copyPerformerIds.remove(performer.getPerformerId());
             }
-            throw new ShowPerformerNotMatchException(performerIds.toString());
+            throw new ShowPerformerNotMatchException(copyPerformerIds.toString());
         }
     }
 
