@@ -1,5 +1,7 @@
 package com.culture.ticketing.show.application.dto;
 
+import com.culture.ticketing.place.domain.Place;
+import com.culture.ticketing.show.domain.Show;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,5 +19,13 @@ public class ShowDetailResponse {
         this.show = show;
         this.rounds = rounds;
         this.showSeatGrades = showSeatGrades;
+    }
+
+    public static ShowDetailResponse from(Show show, Place place, List<RoundWithPerformersResponse> rounds, List<ShowSeatGradeResponse> showSeatGrades) {
+        return ShowDetailResponse.builder()
+                .show(ShowResponse.from(show, place))
+                .rounds(rounds)
+                .showSeatGrades(showSeatGrades)
+                .build();
     }
 }
