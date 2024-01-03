@@ -23,23 +23,15 @@ public class Area extends BaseEntity {
     @Column(name = "area_name", nullable = false)
     private String areaName;
 
-    @Column(name = "coordinate_x", nullable = false)
-    private int coordinateX;
-
-    @Column(name = "coordinate_y", nullable = false)
-    private int coordinateY;
-
     @Column(name = "place_id", nullable = false)
     private Long placeId;
 
     @Builder
-    public Area(String areaName, int coordinateX, int coordinateY, Long placeId) {
+    public Area(String areaName, Long placeId) {
 
         Objects.requireNonNull(placeId, "장소 아이디를 입력해주세요.");
 
         this.areaName = areaName;
-        this.coordinateX = coordinateX;
-        this.coordinateY = coordinateY;
         this.placeId = placeId;
     }
 }
