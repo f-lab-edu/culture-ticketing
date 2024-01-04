@@ -29,7 +29,7 @@ public class SeatService {
     @Transactional
     public void createPlaceSeat(PlaceSeatSaveRequest request) {
 
-        Objects.requireNonNull(request.getAreaId(), "장소 아이디를 입력해주세요.");
+        Objects.requireNonNull(request.getAreaId(), "구역 아이디를 입력해주세요.");
         Preconditions.checkArgument(request.getSeatRow() > 0, "좌석 행을 1 이상 숫자로 입력해주세요.");
         Preconditions.checkArgument(request.getSeatNumber() > 0, "좌석 번호를 1 이상 숫자로 입력해주세요.");
 
