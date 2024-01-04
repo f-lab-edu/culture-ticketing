@@ -18,10 +18,8 @@ public class PlaceSaveRequest {
     @NotBlank(message = "공연 장소 주소를 입력해주세요.")
     private String address;
     @NotNull
-    @Positive
     private BigDecimal latitude;
     @NotNull
-    @Positive
     private BigDecimal longitude;
 
     @Builder
