@@ -187,6 +187,6 @@ class PlaceServiceTest extends Specification {
         boolean response = placeService.notExistsById(placeId);
 
         then:
-        !response;
+        !response
     }
 }

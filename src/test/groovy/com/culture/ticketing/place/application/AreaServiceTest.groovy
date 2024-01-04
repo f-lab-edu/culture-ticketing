@@ -47,4 +47,17 @@ class AreaServiceTest extends Specification {
         def e = thrown(PlaceNotFoundException.class)
         e.message == String.format("존재하지 않는 장소입니다. (placeId = %d)", placeId)
     }
+
+    def "구역_아이디_값으로_구역_존재_여부_확인"() {
+
+        given:
+        Long areaId = 1000L;
+        areaRepository.existsById(areaId) >> true;
+
+        when:
+        boolean response = areaService.notExistsById(areaId);
+
+        then:
+        !response
+    }
 }
