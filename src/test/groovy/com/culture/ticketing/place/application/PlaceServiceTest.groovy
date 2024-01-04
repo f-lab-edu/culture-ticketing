@@ -176,4 +176,17 @@ class PlaceServiceTest extends Specification {
         def e = thrown(IllegalArgumentException.class)
         e.message == "장소 경도 범위를 벗어난 입력값입니다."
     }
+
+    def "장소_아이디_값으로_장소_존재_여부_확인"() {
+
+        given:
+        Long placeId = 1000L;
+        placeRepository.existsById(placeId) >> true;
+
+        when:
+        boolean response = placeService.notExistsById(placeId);
+
+        then:
+        !response;
+    }
 }
