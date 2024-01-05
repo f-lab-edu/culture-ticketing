@@ -3,6 +3,7 @@ package com.culture.ticketing.show.application.dto;
 import com.culture.ticketing.show.domain.AgeRestriction;
 import com.culture.ticketing.show.domain.Category;
 import com.culture.ticketing.show.domain.Show;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -33,6 +34,21 @@ public class ShowSaveRequest {
     private LocalDate showEndDate;
     @NotNull
     private Long placeId;
+
+    @Builder
+    public ShowSaveRequest(Category category, String showName, AgeRestriction ageRestriction, int runningTime, String notice,
+                           String posterImgUrl, String description, LocalDate showStartDate, LocalDate showEndDate, Long placeId) {
+        this.category = category;
+        this.showName = showName;
+        this.ageRestriction = ageRestriction;
+        this.runningTime = runningTime;
+        this.notice = notice;
+        this.posterImgUrl = posterImgUrl;
+        this.description = description;
+        this.showStartDate = showStartDate;
+        this.showEndDate = showEndDate;
+        this.placeId = placeId;
+    }
 
     public Show toEntity() {
         return Show.builder()
