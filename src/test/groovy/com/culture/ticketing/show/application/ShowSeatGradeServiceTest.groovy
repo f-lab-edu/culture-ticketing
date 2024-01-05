@@ -100,4 +100,17 @@ class ShowSeatGradeServiceTest extends Specification {
         def e = thrown(ShowNotFoundException.class)
         e.message == String.format("존재하지 않는 공연입니다. (showId = %d)", showId)
     }
+
+    def "공연_좌석_등급_아이디_값에_해당하는_공연_좌석_등급_존재_여부_확인"() {
+
+        given:
+        Long showSeatGradeId = 1L;
+        showSeatGradeRepository.existsById(showSeatGradeId) >> true
+
+        when:
+        boolean response = showSeatGradeService.notExistsById(showSeatGradeId);
+
+        then:
+        !response
+    }
 }
