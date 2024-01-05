@@ -8,6 +8,8 @@ import com.culture.ticketing.place.infra.PlaceRepository
 import org.spockframework.spring.SpringBean
 import spock.lang.Specification
 
+import java.util.stream.Collectors
+
 class PlaceServiceTest extends Specification {
 
     @SpringBean
@@ -188,5 +190,22 @@ class PlaceServiceTest extends Specification {
 
         then:
         !response
+    }
+
+    def "장소_아이디_목록으로_장소_목록_조회"() {
+
+        given:
+        List<Long> placeIds = List.of(1L, 2L, 3L, 4L, 5L);
+        List<Place> places = placeIds.stream()
+                .map(PlaceFixtures::createPlace)
+                .collect(Collectors.toList());
+        placeRepository.findAllById(placeIds) >> places
+
+        when:
+        List<Place> response = placeService.findPlacesByIds(placeIds);
+
+        then:
+        response.size() == 5
+        response.collect(place -> place.placeId) == [1L, 2L, 3L, 4L, 5L]
     }
 }

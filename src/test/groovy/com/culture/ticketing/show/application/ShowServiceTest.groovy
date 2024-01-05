@@ -1,10 +1,15 @@
 package com.culture.ticketing.show.application
 
+import com.culture.ticketing.place.PlaceFixtures
 import com.culture.ticketing.place.application.PlaceService
+import com.culture.ticketing.place.domain.Place
 import com.culture.ticketing.place.exception.PlaceNotFoundException
+import com.culture.ticketing.show.ShowFixtures
+import com.culture.ticketing.show.application.dto.ShowResponse
 import com.culture.ticketing.show.application.dto.ShowSaveRequest
 import com.culture.ticketing.show.domain.AgeRestriction
 import com.culture.ticketing.show.domain.Category
+import com.culture.ticketing.show.domain.Show
 import com.culture.ticketing.show.infra.ShowRepository
 import org.spockframework.spring.SpringBean
 import spock.lang.Specification
@@ -274,5 +279,70 @@ class ShowServiceTest extends Specification {
 
         then:
         !response
+    }
+
+    def "전체_공연_목록_조회"() {
+
+        given:
+        List<Show> shows = List.of(
+                ShowFixtures.createShow(1L),
+                ShowFixtures.createShow(2L),
+                ShowFixtures.createShow(3L),
+                ShowFixtures.createShow(4L),
+                ShowFixtures.createShow(5L)
+        );
+        List<Show> foundShows = shows.subList(1, 4);
+        showRepository.findByShowIdGreaterThanLimitAndCategory(1L, 3, null) >> foundShows
+        List<Long> placeIds = foundShows.collect(show -> show.placeId);
+        placeService.findPlacesByIds(placeIds) >> placeIds.toSet().collect(placeId -> PlaceFixtures.createPlace(placeId))
+
+        when:
+        List<ShowResponse> response = showService.findShows(1L, 3, null);
+
+        then:
+        response.collect(show -> show.showId > 1L).size() == 3
+    }
+
+    def "카테고리_별_공연_목록_조회"() {
+
+        given:
+        List<Show> shows = List.of(
+                ShowFixtures.createShow(1L, Category.CONCERT),
+                ShowFixtures.createShow(2L, Category.MUSICAL),
+                ShowFixtures.createShow(3L, Category.CONCERT),
+                ShowFixtures.createShow(4L, Category.CLASSIC),
+                ShowFixtures.createShow(5L, Category.CONCERT)
+        );
+        List<Show> foundShows = List.of(shows.get(2), shows.get(4));
+        showRepository.findByShowIdGreaterThanLimitAndCategory(1L, 3, Category.CONCERT) >> foundShows
+        List<Long> placeIds = foundShows.collect(show -> show.placeId);
+        placeService.findPlacesByIds(placeIds) >> placeIds.toSet().collect(placeId -> PlaceFixtures.createPlace(placeId))
+
+        when:
+        List<ShowResponse> response = showService.findShows(1L, 3, Category.CONCERT);
+
+        then:
+        response.collect(show -> show.showId > 1L && show.categoryName == Category.CONCERT.getCategoryName()).size() == 2
+    }
+
+    def "공연_목록의_장소_아이디에_해당하는_장소_없는_경우_예외_발생"() {
+
+        given:
+        List<Show> shows = List.of(
+                ShowFixtures.createShow(1L),
+                ShowFixtures.createShow(2L),
+                ShowFixtures.createShow(3L),
+                ShowFixtures.createShow(4L),
+                ShowFixtures.createShow(5L)
+        );
+        Map<Long, Place> placeMapByPlaceId = new HashMap<>();
+
+        when:
+        showService.checkPlaceExistInShows(shows, placeMapByPlaceId);
+
+        then:
+        def e = thrown(PlaceNotFoundException.class);
+        e.message == "존재하지 않는 장소입니다. (placeId = 1)"
+
     }
 }

@@ -41,18 +41,19 @@ class PlaceControllerTest extends Specification {
                 new PlaceResponse(PlaceFixtures.createPlace(4L)),
                 new PlaceResponse(PlaceFixtures.createPlace(5L))
         )
-        placeService.findPlaces(places.get(0).placeId, 3) >> places.subList(1, 4)
+        Long offset = places.get(0).placeId;
+        placeService.findPlaces(offset, 3) >> places.subList(1, 4)
 
         expect:
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/places")
-                .param("offset", places.get(0).placeId.toString())
+                .param("offset", offset.toString())
                 .param("size", "3"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("\$").isArray())
                 .andExpect(jsonPath("\$", Matchers.hasSize(3)))
-                .andExpect(jsonPath("\$[0].placeId", Matchers.greaterThan(places.get(0).placeId.toInteger())))
-                .andExpect(jsonPath("\$[1].placeId", Matchers.greaterThan(places.get(0).placeId.toInteger())))
-                .andExpect(jsonPath("\$[2].placeId", Matchers.greaterThan(places.get(0).placeId.toInteger())))
+                .andExpect(jsonPath("\$[0].placeId", Matchers.greaterThan(offset.toInteger())))
+                .andExpect(jsonPath("\$[1].placeId", Matchers.greaterThan(offset.toInteger())))
+                .andExpect(jsonPath("\$[2].placeId", Matchers.greaterThan(offset.toInteger())))
                 .andDo(MockMvcResultHandlers.print())
 
     }

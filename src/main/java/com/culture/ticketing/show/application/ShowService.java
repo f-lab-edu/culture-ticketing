@@ -82,7 +82,7 @@ public class ShowService {
                 .collect(Collectors.toList());
     }
 
-    private void checkPlaceExistInShows(List<Show> shows, Map<Long, Place> placeMapByPlaceId) {
+    protected void checkPlaceExistInShows(List<Show> shows, Map<Long, Place> placeMapByPlaceId) {
 
         for (Show show : shows) {
             if (!placeMapByPlaceId.containsKey(show.getPlaceId())) {
