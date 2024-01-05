@@ -4,9 +4,9 @@ import com.culture.ticketing.place.domain.Place;
 
 import java.math.BigDecimal;
 
-public class PlaceFixtures {
+class PlaceFixtures {
 
-    public static Place createPlace(Long placeId) {
+    static Place createPlace(Long placeId) {
         return Place.builder()
                 .placeId(placeId)
                 .placeName("장소" + placeId)

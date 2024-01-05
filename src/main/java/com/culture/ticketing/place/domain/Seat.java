@@ -31,12 +31,13 @@ public class Seat extends BaseEntity {
     private Long areaId;
 
     @Builder
-    public Seat(int seatRow, int seatNumber, Long areaId) {
+    public Seat(Long seatId, int seatRow, int seatNumber, Long areaId) {
 
         Objects.requireNonNull(areaId, "구역 아이디를 입력해주세요.");
         Preconditions.checkArgument(seatRow > 0, "좌석 행을 1 이상 숫자로 입력해주세요.");
         Preconditions.checkArgument(seatNumber > 0, "좌석 번호를 1 이상 숫자로 입력해주세요.");
 
+        this.seatId = seatId;
         this.seatRow = seatRow;
         this.seatNumber = seatNumber;
         this.areaId = areaId;
