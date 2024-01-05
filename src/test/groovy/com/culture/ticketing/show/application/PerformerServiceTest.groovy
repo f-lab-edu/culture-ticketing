@@ -1,6 +1,9 @@
 package com.culture.ticketing.show.application
 
+import com.culture.ticketing.show.PerformerFixtures
+import com.culture.ticketing.show.application.dto.PerformerResponse
 import com.culture.ticketing.show.application.dto.PerformerSaveRequest
+import com.culture.ticketing.show.domain.Performer
 import com.culture.ticketing.show.exception.ShowNotFoundException
 import com.culture.ticketing.show.infra.PerformerRepository
 import org.spockframework.spring.SpringBean
@@ -75,6 +78,25 @@ class PerformerServiceTest extends Specification {
         then:
         def e = thrown(ShowNotFoundException.class)
         e.message == String.format("존재하지 않는 공연입니다. (showId = %d)", showId)
+    }
+
+    def "공연별_출연자_목록_조회"() {
+
+        given:
+        List<Performer> performers = List.of(
+                PerformerFixtures.createPerformer(1L, 1L),
+                PerformerFixtures.createPerformer(2L, 1L),
+                PerformerFixtures.createPerformer(3L, 2L),
+                PerformerFixtures.createPerformer(4L, 1L),
+                PerformerFixtures.createPerformer(5L, 2L)
+        );
+        performerRepository.findByShowId(1L) >> List.of(performers.get(0), performers.get(1), performers.get(3))
+
+        when:
+        List<PerformerResponse> response = performerService.findPerformersByShowId(1L);
+
+        then:
+        response.collect(performer -> performer.performerId) == [1L, 2L, 4L]
     }
 
 }

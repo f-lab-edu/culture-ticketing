@@ -1,8 +1,11 @@
 package com.culture.ticketing.show.api
 
+import com.culture.ticketing.show.PerformerFixtures
 import com.culture.ticketing.show.application.PerformerService
+import com.culture.ticketing.show.application.dto.PerformerResponse
 import com.culture.ticketing.show.application.dto.PerformerSaveRequest
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.hamcrest.Matchers
 import org.spockframework.spring.SpringBean
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -14,6 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import spock.lang.Specification
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @WebMvcTest(PerformerController.class)
@@ -92,6 +96,30 @@ class PerformerControllerTest extends Specification {
                 .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
+                .andDo(MockMvcResultHandlers.print())
+    }
+
+    def "공연별_출연자_목록_조회_성공"() {
+
+        given:
+        List<PerformerResponse> performers = List.of(
+                new PerformerResponse(PerformerFixtures.createPerformer(1L, 1L)),
+                new PerformerResponse(PerformerFixtures.createPerformer(2L, 1L)),
+                new PerformerResponse(PerformerFixtures.createPerformer(3L, 2L)),
+                new PerformerResponse(PerformerFixtures.createPerformer(4L, 1L)),
+                new PerformerResponse(PerformerFixtures.createPerformer(5L, 2L)),
+        );
+        performerService.findPerformersByShowId(1L) >> List.of(performers.get(0), performers.get(1), performers.get(3))
+
+        expect:
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/performers")
+                .param("showId", "1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("\$").isArray())
+                .andExpect(jsonPath("\$", Matchers.hasSize(3)))
+                .andExpect(jsonPath("\$[0].performerId").value(1))
+                .andExpect(jsonPath("\$[1].performerId").value(2))
+                .andExpect(jsonPath("\$[2].performerId").value(4))
                 .andDo(MockMvcResultHandlers.print())
     }
 }
