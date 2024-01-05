@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
@@ -15,7 +16,7 @@ public class ShowSeatSaveRequest {
     @NotNull
     private Long showSeatGradeId;
     @NotNull
-    private List<Long> seatIds;
+    private Set<Long> seatIds;
 
     public List<ShowSeat> toEntities() {
         return seatIds.stream()

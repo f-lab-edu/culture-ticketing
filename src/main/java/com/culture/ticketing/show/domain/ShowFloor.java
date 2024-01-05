@@ -29,12 +29,6 @@ public class ShowFloor {
     @Column(name = "show_floor_name", nullable = false)
     private String showFloorName;
 
-    @Column(name = "coordinate_x", nullable = false)
-    private int coordinateX;
-
-    @Column(name = "coordinate_y", nullable = false)
-    private int coordinateY;
-
     @Column(name = "count", nullable = false)
     private int count;
 
@@ -42,15 +36,13 @@ public class ShowFloor {
     private Long showSeatGradeId;
 
     @Builder
-    public ShowFloor(String showFloorName, int coordinateX, int coordinateY, int count, Long showSeatGradeId) {
+    public ShowFloor(String showFloorName, int count, Long showSeatGradeId) {
 
         Objects.requireNonNull(showSeatGradeId, "공연 좌석 등급 아이디를 입력해주세요.");
         Preconditions.checkArgument(StringUtils.hasText(showFloorName), "공연 플로어 구역명을 입력해주세요.");
         Preconditions.checkArgument(count > 0, "공연 플로어 인원수를 1 이상 숫자로 입력해주세요.");
 
         this.showFloorName = showFloorName;
-        this.coordinateX = coordinateX;
-        this.coordinateY = coordinateY;
         this.count = count;
         this.showSeatGradeId = showSeatGradeId;
     }

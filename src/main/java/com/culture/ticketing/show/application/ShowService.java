@@ -43,26 +43,27 @@ public class ShowService {
         Preconditions.checkArgument(StringUtils.hasText(request.getPosterImgUrl()), "공연 포스터 이미지 url을 입력해주세요.");
         Preconditions.checkArgument(request.getRunningTime() > 0, "공연 러닝 시간을 0 초과로 입력해주세요.");
 
-        if (!placeService.existsById(request.getPlaceId())) {
+        if (placeService.notExistsById(request.getPlaceId())) {
             throw new PlaceNotFoundException(request.getPlaceId());
         }
 
-        Show show = request.toEntity();
-        showRepository.save(show);
+        showRepository.save(request.toEntity());
     }
 
     @Transactional(readOnly = true)
     public Show findShowById(Long showId) {
+
         return showRepository.findById(showId).orElseThrow(() -> {
             throw new ShowNotFoundException(showId);
         });
     }
 
     @Transactional(readOnly = true)
-    public boolean existsById(Long showId) {
-        return showRepository.existsById(showId);
+    public boolean notExistsById(Long showId) {
+        return !showRepository.existsById(showId);
     }
 
+    @Transactional(readOnly = true)
     public List<ShowResponse> findShows(Long offset, int size, Category category) {
 
         List<Show> shows = showRepository.findByShowIdGreaterThanLimitAndCategory(offset, size, category);
