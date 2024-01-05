@@ -22,12 +22,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import spock.lang.Specification
 
 import java.time.LocalDate
-import java.util.stream.Collectors
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
