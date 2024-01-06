@@ -8,12 +8,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 @Getter
 @NoArgsConstructor
-public class RoundSaveRequest {
+public class RoundWithPerformersSaveRequest {
 
     @NotNull
     private Long showId;

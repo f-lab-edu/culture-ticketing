@@ -1,6 +1,8 @@
 package com.culture.ticketing.show.api;
 
+import com.culture.ticketing.show.application.ShowFacadeService;
 import com.culture.ticketing.show.application.ShowService;
+import com.culture.ticketing.show.application.dto.ShowDetailResponse;
 import com.culture.ticketing.show.application.dto.ShowSaveRequest;
 import com.culture.ticketing.show.application.dto.ShowResponse;
 import com.culture.ticketing.show.domain.Category;
@@ -14,9 +16,11 @@ import java.util.List;
 public class ShowController {
 
     private final ShowService showService;
+    private final ShowFacadeService showFacadeService;
 
-    public ShowController(ShowService showService) {
+    public ShowController(ShowService showService, ShowFacadeService showFacadeService) {
         this.showService = showService;
+        this.showFacadeService = showFacadeService;
     }
 
     @PostMapping
@@ -33,4 +37,9 @@ public class ShowController {
         return showService.findShows(offset, size, category);
     }
 
+    @GetMapping("/{showId}")
+    public ShowDetailResponse getShowById(@PathVariable("showId") Long showId) {
+
+        return showFacadeService.findShowById(showId);
+    }
 }

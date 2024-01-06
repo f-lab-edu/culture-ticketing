@@ -14,8 +14,6 @@ public class ShowFloorSaveRequest {
 
     @NotBlank
     private String showFloorName;
-    private int coordinateX;
-    private int coordinateY;
     @Positive
     private int count;
     @NotNull
@@ -24,8 +22,6 @@ public class ShowFloorSaveRequest {
     public ShowFloor toEntity() {
         return ShowFloor.builder()
                 .showFloorName(showFloorName)
-                .coordinateX(coordinateX)
-                .coordinateY(coordinateY)
                 .count(count)
                 .showSeatGradeId(showSeatGradeId)
                 .build();

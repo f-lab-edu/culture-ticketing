@@ -12,8 +12,6 @@ import javax.validation.constraints.Positive;
 @NoArgsConstructor
 public class PlaceSeatSaveRequest {
 
-    private int coordinateX;
-    private int coordinateY;
     @Positive
     private int seatRow;
     @Positive
@@ -23,8 +21,6 @@ public class PlaceSeatSaveRequest {
 
     public Seat toEntity() {
         return Seat.builder()
-                .coordinateX(coordinateX)
-                .coordinateY(coordinateY)
                 .seatRow(seatRow)
                 .seatNumber(seatNumber)
                 .areaId(areaId)
