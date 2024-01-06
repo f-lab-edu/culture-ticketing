@@ -46,7 +46,7 @@ public class Show extends BaseEntity {
     private Long placeId;
 
     @Builder
-    public Show(Category category, String showName, AgeRestriction ageRestriction,
+    public Show(Long showId, Category category, String showName, AgeRestriction ageRestriction,
                 int runningTime, String notice, String posterImgUrl, String description,
                 LocalDate showStartDate, LocalDate showEndDate, Long placeId) {
 
@@ -59,6 +59,7 @@ public class Show extends BaseEntity {
         Preconditions.checkArgument(StringUtils.hasText(posterImgUrl), "공연 포스터 이미지 url을 입력해주세요.");
         Preconditions.checkArgument(runningTime > 0, "공연 러닝 시간을 0 초과로 입력해주세요.");
 
+        this.showId = showId;
         this.category = category;
         this.showName = showName;
         this.ageRestriction = ageRestriction;

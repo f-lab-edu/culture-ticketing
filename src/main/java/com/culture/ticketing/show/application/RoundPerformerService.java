@@ -1,5 +1,6 @@
 package com.culture.ticketing.show.application;
 
+import com.culture.ticketing.show.application.dto.RoundPerformersSaveRequest;
 import com.culture.ticketing.show.domain.Round;
 import com.culture.ticketing.show.domain.RoundPerformer;
 import com.culture.ticketing.show.infra.RoundPerformerRepository;
@@ -7,8 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 @Service
 public class RoundPerformerService {
@@ -24,20 +24,16 @@ public class RoundPerformerService {
     }
 
     @Transactional
-    public void createRoundPerformers(Long roundId, Set<Long> performerIds) {
+    public void createRoundPerformers(RoundPerformersSaveRequest request) {
 
-        Round round = roundService.findById(roundId);
+        Objects.requireNonNull(request.getRoundId(), "회차 아이디를 입력해주세요.");
+        Objects.requireNonNull(request.getPerformerIds(), "출연자 아이디 목록을 입력해주세요.");
 
-        performerService.checkShowPerformersExists(round.getShowId(), performerIds);
+        Round round = roundService.findById(request.getRoundId());
 
-        List<RoundPerformer> roundPerformers = performerIds.stream()
-                .map(performerId -> RoundPerformer.builder()
-                        .roundId(round.getRoundId())
-                        .performerId(performerId)
-                        .build())
-                .collect(Collectors.toList());
+        performerService.checkShowPerformersExists(round.getShowId(), request.getPerformerIds());
 
-        roundPerformerRepository.saveAll(roundPerformers);
+        roundPerformerRepository.saveAll(request.toEntities());
     }
 
     @Transactional(readOnly = true)

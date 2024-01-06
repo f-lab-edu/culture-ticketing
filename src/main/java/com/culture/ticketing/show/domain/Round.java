@@ -33,12 +33,13 @@ public class Round extends BaseEntity {
     private Long showId;
 
     @Builder
-    public Round(LocalDateTime roundStartDateTime, LocalDateTime roundEndDateTime, Long showId) {
+    public Round(Long roundId, LocalDateTime roundStartDateTime, LocalDateTime roundEndDateTime, Long showId) {
 
         Objects.requireNonNull(showId, "공연 아이디를 입력해주세요.");
         Objects.requireNonNull(roundStartDateTime, "회차 시작 일시를 입력해주세요.");
         Objects.requireNonNull(roundEndDateTime, "회차 종료 일시를 입력해주세요.");
 
+        this.roundId = roundId;
         this.roundStartDateTime = roundStartDateTime;
         this.roundEndDateTime = roundEndDateTime;
         this.showId = showId;

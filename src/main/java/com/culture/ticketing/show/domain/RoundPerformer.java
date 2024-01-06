@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -29,6 +30,10 @@ public class RoundPerformer {
 
     @Builder
     public RoundPerformer(Long roundId, Long performerId) {
+
+        Objects.requireNonNull(roundId, "회차 아이디를 입력해주세요.");
+        Objects.requireNonNull(performerId, "출연자 아이디를 입력해주세요.");
+
         this.roundId = roundId;
         this.performerId = performerId;
     }

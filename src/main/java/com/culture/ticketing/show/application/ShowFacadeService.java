@@ -3,7 +3,6 @@ package com.culture.ticketing.show.application;
 import com.culture.ticketing.place.application.PlaceService;
 import com.culture.ticketing.place.domain.Place;
 import com.culture.ticketing.show.application.dto.RoundWithPerformersResponse;
-import com.culture.ticketing.show.application.dto.RoundWithPerformersSaveRequest;
 import com.culture.ticketing.show.application.dto.ShowDetailResponse;
 import com.culture.ticketing.show.application.dto.ShowSeatGradeResponse;
 import com.culture.ticketing.show.domain.Performer;
@@ -16,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -49,20 +47,6 @@ public class ShowFacadeService {
         List<ShowSeatGradeResponse> showSeatGrades = showSeatGradeService.findShowSeatGradesByShowId(showId);
 
         return ShowDetailResponse.from(show, place, rounds, showSeatGrades);
-    }
-
-    @Transactional
-    public void createRoundWithPerformers(RoundWithPerformersSaveRequest request) {
-
-        Objects.requireNonNull(request.getShowId(), "공연 아이디를 입력해주세요.");
-        Objects.requireNonNull(request.getRoundStartDateTime(), "시작 회차 일시를 입력해주세요.");
-
-        Show show = showService.findShowById(request.getShowId());
-
-        Round round = request.toEntity(show);
-        roundService.createRound(show, round);
-
-        roundPerformerService.createRoundPerformers(round.getRoundId(), request.getPerformerIds());
     }
 
     @Transactional(readOnly = true)
