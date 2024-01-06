@@ -36,11 +36,12 @@ public class Performer extends BaseEntity {
     private Long showId;
 
     @Builder
-    public Performer(String performerName, String performerImgUrl, String role, Long showId) {
+    public Performer(Long performerId, String performerName, String performerImgUrl, String role, Long showId) {
 
         Objects.requireNonNull(showId, "공연 아이디를 입력해주세요.");
         Preconditions.checkArgument(StringUtils.hasText(performerName), "출연자 이름을 입력해주세요.");
 
+        this.performerId = performerId;
         this.performerName = performerName;
         this.performerImgUrl = performerImgUrl;
         this.role = role;
