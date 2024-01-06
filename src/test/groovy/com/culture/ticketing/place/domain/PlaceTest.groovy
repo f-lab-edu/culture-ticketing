@@ -34,7 +34,7 @@ class PlaceTest extends Specification {
         e.message == "정확한 장소 경도를 입력해주세요."
     }
 
-    def "Place_생성_시_장소 주소가_null_이면_예외_발생"() {
+    def "Place_생성_시_장소_주소가_null_이면_예외_발생"() {
 
         when:
         Place.builder()
