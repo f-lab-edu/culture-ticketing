@@ -8,31 +8,18 @@ import java.time.LocalDate
 
 class ShowFixtures {
 
-    static Show createShow(Long showId) {
-        return Show.builder()
-                .showId(showId)
-                .category(Category.CONCERT)
-                .showName("테스트")
-                .ageRestriction(AgeRestriction.ALL)
-                .runningTime(120)
-                .posterImgUrl("http://abc.jpg")
-                .showStartDate(LocalDate.of(2024, 1, 1))
-                .showEndDate(LocalDate.of(2024, 5, 31))
-                .placeId(1L)
-                .build();
-    }
-
-    static Show createShow(Long showId, Category category) {
+    static Show createShow(Long showId, Category category = Category.CONCERT, String showName = "테스트", AgeRestriction ageRestriction = AgeRestriction.ALL, int runningTime = 120, String posterImgUrl = "http://abc.jpg",
+                           LocalDate showStartDate = LocalDate.of(2024, 1, 1), LocalDate showEndDate = LocalDate.of(2024, 5, 31), Long placeId = 1L) {
         return Show.builder()
                 .showId(showId)
                 .category(category)
-                .showName("테스트")
-                .ageRestriction(AgeRestriction.ALL)
-                .runningTime(120)
-                .posterImgUrl("http://abc.jpg")
-                .showStartDate(LocalDate.of(2024, 1, 1))
-                .showEndDate(LocalDate.of(2024, 5, 31))
-                .placeId(1L)
+                .showName(showName)
+                .ageRestriction(ageRestriction)
+                .runningTime(runningTime)
+                .posterImgUrl(posterImgUrl)
+                .showStartDate(showStartDate)
+                .showEndDate(showEndDate)
+                .placeId(placeId)
                 .build();
     }
 }
