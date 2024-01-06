@@ -43,10 +43,6 @@ public class SeatService {
     }
 
     private void checkDuplicatedSeat(Seat seat) {
-        seatRepository.findByAreaId(seat.getAreaId())
-                .ifPresent(s -> {
-                    throw new DuplicatedPlaceSeatException();
-                });
         seatRepository.findByAreaIdAndSeatRowAndSeatNumber(seat.getAreaId(), seat.getSeatRow(), seat.getSeatNumber())
                 .ifPresent(s -> {
                     throw new DuplicatedPlaceSeatException();

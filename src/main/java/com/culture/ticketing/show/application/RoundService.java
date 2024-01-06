@@ -9,9 +9,11 @@ import com.culture.ticketing.show.infra.RoundRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RoundService {
@@ -60,5 +62,16 @@ public class RoundService {
     public List<Round> findByShowId(Long showId) {
 
         return roundRepository.findByShowId(showId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<LocalDate> findRoundExistDatesByShowId(Long showId) {
+
+        List<Round> rounds = roundRepository.findByShowId(showId);
+
+        return rounds.stream()
+                .map(round -> round.getRoundStartDateTime().toLocalDate())
+                .distinct()
+                .collect(Collectors.toList());
     }
 }
