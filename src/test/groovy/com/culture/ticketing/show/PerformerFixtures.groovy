@@ -4,11 +4,13 @@ import com.culture.ticketing.show.domain.Performer;
 
 class PerformerFixtures {
 
-    static Performer createPerformer(Long performerId, Long showId) {
+    static Performer createPerformer(Long performerId, Long showId = 1L, String performerName = "홍길동", String performerImgUrl = "https://abc.jpg", String role = "ABC") {
         return Performer.builder()
                 .performerId(performerId)
-                .performerName("사람" + performerId)
                 .showId(showId)
+                .performerName(performerName)
+                .performerImgUrl(performerImgUrl)
+                .role(role)
                 .build();
     }
 }
