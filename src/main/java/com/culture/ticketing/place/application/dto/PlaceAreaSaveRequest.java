@@ -11,16 +11,12 @@ import javax.validation.constraints.NotNull;
 public class PlaceAreaSaveRequest {
 
     private String areaName;
-    private int coordinateX;
-    private int coordinateY;
     @NotNull
     private Long placeId;
 
     public Area toEntity() {
         return Area.builder()
                 .areaName(areaName)
-                .coordinateX(coordinateX)
-                .coordinateY(coordinateY)
                 .placeId(placeId)
                 .build();
     }

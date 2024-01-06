@@ -10,10 +10,10 @@ import com.google.common.base.Preconditions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class SeatService {
@@ -43,10 +43,6 @@ public class SeatService {
     }
 
     private void checkDuplicatedSeat(Seat seat) {
-        seatRepository.findByAreaIdAndCoordinateXAndCoordinateY(seat.getAreaId(), seat.getCoordinateX(), seat.getCoordinateY())
-                .ifPresent(s -> {
-                    throw new DuplicatedPlaceSeatException();
-                });
         seatRepository.findByAreaIdAndSeatRowAndSeatNumber(seat.getAreaId(), seat.getSeatRow(), seat.getSeatNumber())
                 .ifPresent(s -> {
                     throw new DuplicatedPlaceSeatException();
@@ -56,12 +52,13 @@ public class SeatService {
     @Transactional(readOnly = true)
     public void checkSeatsExists(Set<Long> seatIds) {
 
-        List<Seat> foundSeats = seatRepository.findBySeatIdIn(seatIds);
-        if (seatIds.size() != foundSeats.size()) {
+        Set<Long> copySeatIds = new HashSet<>(seatIds);
+        List<Seat> foundSeats = seatRepository.findBySeatIdIn(copySeatIds);
+        if (copySeatIds.size() != foundSeats.size()) {
             for (Seat foundSeat : foundSeats) {
-                seatIds.remove(foundSeat.getSeatId());
+                copySeatIds.remove(foundSeat.getSeatId());
             }
-            throw new SeatNotFoundException(seatIds.toString());
+            throw new SeatNotFoundException(copySeatIds.toString());
         }
     }
 }

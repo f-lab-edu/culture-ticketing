@@ -64,6 +64,7 @@ public class RoundService {
         return roundRepository.findByShowId(showId);
     }
 
+    @Transactional(readOnly = true)
     public List<LocalDate> findRoundExistDatesByShowId(Long showId) {
 
         List<Round> rounds = roundRepository.findByShowId(showId);

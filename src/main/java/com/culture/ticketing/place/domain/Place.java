@@ -35,7 +35,7 @@ public class Place {
     private BigDecimal longitude;
 
     @Builder
-    public Place(String placeName, String address, BigDecimal latitude, BigDecimal longitude) {
+    public Place(Long placeId, String placeName, String address, BigDecimal latitude, BigDecimal longitude) {
 
         Objects.requireNonNull(latitude, "정확한 장소 위도를 입력해주세요.");
         Objects.requireNonNull(longitude, "정확한 장소 경도를 입력해주세요.");
@@ -45,6 +45,7 @@ public class Place {
         Preconditions.checkArgument(longitude.compareTo(BigDecimal.valueOf(-180)) >= 0
                 && longitude.compareTo(BigDecimal.valueOf(180)) <= 0, "장소 경도 범위를 벗어난 입력값입니다.");
 
+        this.placeId = placeId;
         this.placeName = placeName;
         this.address = address;
         this.latitude = latitude;
