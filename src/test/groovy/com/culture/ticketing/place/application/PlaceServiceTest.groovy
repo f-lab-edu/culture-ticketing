@@ -4,6 +4,7 @@ import com.culture.ticketing.place.PlaceFixtures
 import com.culture.ticketing.place.application.dto.PlaceResponse
 import com.culture.ticketing.place.application.dto.PlaceSaveRequest
 import com.culture.ticketing.place.domain.Place
+import com.culture.ticketing.place.exception.PlaceNotFoundException
 import com.culture.ticketing.place.infra.PlaceRepository
 import org.spockframework.spring.SpringBean
 import spock.lang.Specification
@@ -207,5 +208,18 @@ class PlaceServiceTest extends Specification {
         then:
         response.size() == 5
         response.collect(place -> place.placeId) == [1L, 2L, 3L, 4L, 5L]
+    }
+
+    def "장소_아이디로_장소_조회_시_없는_경우_예외_발생"() {
+
+        given:
+        placeRepository.findById(1L) >> Optional.empty()
+
+        when:
+        placeService.findPlaceById(1L);
+
+        then:
+        def e = thrown(PlaceNotFoundException.class)
+        e.message == "존재하지 않는 장소입니다. (placeId = 1)"
     }
 }
