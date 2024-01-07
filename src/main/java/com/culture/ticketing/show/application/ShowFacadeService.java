@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -43,14 +44,14 @@ public class ShowFacadeService {
 
         Show show = showService.findShowById(showId);
         Place place = placeService.findPlaceById(show.getPlaceId());
-        List<RoundWithPerformersResponse> rounds = findRoundsByShowId(showId);
+        List<RoundWithPerformersResponse> rounds = findRoundWitPerformersByShowId(showId);
         List<ShowSeatGradeResponse> showSeatGrades = showSeatGradeService.findShowSeatGradesByShowId(showId);
 
         return ShowDetailResponse.from(show, place, rounds, showSeatGrades);
     }
 
     @Transactional(readOnly = true)
-    public List<RoundWithPerformersResponse> findRoundsByShowId(Long showId) {
+    public List<RoundWithPerformersResponse> findRoundWitPerformersByShowId(Long showId) {
 
         List<Round> rounds = roundService.findByShowId(showId);
         List<Long> roundIds = rounds.stream()
@@ -58,9 +59,9 @@ public class ShowFacadeService {
                 .collect(Collectors.toList());
 
         List<RoundPerformer> roundPerformers = roundPerformerService.findByRoundIds(roundIds);
-        List<Long> performerIds = roundPerformers.stream()
+        Set<Long> performerIds = roundPerformers.stream()
                 .map(RoundPerformer::getPerformerId)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
 
         Map<Long, Performer> performerMapById = performerService.findShowPerformers(showId, performerIds).stream()
                 .collect(Collectors.toMap(Performer::getPerformerId, Function.identity()));

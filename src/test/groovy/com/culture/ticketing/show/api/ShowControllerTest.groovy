@@ -4,6 +4,7 @@ import com.culture.ticketing.place.PlaceFixtures
 import com.culture.ticketing.show.ShowFixtures
 import com.culture.ticketing.show.application.ShowFacadeService
 import com.culture.ticketing.show.application.ShowService
+import com.culture.ticketing.show.application.dto.ShowDetailResponse
 import com.culture.ticketing.show.application.dto.ShowResponse
 import com.culture.ticketing.show.application.dto.ShowSaveRequest
 import com.culture.ticketing.show.domain.AgeRestriction
@@ -342,6 +343,29 @@ class ShowControllerTest extends Specification {
                 .andExpect(jsonPath("\$[1].showId", Matchers.greaterThan(offset.toInteger())))
                 .andExpect(jsonPath("\$[0].categoryName").value(category.getCategoryName()))
                 .andExpect(jsonPath("\$[1].categoryName").value(category.getCategoryName()))
+                .andDo(MockMvcResultHandlers.print())
+    }
+
+    def "공연_아이디로_공연_상세_조회"() {
+
+        given:
+        showFacadeService.findShowById(1L) >> ShowFixtures.createShowDetailResponse(
+                1L,
+                1L,
+                List.of(1L, 2L),
+                List.of(1L, 2L, 3L),
+                List.of(1L, 2L));
+
+        expect:
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/shows/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("\$").exists())
+                .andExpect(jsonPath("\$.show.showId").value(1L))
+                .andExpect(jsonPath("\$.show.place.placeId").value(1L))
+                .andExpect(jsonPath("\$.rounds", Matchers.hasSize(2)))
+                .andExpect(jsonPath("\$.rounds[0].performers", Matchers.hasSize(3)))
+                .andExpect(jsonPath("\$.rounds[1].performers", Matchers.hasSize(3)))
+                .andExpect(jsonPath("\$.showSeatGrades", Matchers.hasSize(2)))
                 .andDo(MockMvcResultHandlers.print())
     }
 }

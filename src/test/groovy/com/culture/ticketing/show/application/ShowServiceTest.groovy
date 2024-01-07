@@ -10,6 +10,7 @@ import com.culture.ticketing.show.application.dto.ShowSaveRequest
 import com.culture.ticketing.show.domain.AgeRestriction
 import com.culture.ticketing.show.domain.Category
 import com.culture.ticketing.show.domain.Show
+import com.culture.ticketing.show.exception.ShowNotFoundException
 import com.culture.ticketing.show.infra.ShowRepository
 import org.spockframework.spring.SpringBean
 import spock.lang.Specification
@@ -344,5 +345,17 @@ class ShowServiceTest extends Specification {
         def e = thrown(PlaceNotFoundException.class);
         e.message == "존재하지 않는 장소입니다. (placeId = 1)"
 
+    }
+
+    def "공연_아이디로_공연_조회_시_없는_경우_예외_발생"() {
+        given:
+        showRepository.findById(1L) >> Optional.empty()
+
+        when:
+        showService.findShowById(1L);
+
+        then:
+        def e = thrown(ShowNotFoundException.class);
+        e.message == "존재하지 않는 공연입니다. (showId = 1)"
     }
 }

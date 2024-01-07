@@ -1,6 +1,9 @@
 package com.culture.ticketing.show.application
 
+import com.culture.ticketing.show.ShowSeatGradeFixtures
+import com.culture.ticketing.show.application.dto.ShowSeatGradeResponse
 import com.culture.ticketing.show.application.dto.ShowSeatGradeSaveRequest
+import com.culture.ticketing.show.domain.ShowSeatGrade
 import com.culture.ticketing.show.exception.ShowNotFoundException
 import com.culture.ticketing.show.infra.ShowSeatGradeRepository
 import org.spockframework.spring.SpringBean
@@ -112,5 +115,22 @@ class ShowSeatGradeServiceTest extends Specification {
 
         then:
         !response
+    }
+
+    def "공연_아이디로_공연_좌석_등급_목록_조회"() {
+
+        given:
+        List<ShowSeatGrade> showSeatGrades = List.of(
+                ShowSeatGradeFixtures.createShowSeatGrade(1L),
+                ShowSeatGradeFixtures.createShowSeatGrade(2L),
+                ShowSeatGradeFixtures.createShowSeatGrade(3L)
+        );
+        showSeatGradeRepository.findByShowId(1L) >> showSeatGrades;
+
+        when:
+        List<ShowSeatGradeResponse> response = showSeatGradeService.findShowSeatGradesByShowId(1L);
+
+        then:
+        response.size() == 3
     }
 }
