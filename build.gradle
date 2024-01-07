@@ -33,6 +33,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation "com.google.guava:guava:32.1.3-jre"
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 
     // queryDSL 설정
     implementation "com.querydsl:querydsl-jpa"
