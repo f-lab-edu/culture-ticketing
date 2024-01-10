@@ -176,4 +176,21 @@ class PlaceServiceTest extends Specification {
         def e = thrown(IllegalArgumentException.class)
         e.message == "장소 경도 범위를 벗어난 입력값입니다."
     }
+
+    def "장소_생성_성공"() {
+
+        given:
+        PlaceSaveRequest request = PlaceSaveRequest.builder()
+                .placeName("테스트")
+                .address("서울특별시")
+                .latitude(new BigDecimal(36.1))
+                .longitude(new BigDecimal(102.6))
+                .build();
+
+        when:
+        placeService.createPlace(request);
+
+        then:
+        1 * placeRepository.save(_)
+    }
 }
