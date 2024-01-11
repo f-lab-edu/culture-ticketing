@@ -7,6 +7,7 @@ import com.culture.ticketing.user.infra.UserRepository;
 import com.google.common.base.Preconditions;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 @Service
@@ -38,6 +39,11 @@ public class UserService {
         userRepository.findByEmail(email).ifPresent((user) -> {
             throw new DuplicatedUserEmailException();
         });
+    }
+
+    @Transactional(readOnly = true)
+    public boolean notExistsById(Long userId) {
+        return !userRepository.existsById(userId);
     }
 
 }
