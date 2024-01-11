@@ -10,7 +10,7 @@ class BookingTest extends Specification {
         Booking.builder()
                 .userId(null)
                 .roundId(1L)
-                .totalPrice(new BigDecimal(100000))
+                .totalPrice(100000)
                 .bookingStatus(BookingStatus.SUCCESS)
                 .build();
 
@@ -25,7 +25,7 @@ class BookingTest extends Specification {
         Booking.builder()
                 .userId(1L)
                 .roundId(null)
-                .totalPrice(new BigDecimal(100000))
+                .totalPrice(100000)
                 .bookingStatus(BookingStatus.SUCCESS)
                 .build();
 
@@ -40,7 +40,7 @@ class BookingTest extends Specification {
         Booking.builder()
                 .userId(1L)
                 .roundId(1L)
-                .totalPrice(new BigDecimal(100000))
+                .totalPrice(100000)
                 .bookingStatus(null)
                 .build();
 
@@ -55,7 +55,7 @@ class BookingTest extends Specification {
         Booking.builder()
                 .userId(1L)
                 .roundId(1L)
-                .totalPrice(new BigDecimal(-1))
+                .totalPrice(-1)
                 .bookingStatus(BookingStatus.SUCCESS)
                 .build();
 

@@ -45,7 +45,8 @@ public class BookingFacadeService {
         Objects.requireNonNull(request.getUserId(), "유저 아이디를 입력해주세요.");
         Objects.requireNonNull(request.getRoundId(), "회차 아이디를 입력해주세요.");
         Preconditions.checkArgument(request.getTotalPrice() >= 0, "총 가격은 0 이상 숫자로 입력해주세요.");
-        Preconditions.checkArgument(request.getShowSeatIds().size() != 0 || request.getShowFloors().size() != 0, "예약 좌석 정보를 입력해주세요.");
+        Preconditions.checkArgument(request.getShowSeatIds() != null && request.getShowFloors() != null &&
+                (request.getShowSeatIds().size() != 0 || request.getShowFloors().size() != 0), "예약 좌석 정보를 입력해주세요.");
 
         checkBookingTotalPrice(request.getShowSeatIds(), request.getShowFloors(), request.getTotalPrice());
 
@@ -55,7 +56,7 @@ public class BookingFacadeService {
         bookingShowFloorService.createBookingShowFloors(request.getShowFloors(), booking.getBookingId());
     }
 
-    private void checkBookingTotalPrice(List<Long> showSeatIds, List<BookingShowFloorSaveRequest> bookingShowFloors, int totalPrice) {
+    protected void checkBookingTotalPrice(List<Long> showSeatIds, List<BookingShowFloorSaveRequest> bookingShowFloors, int totalPrice) {
         List<ShowSeat> showSeats = showSeatService.findByIds(showSeatIds);
         List<ShowFloor> showFloors = showFloorService.findByIds(bookingShowFloors.stream()
                 .map(BookingShowFloorSaveRequest::getShowFloorId)

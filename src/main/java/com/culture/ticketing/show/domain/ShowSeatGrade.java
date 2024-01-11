@@ -32,12 +32,13 @@ public class ShowSeatGrade extends BaseEntity {
     private Long showId;
 
     @Builder
-    public ShowSeatGrade(String seatGrade, int price, Long showId) {
+    public ShowSeatGrade(Long showSeatGradeId, String seatGrade, int price, Long showId) {
 
         Objects.requireNonNull(showId, "공연 아이디를 입력해주세요.");
         Preconditions.checkArgument(StringUtils.hasText(seatGrade), "공연 좌석 등급을 입력해주세요.");
         Preconditions.checkArgument(price >= 0, "공연 좌석 가격을 0 이상으로 입력해주세요.");
 
+        this.showSeatGradeId = showSeatGradeId;
         this.seatGrade = seatGrade;
         this.price = price;
         this.showId = showId;

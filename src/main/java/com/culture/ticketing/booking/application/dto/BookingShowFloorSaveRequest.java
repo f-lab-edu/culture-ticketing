@@ -15,4 +15,8 @@ public class BookingShowFloorSaveRequest {
     @Positive
     private int entryOrder;
 
+    public BookingShowFloorSaveRequest(Long showFloorId, int entryOrder) {
+        this.showFloorId = showFloorId;
+        this.entryOrder = entryOrder;
+    }
 }
