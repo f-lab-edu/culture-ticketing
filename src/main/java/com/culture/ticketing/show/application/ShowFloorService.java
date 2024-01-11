@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -34,5 +35,11 @@ public class ShowFloorService {
         }
 
         showFloorRepository.save(request.toEntity());
+    }
+
+    @Transactional(readOnly = true)
+    public List<ShowFloor> findByIds(List<Long> showFloorIds) {
+
+        return showFloorRepository.findAllById(showFloorIds);
     }
 }

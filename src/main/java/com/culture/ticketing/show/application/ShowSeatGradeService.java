@@ -51,4 +51,10 @@ public class ShowSeatGradeService {
                 .map(ShowSeatGradeResponse::new)
                 .collect(Collectors.toList());
     }
+
+    @Transactional(readOnly = true)
+    public List<ShowSeatGrade> findByIds(List<Long> showSeatGradeIds) {
+
+        return showSeatGradeRepository.findAllById(showSeatGradeIds);
+    }
 }

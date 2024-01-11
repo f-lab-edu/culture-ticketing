@@ -41,4 +41,10 @@ public class ShowSeatService {
         List<ShowSeat> showSeats = request.toEntities();
         showSeatRepository.saveAll(showSeats);
     }
+
+    @Transactional(readOnly = true)
+    public List<ShowSeat> findByIds(List<Long> showSeatIds) {
+
+        return showSeatRepository.findAllById(showSeatIds);
+    }
 }
