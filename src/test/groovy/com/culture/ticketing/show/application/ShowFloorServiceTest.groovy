@@ -14,6 +14,23 @@ class ShowFloorServiceTest extends Specification {
     private ShowSeatGradeService showSeatGradeService = Mock();
     private ShowFloorService showFloorService = new ShowFloorService(showFloorRepository, showSeatGradeService);
 
+    def "공연 플로어 생성 성공"() {
+
+        given:
+        ShowFloorSaveRequest request = ShowFloorSaveRequest.builder()
+                .showSeatGradeId(1L)
+                .showFloorName("F1")
+                .count(700)
+                .build();
+        showSeatGradeService.notExistsById(1L) >> false
+
+        when:
+        showFloorService.createShowFloor(request);
+
+        then:
+        1 * showFloorRepository.save(_)
+    }
+
     def "공연 플로어 생성 시 공연 좌석 등급 아이디 값이 null 인 경우 예외 발생"() {
 
         given:
