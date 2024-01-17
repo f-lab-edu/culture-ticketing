@@ -4,7 +4,7 @@ import spock.lang.Specification
 
 class ShowSeatGradeTest extends Specification {
 
-    def "공연_좌석_등급_생성_시_공연_아이디_값이_null_인_경우_예외_발생"() {
+    def "공연 좌석 등급 생성 시 공연 아이디 값이 null 인 경우 예외 발생"() {
 
         when:
         ShowSeatGrade.builder()
@@ -18,7 +18,7 @@ class ShowSeatGradeTest extends Specification {
         e.message == "공연 아이디를 입력해주세요."
     }
 
-    def "공연_좌석_등급_생성_시_좌석_등급_명이_null_인_경우_예외_발생"() {
+    def "공연 좌석 등급 생성 시 좌석 등급 명이 null 인 경우 예외 발생"() {
 
         when:
         ShowSeatGrade.builder()
@@ -32,7 +32,7 @@ class ShowSeatGradeTest extends Specification {
         e.message == "공연 좌석 등급을 입력해주세요."
     }
 
-    def "공연_좌석_등급_생성_시_좌석_등급_명이_빈_값_인_경우_예외_발생"() {
+    def "공연 좌석 등급 생성 시 좌석 등급명이 빈 값인 경우 예외 발생"() {
 
         when:
         ShowSeatGrade.builder()
@@ -46,7 +46,7 @@ class ShowSeatGradeTest extends Specification {
         e.message == "공연 좌석 등급을 입력해주세요."
     }
 
-    def "공연_좌석_등급_생성_시_가격이_0미만_인_경우_예외_발생"() {
+    def "공연 좌석 등급 생성 시 가격이 0 미만인 경우 예외 발생"() {
 
         when:
         ShowSeatGrade.builder()

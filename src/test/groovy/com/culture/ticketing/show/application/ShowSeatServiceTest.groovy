@@ -1,7 +1,6 @@
 package com.culture.ticketing.show.application
 
 import com.culture.ticketing.place.application.SeatService
-import com.culture.ticketing.place.exception.SeatNotFoundException
 import com.culture.ticketing.show.application.dto.ShowSeatSaveRequest
 import com.culture.ticketing.show.exception.ShowSeatGradeNotFoundException
 import com.culture.ticketing.show.infra.ShowSeatRepository
@@ -18,7 +17,7 @@ class ShowSeatServiceTest extends Specification {
     private SeatService seatService = Mock();
     private ShowSeatService showSeatService = new ShowSeatService(showSeatRepository, showSeatGradeService, seatService);
 
-    def "공연_좌석_정보_생성_시_공연_좌석_등급_아이디_값이_null_인_경우_예외_발생"() {
+    def "공연 좌석 정보 생성 시 공연 좌석 등급 아이디 값이 null 인 경우 예외 발생"() {
 
         given:
         ShowSeatSaveRequest request = ShowSeatSaveRequest.builder()
@@ -34,7 +33,7 @@ class ShowSeatServiceTest extends Specification {
         e.message == "공연 좌석 등급 아이디를 입력해주세요."
     }
 
-    def "공연_좌석_정보_생성_시_좌석_아이디_목록_값이_null_인_경우_예외_발생"() {
+    def "공연 좌석 정보 생성 시 좌석 아이디 목록 값이 null 인 경우 예외 발생"() {
 
         given:
         ShowSeatSaveRequest request = ShowSeatSaveRequest.builder()
@@ -50,7 +49,7 @@ class ShowSeatServiceTest extends Specification {
         e.message == "좌석 아이디를 입력해주세요."
     }
 
-    def "공연_좌석_정보_생성_시_좌석_아이디_목록_사이즈가_0인_경우_예외_발생"() {
+    def "공연 좌석 정보 생성 시 좌석 아이디 목록 사이즈가 0인 경우 예외 발생"() {
 
         given:
         ShowSeatSaveRequest request = ShowSeatSaveRequest.builder()
@@ -66,7 +65,7 @@ class ShowSeatServiceTest extends Specification {
         e.message == "좌석 아이디를 입력해주세요."
     }
 
-    def "공연_좌석_정보_생성_시_공연_좌석_등급_아이디_값에_해당하는_공연_좌석_등급이_존재하지_않는_경우_예외_발생"() {
+    def "공연 좌석 정보 생성 시 공연 좌석 등급 아이디 값에 해당하는 공연 좌석 등급이 존재하지 않는 경우 예외 발생"() {
 
         given:
         Long showSeatGradeId = 1L;

@@ -27,7 +27,7 @@ class ShowSeatGradeControllerTest extends Specification {
     @SpringBean
     private ShowSeatGradeService showSeatGradeService = Mock();
 
-    def "공연_좌석_등급_생성"() {
+    def "공연 좌석 등급 생성"() {
 
         given:
         ShowSeatGradeSaveRequest request = ShowSeatGradeSaveRequest.builder()
@@ -45,7 +45,7 @@ class ShowSeatGradeControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "공연_좌석_등급_생성_시_공연_아이디_값이_null_인_경우_400_에러"() {
+    def "공연 좌석 등급 생성 시 공연 아이디 값이 null 인 경우 400 에러"() {
 
         given:
         ShowSeatGradeSaveRequest request = ShowSeatGradeSaveRequest.builder()
@@ -63,7 +63,7 @@ class ShowSeatGradeControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "공연_좌석_등급_생성_시_좌석_등급_명이_null_인_경우_400_에러"() {
+    def "공연 좌석 등급 생성 시 좌석 등급 명이 null 인 경우 400 에러"() {
 
         given:
         ShowSeatGradeSaveRequest request = ShowSeatGradeSaveRequest.builder()
@@ -81,7 +81,7 @@ class ShowSeatGradeControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "공연_좌석_등급_생성_시_좌석_등급_명이_빈_값_인_경우_400_에러"() {
+    def "공연 좌석 등급 생성 시 좌석 등급 명이 빈 값인 경우 400 에러"() {
 
         given:
         ShowSeatGradeSaveRequest request = ShowSeatGradeSaveRequest.builder()
@@ -99,7 +99,7 @@ class ShowSeatGradeControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "공연_좌석_등급_생성_시_가격이_0미만_인_경우_400_에러"() {
+    def "공연 좌석 등급 생성 시 가격이 0 미만 인 경우 400 에러"() {
 
         given:
         ShowSeatGradeSaveRequest request = ShowSeatGradeSaveRequest.builder()

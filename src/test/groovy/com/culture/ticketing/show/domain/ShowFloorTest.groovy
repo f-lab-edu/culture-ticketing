@@ -4,7 +4,7 @@ import spock.lang.Specification
 
 class ShowFloorTest extends Specification {
 
-    def "공연_플로어_생성_시_공연_좌석_등급_아이디_값이_null_인_경우_예외_발생"() {
+    def "공연 플로어 생성 시 공연 좌석 등급 아이디 값이 null 인 경우 예외 발생"() {
 
         when:
         ShowFloor.builder()
@@ -18,7 +18,7 @@ class ShowFloorTest extends Specification {
         e.message == "공연 좌석 등급 아이디를 입력해주세요."
     }
 
-    def "공연_플로어_생성_시_공연_플로어_구역명이_null_인_경우_예외_발생"() {
+    def "공연 플로어 생성 시 공연 플로어 구역명이 null 인 경우 예외 발생"() {
 
         when:
         ShowFloor.builder()
@@ -32,7 +32,7 @@ class ShowFloorTest extends Specification {
         e.message == "공연 플로어 구역명을 입력해주세요."
     }
 
-    def "공연_플로어_생성_시_공연_플로어_구역명이_빈_값인_경우_예외_발생"() {
+    def "공연 플로어 생성 시 공연 플로어 구역명이 빈 값인 경우 예외 발생"() {
 
         when:
         ShowFloor.builder()
@@ -46,7 +46,7 @@ class ShowFloorTest extends Specification {
         e.message == "공연 플로어 구역명을 입력해주세요."
     }
 
-    def "공연_플로어_생성_시_인원수가_0이하_인_경우_예외_발생"() {
+    def "공연 플로어 생성 시 인원수가 0 이하인 경우 예외 발생"() {
 
         when:
         ShowFloor.builder()

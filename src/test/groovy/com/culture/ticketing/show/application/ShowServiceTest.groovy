@@ -13,7 +13,7 @@ class ShowServiceTest extends Specification {
     private PlaceService placeService = Mock();
     private ShowService showService = new ShowService(showRepository, placeService);
 
-    def "공연_아이디_값으로_공연_존재_여부_확인"() {
+    def "공연 아이디 값으로 공연 존재 여부 확인"() {
 
         given:
         Long showId = 1L;

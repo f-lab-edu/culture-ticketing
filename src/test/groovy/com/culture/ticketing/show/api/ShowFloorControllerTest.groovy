@@ -27,7 +27,7 @@ class ShowFloorControllerTest extends Specification {
     @SpringBean
     private ShowFloorService showFloorService = Mock();
 
-    def "공연_플로어_생성_성공"() {
+    def "공연 플로어 생성 성공"() {
 
         given:
         ShowFloorSaveRequest request = ShowFloorSaveRequest.builder()
@@ -45,7 +45,7 @@ class ShowFloorControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "공연_플로어_생성_시_공연_좌석_등급_아이디_값이_null_인_경우_400_에러"() {
+    def "공연 플로어 생성 시 공연 좌석 등급 아이디 값이 null 인 경우 400 에러"() {
 
         given:
         ShowFloorSaveRequest request = ShowFloorSaveRequest.builder()
@@ -63,7 +63,7 @@ class ShowFloorControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "공연_플로어_생성_시_공연_플로어_구역명이_null_인_경우_400_에러"() {
+    def "공연 플로어 생성 시 공연 플로어 구역명이 null 인 경우 400 에러"() {
 
         given:
         ShowFloorSaveRequest request = ShowFloorSaveRequest.builder()
@@ -81,7 +81,7 @@ class ShowFloorControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "공연_플로어_생성_시_공연_플로어_구역명이_빈_값인_경우_400_에러"() {
+    def "공연 플로어 생성 시 공연 플로어 구역명이 빈 값인 경우 400 에러"() {
 
         given:
         ShowFloorSaveRequest request = ShowFloorSaveRequest.builder()
@@ -99,7 +99,7 @@ class ShowFloorControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "공연_플로어_생성_시_인원수가_0이하_인_경우_400_에러"() {
+    def "공연 플로어 생성 시 인원수가 0이하 인 경우 400 에러"() {
 
         given:
         ShowFloorSaveRequest request = ShowFloorSaveRequest.builder()

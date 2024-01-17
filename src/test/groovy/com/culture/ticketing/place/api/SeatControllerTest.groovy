@@ -27,7 +27,7 @@ class SeatControllerTest extends Specification {
     @SpringBean
     private SeatService seatService = Mock();
 
-    def "좌석_생성_성공"() {
+    def "좌석 생성 성공"() {
 
         given:
         PlaceSeatSaveRequest request = PlaceSeatSaveRequest.builder()
@@ -45,7 +45,7 @@ class SeatControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "좌석_생성_시_구역_아이디_값이_null_인_경우_400_에러"() {
+    def "좌석 생성 시 구역 아이디 값이 null 인 경우 400 에러"() {
 
         given:
         PlaceSeatSaveRequest request = PlaceSeatSaveRequest.builder()
@@ -63,7 +63,7 @@ class SeatControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "좌석_생성_시_좌석_행이_0이하_인_경우_400_에러"() {
+    def "좌석 생성 시 좌석 행이 0이하 인 경우 400 에러"() {
 
         given:
         PlaceSeatSaveRequest request = PlaceSeatSaveRequest.builder()
@@ -81,7 +81,7 @@ class SeatControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "좌석_생성_시_좌석_번호가_0이하_인_경우_400_에러"() {
+    def "좌석 생성 시 좌석 번호가 0이하 인 경우 400 에러"() {
 
         given:
         PlaceSeatSaveRequest request = PlaceSeatSaveRequest.builder()
