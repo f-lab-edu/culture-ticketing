@@ -177,6 +177,23 @@ class PlaceServiceTest extends Specification {
         e.message == "장소 경도 범위를 벗어난 입력값입니다."
     }
 
+    def "장소_생성_성공"() {
+
+        given:
+        PlaceSaveRequest request = PlaceSaveRequest.builder()
+                .placeName("테스트")
+                .address("서울특별시")
+                .latitude(new BigDecimal(36.1))
+                .longitude(new BigDecimal(102.6))
+                .build();
+
+        when:
+        placeService.createPlace(request);
+
+        then:
+        1 * placeRepository.save(_)
+    }
+
     def "장소_아이디_값으로_장소_존재_여부_확인"() {
 
         given:
