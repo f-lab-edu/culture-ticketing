@@ -17,6 +17,22 @@ class ShowSeatServiceTest extends Specification {
     private SeatService seatService = Mock();
     private ShowSeatService showSeatService = new ShowSeatService(showSeatRepository, showSeatGradeService, seatService);
 
+    def "공연 좌석 정보 생성 성공"() {
+
+        given:
+        ShowSeatSaveRequest request = ShowSeatSaveRequest.builder()
+                .showSeatGradeId(1L)
+                .seatIds(Set.of(1L, 2L, 3L, 4L, 5L))
+                .build();
+        showSeatGradeService.notExistsById(1L) >> false
+
+        when:
+        showSeatService.createShowSeat(request);
+
+        then:
+        1 * showSeatRepository.saveAll(_)
+    }
+
     def "공연 좌석 정보 생성 시 공연 좌석 등급 아이디 값이 null 인 경우 예외 발생"() {
 
         given:
