@@ -48,7 +48,7 @@ public class RoundService {
         roundRepository.save(round);
     }
 
-    protected void checkDuplicatedRoundDateTime(Round round) {
+    private void checkDuplicatedRoundDateTime(Round round) {
         roundRepository.findByShowIdAndDuplicatedRoundDateTime(
                 round.getShowId(),
                 round.getRoundStartDateTime(),
@@ -57,7 +57,7 @@ public class RoundService {
         });
     }
 
-    protected void checkOutOfRangeRoundDateTime(Round round, Show show) {
+    private void checkOutOfRangeRoundDateTime(Round round, Show show) {
         LocalDateTime showStartDateTime = LocalDateTime.of(show.getShowStartDate(), LocalTime.MIN);
         LocalDateTime showEndDateTime = LocalDateTime.of(show.getShowEndDate(), LocalTime.MAX);
         if (round.getRoundStartDateTime().isBefore(showStartDateTime)
