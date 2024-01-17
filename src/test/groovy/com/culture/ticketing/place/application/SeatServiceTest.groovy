@@ -18,6 +18,23 @@ class SeatServiceTest extends Specification {
     private AreaService areaService = Mock();
     private SeatService seatService = new SeatService(seatRepository, areaService);
 
+    def "좌석 생성 성공"() {
+        given:
+        PlaceSeatSaveRequest request = PlaceSeatSaveRequest.builder()
+                .seatRow(1)
+                .seatNumber(1)
+                .areaId(1L)
+                .build();
+        areaService.notExistsById(1L) >> false
+        seatRepository.findByAreaIdAndSeatRowAndSeatNumber(request.getAreaId(), request.getSeatRow(), request.getSeatNumber()) >> Optional.empty()
+
+        when:
+        seatService.createPlaceSeat(request);
+
+        then:
+        1 * seatRepository.save(_)
+    }
+
     def "좌석 생성 시 구역 아이디가 null 인 경우 예외 발생"() {
 
         given:
