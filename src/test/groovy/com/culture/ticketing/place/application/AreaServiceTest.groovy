@@ -14,6 +14,22 @@ class AreaServiceTest extends Specification {
     private PlaceService placeService = Mock();
     private AreaService areaService = new AreaService(areaRepository, placeService);
 
+    def "구역 생성 성공"() {
+
+        given:
+        PlaceAreaSaveRequest request = PlaceAreaSaveRequest.builder()
+                .areaName("테스트")
+                .placeId(1L)
+                .build();
+        placeService.notExistsById(1L) >> false
+
+        when:
+        areaService.createPlaceArea(request);
+
+        then:
+        1 * areaRepository.save(_)
+    }
+
     def "구역 생성 시 장소 아이디가 null 인 경우 예외 발생"() {
 
         given:
