@@ -31,7 +31,7 @@ class PlaceControllerTest extends Specification {
     private PlaceService placeService = Mock()
 
 
-    def "장소_목록 조회"() {
+    def "장소 목록 조회"() {
 
         given:
         List<PlaceResponse> places = List.of(
@@ -57,7 +57,7 @@ class PlaceControllerTest extends Specification {
 
     }
 
-    def "장소_생성_성공"() {
+    def "장소 생성 성공"() {
 
         given:
         PlaceSaveRequest request = PlaceSaveRequest.builder()
@@ -77,7 +77,7 @@ class PlaceControllerTest extends Specification {
 
     }
 
-    def "장소_생성_시_장소_주소가_null_인_경우_400_에러"() {
+    def "장소 생성 시 장소 주소가 null 인 경우 400 에러"() {
 
         given:
         PlaceSaveRequest request = PlaceSaveRequest.builder()
@@ -97,7 +97,7 @@ class PlaceControllerTest extends Specification {
 
     }
 
-    def "장소_생성_시_장소_주소가_빈_값_인_경우_400_에러"() {
+    def "장소 생성 시 장소 주소가 빈 값인 경우 400 에러"() {
 
         given:
         PlaceSaveRequest request = PlaceSaveRequest.builder()
@@ -117,7 +117,7 @@ class PlaceControllerTest extends Specification {
 
     }
 
-    def "장소_생성_시_위도가_null_인_경우_400_에러"() {
+    def "장소 생성 시 위도가 null 인 경우 400 에러"() {
 
         given:
         PlaceSaveRequest request = PlaceSaveRequest.builder()
@@ -137,7 +137,7 @@ class PlaceControllerTest extends Specification {
 
     }
 
-    def "장소_생성_시_경도가_null_인_경우_400_에러"() {
+    def "장소생성 시 경도가 null 인 경우 400 에러"() {
 
         given:
         PlaceSaveRequest request = PlaceSaveRequest.builder()

@@ -25,9 +25,9 @@ class RoundPerformerControllerTest extends Specification {
     @Autowired
     private ObjectMapper objectMapper;
     @SpringBean
-    private RoundPerformerService performerService = Mock();
+    private RoundPerformerService roundPerformerService = Mock();
 
-    def "회차_출연자_목록_생성_성공"() {
+    def "회차 출연자 목록 생성 성공"() {
 
         given:
         RoundPerformersSaveRequest request = RoundPerformersSaveRequest.builder()
@@ -44,7 +44,7 @@ class RoundPerformerControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "회차_출연자_목록_생성_시_회차_아이디가_null_인_경우_400_에러"() {
+    def "회차 출연자 목록 생성 시 회차 아이디가 null 인경우 400 에러"() {
 
         given:
         RoundPerformersSaveRequest request = RoundPerformersSaveRequest.builder()
@@ -61,7 +61,7 @@ class RoundPerformerControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "회차_출연자_목록_생성_시_출연자_아이디_목록_null_인_경우_400_에러"() {
+    def "회차 출연자 목록 생성 시 출연자 아이디 목록 null 인 경우 400 에러"() {
 
         given:
         RoundPerformersSaveRequest request = RoundPerformersSaveRequest.builder()

@@ -14,7 +14,7 @@ class PlaceRepositoryCustomTest extends Specification {
     @Autowired
     private PlaceRepository placeRepository;
 
-    def "장소_목록_조회_테스트_특정한_아이디보다_크고_사이즈_제한"() {
+    def "장소 목록 조회 테스트 - 특정한 아이디보다 크고 사이즈 제한"() {
 
         given:
         List<Place> places = List.of(

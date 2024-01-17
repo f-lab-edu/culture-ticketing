@@ -24,7 +24,7 @@ class RoundServiceTest extends Specification {
     private ShowService showService = Mock();
     private RoundService roundService = new RoundService(roundRepository, showService);
 
-    def "회사_생성_성공"() {
+    def "회차 생성 성공"() {
 
         given:
         RoundSaveRequest request = RoundSaveRequest.builder()
@@ -56,7 +56,7 @@ class RoundServiceTest extends Specification {
         1 * roundRepository.save(_)
     }
 
-    def "회차_생성_시_공연_아이디가_null_인_경우_예외_생성"() {
+    def "회차 생성 시 공연 아이디가 null 인 경우 예외 생성"() {
 
         given:
         RoundSaveRequest request = RoundSaveRequest.builder()
@@ -72,7 +72,7 @@ class RoundServiceTest extends Specification {
         e.message == "공연 아이디를 입력해주세요."
     }
 
-    def "회차_생성_시_회차_시작_일시가_null_인_경우_예외_생성"() {
+    def "회차 생성 시 회차 시작 일시가 null 인 경우 예외 생성"() {
 
         given:
         RoundSaveRequest request = RoundSaveRequest.builder()
@@ -88,7 +88,7 @@ class RoundServiceTest extends Specification {
         e.message == "시작 회차 일시를 입력해주세요."
     }
 
-    def "회차_아이디로_회차_조회_시_존재하지_않는_경우_예외_발생"() {
+    def "회차 아이디로 회차 조회 시 존재하지 않는 경우 예외 발생"() {
 
         given:
         roundRepository.findById(1L) >> Optional.empty()
@@ -101,7 +101,7 @@ class RoundServiceTest extends Specification {
         e.message == "존재하지 않는 회차입니다. (roundId = 1)"
     }
 
-    def "공연_아이디_값으로_회차_목록_조회"() {
+    def "공연 아이디 값으로 회차 목록 조회"() {
 
         given:
         List<Round> rounds = List.of(
@@ -122,7 +122,7 @@ class RoundServiceTest extends Specification {
 
     }
 
-    def "회차_생성_시_중복_회차_일시_있는_경우_예외_발생"() {
+    def "회차 생성 시 중복 회차 일시 있는 경우 예외 발생"() {
 
         given:
         RoundSaveRequest request = RoundSaveRequest.builder()
@@ -155,7 +155,7 @@ class RoundServiceTest extends Specification {
         e.message == "해당 공연에 일정이 동일한 회차가 이미 존재합니다."
     }
 
-    def "회사_생성_시_공연_회차_일시_범위를_벗어난_경우_예외_발생"() {
+    def "회차 생성 시 공연 회차 일시 범위를 벗어난 경우 예외 발생"() {
 
         given:
         RoundSaveRequest request = RoundSaveRequest.builder()
