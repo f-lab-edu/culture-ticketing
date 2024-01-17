@@ -14,6 +14,23 @@ class ShowSeatGradeServiceTest extends Specification {
     private ShowService showService = Mock();
     private ShowSeatGradeService showSeatGradeService = new ShowSeatGradeService(showSeatGradeRepository, showService);
 
+    def "공연 좌석 등급 생성 성공"() {
+
+        given:
+        ShowSeatGradeSaveRequest request = ShowSeatGradeSaveRequest.builder()
+                .seatGrade("VIP")
+                .price(100000)
+                .showId(1L)
+                .build();
+        showService.notExistsById(1L) >> false
+
+        when:
+        showSeatGradeService.createShowSeatGrade(request);
+
+        then:
+        1 * showSeatGradeRepository.save(_)
+    }
+
     def "공연 좌석 등급 생성 시 공연 아이디 값이 null 인 경우 예외 발생"() {
 
         given:
