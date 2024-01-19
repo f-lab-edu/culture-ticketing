@@ -193,4 +193,17 @@ class PlaceServiceTest extends Specification {
         then:
         1 * placeRepository.save(_)
     }
+
+    def "장소_아이디_값으로_장소_존재_여부_확인"() {
+
+        given:
+        Long placeId = 1000L;
+        placeRepository.existsById(placeId) >> true;
+
+        when:
+        boolean response = placeService.notExistsById(placeId);
+
+        then:
+        !response
+    }
 }
