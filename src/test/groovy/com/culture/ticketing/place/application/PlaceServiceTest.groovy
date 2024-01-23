@@ -230,13 +230,14 @@ class PlaceServiceTest extends Specification {
     def "장소_아이디로_장소_조회_시_없는_경우_예외_발생"() {
 
         given:
-        placeRepository.findById(1L) >> Optional.empty()
+        Long placeId = 1L;
+        placeRepository.findById(placeId) >> Optional.empty()
 
         when:
-        placeService.findPlaceById(1L);
+        placeService.findPlaceById(placeId);
 
         then:
         def e = thrown(PlaceNotFoundException.class)
-        e.message == "존재하지 않는 장소입니다. (placeId = 1)"
+        e.message == String.format("존재하지 않는 장소입니다. (placeId = %d)", placeId)
     }
 }
