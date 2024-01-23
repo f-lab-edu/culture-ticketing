@@ -1,6 +1,7 @@
 package com.culture.ticketing.show.application;
 
 import com.culture.ticketing.show.application.dto.RoundSaveRequest;
+import com.culture.ticketing.show.application.dto.RoundResponse;
 import com.culture.ticketing.show.domain.Round;
 import com.culture.ticketing.show.domain.Show;
 import com.culture.ticketing.show.exception.DuplicatedRoundDateTimeException;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class RoundService {
@@ -70,5 +72,15 @@ public class RoundService {
     public List<Round> findByShowId(Long showId) {
 
         return roundRepository.findByShowId(showId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<RoundResponse> findRoundsByShowId(Long showId) {
+
+        List<Round> rounds = roundRepository.findByShowId(showId);
+
+        return rounds.stream()
+                .map(RoundResponse::from)
+                .collect(Collectors.toList());
     }
 }

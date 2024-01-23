@@ -1,13 +1,17 @@
 package com.culture.ticketing.show.api;
 
 import com.culture.ticketing.show.application.RoundService;
+import com.culture.ticketing.show.application.dto.RoundResponse;
 import com.culture.ticketing.show.application.dto.RoundSaveRequest;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/rounds")
@@ -23,5 +27,11 @@ public class RoundController {
     public void postRound(@Valid @RequestBody RoundSaveRequest request) {
 
         roundService.createRound(request);
+    }
+
+    @GetMapping
+    public List<RoundResponse> getRoundsByShowId(@RequestParam("showId") Long showId) {
+
+        return roundService.findRoundsByShowId(showId);
     }
 }
