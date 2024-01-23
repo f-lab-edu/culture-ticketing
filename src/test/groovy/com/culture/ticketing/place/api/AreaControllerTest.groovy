@@ -44,7 +44,7 @@ class AreaControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "장소 구역 생성 시 장소 아이디 값이 null 인 경우 400 에러"() {
+    def "장소 구역 생성 시 적절하지 않은 요청값인 경우 400 에러"() {
 
         given:
         PlaceAreaSaveRequest request = PlaceAreaSaveRequest.builder()

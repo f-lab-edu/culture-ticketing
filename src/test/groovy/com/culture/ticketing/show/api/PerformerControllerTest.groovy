@@ -48,7 +48,7 @@ class PerformerControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "출연자 생성 시 공연 아이디가 null 인 경우 400 에러"() {
+    def "출연자 생성 시 적절하지 않은 요청값인 경우 400 에러"() {
 
         given:
         PerformerSaveRequest request = PerformerSaveRequest.builder()
@@ -63,40 +63,12 @@ class PerformerControllerTest extends Specification {
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
                 .andDo(MockMvcResultHandlers.print())
-    }
 
-    def "출연자 생성 시 출연자 이름이 null 인 경우 400 에러"() {
-
-        given:
-        PerformerSaveRequest request = PerformerSaveRequest.builder()
-                .showId(1L)
-                .performerName(null)
-                .build();
-
-        expect:
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/performers")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print())
-    }
-
-    def "출연자 생성 시 출연자 이름이 빈 값인 경우 400 에러"() {
-
-        given:
-        PerformerSaveRequest request = PerformerSaveRequest.builder()
-                .showId(1L)
-                .performerName("")
-                .build();
-
-        expect:
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/performers")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print())
+        where:
+        showId | performerName
+        null | "홍길동"
+        1L | null
+        1L | ""
     }
 
     def "공연별 출연자 목록 조회 성공"() {

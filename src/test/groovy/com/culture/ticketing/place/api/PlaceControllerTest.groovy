@@ -78,14 +78,14 @@ class PlaceControllerTest extends Specification {
 
     }
 
-    def "장소 생성 시 장소 주소가 null 인 경우 400 에러"() {
+    def "장소 생성 시 적절하지 않은 요청값인 경우 400 에러"() {
 
         given:
         PlaceSaveRequest request = PlaceSaveRequest.builder()
                 .placeName("테스트")
-                .address(null)
-                .latitude(new BigDecimal(0))
-                .longitude(new BigDecimal(0))
+                .address(address)
+                .latitude(latitude)
+                .longitude(longitude)
                 .build();
 
         expect:
@@ -96,65 +96,13 @@ class PlaceControllerTest extends Specification {
                 .andExpect(status().isBadRequest())
                 .andDo(MockMvcResultHandlers.print())
 
-    }
-
-    def "장소 생성 시 장소 주소가 빈 값인 경우 400 에러"() {
-
-        given:
-        PlaceSaveRequest request = PlaceSaveRequest.builder()
-                .placeName("테스트")
-                .address("")
-                .latitude(new BigDecimal(0))
-                .longitude(new BigDecimal(0))
-                .build();
-
-        expect:
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/places")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print())
+        where:
+        address | latitude | longitude
+        null | 36.1 | 102.6
+        "" | 36.1 | 102.6
+        "서울특별시" | null | 102.6
+        "서울특별시" | 36.1 | null
 
     }
 
-    def "장소 생성 시 위도가 null 인 경우 400 에러"() {
-
-        given:
-        PlaceSaveRequest request = PlaceSaveRequest.builder()
-                .placeName("테스트")
-                .address("서울특별시")
-                .latitude(null)
-                .longitude(new BigDecimal(0))
-                .build();
-
-        expect:
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/places")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print())
-
-    }
-
-    def "장소생성 시 경도가 null 인 경우 400 에러"() {
-
-        given:
-        PlaceSaveRequest request = PlaceSaveRequest.builder()
-                .placeName("테스트")
-                .address("서울특별시")
-                .latitude(new BigDecimal(0))
-                .longitude(null)
-                .build();
-
-        expect:
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/places")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print())
-
-    }
 }

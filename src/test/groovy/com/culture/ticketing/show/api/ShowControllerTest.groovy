@@ -4,7 +4,6 @@ import com.culture.ticketing.place.PlaceFixtures
 import com.culture.ticketing.show.ShowFixtures
 import com.culture.ticketing.show.application.ShowFacadeService
 import com.culture.ticketing.show.application.ShowService
-import com.culture.ticketing.show.application.dto.ShowDetailResponse
 import com.culture.ticketing.show.application.dto.ShowResponse
 import com.culture.ticketing.show.application.dto.ShowSaveRequest
 import com.culture.ticketing.show.domain.AgeRestriction
@@ -63,18 +62,18 @@ class ShowControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "공연 생성 시 카테고리가 null 인 경우 400 에러"() {
+    def "공연 생성 시 적절하지 않은 요청값인 경우 400 에러"() {
 
         given:
         ShowSaveRequest request = ShowSaveRequest.builder()
-                .category(null)
-                .showName("테스트")
-                .ageRestriction(AgeRestriction.ALL)
-                .runningTime(120)
-                .posterImgUrl("http://abc.jpg")
-                .showStartDate(LocalDate.of(2024, 1, 1))
-                .showEndDate(LocalDate.of(2024, 5, 31))
-                .placeId(1L)
+                .category(category)
+                .showName(showName)
+                .ageRestriction(ageRetriction)
+                .runningTime(runningTime)
+                .posterImgUrl(posterImgUrl)
+                .showStartDate(showStartDate)
+                .showEndDate(showEndDate)
+                .placeId(placeId)
                 .build();
 
         expect:
@@ -84,213 +83,19 @@ class ShowControllerTest extends Specification {
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
                 .andDo(MockMvcResultHandlers.print())
-    }
 
-    def "공연 생성 시 관람가가 null 인 경우 400 에러"() {
-
-        given:
-        ShowSaveRequest request = ShowSaveRequest.builder()
-                .category(Category.CONCERT)
-                .showName("테스트")
-                .ageRestriction(null)
-                .runningTime(120)
-                .posterImgUrl("http://abc.jpg")
-                .showStartDate(LocalDate.of(2024, 1, 1))
-                .showEndDate(LocalDate.of(2024, 5, 31))
-                .placeId(1L)
-                .build();
-
-        expect:
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/shows")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print())
-    }
-
-    def "공연 생성 시 공연 이름이 null 인 경우 400 에러"() {
-
-        given:
-        ShowSaveRequest request = ShowSaveRequest.builder()
-                .category(Category.CONCERT)
-                .showName(null)
-                .ageRestriction(AgeRestriction.ALL)
-                .runningTime(120)
-                .posterImgUrl("http://abc.jpg")
-                .showStartDate(LocalDate.of(2024, 1, 1))
-                .showEndDate(LocalDate.of(2024, 5, 31))
-                .placeId(1L)
-                .build();
-
-        expect:
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/shows")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print())
-    }
-
-    def "공연 생성 시 공연 이름이 빈 값인 경우 400 에러"() {
-
-        given:
-        ShowSaveRequest request = ShowSaveRequest.builder()
-                .category(Category.CONCERT)
-                .showName("")
-                .ageRestriction(AgeRestriction.ALL)
-                .runningTime(120)
-                .posterImgUrl("http://abc.jpg")
-                .showStartDate(LocalDate.of(2024, 1, 1))
-                .showEndDate(LocalDate.of(2024, 5, 31))
-                .placeId(1L)
-                .build();
-
-        expect:
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/shows")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print())
-    }
-
-    def "공연 생성 시 러닝 시간이 0이하인 경우 400 에러"() {
-
-        given:
-        ShowSaveRequest request = ShowSaveRequest.builder()
-                .category(Category.CONCERT)
-                .showName("테스트")
-                .ageRestriction(AgeRestriction.ALL)
-                .runningTime(0)
-                .posterImgUrl("http://abc.jpg")
-                .showStartDate(LocalDate.of(2024, 1, 1))
-                .showEndDate(LocalDate.of(2024, 5, 31))
-                .placeId(1L)
-                .build();
-
-        expect:
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/shows")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print())
-    }
-
-    def "공연 생성 시 포스터 이미지 url 이 null 인 경우 400 에러"() {
-
-        given:
-        ShowSaveRequest request = ShowSaveRequest.builder()
-                .category(Category.CONCERT)
-                .showName("테스트")
-                .ageRestriction(AgeRestriction.ALL)
-                .runningTime(120)
-                .posterImgUrl(null)
-                .showStartDate(LocalDate.of(2024, 1, 1))
-                .showEndDate(LocalDate.of(2024, 5, 31))
-                .placeId(1L)
-                .build();
-
-        expect:
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/shows")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print())
-    }
-
-    def "공연 생성 시 포스터 이미지 url 이 빈 값인 경우 400 에러"() {
-
-        given:
-        ShowSaveRequest request = ShowSaveRequest.builder()
-                .category(Category.CONCERT)
-                .showName("테스트")
-                .ageRestriction(AgeRestriction.ALL)
-                .runningTime(120)
-                .posterImgUrl("")
-                .showStartDate(LocalDate.of(2024, 1, 1))
-                .showEndDate(LocalDate.of(2024, 5, 31))
-                .placeId(1L)
-                .build();
-
-        expect:
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/shows")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print())
-    }
-
-    def "공연 생성 시 공연 시작 날짜가 null 인 경우 400 에러"() {
-
-        given:
-        ShowSaveRequest request = ShowSaveRequest.builder()
-                .category(Category.CONCERT)
-                .showName("테스트")
-                .ageRestriction(AgeRestriction.ALL)
-                .runningTime(120)
-                .posterImgUrl("http://abc.jpg")
-                .showStartDate(null)
-                .showEndDate(LocalDate.of(2024, 5, 31))
-                .placeId(1L)
-                .build();
-
-        expect:
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/shows")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print())
-    }
-
-    def "공연 생성 시 공연 종료 날짜가 null 인 경우 400 에러"() {
-
-        given:
-        ShowSaveRequest request = ShowSaveRequest.builder()
-                .category(Category.CONCERT)
-                .showName("테스트")
-                .ageRestriction(AgeRestriction.ALL)
-                .runningTime(120)
-                .posterImgUrl("http://abc.jpg")
-                .showStartDate(LocalDate.of(2024, 1, 1))
-                .showEndDate(null)
-                .placeId(1L)
-                .build();
-
-        expect:
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/shows")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print())
-    }
-
-    def "공연 생성 시 장소 아이디 값이 null 인 경우 400 에러"() {
-
-        given:
-        ShowSaveRequest request = ShowSaveRequest.builder()
-                .category(Category.CONCERT)
-                .showName("테스트")
-                .ageRestriction(AgeRestriction.ALL)
-                .runningTime(120)
-                .posterImgUrl("http://abc.jpg")
-                .showStartDate(LocalDate.of(2024, 1, 1))
-                .showEndDate(LocalDate.of(2024, 5, 31))
-                .placeId(null)
-                .build();
-
-        expect:
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/shows")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print())
+        where:
+        category | showName | ageRetriction | runningTime | posterImgUrl | showStartDate | showEndDate | placeId
+        null | "테스트" | AgeRestriction.ALL | 120 | "http://abc.jpg" | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | 1L
+        Category.CONCERT | null | AgeRestriction.ALL | 120 | "http://abc.jpg" | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | 1L
+        Category.CONCERT | "" | AgeRestriction.ALL | 120 | "http://abc.jpg" | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | 1L
+        Category.CONCERT | "테스트" | null | 120 | "http://abc.jpg" | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | 1L
+        Category.CONCERT | "테스트" | AgeRestriction.ALL | 0 | "http://abc.jpg" | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | 1L
+        Category.CONCERT | "테스트" | AgeRestriction.ALL | 120 | null | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | 1L
+        Category.CONCERT | "테스트" | AgeRestriction.ALL | 120 | "" | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | 1L
+        Category.CONCERT | "테스트" | AgeRestriction.ALL | 120 | "http://abc.jpg" | null | LocalDate.of(2024, 5, 31) | 1L
+        Category.CONCERT | "테스트" | AgeRestriction.ALL | 120 | "http://abc.jpg" | LocalDate.of(2024, 1, 1) | null | 1L
+        Category.CONCERT | "테스트" | AgeRestriction.ALL | 120 | "http://abc.jpg" | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | null
     }
 
     def "전체 공연 목록 조회 성공"() {
