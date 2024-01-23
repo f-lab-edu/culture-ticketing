@@ -32,7 +32,7 @@ class ShowFacadeServiceTest extends Specification {
     private PerformerService performerService = Mock();
     private ShowFacadeService showFacadeService = new ShowFacadeService(showService, roundService, roundPerformerService, showSeatGradeService, placeService, performerService);
 
-    def "공연_아이디로_회차_및_출연자_정보_조회"() {
+    def "공연 아이디로 회차 및 출연자 정보 조회"() {
 
         given:
         List<Round> rounds = List.of(
@@ -74,7 +74,7 @@ class ShowFacadeServiceTest extends Specification {
         response.get(2).performers.collect(p -> p.performerId) == []
     }
 
-    def "공연_아이디로_공연_상세_조회"() {
+    def "공연 아이디로 공연 상세 조회"() {
         given:
         showService.findShowById(1L) >> ShowFixtures.createShow(1L)
         placeService.findPlaceById(1L) >> PlaceFixtures.createPlace(1L)

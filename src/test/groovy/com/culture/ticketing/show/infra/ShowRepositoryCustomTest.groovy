@@ -15,7 +15,7 @@ class ShowRepositoryCustomTest extends Specification {
     @Autowired
     private ShowRepository showRepository;
 
-    def "전체_공연_목록_조회_테스트_특정한_아이디보다_크고_사이즈_제한"() {
+    def "전체 공연 목록 조회 테스트 특정한 아이디보다 크고 사이즈 제한"() {
 
         given:
         List<Show> shows = List.of(
@@ -34,7 +34,7 @@ class ShowRepositoryCustomTest extends Specification {
         foundShows.collect(show -> show.showId > 1L).size() == 3
     }
 
-    def "카테고리별_공연_목록_조회_테스트_특정한_아이디보다_크고_사이즈_제한"() {
+    def "카테고리별 공연 목록 조회 테스트 특정한 아이디보다 크고 사이즈 제한"() {
 
         given:
         List<Show> shows = List.of(

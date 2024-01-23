@@ -197,7 +197,7 @@ class PlaceServiceTest extends Specification {
         1 * placeRepository.save(_)
     }
 
-    def "장소_아이디_값으로_장소_존재_여부_확인"() {
+    def "장소 아이디 값으로 장소 존재 여부 확인"() {
 
         given:
         Long placeId = 1000L;
@@ -210,7 +210,7 @@ class PlaceServiceTest extends Specification {
         !response
     }
 
-    def "장소_아이디_목록으로_장소_목록_조회"() {
+    def "장소 아이디 목록으로 장소 목록 조회"() {
 
         given:
         List<Long> placeIds = List.of(1L, 2L, 3L, 4L, 5L);
@@ -227,7 +227,7 @@ class PlaceServiceTest extends Specification {
         response.collect(place -> place.placeId) == [1L, 2L, 3L, 4L, 5L]
     }
 
-    def "장소_아이디로_장소_조회_시_없는_경우_예외_발생"() {
+    def "장소 아이디로 장소 조회 시 없는 경우 예외 발생"() {
 
         given:
         Long placeId = 1L;

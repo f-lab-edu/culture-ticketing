@@ -25,7 +25,7 @@ class ShowServiceTest extends Specification {
     private PlaceService placeService = Mock();
     private ShowService showService = new ShowService(showRepository, placeService);
 
-    def "공연_생성_시_카테고리가_null_인_경우_예외_발생"() {
+    def "공연 생성 시 카테고리가 null 인 경우 예외 발생"() {
 
         given:
         ShowSaveRequest request = ShowSaveRequest.builder()
@@ -47,7 +47,7 @@ class ShowServiceTest extends Specification {
         e.message == "공연 카테고리를 입력해주세요."
     }
 
-    def "공연_생성_시_관람_제한가가_null_인_경우_예외_발생"() {
+    def "공연 생성 시 관람 제한가가 null 인 경우 예외 발생"() {
 
         given:
         ShowSaveRequest request = ShowSaveRequest.builder()
@@ -69,7 +69,7 @@ class ShowServiceTest extends Specification {
         e.message == "공연 관람 제한가를 입력해주세요."
     }
 
-    def "공연_생성_시_장소_아이디_값이_null_인_경우_예외_발생"() {
+    def "공연 생성 시 장소 아이디 값이 null 인 경우 예외 발생"() {
 
         given:
         ShowSaveRequest request = ShowSaveRequest.builder()
@@ -91,7 +91,7 @@ class ShowServiceTest extends Specification {
         e.message == "공연 장소 아이디를 입력해주세요."
     }
 
-    def "공연_생성_시_공연_시작_날짜가_null_인_경우_예외_발생"() {
+    def "공연 생성 시 공연 시작 날짜가 null 인 경우 예외 발생"() {
 
         given:
         ShowSaveRequest request = ShowSaveRequest.builder()
@@ -113,7 +113,7 @@ class ShowServiceTest extends Specification {
         e.message == "공연 시작 날짜를 입력해주세요."
     }
 
-    def "공연_생성_시_공연_종료_날짜가_null_인_경우_예외_발생"() {
+    def "공연 생성 시 공연 종료 날짜가 null 인 경우 예외 발생"() {
 
         given:
         ShowSaveRequest request = ShowSaveRequest.builder()
@@ -135,7 +135,7 @@ class ShowServiceTest extends Specification {
         e.message == "공연 종료 날짜를 입력해주세요."
     }
 
-    def "공연_생성_시_공연_이름이_null_인_경우_예외_발생"() {
+    def "공연 생성 시 공연 이름이 null 인 경우 예외 발생"() {
 
         given:
         ShowSaveRequest request = ShowSaveRequest.builder()
@@ -157,7 +157,7 @@ class ShowServiceTest extends Specification {
         e.message == "공연 이름을 입력해주세요."
     }
 
-    def "공연_생성_시_공연_이름이_빈_값인_경우_예외_발생"() {
+    def "공연 생성 시 공연 이름이 빈 값인 경우 예외 발생"() {
 
         given:
         ShowSaveRequest request = ShowSaveRequest.builder()
@@ -179,7 +179,7 @@ class ShowServiceTest extends Specification {
         e.message == "공연 이름을 입력해주세요."
     }
 
-    def "공연_생성_시_포스터_이미지_url_이_null_인_경우_예외_발생"() {
+    def "공연 생성 시 포스터 이미지 url 이 null 인 경우 예외 발생"() {
 
         given:
         ShowSaveRequest request = ShowSaveRequest.builder()
@@ -201,7 +201,7 @@ class ShowServiceTest extends Specification {
         e.message == "공연 포스터 이미지 url을 입력해주세요."
     }
 
-    def "공연_생성_시_포스터_이미지_url_이_빈_값인_경우_예외_발생"() {
+    def "공연 생성 시 포스터 이미지 url 이 빈 값인 경우 예외 발생"() {
 
         given:
         ShowSaveRequest request = ShowSaveRequest.builder()
@@ -223,7 +223,7 @@ class ShowServiceTest extends Specification {
         e.message == "공연 포스터 이미지 url을 입력해주세요."
     }
 
-    def "공연_생성_시_러닝_시간이_0이하_인_경우_예외_발생"() {
+    def "공연 생성 시 러닝 시간이 0이하 인 경우 예외 발생"() {
 
         given:
         ShowSaveRequest request = ShowSaveRequest.builder()
@@ -245,7 +245,7 @@ class ShowServiceTest extends Specification {
         e.message == "공연 러닝 시간을 0 초과로 입력해주세요."
     }
 
-    def "공연_생성_시_장소_아이디_값에_해당하는_장소가_존재하지_않을_경우_예외_발생"() {
+    def "공연 생성 시 장소 아이디 값에 해당하는 장소가 존재하지 않을 경우 예외 발생"() {
 
         given:
         Long placeId = 1L;
@@ -304,7 +304,7 @@ class ShowServiceTest extends Specification {
         response.collect(show -> show.showId > 1L).size() == 3
     }
 
-    def "카테고리_별_공연_목록_조회"() {
+    def "카테고리 별 공연 목록 조회"() {
 
         given:
         List<Show> shows = List.of(
@@ -326,7 +326,7 @@ class ShowServiceTest extends Specification {
         response.collect(show -> show.showId > 1L && show.categoryName == Category.CONCERT.getCategoryName()).size() == 2
     }
 
-    def "공연_목록의_장소_아이디에_해당하는_장소_없는_경우_예외_발생"() {
+    def "공연 목록의 장소 아이디에 해당하는 장소 없는 경우 예외 발생"() {
 
         given:
         List<Show> shows = List.of(
@@ -347,7 +347,7 @@ class ShowServiceTest extends Specification {
 
     }
 
-    def "공연_아이디로_공연_조회_시_없는_경우_예외_발생"() {
+    def "공연 아이디로 공연 조회 시 없는 경우 예외 발생"() {
         given:
         showRepository.findById(1L) >> Optional.empty()
 

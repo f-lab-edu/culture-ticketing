@@ -18,7 +18,7 @@ class PerformerServiceTest extends Specification {
     private ShowService showService = Mock();
     private PerformerService performerService = new PerformerService(performerRepository, showService);
 
-    def "출연자_생성_시_공연_아이디가_null_인_경우_예외_발생"() {
+    def "출연자 생성 시 공연 아이디가 null 인 경우 예외 발생"() {
 
         given:
         PerformerSaveRequest request = PerformerSaveRequest.builder()
@@ -34,7 +34,7 @@ class PerformerServiceTest extends Specification {
         e.message == "공연 아이디를 입력해주세요."
     }
 
-    def "출연자_생성_시_출연자_이름이_null_인_경우_예외_발생"() {
+    def "출연자 생성 시 출연자 이름이 null 인 경우 예외 발생"() {
         given:
         PerformerSaveRequest request = PerformerSaveRequest.builder()
                 .showId(1L)
@@ -49,7 +49,7 @@ class PerformerServiceTest extends Specification {
         e.message == "출연자 이름을 입력해주세요."
     }
 
-    def "출연자_생성_시_출연자_이름이_빈_값인_경우_예외_발생"() {
+    def "출연자 생성 시 출연자 이름이 빈 값인 경우 예외 발생"() {
         given:
         PerformerSaveRequest request = PerformerSaveRequest.builder()
                 .showId(1L)
@@ -64,7 +64,7 @@ class PerformerServiceTest extends Specification {
         e.message == "출연자 이름을 입력해주세요."
     }
 
-    def "출연자_생성_시_공연_아이디_값에_해당하는_공연이_존재하지_않는_경우_예외_발생"() {
+    def "출연자 생성 시 공연 아이디 값에 해당하는 공연이 존재하지 않는 경우 예외 발생"() {
         given:
         Long showId = 1L;
         PerformerSaveRequest request = PerformerSaveRequest.builder()
@@ -81,7 +81,7 @@ class PerformerServiceTest extends Specification {
         e.message == String.format("존재하지 않는 공연입니다. (showId = %d)", showId)
     }
 
-    def "공연별_출연자_목록_조회"() {
+    def "공연별 출연자 목록 조회"() {
 
         given:
         List<Performer> performers = List.of(

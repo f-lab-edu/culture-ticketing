@@ -40,7 +40,7 @@ class ShowControllerTest extends Specification {
     @SpringBean
     private ShowFacadeService showFacadeService = Mock();
 
-    def "공연_생성_성공"() {
+    def "공연 생성 성공"() {
 
         given:
         ShowSaveRequest request = ShowSaveRequest.builder()
@@ -63,7 +63,7 @@ class ShowControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "공연_생성_시_카테고리가_null_인_경우_400_에러"() {
+    def "공연 생성 시 카테고리가 null 인 경우 400 에러"() {
 
         given:
         ShowSaveRequest request = ShowSaveRequest.builder()
@@ -86,7 +86,7 @@ class ShowControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "공연_생성_시_관람가가_null_인_경우_400_에러"() {
+    def "공연 생성 시 관람가가 null 인 경우 400 에러"() {
 
         given:
         ShowSaveRequest request = ShowSaveRequest.builder()
@@ -109,7 +109,7 @@ class ShowControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "공연_생성_시_공연_이름이_null_인_경우_400_에러"() {
+    def "공연 생성 시 공연 이름이 null 인 경우 400 에러"() {
 
         given:
         ShowSaveRequest request = ShowSaveRequest.builder()
@@ -132,7 +132,7 @@ class ShowControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "공연_생성_시_공연_이름이_빈_값인_경우_400_에러"() {
+    def "공연 생성 시 공연 이름이 빈 값인 경우 400 에러"() {
 
         given:
         ShowSaveRequest request = ShowSaveRequest.builder()
@@ -155,7 +155,7 @@ class ShowControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "공연_생성_시_러닝_시간이_0이하_인_경우_400_에러"() {
+    def "공연 생성 시 러닝 시간이 0이하인 경우 400 에러"() {
 
         given:
         ShowSaveRequest request = ShowSaveRequest.builder()
@@ -178,7 +178,7 @@ class ShowControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "공연_생성_시_포스터_이미지_url_이_null_인_경우_400_에러"() {
+    def "공연 생성 시 포스터 이미지 url 이 null 인 경우 400 에러"() {
 
         given:
         ShowSaveRequest request = ShowSaveRequest.builder()
@@ -201,7 +201,7 @@ class ShowControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "공연_생성_시_포스터_이미지_url_이_빈_값인_경우_400_에러"() {
+    def "공연 생성 시 포스터 이미지 url 이 빈 값인 경우 400 에러"() {
 
         given:
         ShowSaveRequest request = ShowSaveRequest.builder()
@@ -224,7 +224,7 @@ class ShowControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "공연_생성_시_공연_시작_날짜가_null_인_경우_400_에러"() {
+    def "공연 생성 시 공연 시작 날짜가 null 인 경우 400 에러"() {
 
         given:
         ShowSaveRequest request = ShowSaveRequest.builder()
@@ -247,7 +247,7 @@ class ShowControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "공연_생성_시_공연_종료_날짜가_null_인_경우_400_에러"() {
+    def "공연 생성 시 공연 종료 날짜가 null 인 경우 400 에러"() {
 
         given:
         ShowSaveRequest request = ShowSaveRequest.builder()
@@ -270,7 +270,7 @@ class ShowControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "공연_생성_시_장소_아이디_값이_null_인_경우_400_에러"() {
+    def "공연 생성 시 장소 아이디 값이 null 인 경우 400 에러"() {
 
         given:
         ShowSaveRequest request = ShowSaveRequest.builder()
@@ -293,7 +293,7 @@ class ShowControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "전체_공연_목록_조회_성공"() {
+    def "전체 공연 목록 조회 성공"() {
 
         given:
         List<ShowResponse> shows = List.of(
@@ -318,7 +318,7 @@ class ShowControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "카테고리_별_공연_목록_조회"() {
+    def "카테고리 별 공연 목록 조회"() {
 
         given:
         List<ShowResponse> shows = List.of(
@@ -346,7 +346,7 @@ class ShowControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "공연_아이디로_공연_상세_조회"() {
+    def "공연 아이디로 공연 상세 조회"() {
 
         given:
         showFacadeService.findShowById(1L) >> ShowFixtures.createShowDetailResponse(

@@ -6,7 +6,7 @@ import java.time.LocalDate
 
 class ShowTest extends Specification {
 
-    def "공연_생성_시_카테고리가_null_인_경우_예외_발생"() {
+    def "공연 생성 시 카테고리가 null 인 경우 예외 발생"() {
 
         when:
         Show.builder()
@@ -25,7 +25,7 @@ class ShowTest extends Specification {
         e.message == "공연 카테고리를 입력해주세요."
     }
 
-    def "공연_생성_시_관람_제한가가_null_인_경우_예외_발생"() {
+    def "공연 생성 시 관람 제한가가 null 인 경우 예외 발생"() {
 
         when:
         Show.builder()
@@ -44,7 +44,7 @@ class ShowTest extends Specification {
         e.message == "공연 관람 제한가를 입력해주세요."
     }
 
-    def "공연_생성_시_장소_아이디_값이_null_인_경우_예외_발생"() {
+    def "공연 생성 시 장소 아이디 값이 null 인 경우 예외 발생"() {
 
         when:
         Show.builder()
@@ -63,7 +63,7 @@ class ShowTest extends Specification {
         e.message == "공연 장소 아이디를 입력해주세요."
     }
 
-    def "공연_생성_시_공연_시작_날짜가_null_인_경우_예외_발생"() {
+    def "공연 생성 시 공연 시작 날짜가 null 인 경우 예외 발생"() {
 
         when:
         Show.builder()
@@ -82,7 +82,7 @@ class ShowTest extends Specification {
         e.message == "공연 시작 날짜를 입력해주세요."
     }
 
-    def "공연_생성_시_공연_종료_날짜가_null_인_경우_예외_발생"() {
+    def "공연 생성 시 공연 종료 날짜가 null 인 경우 예외 발생"() {
 
         when:
         Show.builder()
@@ -101,7 +101,7 @@ class ShowTest extends Specification {
         e.message == "공연 종료 날짜를 입력해주세요."
     }
 
-    def "공연_생성_시_공연_이름이_null_인_경우_예외_발생"() {
+    def "공연 생성 시 공연 이름이 null 인 경우 예외 발생"() {
 
         when:
         Show.builder()
@@ -120,7 +120,7 @@ class ShowTest extends Specification {
         e.message == "공연 이름을 입력해주세요."
     }
 
-    def "공연_생성_시_공연_이름이_빈_값인_경우_예외_발생"() {
+    def "공연 생성 시 공연 이름이 빈 값인 경우 예외 발생"() {
 
         when:
         Show.builder()
@@ -139,7 +139,7 @@ class ShowTest extends Specification {
         e.message == "공연 이름을 입력해주세요."
     }
 
-    def "공연_생성_시_포스터_이미지_url_이_null_인_경우_예외_발생"() {
+    def "공연 생성 시 포스터 이미지 url 이 null 인 경우 예외 발생"() {
 
         when:
         Show.builder()
@@ -158,7 +158,7 @@ class ShowTest extends Specification {
         e.message == "공연 포스터 이미지 url을 입력해주세요."
     }
 
-    def "공연_생성_시_포스터_이미지_url_이_빈_값인_경우_예외_발생"() {
+    def "공연 생성 시 포스터 이미지 url 이 빈 값인 경우 예외 발생"() {
 
         when:
         Show.builder()
@@ -177,7 +177,7 @@ class ShowTest extends Specification {
         e.message == "공연 포스터 이미지 url을 입력해주세요."
     }
 
-    def "공연_생성_시_러닝_시간이_0이하_인_경우_예외_발생"() {
+    def "공연 생성 시 러닝 시간이 0이하인 경우 예외 발생"() {
 
         when:
         Show.builder()

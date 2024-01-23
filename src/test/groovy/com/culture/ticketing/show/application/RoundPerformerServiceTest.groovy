@@ -66,7 +66,7 @@ class RoundPerformerServiceTest extends Specification {
         1 * roundPerformerRepository.saveAll(_)
     }
 
-    def "회차_아이디_목록으로_회차_목록_조회"() {
+    def "회차 아이디 목록으로 회차 목록 조회"() {
 
         given:
         List<RoundPerformer> roundPerformers = List.of(

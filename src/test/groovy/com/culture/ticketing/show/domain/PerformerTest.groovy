@@ -4,7 +4,7 @@ import spock.lang.Specification
 
 class PerformerTest extends Specification {
 
-    def "출연자_생성_시_공연_아이디가_null_인_경우_예외_발생"() {
+    def "출연자 생성 시 공연 아이디가 null 인 경우 예외 발생"() {
 
         when:
         Performer.builder()
@@ -17,7 +17,7 @@ class PerformerTest extends Specification {
         e.message == "공연 아이디를 입력해주세요."
     }
 
-    def "출연자_생성_시_출연자_이름이_null_인_경우_예외_발생"() {
+    def "출연자 생성 시 출연자 이름이 null 인 경우 예외 발생"() {
 
         when:
         Performer.builder()
@@ -30,7 +30,7 @@ class PerformerTest extends Specification {
         e.message == "출연자 이름을 입력해주세요."
     }
 
-    def "출연자_생성_시_출연자_이름이_빈_값인_경우_예외_발생"() {
+    def "출연자 생성 시 출연자 이름이 빈 값인 경우 예외 발생"() {
 
         when:
         Performer.builder()
