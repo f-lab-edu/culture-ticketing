@@ -18,6 +18,21 @@ class PerformerServiceTest extends Specification {
     private ShowService showService = Mock();
     private PerformerService performerService = new PerformerService(performerRepository, showService);
 
+    def "출연자 생성 성공"() {
+
+        given:
+        PerformerSaveRequest request = PerformerSaveRequest.builder()
+                .showId(1L)
+                .performerName("홍길동")
+                .build();
+
+        when:
+        performerService.createPerformer(request);
+
+        then:
+        1 * performerRepository.save(_)
+    }
+
     def "출연자 생성 시 공연 아이디가 null 인 경우 예외 발생"() {
 
         given:
