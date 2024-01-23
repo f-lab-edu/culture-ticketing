@@ -25,6 +25,27 @@ class ShowServiceTest extends Specification {
     private PlaceService placeService = Mock();
     private ShowService showService = new ShowService(showRepository, placeService);
 
+    def "공연 생성 성공"() {
+
+        given:
+        ShowSaveRequest request = ShowSaveRequest.builder()
+                .category(Category.CONCERT)
+                .showName("테스트")
+                .ageRestriction(AgeRestriction.ALL)
+                .runningTime(120)
+                .posterImgUrl("http://abc.jpg")
+                .showStartDate(LocalDate.of(2024, 1, 1))
+                .showEndDate(LocalDate.of(2024, 5, 31))
+                .placeId(1L)
+                .build();
+
+        when:
+        showService.createShow(request);
+
+        then:
+        1 * showRepository.save(_)
+    }
+
     def "공연 생성 시 카테고리가 null 인 경우 예외 발생"() {
 
         given:
