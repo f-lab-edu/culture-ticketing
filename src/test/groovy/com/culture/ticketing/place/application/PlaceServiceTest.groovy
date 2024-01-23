@@ -17,7 +17,7 @@ class PlaceServiceTest extends Specification {
     private PlaceRepository placeRepository = Mock();
     private PlaceService placeService = new PlaceService(placeRepository);
 
-    def "장소_목록_조회"() {
+    def "장소 목록 조회"() {
 
         given:
         List<Place> places = List.of(
@@ -36,7 +36,7 @@ class PlaceServiceTest extends Specification {
         response.collect(place -> place.placeId > 1L).size() == 3
     }
 
-    def "장소_생성_시_위도가_null_이면_예외_발생"() {
+    def "장소 생성 시 위도가 null 이면 예외 발생"() {
 
         given:
         PlaceSaveRequest request = PlaceSaveRequest.builder()
@@ -54,7 +54,7 @@ class PlaceServiceTest extends Specification {
         e.message == "정확한 장소 위도를 입력해주세요."
     }
 
-    def "장소_생성_시_경도가_null_이면_예외_발생"() {
+    def "장소 생성 시 경도가 null 이면 예외 발생"() {
 
         given:
         PlaceSaveRequest request = PlaceSaveRequest.builder()
@@ -72,7 +72,7 @@ class PlaceServiceTest extends Specification {
         e.message == "정확한 장소 경도를 입력해주세요."
     }
 
-    def "장소_생성_시_장소_주소가_null_이면_예외_발생"() {
+    def "장소 생성시 장소 주소가 null 이면 예외 발생"() {
 
         given:
         PlaceSaveRequest request = PlaceSaveRequest.builder()
@@ -90,7 +90,7 @@ class PlaceServiceTest extends Specification {
         e.message == "장소 주소를 입력해주세요."
     }
 
-    def "장소_생성_시_장소 주소가_빈_값_이면_예외_발생"() {
+    def "장소 생성 시 장소 주소가 빈 값 이면 예외 발생"() {
 
         given:
         PlaceSaveRequest request = PlaceSaveRequest.builder()
@@ -108,7 +108,7 @@ class PlaceServiceTest extends Specification {
         e.message == "장소 주소를 입력해주세요."
     }
 
-    def "장소_생성_시_위도_범위가_-90_미만인_경우_예외_발생"() {
+    def "장소 생성 시 위도 범위가 -90 미만인 경우 예외 발생"() {
 
         given:
         PlaceSaveRequest request = PlaceSaveRequest.builder()
@@ -126,7 +126,7 @@ class PlaceServiceTest extends Specification {
         e.message == "장소 위도 범위를 벗어난 입력값입니다."
     }
 
-    def "장소_생성_시_위도_범위가_90_초과인_경우_예외_발생"() {
+    def "장소 생성 시 위도 범위가 90 초과인 경우 예외 발생"() {
 
         given:
         PlaceSaveRequest request = PlaceSaveRequest.builder()
@@ -144,7 +144,7 @@ class PlaceServiceTest extends Specification {
         e.message == "장소 위도 범위를 벗어난 입력값입니다."
     }
 
-    def "장소_생성_시_경도_범위가_-180_미만인_경우_예외_발생"() {
+    def "장소 생성 시 경도 범위가 -180 미만인 경우 예외 발생"() {
 
         given:
         PlaceSaveRequest request = PlaceSaveRequest.builder()
@@ -162,7 +162,7 @@ class PlaceServiceTest extends Specification {
         e.message == "장소 경도 범위를 벗어난 입력값입니다."
     }
 
-    def "장소_생성_시_경도_범위가_180_초과인_경우_예외_발생"() {
+    def "장소 생성 시 경도 범위가 180 초과인 경우 예외 발생"() {
 
         given:
         PlaceSaveRequest request = PlaceSaveRequest.builder()
@@ -178,6 +178,23 @@ class PlaceServiceTest extends Specification {
         then:
         def e = thrown(IllegalArgumentException.class)
         e.message == "장소 경도 범위를 벗어난 입력값입니다."
+    }
+
+    def "장소 생성 성공"() {
+
+        given:
+        PlaceSaveRequest request = PlaceSaveRequest.builder()
+                .placeName("테스트")
+                .address("서울특별시")
+                .latitude(new BigDecimal(36.1))
+                .longitude(new BigDecimal(102.6))
+                .build();
+
+        when:
+        placeService.createPlace(request);
+
+        then:
+        1 * placeRepository.save(_)
     }
 
     def "장소_아이디_값으로_장소_존재_여부_확인"() {

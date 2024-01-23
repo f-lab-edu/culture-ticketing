@@ -1,9 +1,9 @@
 package com.culture.ticketing.show.application
 
 import com.culture.ticketing.show.PerformerFixtures
+import com.culture.ticketing.show.domain.Performer
 import com.culture.ticketing.show.application.dto.PerformerResponse
 import com.culture.ticketing.show.application.dto.PerformerSaveRequest
-import com.culture.ticketing.show.domain.Performer
 import com.culture.ticketing.show.exception.ShowNotFoundException
 import com.culture.ticketing.show.infra.PerformerRepository
 import com.culture.ticketing.show.exception.ShowPerformerNotMatchException
@@ -100,7 +100,7 @@ class PerformerServiceTest extends Specification {
         response.collect(performer -> performer.performerId) == [1L, 2L, 4L]
     }
 
-    def "공연_아이디와_출연자_아이디_목록으로_출연자_목록_조회"() {
+    def "공연 아이디와 출연자 아이디 목록으로 출연자 목록 조회"() {
 
         given:
         List<Performer> performers = List.of(
@@ -119,7 +119,7 @@ class PerformerServiceTest extends Specification {
         foundPerformers.collect(performer -> performer.performerId) == [1L, 2L]
     }
 
-    def "출연자_목록_중_해당_공연_출연자가_아닌_경우_예외_발생"() {
+    def "출연자 목록 중 해당 공연 출연자가 아닌 경우 예외 발생"() {
 
         given:
         List<Performer> performers = List.of(

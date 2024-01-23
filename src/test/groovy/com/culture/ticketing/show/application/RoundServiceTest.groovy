@@ -24,7 +24,39 @@ class RoundServiceTest extends Specification {
     private ShowService showService = Mock();
     private RoundService roundService = new RoundService(roundRepository, showService);
 
-    def "회차_생성_시_공연_아이디가_null_인_경우_예외_생성"() {
+    def "회차 생성 성공"() {
+
+        given:
+        RoundSaveRequest request = RoundSaveRequest.builder()
+                .showId(1L)
+                .roundStartDateTime(LocalDateTime.of(2024, 1, 1, 10, 0, 0))
+                .build();
+
+        Show show = Show.builder()
+                .showId(1L)
+                .category(Category.CONCERT)
+                .ageRestriction(AgeRestriction.ALL)
+                .placeId(1L)
+                .showStartDate(LocalDate.of(2024, 1, 1))
+                .showEndDate(LocalDate.of(2024, 2, 20))
+                .showName("테스트 공연")
+                .posterImgUrl("http://abc.jpg")
+                .runningTime(120)
+                .build();
+
+        Round round = request.toEntity(show);
+
+        showService.findShowById(1L) >> show
+        roundRepository.findByShowIdAndDuplicatedRoundDateTime(round.getShowId(), round.getRoundStartDateTime(), round.getRoundEndDateTime()) >> Optional.empty()
+
+        when:
+        roundService.createRound(request);
+
+        then:
+        1 * roundRepository.save(_)
+    }
+
+    def "회차 생성 시 공연 아이디가 null 인 경우 예외 생성"() {
 
         given:
         RoundSaveRequest request = RoundSaveRequest.builder()
@@ -40,7 +72,7 @@ class RoundServiceTest extends Specification {
         e.message == "공연 아이디를 입력해주세요."
     }
 
-    def "회차_생성_시_회차_시작_일시가_null_인_경우_예외_생성"() {
+    def "회차 생성 시 회차 시작 일시가 null 인 경우 예외 생성"() {
 
         given:
         RoundSaveRequest request = RoundSaveRequest.builder()
@@ -56,75 +88,7 @@ class RoundServiceTest extends Specification {
         e.message == "시작 회차 일시를 입력해주세요."
     }
 
-    def "회차_생성_시_공연_회차_일시_범위를_벗어난_경우_예외_발생"() {
-
-        given:
-        Show show = Show.builder()
-                .showId(1L)
-                .category(Category.CONCERT)
-                .ageRestriction(AgeRestriction.ALL)
-                .placeId(1L)
-                .showStartDate(LocalDate.of(2024, 1, 5))
-                .showEndDate(LocalDate.of(2024, 2, 20))
-                .showName("테스트 공연")
-                .posterImgUrl("http://abc.jpg")
-                .runningTime(120)
-                .build();
-
-        showService.findShowById(1L) >> show
-
-        RoundSaveRequest request = RoundSaveRequest.builder()
-                .showId(1L)
-                .roundStartDateTime(LocalDateTime.of(2024, 1, 1, 10, 0, 0))
-                .build();
-
-        when:
-        roundService.createRound(request);
-
-        then:
-        def e = thrown(OutOfRangeRoundDateTimeException.class)
-        e.message == "공연 가능한 회차 날짜 범위를 벗어난 입력값입니다."
-    }
-
-    def "회차_생성_시_중복_회차_일시_있는_경우_예외_발생"() {
-
-        given:
-        Show show = Show.builder()
-                .showId(1L)
-                .category(Category.CONCERT)
-                .ageRestriction(AgeRestriction.ALL)
-                .placeId(1L)
-                .showStartDate(LocalDate.of(2024, 1, 1))
-                .showEndDate(LocalDate.of(2024, 2, 20))
-                .showName("테스트 공연")
-                .posterImgUrl("http://abc.jpg")
-                .runningTime(120)
-                .build();
-
-        showService.findShowById(1L) >> show
-
-        Round round = Round.builder()
-                .showId(1L)
-                .roundStartDateTime(LocalDateTime.of(2024, 1, 1, 10, 0, 0))
-                .roundEndDateTime(LocalDateTime.of(2024, 1, 1, 12, 0, 0))
-                .build();
-
-        roundRepository.findByShowIdAndDuplicatedRoundDateTime(round.getShowId(), round.getRoundStartDateTime(), round.getRoundEndDateTime()) >> Optional.of(round)
-
-        RoundSaveRequest request = RoundSaveRequest.builder()
-                .showId(1L)
-                .roundStartDateTime(LocalDateTime.of(2024, 1, 1, 10, 0, 0))
-                .build();
-
-        when:
-        roundService.createRound(request);
-
-        then:
-        def e = thrown(DuplicatedRoundDateTimeException.class)
-        e.message == "해당 공연에 일정이 동일한 회차가 이미 존재합니다."
-    }
-
-    def "회차_아이디로_회차_조회_시_존재하지_않는_경우_예외_발생"() {
+    def "회차 아이디로 회차 조회 시 존재하지 않는 경우 예외 발생"() {
 
         given:
         roundRepository.findById(1L) >> Optional.empty()
@@ -137,7 +101,7 @@ class RoundServiceTest extends Specification {
         e.message == "존재하지 않는 회차입니다. (roundId = 1)"
     }
 
-    def "공연_아이디_값으로_회차_목록_조회"() {
+    def "공연 아이디 값으로 회차 목록 조회"() {
 
         given:
         List<Round> rounds = List.of(
@@ -158,28 +122,47 @@ class RoundServiceTest extends Specification {
 
     }
 
-    def "중복_회차_일시_있는_경우_예외_발생"() {
+    def "회차 생성 시 중복 회차 일시 있는 경우 예외 발생"() {
 
         given:
-        Round round = Round.builder()
+        RoundSaveRequest request = RoundSaveRequest.builder()
                 .showId(1L)
                 .roundStartDateTime(LocalDateTime.of(2024, 1, 1, 10, 0, 0))
-                .roundEndDateTime(LocalDateTime.of(2024, 1, 1, 12, 0, 0))
                 .build();
 
+        Show show = Show.builder()
+                .showId(1L)
+                .category(Category.CONCERT)
+                .ageRestriction(AgeRestriction.ALL)
+                .placeId(1L)
+                .showStartDate(LocalDate.of(2024, 1, 1))
+                .showEndDate(LocalDate.of(2024, 2, 20))
+                .showName("테스트 공연")
+                .posterImgUrl("http://abc.jpg")
+                .runningTime(120)
+                .build();
+
+        Round round = request.toEntity(show);
+
+        showService.findShowById(1L) >> show
         roundRepository.findByShowIdAndDuplicatedRoundDateTime(round.getShowId(), round.getRoundStartDateTime(), round.getRoundEndDateTime()) >> Optional.of(round)
 
         when:
-        roundService.checkDuplicatedRoundDateTime(round);
+        roundService.createRound(request);
 
         then:
         def e = thrown(DuplicatedRoundDateTimeException.class)
         e.message == "해당 공연에 일정이 동일한 회차가 이미 존재합니다."
     }
 
-    def "공연_회차_일시_범위를_벗어난_경우_예외_발생"() {
+    def "회차 생성 시 공연 회차 일시 범위를 벗어난 경우 예외 발생"() {
 
         given:
+        RoundSaveRequest request = RoundSaveRequest.builder()
+                .showId(1L)
+                .roundStartDateTime(LocalDateTime.of(2024, 1, 1, 10, 0, 0))
+                .build();
+
         Show show = Show.builder()
                 .showId(1L)
                 .category(Category.CONCERT)
@@ -192,14 +175,10 @@ class RoundServiceTest extends Specification {
                 .runningTime(120)
                 .build();
 
-        Round round = Round.builder()
-                .showId(1L)
-                .roundStartDateTime(LocalDateTime.of(2024, 2, 21, 0, 0, 0))
-                .roundEndDateTime(LocalDateTime.of(2024, 2, 21, 2, 0, 0))
-                .build();
+        showService.findShowById(1L) >> show
 
         when:
-        roundService.checkOutOfRangeRoundDateTime(round, show);
+        roundService.createRound(request);
 
         then:
         def e = thrown(OutOfRangeRoundDateTimeException.class)

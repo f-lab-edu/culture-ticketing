@@ -18,7 +18,24 @@ class SeatServiceTest extends Specification {
     private AreaService areaService = Mock();
     private SeatService seatService = new SeatService(seatRepository, areaService);
 
-    def "좌석_생성_시_구역_아이디가_null_인_경우_예외_발생"() {
+    def "좌석 생성 성공"() {
+        given:
+        PlaceSeatSaveRequest request = PlaceSeatSaveRequest.builder()
+                .seatRow(1)
+                .seatNumber(1)
+                .areaId(1L)
+                .build();
+        areaService.notExistsById(1L) >> false
+        seatRepository.findByAreaIdAndSeatRowAndSeatNumber(request.getAreaId(), request.getSeatRow(), request.getSeatNumber()) >> Optional.empty()
+
+        when:
+        seatService.createPlaceSeat(request);
+
+        then:
+        1 * seatRepository.save(_)
+    }
+
+    def "좌석 생성 시 구역 아이디가 null 인 경우 예외 발생"() {
 
         given:
         PlaceSeatSaveRequest request = PlaceSeatSaveRequest.builder()
@@ -35,7 +52,7 @@ class SeatServiceTest extends Specification {
         e.message == "구역 아이디를 입력해주세요."
     }
 
-    def "좌석_생성_시_좌석_행이_0이하_인_경우_예외_발생"() {
+    def "좌석 생성 시 좌석 행이 0 이하 인 경우 예외 발생"() {
 
         given:
         PlaceSeatSaveRequest request = PlaceSeatSaveRequest.builder()
@@ -52,7 +69,7 @@ class SeatServiceTest extends Specification {
         e.message == "좌석 행을 1 이상 숫자로 입력해주세요."
     }
 
-    def "좌석_생성_시_좌석_번호가_0이하_인_경우_예외_발생"() {
+    def "좌석 생성 시 좌석 번호가 0이하 인 경우 예외 발생"() {
 
         given:
         PlaceSeatSaveRequest request = PlaceSeatSaveRequest.builder()
@@ -69,7 +86,7 @@ class SeatServiceTest extends Specification {
         e.message == "좌석 번호를 1 이상 숫자로 입력해주세요."
     }
 
-    def "좌석_생성_시_구역_아이디_값에_해당하는_구역이_존재하지_않는_경우_예외_발생"() {
+    def "좌석 생성 시 구역 아이디 값에 해당하는 구역이 존재하지 않는 경우 예외 발생"() {
 
         given:
         Long areaId = 1L;
@@ -88,7 +105,7 @@ class SeatServiceTest extends Specification {
         e.message == String.format("존재하지 않는 구역입니다. (areaId = %d)", areaId)
     }
 
-    def "좌석_생성_시_이미_동일한_정보의_좌석이_존재하는_경우_예외_발생"() {
+    def "좌석 생성 시 이미 동일한 정보의 좌석이 존재하는 경우 예외 발생"() {
 
         given:
         PlaceSeatSaveRequest request = PlaceSeatSaveRequest.builder()
@@ -106,7 +123,7 @@ class SeatServiceTest extends Specification {
         e.message == "해당 장소에 동일한 좌석이 이미 존재합니다."
     }
 
-    def "좌석_아이디_값_목록에_해당하는_값이_없는 경우_예외_발생"() {
+    def "좌석 아이디 값 목록에 해당하는 값이 없는 경우 예외 발생"() {
 
         given:
         Set<Long> seatIds = Set.of(1L, 2L, 3L, 4L, 5L);

@@ -1,7 +1,6 @@
 package com.culture.ticketing.show.api
 
 import com.culture.ticketing.show.application.RoundService
-import com.culture.ticketing.show.application.ShowFacadeService
 import com.culture.ticketing.show.application.dto.RoundSaveRequest
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.spockframework.spring.SpringBean
@@ -30,7 +29,7 @@ class RoundControllerTest extends Specification {
     @SpringBean
     private RoundService roundService = Mock();
 
-    def "회차_생성_성공"() {
+    def "회차 생성 성공"() {
 
         given:
         RoundSaveRequest request = RoundSaveRequest.builder()
@@ -47,7 +46,7 @@ class RoundControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "회차_생성_시_공연_아이디가_null_인_경우_400_에러"() {
+    def "회차 생성 시 공연 아이디가 null 인 경우 400 에러"() {
 
         given:
         RoundSaveRequest request = RoundSaveRequest.builder()
@@ -64,7 +63,7 @@ class RoundControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "회차_생성_시_회차_시작_일시가_null_인_경우_400_에러"() {
+    def "회차 생성 시 회차 시작 일시가 null 인 경우 400 에러"() {
 
         given:
         RoundSaveRequest request = RoundSaveRequest.builder()

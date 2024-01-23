@@ -4,7 +4,7 @@ import spock.lang.Specification
 
 class SeatTest extends Specification {
 
-    def "좌석_생성_시_구역_아이디가_null_인_경우_예외_발생"() {
+    def "좌석 생성 시 구역 아이디가 null 인 경우 예외 발생"() {
 
         when:
         Seat.builder()
@@ -18,7 +18,7 @@ class SeatTest extends Specification {
         e.message == "구역 아이디를 입력해주세요."
     }
 
-    def "좌석_생성_시_좌석_행이_0이하_인_경우_예외_발생"() {
+    def "좌석 생성 시 좌석 행이 0 이하 인 경우 예외 발생"() {
 
         when:
         Seat.builder()
@@ -32,7 +32,7 @@ class SeatTest extends Specification {
         e.message == "좌석 행을 1 이상 숫자로 입력해주세요."
     }
 
-    def "좌석_생성_시_좌석_번호가_0이하_인_경우_예외_발생"() {
+    def "좌석 생성 시 좌석 번호가 0 이하 인 경우 예외 발생"() {
 
         when:
         Seat.builder()

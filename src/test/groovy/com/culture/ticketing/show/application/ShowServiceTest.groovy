@@ -2,6 +2,7 @@ package com.culture.ticketing.show.application
 
 import com.culture.ticketing.place.PlaceFixtures
 import com.culture.ticketing.place.application.PlaceService
+import com.culture.ticketing.show.infra.ShowRepository
 import com.culture.ticketing.place.domain.Place
 import com.culture.ticketing.place.exception.PlaceNotFoundException
 import com.culture.ticketing.show.ShowFixtures
@@ -11,7 +12,6 @@ import com.culture.ticketing.show.domain.AgeRestriction
 import com.culture.ticketing.show.domain.Category
 import com.culture.ticketing.show.domain.Show
 import com.culture.ticketing.show.exception.ShowNotFoundException
-import com.culture.ticketing.show.infra.ShowRepository
 import org.spockframework.spring.SpringBean
 import spock.lang.Specification
 
@@ -269,7 +269,7 @@ class ShowServiceTest extends Specification {
         e.message == String.format("존재하지 않는 장소입니다. (placeId = %d)", placeId)
     }
 
-    def "공연_아이디_값으로_공연_존재_여부_확인"() {
+    def "공연 아이디 값으로 공연 존재 여부 확인"() {
 
         given:
         Long showId = 1L;

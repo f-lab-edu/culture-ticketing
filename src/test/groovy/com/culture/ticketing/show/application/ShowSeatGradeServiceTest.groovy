@@ -17,7 +17,24 @@ class ShowSeatGradeServiceTest extends Specification {
     private ShowService showService = Mock();
     private ShowSeatGradeService showSeatGradeService = new ShowSeatGradeService(showSeatGradeRepository, showService);
 
-    def "공연_좌석_등급_생성_시_공연_아이디_값이_null_인_경우_예외_발생"() {
+    def "공연 좌석 등급 생성 성공"() {
+
+        given:
+        ShowSeatGradeSaveRequest request = ShowSeatGradeSaveRequest.builder()
+                .seatGrade("VIP")
+                .price(100000)
+                .showId(1L)
+                .build();
+        showService.notExistsById(1L) >> false
+
+        when:
+        showSeatGradeService.createShowSeatGrade(request);
+
+        then:
+        1 * showSeatGradeRepository.save(_)
+    }
+
+    def "공연 좌석 등급 생성 시 공연 아이디 값이 null 인 경우 예외 발생"() {
 
         given:
         ShowSeatGradeSaveRequest request = ShowSeatGradeSaveRequest.builder()
@@ -34,7 +51,7 @@ class ShowSeatGradeServiceTest extends Specification {
         e.message == "공연 아이디를 입력해주세요."
     }
 
-    def "공연_좌석_등급_생성_시_좌석_등급_명이_null_인_경우_예외_발생"() {
+    def "공연 좌석 등급 생성 시 좌석 등급 명이 null 인 경우 예외 발생"() {
 
         given:
         ShowSeatGradeSaveRequest request = ShowSeatGradeSaveRequest.builder()
@@ -51,7 +68,7 @@ class ShowSeatGradeServiceTest extends Specification {
         e.message == "공연 좌석 등급을 입력해주세요."
     }
 
-    def "공연_좌석_등급_생성_시_좌석_등급_명이_빈_값_인_경우_예외_발생"() {
+    def "공연 좌석 등급 생성 시 좌석 등급 명이 빈 값인 경우 예외 발생"() {
 
         given:
         ShowSeatGradeSaveRequest request = ShowSeatGradeSaveRequest.builder()
@@ -68,7 +85,7 @@ class ShowSeatGradeServiceTest extends Specification {
         e.message == "공연 좌석 등급을 입력해주세요."
     }
 
-    def "공연_좌석_등급_생성_시_가격이_0미만_인_경우_예외_발생"() {
+    def "공연 좌석 등급 생성 시 가격이 0 미만 인 경우 예외 발생"() {
 
         given:
         ShowSeatGradeSaveRequest request = ShowSeatGradeSaveRequest.builder()
@@ -85,7 +102,7 @@ class ShowSeatGradeServiceTest extends Specification {
         e.message == "공연 좌석 가격을 0 이상으로 입력해주세요."
     }
 
-    def "공연_좌석_등급_생성_시_공연_아이디_값에_해당하는_공연이_존재하지_않는_경우_예외_발생"() {
+    def "공연 좌석 등급 생성 시 공연 아이디 값에 해당하는 공연이 존재하지 않는 경우 예외 발생"() {
 
         given:
         Long showId = 1L;
@@ -104,7 +121,7 @@ class ShowSeatGradeServiceTest extends Specification {
         e.message == String.format("존재하지 않는 공연입니다. (showId = %d)", showId)
     }
 
-    def "공연_좌석_등급_아이디_값에_해당하는_공연_좌석_등급_존재_여부_확인"() {
+    def "공연 좌석 등급 아이디 값에 해당하는 공연 좌석 등급 존재 여부 확인"() {
 
         given:
         Long showSeatGradeId = 1L;

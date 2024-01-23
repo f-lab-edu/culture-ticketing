@@ -15,7 +15,7 @@ class RoundRepositoryCustomTest extends Specification {
     @Autowired
     private RoundRepository roundRepository;
 
-    def "회차_중_같은_공연_일시_겹치는_회차_조회"() {
+    def "회차 중 같은 공연 일시 겹치는 회차 조회"() {
 
         given:
         Round round = Round.builder()

@@ -27,7 +27,7 @@ class AreaControllerTest extends Specification {
     @SpringBean
     private AreaService areaService = Mock();
 
-    def "장소_구역_생성_성공"() {
+    def "장소 구역 생성 성공"() {
 
         given:
         PlaceAreaSaveRequest request = PlaceAreaSaveRequest.builder()
@@ -44,7 +44,7 @@ class AreaControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "장소_구역_생성_시_장소_아이디_값이_null_인_경우_400_에러"() {
+    def "장소 구역 생성 시 장소 아이디 값이 null 인 경우 400 에러"() {
 
         given:
         PlaceAreaSaveRequest request = PlaceAreaSaveRequest.builder()
