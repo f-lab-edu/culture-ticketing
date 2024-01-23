@@ -1,9 +1,8 @@
 package com.culture.ticketing.show.api;
 
 import com.culture.ticketing.show.application.RoundService;
-import com.culture.ticketing.show.application.ShowFacadeService;
 import com.culture.ticketing.show.application.dto.RoundResponse;
-import com.culture.ticketing.show.application.dto.RoundWithPerformersSaveRequest;
+import com.culture.ticketing.show.application.dto.RoundSaveRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,18 +17,16 @@ import java.util.List;
 @RequestMapping("/api/v1/rounds")
 public class RoundController {
 
-    private final ShowFacadeService showFacadeService;
     private final RoundService roundService;
 
-    public RoundController(ShowFacadeService showFacadeService, RoundService roundService) {
-        this.showFacadeService = showFacadeService;
+    public RoundController(RoundService roundService) {
         this.roundService = roundService;
     }
 
     @PostMapping
-    public void postRound(@Valid @RequestBody RoundWithPerformersSaveRequest request) {
+    public void postRound(@Valid @RequestBody RoundSaveRequest request) {
 
-        showFacadeService.createRoundWithPerformers(request);
+        roundService.createRound(request);
     }
 
     @GetMapping

@@ -1,5 +1,6 @@
 package com.culture.ticketing.show.application;
 
+import com.culture.ticketing.show.application.dto.RoundSaveRequest;
 import com.culture.ticketing.show.application.dto.RoundResponse;
 import com.culture.ticketing.show.domain.Round;
 import com.culture.ticketing.show.domain.Show;
@@ -13,15 +14,18 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 public class RoundService {
 
     private final RoundRepository roundRepository;
+    private final ShowService showService;
 
-    public RoundService(RoundRepository roundRepository) {
+    public RoundService(RoundRepository roundRepository, ShowService showService) {
         this.roundRepository = roundRepository;
+        this.showService = showService;
     }
 
     @Transactional(readOnly = true)
@@ -32,7 +36,13 @@ public class RoundService {
     }
 
     @Transactional
-    public void createRound(Show show, Round round) {
+    public void createRound(RoundSaveRequest request) {
+
+        Objects.requireNonNull(request.getShowId(), "공연 아이디를 입력해주세요.");
+        Objects.requireNonNull(request.getRoundStartDateTime(), "시작 회차 일시를 입력해주세요.");
+
+        Show show = showService.findShowById(request.getShowId());
+        Round round = request.toEntity(show);
 
         checkOutOfRangeRoundDateTime(round, show);
         checkDuplicatedRoundDateTime(round);
