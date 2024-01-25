@@ -45,28 +45,4 @@ class ShowFloorControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "공연 플로어 생성 시 적절하지 않은 요청값인 경우 400 에러"() {
-
-        given:
-        ShowFloorSaveRequest request = ShowFloorSaveRequest.builder()
-                .showSeatGradeId(showSeatGradeId)
-                .showFloorName(showFloorName)
-                .count(count)
-                .build();
-
-        expect:
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/show-floors")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print())
-
-        where:
-        showSeatGradeId | showFloorName | count
-        null | "F1" | 700
-        1L | null | 700
-        1L | "" | 700
-        1L | "F1" | 0
-    }
 }

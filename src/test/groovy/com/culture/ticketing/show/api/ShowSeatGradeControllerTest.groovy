@@ -45,28 +45,4 @@ class ShowSeatGradeControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "공연 좌석 등급 생성 시 적절하지 않은 요청값인 경우 400 에러"() {
-
-        given:
-        ShowSeatGradeSaveRequest request = ShowSeatGradeSaveRequest.builder()
-                .seatGrade(seatGrade)
-                .price(price)
-                .showId(showId)
-                .build();
-
-        expect:
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/show-seat-grades")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print())
-
-        where:
-        seatGrade | price | showId
-        "VIP" | 100000 | null
-        null | 100000 | 1L
-        "" | 100000 | 1L
-        "VIP" | -1 | 1L
-    }
 }

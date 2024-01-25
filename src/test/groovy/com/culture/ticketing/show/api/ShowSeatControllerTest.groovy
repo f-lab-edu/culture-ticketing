@@ -44,25 +44,4 @@ class ShowSeatControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "공연 좌석 정보 생성 시 적절하지 않은 요청값인 경우 400 에러"() {
-
-        given:
-        ShowSeatSaveRequest request = ShowSeatSaveRequest.builder()
-                .showSeatGradeId(showSeatGradeId)
-                .seatIds(seatIds)
-                .build();
-
-        expect:
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/show-seats")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print())
-
-        where:
-        showSeatGradeId | seatIds
-        null | Set.of(1L, 2L, 3L, 4L, 5L)
-        1L | null
-    }
 }

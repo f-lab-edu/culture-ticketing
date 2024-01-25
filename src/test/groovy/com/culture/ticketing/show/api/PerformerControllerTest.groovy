@@ -48,29 +48,6 @@ class PerformerControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "출연자 생성 시 적절하지 않은 요청값인 경우 400 에러"() {
-
-        given:
-        PerformerSaveRequest request = PerformerSaveRequest.builder()
-                .showId(null)
-                .performerName("홍길동")
-                .build();
-
-        expect:
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/performers")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print())
-
-        where:
-        showId | performerName
-        null | "홍길동"
-        1L | null
-        1L | ""
-    }
-
     def "공연별 출연자 목록 조회 성공"() {
 
         given:

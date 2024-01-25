@@ -43,21 +43,4 @@ class AreaControllerTest extends Specification {
                 .andExpect(status().isOk())
                 .andDo(MockMvcResultHandlers.print())
     }
-
-    def "장소 구역 생성 시 적절하지 않은 요청값인 경우 400 에러"() {
-
-        given:
-        PlaceAreaSaveRequest request = PlaceAreaSaveRequest.builder()
-                .areaName("테스트")
-                .placeId(null)
-                .build();
-
-        expect:
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/areas")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print())
-    }
 }

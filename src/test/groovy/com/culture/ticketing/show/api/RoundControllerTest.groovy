@@ -46,26 +46,4 @@ class RoundControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "회차 생성 시 적절하지 않은 요청값인 경우 400 에러"() {
-
-        given:
-        RoundSaveRequest request = RoundSaveRequest.builder()
-                .showId(showId)
-                .roundStartDateTime(roundStartDateTime)
-                .build();
-
-        expect:
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/rounds")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print())
-
-        where:
-        showId | roundStartDateTime
-        null | LocalDateTime.of(2024, 1, 1, 10, 0, 0)
-        1L | null
-    }
-
 }

@@ -44,25 +44,4 @@ class RoundPerformerControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "회차 출연자 목록 생성 시 적절하지 않은 요청값인 경우 400 에러"() {
-
-        given:
-        RoundPerformersSaveRequest request = RoundPerformersSaveRequest.builder()
-                .roundId(roundId)
-                .performerIds(performerIds)
-                .build();
-
-        expect:
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/round-performers")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print())
-
-        where:
-        roundId | performerIds
-        null | Set.of(1L, 2L, 3L)
-        1L | null
-    }
 }

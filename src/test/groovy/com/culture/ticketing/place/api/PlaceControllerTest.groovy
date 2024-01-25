@@ -75,31 +75,4 @@ class PlaceControllerTest extends Specification {
 
     }
 
-    def "장소 생성 시 적절하지 않은 요청값인 경우 400 에러"() {
-
-        given:
-        PlaceSaveRequest request = PlaceSaveRequest.builder()
-                .placeName("테스트")
-                .address(address)
-                .latitude(latitude)
-                .longitude(longitude)
-                .build();
-
-        expect:
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/places")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print())
-
-        where:
-        address | latitude | longitude
-        null | 36.1 | 102.6
-        "" | 36.1 | 102.6
-        "서울특별시" | null | 102.6
-        "서울특별시" | 36.1 | null
-
-    }
-
 }

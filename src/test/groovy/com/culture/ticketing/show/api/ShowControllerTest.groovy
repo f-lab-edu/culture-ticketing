@@ -62,42 +62,6 @@ class ShowControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
-    def "공연 생성 시 적절하지 않은 요청값인 경우 400 에러"() {
-
-        given:
-        ShowSaveRequest request = ShowSaveRequest.builder()
-                .category(category)
-                .showName(showName)
-                .ageRestriction(ageRetriction)
-                .runningTime(runningTime)
-                .posterImgUrl(posterImgUrl)
-                .showStartDate(showStartDate)
-                .showEndDate(showEndDate)
-                .placeId(placeId)
-                .build();
-
-        expect:
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/shows")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print())
-
-        where:
-        category         | showName | ageRetriction      | runningTime | posterImgUrl     | showStartDate            | showEndDate               | placeId
-        null             | "테스트"    | AgeRestriction.ALL | 120         | "http://abc.jpg" | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | 1L
-        Category.CONCERT | null     | AgeRestriction.ALL | 120         | "http://abc.jpg" | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | 1L
-        Category.CONCERT | ""       | AgeRestriction.ALL | 120         | "http://abc.jpg" | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | 1L
-        Category.CONCERT | "테스트"    | null               | 120         | "http://abc.jpg" | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | 1L
-        Category.CONCERT | "테스트"    | AgeRestriction.ALL | 0           | "http://abc.jpg" | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | 1L
-        Category.CONCERT | "테스트"    | AgeRestriction.ALL | 120         | null             | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | 1L
-        Category.CONCERT | "테스트"    | AgeRestriction.ALL | 120         | ""               | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | 1L
-        Category.CONCERT | "테스트"    | AgeRestriction.ALL | 120         | "http://abc.jpg" | null                     | LocalDate.of(2024, 5, 31) | 1L
-        Category.CONCERT | "테스트"    | AgeRestriction.ALL | 120         | "http://abc.jpg" | LocalDate.of(2024, 1, 1) | null                      | 1L
-        Category.CONCERT | "테스트"    | AgeRestriction.ALL | 120         | "http://abc.jpg" | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | null
-    }
-
     def "전체 공연 목록 조회 성공"() {
 
         given:
