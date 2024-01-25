@@ -6,14 +6,11 @@ import com.culture.ticketing.place.domain.Seat
 import com.culture.ticketing.place.exception.DuplicatedPlaceSeatException
 import com.culture.ticketing.place.exception.SeatNotFoundException
 import com.culture.ticketing.place.infra.SeatRepository
-import org.spockframework.spring.SpringBean
 import spock.lang.Specification
 
 class SeatServiceTest extends Specification {
 
-    @SpringBean
     private SeatRepository seatRepository = Mock();
-    @SpringBean
     private AreaService areaService = Mock();
     private SeatService seatService = new SeatService(seatRepository, areaService);
 

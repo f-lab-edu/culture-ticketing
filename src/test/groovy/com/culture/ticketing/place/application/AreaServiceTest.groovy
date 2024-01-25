@@ -4,14 +4,11 @@ import com.culture.ticketing.place.application.dto.PlaceAreaSaveRequest
 import com.culture.ticketing.place.domain.Area
 import com.culture.ticketing.place.exception.PlaceNotFoundException
 import com.culture.ticketing.place.infra.AreaRepository
-import org.spockframework.spring.SpringBean
 import spock.lang.Specification
 
 class AreaServiceTest extends Specification {
 
-    @SpringBean
     private AreaRepository areaRepository = Mock();
-    @SpringBean
     private PlaceService placeService = Mock();
     private AreaService areaService = new AreaService(areaRepository, placeService);
 

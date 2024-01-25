@@ -12,16 +12,13 @@ import com.culture.ticketing.show.domain.AgeRestriction
 import com.culture.ticketing.show.domain.Category
 import com.culture.ticketing.show.domain.Show
 import com.culture.ticketing.show.exception.ShowNotFoundException
-import org.spockframework.spring.SpringBean
 import spock.lang.Specification
 
 import java.time.LocalDate
 
 class ShowServiceTest extends Specification {
 
-    @SpringBean
     private ShowRepository showRepository = Mock();
-    @SpringBean
     private PlaceService placeService = Mock();
     private ShowService showService = new ShowService(showRepository, placeService);
 

@@ -6,12 +6,10 @@ import com.culture.ticketing.place.application.dto.PlaceSaveRequest
 import com.culture.ticketing.place.domain.Place
 import com.culture.ticketing.place.exception.PlaceNotFoundException
 import com.culture.ticketing.place.infra.PlaceRepository
-import org.spockframework.spring.SpringBean
 import spock.lang.Specification
 
 class PlaceServiceTest extends Specification {
 
-    @SpringBean
     private PlaceRepository placeRepository = Mock();
     private PlaceService placeService = new PlaceService(placeRepository);
 

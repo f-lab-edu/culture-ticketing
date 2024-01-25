@@ -10,7 +10,6 @@ import com.culture.ticketing.show.exception.DuplicatedRoundDateTimeException
 import com.culture.ticketing.show.exception.OutOfRangeRoundDateTimeException
 import com.culture.ticketing.show.exception.RoundNotFoundException
 import com.culture.ticketing.show.infra.RoundRepository
-import org.spockframework.spring.SpringBean
 import spock.lang.Specification
 
 import java.time.LocalDate
@@ -18,9 +17,7 @@ import java.time.LocalDateTime
 
 class RoundServiceTest extends Specification {
 
-    @SpringBean
     private RoundRepository roundRepository = Mock();
-    @SpringBean
     private ShowService showService = Mock();
     private RoundService roundService = new RoundService(roundRepository, showService);
 

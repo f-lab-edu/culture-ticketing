@@ -8,22 +8,15 @@ import com.culture.ticketing.show.RoundPerformerFixtures
 import com.culture.ticketing.show.ShowFixtures
 import com.culture.ticketing.show.ShowSeatGradeFixtures
 import com.culture.ticketing.show.application.dto.ShowDetailResponse
-import org.spockframework.spring.SpringBean
 import spock.lang.Specification
 
 class ShowFacadeServiceTest extends Specification {
 
-    @SpringBean
     private ShowService showService = Mock();
-    @SpringBean
     private RoundService roundService = Mock();
-    @SpringBean
     private RoundPerformerService roundPerformerService = Mock();
-    @SpringBean
     private ShowSeatGradeService showSeatGradeService = Mock();
-    @SpringBean
     private PlaceService placeService = Mock();
-    @SpringBean
     private PerformerService performerService = Mock();
     private ShowFacadeService showFacadeService = new ShowFacadeService(showService, roundService, roundPerformerService, showSeatGradeService, placeService, performerService);
 

@@ -5,16 +5,12 @@ import com.culture.ticketing.show.RoundPerformerFixtures
 import com.culture.ticketing.show.RoundFixtures
 import com.culture.ticketing.show.infra.RoundPerformerRepository
 import com.culture.ticketing.show.domain.RoundPerformer
-import org.spockframework.spring.SpringBean
 import spock.lang.Specification
 
 class RoundPerformerServiceTest extends Specification {
 
-    @SpringBean
     private RoundPerformerRepository roundPerformerRepository = Mock();
-    @SpringBean
     private PerformerService performerService = Mock();
-    @SpringBean
     private RoundService roundService = Mock();
     private RoundPerformerService roundPerformerService = new RoundPerformerService(roundPerformerRepository, performerService, roundService);
 

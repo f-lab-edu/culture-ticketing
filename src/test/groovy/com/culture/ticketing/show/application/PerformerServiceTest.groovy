@@ -7,14 +7,11 @@ import com.culture.ticketing.show.application.dto.PerformerSaveRequest
 import com.culture.ticketing.show.exception.ShowNotFoundException
 import com.culture.ticketing.show.infra.PerformerRepository
 import com.culture.ticketing.show.exception.ShowPerformerNotMatchException
-import org.spockframework.spring.SpringBean
 import spock.lang.Specification
 
 class PerformerServiceTest extends Specification {
 
-    @SpringBean
     private PerformerRepository performerRepository = Mock();
-    @SpringBean
     private ShowService showService = Mock();
     private PerformerService performerService = new PerformerService(performerRepository, showService);
 

@@ -6,14 +6,11 @@ import com.culture.ticketing.show.application.dto.ShowSeatGradeSaveRequest
 import com.culture.ticketing.show.domain.ShowSeatGrade
 import com.culture.ticketing.show.exception.ShowNotFoundException
 import com.culture.ticketing.show.infra.ShowSeatGradeRepository
-import org.spockframework.spring.SpringBean
 import spock.lang.Specification
 
 class ShowSeatGradeServiceTest extends Specification {
 
-    @SpringBean
     private ShowSeatGradeRepository showSeatGradeRepository = Mock();
-    @SpringBean
     private ShowService showService = Mock();
     private ShowSeatGradeService showSeatGradeService = new ShowSeatGradeService(showSeatGradeRepository, showService);
 
