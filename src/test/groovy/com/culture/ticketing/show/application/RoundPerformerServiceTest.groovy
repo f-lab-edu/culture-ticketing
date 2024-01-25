@@ -57,7 +57,7 @@ class RoundPerformerServiceTest extends Specification {
                 .roundId(1L)
                 .performerIds(Set.of(1L, 2L, 3L))
                 .build();
-        roundService.findById(1L) >> RoundFixtures.createRound(1L)
+        roundService.findById(1L) >> RoundFixtures.createRound(roundId: 1L)
 
         when:
         roundPerformerService.createRoundPerformers(request);

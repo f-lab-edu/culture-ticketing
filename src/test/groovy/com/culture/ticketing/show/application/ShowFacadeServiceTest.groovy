@@ -44,14 +44,11 @@ class ShowFacadeServiceTest extends Specification {
         ]
         showSeatGradeService.findShowSeatGradesByShowId(1L) >> showSeatGrades;
 
-        List<Round> rounds = [
-                RoundFixtures.createRound(1L, 1L),
-                RoundFixtures.createRound(2L, 1L),
-                RoundFixtures.createRound(3L, 2L),
-                RoundFixtures.createRound(4L, 1L),
-                RoundFixtures.createRound(5L, 3L)
+        roundService.findByShowId(1L) >> [
+                RoundFixtures.createRound(roundId: 1L, showId: 1L),
+                RoundFixtures.createRound(roundId: 2L, showId: 1L),
+                RoundFixtures.createRound(roundId: 4L, showId: 1L)
         ]
-        roundService.findByShowId(1L) >> [rounds.get(0), rounds.get(1), rounds.get(3)]
 
         List<RoundPerformer> roundPerformers = [
                 RoundPerformerFixtures.createRoundPerformer(1L, 1L, 1L),
