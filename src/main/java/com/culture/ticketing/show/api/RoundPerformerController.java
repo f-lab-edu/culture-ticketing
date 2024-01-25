@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-
 @RestController
 @RequestMapping("/api/v1/round-performers")
 public class RoundPerformerController {
@@ -20,7 +18,7 @@ public class RoundPerformerController {
     }
 
     @PostMapping
-    public void postRoundPerformers(@Valid @RequestBody RoundPerformersSaveRequest request) {
+    public void postRoundPerformers(@RequestBody RoundPerformersSaveRequest request) {
 
         roundPerformerService.createRoundPerformers(request);
     }

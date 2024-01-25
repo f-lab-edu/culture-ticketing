@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-
 @RestController
 @RequestMapping("/api/v1/show-floors")
 public class ShowFloorController {
@@ -20,7 +18,7 @@ public class ShowFloorController {
     }
 
     @PostMapping
-    public void postShowFloor(@Valid @RequestBody ShowFloorSaveRequest request) {
+    public void postShowFloor(@RequestBody ShowFloorSaveRequest request) {
 
         showFloorService.createShowFloor(request);
     }
