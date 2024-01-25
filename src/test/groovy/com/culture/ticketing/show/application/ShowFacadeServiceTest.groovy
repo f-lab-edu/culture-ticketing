@@ -32,48 +32,6 @@ class ShowFacadeServiceTest extends Specification {
     private PerformerService performerService = Mock();
     private ShowFacadeService showFacadeService = new ShowFacadeService(showService, roundService, roundPerformerService, showSeatGradeService, placeService, performerService);
 
-    def "공연 아이디로 회차 및 출연자 정보 조회"() {
-
-        given:
-        List<Round> rounds = List.of(
-                RoundFixtures.createRound(1L, 1L),
-                RoundFixtures.createRound(2L, 1L),
-                RoundFixtures.createRound(3L, 2L),
-                RoundFixtures.createRound(4L, 1L),
-                RoundFixtures.createRound(5L, 3L)
-        );
-        roundService.findByShowId(1L) >> List.of(rounds.get(0), rounds.get(1), rounds.get(3))
-
-        List<RoundPerformer> roundPerformers = List.of(
-                RoundPerformerFixtures.createRoundPerformer(1L, 1L, 1L),
-                RoundPerformerFixtures.createRoundPerformer(2L, 2L, 2L),
-                RoundPerformerFixtures.createRoundPerformer(3L, 3L, 1L),
-                RoundPerformerFixtures.createRoundPerformer(4L, 3L, 3L),
-                RoundPerformerFixtures.createRoundPerformer(5L, 1L, 2L)
-
-        );
-        roundPerformerService.findByRoundIds(List.of(1L, 2L, 4L)) >> List.of(roundPerformers.get(0), roundPerformers.get(1), roundPerformers.get(4))
-
-        List<Performer> performers = List.of(
-                PerformerFixtures.createPerformer(1L, 1L),
-                PerformerFixtures.createPerformer(2L, 1L),
-                PerformerFixtures.createPerformer(3L, 2L),
-                PerformerFixtures.createPerformer(4L, 1L),
-                PerformerFixtures.createPerformer(5L, 3L)
-        );
-        performerService.findShowPerformers(1L, Set.of(1L, 2L)) >> List.of(performers.get(0), performers.get(1))
-
-        when:
-        List<RoundWithPerformersResponse> response = showFacadeService.findRoundWitPerformersByShowId(1L);
-
-        then:
-        response.size() == 3
-        response.collect(r -> r.roundId) == [1L, 2L, 4L]
-        response.get(0).performers.collect(p -> p.performerId) == [1L, 2L]
-        response.get(1).performers.collect(p -> p.performerId) == [2L]
-        response.get(2).performers.collect(p -> p.performerId) == []
-    }
-
     def "공연 아이디로 공연 상세 조회"() {
         given:
         showService.findShowById(1L) >> ShowFixtures.createShow(1L)

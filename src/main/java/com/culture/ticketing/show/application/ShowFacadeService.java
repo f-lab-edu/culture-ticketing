@@ -50,8 +50,7 @@ public class ShowFacadeService {
         return ShowDetailResponse.from(show, place, rounds, showSeatGrades);
     }
 
-    @Transactional(readOnly = true)
-    public List<RoundWithPerformersResponse> findRoundWitPerformersByShowId(Long showId) {
+    private List<RoundWithPerformersResponse> findRoundWitPerformersByShowId(Long showId) {
 
         List<Round> rounds = roundService.findByShowId(showId);
         List<Long> roundIds = rounds.stream()
