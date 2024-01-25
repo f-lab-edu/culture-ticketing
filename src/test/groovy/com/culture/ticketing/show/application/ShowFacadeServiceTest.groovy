@@ -50,14 +50,11 @@ class ShowFacadeServiceTest extends Specification {
                 RoundFixtures.createRound(roundId: 4L, showId: 1L)
         ]
 
-        List<RoundPerformer> roundPerformers = [
-                RoundPerformerFixtures.createRoundPerformer(1L, 1L, 1L),
-                RoundPerformerFixtures.createRoundPerformer(2L, 2L, 2L),
-                RoundPerformerFixtures.createRoundPerformer(3L, 3L, 1L),
-                RoundPerformerFixtures.createRoundPerformer(4L, 3L, 3L),
-                RoundPerformerFixtures.createRoundPerformer(5L, 1L, 2L)
+        roundPerformerService.findByRoundIds([1L, 2L, 4L]) >> [
+                RoundPerformerFixtures.createRoundPerformer(roundPerformerId: 1L, roundId: 1L, performerId: 1L),
+                RoundPerformerFixtures.createRoundPerformer(roundPerformerId: 2L, roundId: 2L, performerId: 2L),
+                RoundPerformerFixtures.createRoundPerformer(roundPerformerId: 5L, roundId: 1L, performerId: 2L)
         ]
-        roundPerformerService.findByRoundIds([1L, 2L, 4L]) >> [roundPerformers.get(0), roundPerformers.get(1), roundPerformers.get(4)]
 
         performerService.findShowPerformers(1L, Set.of(1L, 2L)) >> [
                 PerformerFixtures.createPerformer(performerId: 1L, showId: 1L),

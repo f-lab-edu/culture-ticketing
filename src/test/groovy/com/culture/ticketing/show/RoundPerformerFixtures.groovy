@@ -4,11 +4,11 @@ import com.culture.ticketing.show.domain.RoundPerformer
 
 class RoundPerformerFixtures {
 
-    static RoundPerformer createRoundPerformer(Long roundPerformerId, Long roundId = 1L, Long performerId = 1L) {
+    static RoundPerformer createRoundPerformer(Map map = [:]) {
         return RoundPerformer.builder()
-                .roundPerformerId(roundPerformerId)
-                .roundId(roundId)
-                .performerId(performerId)
+                .roundPerformerId(map.getOrDefault("roundPerformerId", 1L) as Long)
+                .roundId(map.getOrDefault("roundId", 1L) as Long)
+                .performerId(map.getOrDefault("performerId", 1L) as Long)
                 .build();
     }
 }
