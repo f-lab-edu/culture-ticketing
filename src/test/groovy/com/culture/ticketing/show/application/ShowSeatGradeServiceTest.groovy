@@ -144,12 +144,11 @@ class ShowSeatGradeServiceTest extends Specification {
     def "공연_아이디로_공연_좌석_등급_목록_조회"() {
 
         given:
-        List<ShowSeatGrade> showSeatGrades = [
-                ShowSeatGradeFixtures.createShowSeatGrade(1L),
-                ShowSeatGradeFixtures.createShowSeatGrade(2L),
-                ShowSeatGradeFixtures.createShowSeatGrade(3L)
+        showSeatGradeRepository.findByShowId(1L) >> [
+                ShowSeatGradeFixtures.createShowSeatGrade(showSeatGradeId: 1L),
+                ShowSeatGradeFixtures.createShowSeatGrade(showSeatGradeId: 2L),
+                ShowSeatGradeFixtures.createShowSeatGrade(showSeatGradeId: 3L)
         ]
-        showSeatGradeRepository.findByShowId(1L) >> showSeatGrades;
 
         when:
         List<ShowSeatGradeResponse> response = showSeatGradeService.findShowSeatGradesByShowId(1L);

@@ -46,7 +46,7 @@ class ShowFixtures {
                         ))
                         .collect(Collectors.toList()))
                 .showSeatGrades((map.getOrDefault("showSeatGradeIds", []) as List<Long>).stream()
-                        .map(showSeatGradeId -> ShowSeatGradeFixtures.createShowSeatGradeResponse(showSeatGradeId))
+                        .map(showSeatGradeId -> ShowSeatGradeFixtures.createShowSeatGradeResponse(showSeatGradeId: showSeatGradeId))
                         .collect(Collectors.toList()))
                 .build();
     }

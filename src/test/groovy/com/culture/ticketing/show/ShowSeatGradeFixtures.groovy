@@ -5,20 +5,20 @@ import com.culture.ticketing.show.domain.ShowSeatGrade
 
 class ShowSeatGradeFixtures {
 
-    static ShowSeatGrade createShowSeatGrade(Long showSeatGradeId, String seatGrade = "VIP", int price = 100000, Long showId = 1L) {
+    static ShowSeatGrade createShowSeatGrade(Map map = [:]) {
         return ShowSeatGrade.builder()
-                .showSeatGradeId(showSeatGradeId)
-                .seatGrade(seatGrade)
-                .price(price)
-                .showId(showId)
+                .showSeatGradeId(map.getOrDefault("showSeatGradeId", 1L) as Long)
+                .seatGrade(map.getOrDefault("seatGrade", "VIP") as String)
+                .price(map.getOrDefault("price", 100000) as Integer)
+                .showId(map.getOrDefault("showId", 1L) as Long)
                 .build();
     }
 
-    static ShowSeatGradeResponse createShowSeatGradeResponse(Long showSeatGradeId, String seatGrade = "VIP", int price = 100000) {
+    static ShowSeatGradeResponse createShowSeatGradeResponse(Map map = [:]) {
         return ShowSeatGradeResponse.builder()
-                .showSeatGradeId(showSeatGradeId)
-                .seatGrade(seatGrade)
-                .price(price)
+                .showSeatGradeId(map.getOrDefault("showSeatGradeId", 1L) as Long)
+                .seatGrade(map.getOrDefault("seatGrade", "VIP") as String)
+                .price(map.getOrDefault("price", 100000) as Integer)
                 .build();
     }
 }

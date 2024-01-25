@@ -37,12 +37,11 @@ class ShowFacadeServiceTest extends Specification {
         showService.findShowById(1L) >> ShowFixtures.createShow(showId: 1L)
         placeService.findPlaceById(1L) >> PlaceFixtures.createPlace(1L)
 
-        List<ShowSeatGradeResponse> showSeatGrades = [
-                ShowSeatGradeFixtures.createShowSeatGradeResponse(1L),
-                ShowSeatGradeFixtures.createShowSeatGradeResponse(2L),
-                ShowSeatGradeFixtures.createShowSeatGradeResponse(3L)
-        ]
-        showSeatGradeService.findShowSeatGradesByShowId(1L) >> showSeatGrades;
+        showSeatGradeService.findShowSeatGradesByShowId(1L) >> [
+                ShowSeatGradeFixtures.createShowSeatGradeResponse(showSeatGradeId: 1L),
+                ShowSeatGradeFixtures.createShowSeatGradeResponse(showSeatGradeId: 2L),
+                ShowSeatGradeFixtures.createShowSeatGradeResponse(showSeatGradeId: 3L)
+        ];
 
         roundService.findByShowId(1L) >> [
                 RoundFixtures.createRound(roundId: 1L, showId: 1L),
