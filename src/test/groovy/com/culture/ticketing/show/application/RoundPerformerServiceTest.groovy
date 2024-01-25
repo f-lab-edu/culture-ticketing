@@ -63,7 +63,16 @@ class RoundPerformerServiceTest extends Specification {
         roundPerformerService.createRoundPerformers(request);
 
         then:
-        1 * roundPerformerRepository.saveAll(_)
+        1 * roundPerformerRepository.saveAll(_) >> { args ->
+
+            def savedRoundPerformer = args.get(0) as List<RoundPerformer>
+
+            savedRoundPerformer.size() == 3
+            savedRoundPerformer.roundId == [1L, 1L, 1L]
+            savedRoundPerformer.performerId == [1L, 2L, 3L]
+
+            return args
+        }
     }
 
     def "회차 아이디 목록으로 회차 목록 조회"() {

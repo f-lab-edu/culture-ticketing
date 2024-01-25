@@ -194,7 +194,15 @@ class PlaceServiceTest extends Specification {
         placeService.createPlace(request);
 
         then:
-        1 * placeRepository.save(_)
+        1 * placeRepository.save(_) >> { args ->
+
+            def savedPlace = args.get(0) as Place
+
+            savedPlace.placeName == "테스트"
+            savedPlace.address == "서울특별시"
+            savedPlace.latitude == 36.1
+            savedPlace.longitude == 102.6
+        }
     }
 
     def "장소 아이디 값으로 장소 존재 여부 확인"() {

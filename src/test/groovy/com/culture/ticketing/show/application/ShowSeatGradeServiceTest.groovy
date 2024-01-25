@@ -31,7 +31,14 @@ class ShowSeatGradeServiceTest extends Specification {
         showSeatGradeService.createShowSeatGrade(request);
 
         then:
-        1 * showSeatGradeRepository.save(_)
+        1 * showSeatGradeRepository.save(_) >> { args ->
+
+            def savedShowSeatGrade = args.get(0) as ShowSeatGrade
+
+            savedShowSeatGrade.seatGrade == "VIP"
+            savedShowSeatGrade.price == 100000
+            savedShowSeatGrade.showId == 1L
+        }
     }
 
     def "공연 좌석 등급 생성 시 공연 아이디 값이 null 인 경우 예외 발생"() {

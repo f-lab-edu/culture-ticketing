@@ -53,7 +53,14 @@ class RoundServiceTest extends Specification {
         roundService.createRound(request);
 
         then:
-        1 * roundRepository.save(_)
+        1 * roundRepository.save(_) >> { args ->
+
+            def savedRound = args.get(0) as Round
+
+            savedRound.showId == 1L
+            savedRound.roundStartDateTime == LocalDateTime.of(2024, 1, 1, 10, 0, 0)
+            savedRound.roundEndDateTime == LocalDateTime.of(2024, 1, 1, 12, 0, 0)
+        }
     }
 
     def "회차 생성 시 공연 아이디가 null 인 경우 예외 생성"() {

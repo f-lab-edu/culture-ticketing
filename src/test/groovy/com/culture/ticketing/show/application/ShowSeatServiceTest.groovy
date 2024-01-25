@@ -2,6 +2,7 @@ package com.culture.ticketing.show.application
 
 import com.culture.ticketing.place.application.SeatService
 import com.culture.ticketing.show.application.dto.ShowSeatSaveRequest
+import com.culture.ticketing.show.domain.ShowSeat
 import com.culture.ticketing.show.exception.ShowSeatGradeNotFoundException
 import com.culture.ticketing.show.infra.ShowSeatRepository
 import org.spockframework.spring.SpringBean
@@ -30,7 +31,16 @@ class ShowSeatServiceTest extends Specification {
         showSeatService.createShowSeat(request);
 
         then:
-        1 * showSeatRepository.saveAll(_)
+        1 * showSeatRepository.saveAll(_) >> { args ->
+
+            def savedShowSeats = args.get(0) as List<ShowSeat>
+
+            savedShowSeats.size() == 5
+            savedShowSeats.showSeatGradeId == [1L, 1L, 1L, 1L, 1L]
+            savedShowSeats.seatId == [1L, 2L, 3L, 4L, 5L]
+
+            return args
+        }
     }
 
     def "공연 좌석 정보 생성 시 공연 좌석 등급 아이디 값이 null 인 경우 예외 발생"() {

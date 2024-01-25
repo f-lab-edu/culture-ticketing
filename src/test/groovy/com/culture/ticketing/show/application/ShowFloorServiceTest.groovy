@@ -1,6 +1,7 @@
 package com.culture.ticketing.show.application
 
 import com.culture.ticketing.show.application.dto.ShowFloorSaveRequest
+import com.culture.ticketing.show.domain.ShowFloor
 import com.culture.ticketing.show.exception.ShowSeatGradeNotFoundException
 import com.culture.ticketing.show.infra.ShowFloorRepository
 import org.spockframework.spring.SpringBean
@@ -28,7 +29,14 @@ class ShowFloorServiceTest extends Specification {
         showFloorService.createShowFloor(request);
 
         then:
-        1 * showFloorRepository.save(_)
+        1 * showFloorRepository.save(_) >> { args ->
+
+            def savedShowFloor = args.get(0) as ShowFloor
+
+            savedShowFloor.showSeatGradeId == 1L
+            savedShowFloor.showFloorName == "F1"
+            savedShowFloor.count == 700
+        }
     }
 
     def "공연 플로어 생성 시 공연 좌석 등급 아이디 값이 null 인 경우 예외 발생"() {

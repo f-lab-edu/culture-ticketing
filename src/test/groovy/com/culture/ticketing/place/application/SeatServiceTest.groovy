@@ -32,7 +32,14 @@ class SeatServiceTest extends Specification {
         seatService.createPlaceSeat(request);
 
         then:
-        1 * seatRepository.save(_)
+        1 * seatRepository.save(_) >> { args ->
+
+            def savedSeat = args.get(0) as Seat
+
+            savedSeat.seatRow == 1
+            savedSeat.seatNumber == 1
+            savedSeat.areaId == 1L
+        }
     }
 
     def "좌석 생성 시 구역 아이디가 null 인 경우 예외 발생"() {

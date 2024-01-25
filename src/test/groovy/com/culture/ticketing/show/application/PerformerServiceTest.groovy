@@ -30,7 +30,13 @@ class PerformerServiceTest extends Specification {
         performerService.createPerformer(request);
 
         then:
-        1 * performerRepository.save(_)
+        1 * performerRepository.save(_) >> { args ->
+
+            def savedPerformer = args.get(0) as Performer
+
+            savedPerformer.showId == 1L
+            savedPerformer.performerName == "홍길동"
+        }
     }
 
     def "출연자 생성 시 공연 아이디가 null 인 경우 예외 발생"() {

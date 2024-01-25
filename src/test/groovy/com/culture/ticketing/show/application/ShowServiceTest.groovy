@@ -43,7 +43,19 @@ class ShowServiceTest extends Specification {
         showService.createShow(request);
 
         then:
-        1 * showRepository.save(_)
+        1 * showRepository.save(_) >> { args ->
+
+            def savedShow = args.get(0) as Show
+
+            savedShow.category == Category.CONCERT
+            savedShow.showName == "테스트"
+            savedShow.ageRestriction == AgeRestriction.ALL
+            savedShow.runningTime == 120
+            savedShow.posterImgUrl == "http://abc.jpg"
+            savedShow.showStartDate == LocalDate.of(2024, 1, 1)
+            savedShow.showEndDate == LocalDate.of(2024, 5, 31)
+            savedShow.placeId == 1L
+        }
     }
 
     def "공연 생성 시 카테고리가 null 인 경우 예외 발생"() {
