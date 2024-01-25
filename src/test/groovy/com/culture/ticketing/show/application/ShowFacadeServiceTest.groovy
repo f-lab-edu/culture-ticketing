@@ -34,7 +34,7 @@ class ShowFacadeServiceTest extends Specification {
 
     def "공연 아이디로 공연 상세 조회"() {
         given:
-        showService.findShowById(1L) >> ShowFixtures.createShow(1L)
+        showService.findShowById(1L) >> ShowFixtures.createShow(showId: 1L)
         placeService.findPlaceById(1L) >> PlaceFixtures.createPlace(1L)
 
         List<ShowSeatGradeResponse> showSeatGrades = [

@@ -318,14 +318,11 @@ class ShowServiceTest extends Specification {
     def "전체_공연_목록_조회"() {
 
         given:
-        List<Show> shows = [
-                ShowFixtures.createShow(1L),
-                ShowFixtures.createShow(2L),
-                ShowFixtures.createShow(3L),
-                ShowFixtures.createShow(4L),
-                ShowFixtures.createShow(5L)
+        List<Show> foundShows = [
+                ShowFixtures.createShow(showId: 2L),
+                ShowFixtures.createShow(showId: 3L),
+                ShowFixtures.createShow(showId: 4L)
         ]
-        List<Show> foundShows = shows.subList(1, 4);
         showRepository.findByShowIdGreaterThanLimitAndCategory(1L, 3, null) >> foundShows
         List<Long> placeIds = foundShows.collect(show -> show.placeId);
         placeService.findPlacesByIds(placeIds) >> placeIds.toSet().collect(placeId -> PlaceFixtures.createPlace(placeId))
@@ -340,17 +337,14 @@ class ShowServiceTest extends Specification {
     def "카테고리 별 공연 목록 조회"() {
 
         given:
-        List<Show> shows = [
-                ShowFixtures.createShow(1L, Category.CONCERT),
-                ShowFixtures.createShow(2L, Category.MUSICAL),
-                ShowFixtures.createShow(3L, Category.CONCERT),
-                ShowFixtures.createShow(4L, Category.CLASSIC),
-                ShowFixtures.createShow(5L, Category.CONCERT)
+        showRepository.findByShowIdGreaterThanLimitAndCategory(1L, 3, Category.CONCERT) >> [
+                ShowFixtures.createShow(showId: 3L, category: Category.CONCERT, placeId: 1L),
+                ShowFixtures.createShow(showId: 5L, category: Category.CONCERT, placeId: 2L)
         ]
-        List<Show> foundShows = [shows.get(2), shows.get(4)]
-        showRepository.findByShowIdGreaterThanLimitAndCategory(1L, 3, Category.CONCERT) >> foundShows
-        List<Long> placeIds = foundShows.collect(show -> show.placeId);
-        placeService.findPlacesByIds(placeIds) >> placeIds.toSet().collect(placeId -> PlaceFixtures.createPlace(placeId))
+        placeService.findPlacesByIds([1L, 2L]) >> [
+                PlaceFixtures.createPlace(1L),
+                PlaceFixtures.createPlace(2L)
+        ]
 
         when:
         List<ShowResponse> response = showService.findShows(1L, 3, Category.CONCERT);
@@ -363,11 +357,11 @@ class ShowServiceTest extends Specification {
 
         given:
         List<Show> shows = [
-                ShowFixtures.createShow(1L),
-                ShowFixtures.createShow(2L),
-                ShowFixtures.createShow(3L),
-                ShowFixtures.createShow(4L),
-                ShowFixtures.createShow(5L)
+                ShowFixtures.createShow(showId: 1L),
+                ShowFixtures.createShow(showId: 2L),
+                ShowFixtures.createShow(showId: 3L),
+                ShowFixtures.createShow(showId: 4L),
+                ShowFixtures.createShow(showId: 5L)
         ]
         Map<Long, Place> placeMapByPlaceId = new HashMap<>();
 

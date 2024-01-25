@@ -85,30 +85,28 @@ class ShowControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
 
         where:
-        category | showName | ageRetriction | runningTime | posterImgUrl | showStartDate | showEndDate | placeId
-        null | "테스트" | AgeRestriction.ALL | 120 | "http://abc.jpg" | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | 1L
-        Category.CONCERT | null | AgeRestriction.ALL | 120 | "http://abc.jpg" | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | 1L
-        Category.CONCERT | "" | AgeRestriction.ALL | 120 | "http://abc.jpg" | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | 1L
-        Category.CONCERT | "테스트" | null | 120 | "http://abc.jpg" | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | 1L
-        Category.CONCERT | "테스트" | AgeRestriction.ALL | 0 | "http://abc.jpg" | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | 1L
-        Category.CONCERT | "테스트" | AgeRestriction.ALL | 120 | null | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | 1L
-        Category.CONCERT | "테스트" | AgeRestriction.ALL | 120 | "" | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | 1L
-        Category.CONCERT | "테스트" | AgeRestriction.ALL | 120 | "http://abc.jpg" | null | LocalDate.of(2024, 5, 31) | 1L
-        Category.CONCERT | "테스트" | AgeRestriction.ALL | 120 | "http://abc.jpg" | LocalDate.of(2024, 1, 1) | null | 1L
-        Category.CONCERT | "테스트" | AgeRestriction.ALL | 120 | "http://abc.jpg" | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | null
+        category         | showName | ageRetriction      | runningTime | posterImgUrl     | showStartDate            | showEndDate               | placeId
+        null             | "테스트"    | AgeRestriction.ALL | 120         | "http://abc.jpg" | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | 1L
+        Category.CONCERT | null     | AgeRestriction.ALL | 120         | "http://abc.jpg" | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | 1L
+        Category.CONCERT | ""       | AgeRestriction.ALL | 120         | "http://abc.jpg" | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | 1L
+        Category.CONCERT | "테스트"    | null               | 120         | "http://abc.jpg" | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | 1L
+        Category.CONCERT | "테스트"    | AgeRestriction.ALL | 0           | "http://abc.jpg" | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | 1L
+        Category.CONCERT | "테스트"    | AgeRestriction.ALL | 120         | null             | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | 1L
+        Category.CONCERT | "테스트"    | AgeRestriction.ALL | 120         | ""               | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | 1L
+        Category.CONCERT | "테스트"    | AgeRestriction.ALL | 120         | "http://abc.jpg" | null                     | LocalDate.of(2024, 5, 31) | 1L
+        Category.CONCERT | "테스트"    | AgeRestriction.ALL | 120         | "http://abc.jpg" | LocalDate.of(2024, 1, 1) | null                      | 1L
+        Category.CONCERT | "테스트"    | AgeRestriction.ALL | 120         | "http://abc.jpg" | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) | null
     }
 
     def "전체 공연 목록 조회 성공"() {
 
         given:
-        List<ShowResponse> shows = [
-                ShowResponse.from(ShowFixtures.createShow(1L), PlaceFixtures.createPlace(1L)),
-                ShowResponse.from(ShowFixtures.createShow(2L), PlaceFixtures.createPlace(1L)),
-                ShowResponse.from(ShowFixtures.createShow(3L), PlaceFixtures.createPlace(1L)),
-                ShowResponse.from(ShowFixtures.createShow(4L), PlaceFixtures.createPlace(1L))
+        Long offset = 1L
+        showService.findShows(offset, 3, null) >> [
+                ShowResponse.from(ShowFixtures.createShow(showId: 2L), PlaceFixtures.createPlace(1L)),
+                ShowResponse.from(ShowFixtures.createShow(showId: 3L), PlaceFixtures.createPlace(1L)),
+                ShowResponse.from(ShowFixtures.createShow(showId: 4L), PlaceFixtures.createPlace(1L))
         ]
-        Long offset = shows.get(0).showId;
-        showService.findShows(offset, 3, null) >> shows.subList(1, 4)
 
         expect:
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/shows")
@@ -126,15 +124,12 @@ class ShowControllerTest extends Specification {
     def "카테고리 별 공연 목록 조회"() {
 
         given:
-        List<ShowResponse> shows = [
-                ShowResponse.from(ShowFixtures.createShow(1L, Category.CONCERT), PlaceFixtures.createPlace(1L)),
-                ShowResponse.from(ShowFixtures.createShow(2L, Category.MUSICAL), PlaceFixtures.createPlace(1L)),
-                ShowResponse.from(ShowFixtures.createShow(3L, Category.CONCERT), PlaceFixtures.createPlace(1L)),
-                ShowResponse.from(ShowFixtures.createShow(4L, Category.CLASSIC), PlaceFixtures.createPlace(1L))
-        ]
         Long offset = 0;
         Category category = Category.CONCERT;
-        showService.findShows(offset, 3, category) >> [shows.get(0), shows.get(2)]
+        showService.findShows(offset, 3, category) >> [
+                ShowResponse.from(ShowFixtures.createShow(showId: 1L, category: Category.CONCERT), PlaceFixtures.createPlace(1L)),
+                ShowResponse.from(ShowFixtures.createShow(showId: 3L, category: Category.CONCERT), PlaceFixtures.createPlace(1L))
+        ]
 
         expect:
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/shows")
@@ -155,11 +150,12 @@ class ShowControllerTest extends Specification {
 
         given:
         showFacadeService.findShowById(1L) >> ShowFixtures.createShowDetailResponse(
-                1L,
-                1L,
-                [1L, 2L],
-                [1L, 2L, 3L],
-                [1L, 2L]);
+                showId: 1L,
+                placeId: 1L,
+                roundIds: [1L, 2L],
+                performerIds: [1L, 2L, 3L],
+                showSeatGradeIds: [1L, 2L]
+        );
 
         expect:
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/shows/1"))

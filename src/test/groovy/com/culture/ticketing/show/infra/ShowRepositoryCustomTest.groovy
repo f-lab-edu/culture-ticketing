@@ -18,14 +18,13 @@ class ShowRepositoryCustomTest extends Specification {
     def "전체 공연 목록 조회 테스트 특정한 아이디보다 크고 사이즈 제한"() {
 
         given:
-        List<Show> shows = [
-                ShowFixtures.createShow(1L),
-                ShowFixtures.createShow(2L),
-                ShowFixtures.createShow(3L),
-                ShowFixtures.createShow(4L),
-                ShowFixtures.createShow(5L)
-        ]
-        showRepository.saveAll(shows);
+        showRepository.saveAll([
+                ShowFixtures.createShow(showId: 1L),
+                ShowFixtures.createShow(showId: 2L),
+                ShowFixtures.createShow(showId: 3L),
+                ShowFixtures.createShow(showId: 4L),
+                ShowFixtures.createShow(showId: 5L)
+        ]);
 
         when:
         List<Show> foundShows = showRepository.findByShowIdGreaterThanLimitAndCategory(1L, 3, null);
@@ -37,14 +36,13 @@ class ShowRepositoryCustomTest extends Specification {
     def "카테고리별 공연 목록 조회 테스트 특정한 아이디보다 크고 사이즈 제한"() {
 
         given:
-        List<Show> shows = [
-                ShowFixtures.createShow(1L, Category.CONCERT),
-                ShowFixtures.createShow(2L, Category.CONCERT),
-                ShowFixtures.createShow(3L, Category.MUSICAL),
-                ShowFixtures.createShow(4L, Category.CONCERT),
-                ShowFixtures.createShow(5L, Category.CLASSIC)
-        ]
-        showRepository.saveAll(shows);
+        showRepository.saveAll([
+                ShowFixtures.createShow(showId: 1L, category: Category.CONCERT),
+                ShowFixtures.createShow(showId: 2L, category: Category.CONCERT),
+                ShowFixtures.createShow(showId: 3L, category: Category.MUSICAL),
+                ShowFixtures.createShow(showId: 4L, category: Category.CONCERT),
+                ShowFixtures.createShow(showId: 5L, category: Category.CLASSIC)
+        ]);
 
         when:
         List<Show> foundShows = showRepository.findByShowIdGreaterThanLimitAndCategory(1L, 3, Category.CONCERT);
