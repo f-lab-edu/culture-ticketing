@@ -74,14 +74,11 @@ class PerformerControllerTest extends Specification {
     def "공연별 출연자 목록 조회 성공"() {
 
         given:
-        List<PerformerResponse> performers = [
-                new PerformerResponse(PerformerFixtures.createPerformer(1L, 1L)),
-                new PerformerResponse(PerformerFixtures.createPerformer(2L, 1L)),
-                new PerformerResponse(PerformerFixtures.createPerformer(3L, 2L)),
-                new PerformerResponse(PerformerFixtures.createPerformer(4L, 1L)),
-                new PerformerResponse(PerformerFixtures.createPerformer(5L, 2L)),
+        performerService.findPerformersByShowId(1L) >> [
+                new PerformerResponse(PerformerFixtures.createPerformer(performerId: 1L, showId: 1L)),
+                new PerformerResponse(PerformerFixtures.createPerformer(performerId: 2L, showId: 1L)),
+                new PerformerResponse(PerformerFixtures.createPerformer(performerId: 4L, showId: 1L))
         ]
-        performerService.findPerformersByShowId(1L) >> [performers.get(0), performers.get(1), performers.get(3)]
 
         expect:
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/performers")

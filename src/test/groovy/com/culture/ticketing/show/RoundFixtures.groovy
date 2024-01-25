@@ -22,7 +22,7 @@ class RoundFixtures {
 
     static RoundWithPerformersResponse createRoundWithPerformersResponse(Long roundId, List<Long> performerIds) {
         return RoundWithPerformersResponse.from(createRound(roundId), performerIds.stream()
-                .map(performerId -> PerformerFixtures.createPerformer(performerId))
+                .map(performerId -> PerformerFixtures.createPerformer(performerId: performerId))
                 .collect(Collectors.toList()))
     }
 }

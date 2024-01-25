@@ -4,13 +4,13 @@ import com.culture.ticketing.show.domain.Performer;
 
 class PerformerFixtures {
 
-    static Performer createPerformer(Long performerId, Long showId = 1L, String performerName = "홍길동", String performerImgUrl = "https://abc.jpg", String role = "ABC") {
+    static Performer createPerformer(Map map = [:]) {
         return Performer.builder()
-                .performerId(performerId)
-                .showId(showId)
-                .performerName(performerName)
-                .performerImgUrl(performerImgUrl)
-                .role(role)
+                .performerId(map.getOrDefault("performerId", 1L))
+                .showId(map.getOrDefault("showId", 1L))
+                .performerName(map.getOrDefault("performerName", "홍길동"))
+                .performerImgUrl(map.getOrDefault("performerImgUrl", "https://abc.jpg"))
+                .role(map.getOrDefault("role", "ABC"))
                 .build();
     }
 }

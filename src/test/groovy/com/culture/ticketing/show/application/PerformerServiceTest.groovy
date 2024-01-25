@@ -105,14 +105,11 @@ class PerformerServiceTest extends Specification {
     def "공연별 출연자 목록 조회"() {
 
         given:
-        List<Performer> performers = [
-                PerformerFixtures.createPerformer(1L, 1L),
-                PerformerFixtures.createPerformer(2L, 1L),
-                PerformerFixtures.createPerformer(3L, 2L),
-                PerformerFixtures.createPerformer(4L, 1L),
-                PerformerFixtures.createPerformer(5L, 2L)
+        performerRepository.findByShowId(1L) >> [
+                PerformerFixtures.createPerformer(performerId: 1L, showId: 1L),
+                PerformerFixtures.createPerformer(performerId: 2L, showId: 1L),
+                PerformerFixtures.createPerformer(performerId: 4L, showId: 1L),
         ]
-        performerRepository.findByShowId(1L) >> [performers.get(0), performers.get(1), performers.get(3)]
 
         when:
         List<PerformerResponse> response = performerService.findPerformersByShowId(1L);
@@ -124,14 +121,10 @@ class PerformerServiceTest extends Specification {
     def "공연 아이디와 출연자 아이디 목록으로 출연자 목록 조회"() {
 
         given:
-        List<Performer> performers = [
-                PerformerFixtures.createPerformer(1L, 1L),
-                PerformerFixtures.createPerformer(2L, 1L),
-                PerformerFixtures.createPerformer(3L, 2L),
-                PerformerFixtures.createPerformer(4L, 1L),
-                PerformerFixtures.createPerformer(5L, 3L)
+        performerRepository.findByShowIdAndPerformerIdIn(1L, [1L, 2L, 3L]) >> [
+                PerformerFixtures.createPerformer(performerId: 1L, showId: 1L),
+                PerformerFixtures.createPerformer(performerId: 2L, showId: 1L)
         ]
-        performerRepository.findByShowIdAndPerformerIdIn(1L, [1L, 2L, 3L]) >> [performers.get(0), performers.get(1)]
 
         when:
         List<Performer> foundPerformers = performerService.findShowPerformers(1L, [1L, 2L, 3L]);
@@ -143,14 +136,10 @@ class PerformerServiceTest extends Specification {
     def "출연자 목록 중 해당 공연 출연자가 아닌 경우 예외 발생"() {
 
         given:
-        List<Performer> performers = [
-                PerformerFixtures.createPerformer(1L, 1L),
-                PerformerFixtures.createPerformer(2L, 1L),
-                PerformerFixtures.createPerformer(3L, 2L),
-                PerformerFixtures.createPerformer(4L, 1L),
-                PerformerFixtures.createPerformer(5L, 3L)
+        performerRepository.findByShowIdAndPerformerIdIn(1L, Set.of(1L, 2L, 3L)) >> [
+                PerformerFixtures.createPerformer(performerId: 1L, showId: 1L),
+                PerformerFixtures.createPerformer(performerId: 2L, showId: 1L)
         ]
-        performerRepository.findByShowIdAndPerformerIdIn(1L, Set.of(1L, 2L, 3L)) >> [performers.get(0), performers.get(1)]
 
         when:
         performerService.checkShowPerformersExists(1L, Set.of(1L, 2L, 3L));

@@ -62,14 +62,10 @@ class ShowFacadeServiceTest extends Specification {
         ]
         roundPerformerService.findByRoundIds([1L, 2L, 4L]) >> [roundPerformers.get(0), roundPerformers.get(1), roundPerformers.get(4)]
 
-        List<Performer> performers = [
-                PerformerFixtures.createPerformer(1L, 1L),
-                PerformerFixtures.createPerformer(2L, 1L),
-                PerformerFixtures.createPerformer(3L, 2L),
-                PerformerFixtures.createPerformer(4L, 1L),
-                PerformerFixtures.createPerformer(5L, 3L)
+        performerService.findShowPerformers(1L, Set.of(1L, 2L)) >> [
+                PerformerFixtures.createPerformer(performerId: 1L, showId: 1L),
+                PerformerFixtures.createPerformer(performerId: 2L, showId: 1L)
         ]
-        performerService.findShowPerformers(1L, Set.of(1L, 2L)) >> [performers.get(0), performers.get(1)]
 
         when:
         ShowDetailResponse response = showFacadeService.findShowById(1L);
