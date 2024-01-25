@@ -134,12 +134,11 @@ class SeatServiceTest extends Specification {
 
         given:
         Set<Long> seatIds = [1L, 2L, 3L, 4L, 5L]
-        List<Seat> foundSeats = [
-                SeatFixtures.creatSeat(1L),
-                SeatFixtures.creatSeat(2L),
-                SeatFixtures.creatSeat(3L)
+        seatRepository.findBySeatIdIn(seatIds) >> [
+                SeatFixtures.creatSeat(seatId: 1L),
+                SeatFixtures.creatSeat(seatId: 2L),
+                SeatFixtures.creatSeat(seatId: 3L)
         ]
-        seatRepository.findBySeatIdIn(seatIds) >> foundSeats
 
         when:
         seatService.checkSeatsExists(seatIds);
