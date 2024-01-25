@@ -325,7 +325,7 @@ class ShowServiceTest extends Specification {
         ]
         showRepository.findByShowIdGreaterThanLimitAndCategory(1L, 3, null) >> foundShows
         List<Long> placeIds = foundShows.collect(show -> show.placeId);
-        placeService.findPlacesByIds(placeIds) >> placeIds.toSet().collect(placeId -> PlaceFixtures.createPlace(placeId))
+        placeService.findPlacesByIds(placeIds) >> placeIds.toSet().collect(placeId -> PlaceFixtures.createPlace(placeId: placeId))
 
         when:
         List<ShowResponse> response = showService.findShows(1L, 3, null);
@@ -342,8 +342,8 @@ class ShowServiceTest extends Specification {
                 ShowFixtures.createShow(showId: 5L, category: Category.CONCERT, placeId: 2L)
         ]
         placeService.findPlacesByIds([1L, 2L]) >> [
-                PlaceFixtures.createPlace(1L),
-                PlaceFixtures.createPlace(2L)
+                PlaceFixtures.createPlace(placeId: 1L),
+                PlaceFixtures.createPlace(placeId: 2L)
         ]
 
         when:

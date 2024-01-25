@@ -29,7 +29,7 @@ class ShowFixtures {
     static ShowResponse createShowResponse(Map map = [:]) {
         return ShowResponse.from(
                 createShow(showId: map.getOrDefault("showId", 1L) as Long),
-                PlaceFixtures.createPlace(map.getOrDefault("placeId", 1L) as Long)
+                PlaceFixtures.createPlace(placeId: map.getOrDefault("placeId", 1L) as Long)
         );
     }
 

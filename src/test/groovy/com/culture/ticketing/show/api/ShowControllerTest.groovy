@@ -103,9 +103,9 @@ class ShowControllerTest extends Specification {
         given:
         Long offset = 1L
         showService.findShows(offset, 3, null) >> [
-                ShowResponse.from(ShowFixtures.createShow(showId: 2L), PlaceFixtures.createPlace(1L)),
-                ShowResponse.from(ShowFixtures.createShow(showId: 3L), PlaceFixtures.createPlace(1L)),
-                ShowResponse.from(ShowFixtures.createShow(showId: 4L), PlaceFixtures.createPlace(1L))
+                ShowResponse.from(ShowFixtures.createShow(showId: 2L), PlaceFixtures.createPlace(placeId: 1L)),
+                ShowResponse.from(ShowFixtures.createShow(showId: 3L), PlaceFixtures.createPlace(placeId: 1L)),
+                ShowResponse.from(ShowFixtures.createShow(showId: 4L), PlaceFixtures.createPlace(placeId: 1L))
         ]
 
         expect:
@@ -127,8 +127,8 @@ class ShowControllerTest extends Specification {
         Long offset = 0;
         Category category = Category.CONCERT;
         showService.findShows(offset, 3, category) >> [
-                ShowResponse.from(ShowFixtures.createShow(showId: 1L, category: Category.CONCERT), PlaceFixtures.createPlace(1L)),
-                ShowResponse.from(ShowFixtures.createShow(showId: 3L, category: Category.CONCERT), PlaceFixtures.createPlace(1L))
+                ShowResponse.from(ShowFixtures.createShow(showId: 1L, category: Category.CONCERT), PlaceFixtures.createPlace(placeId: 1L)),
+                ShowResponse.from(ShowFixtures.createShow(showId: 3L, category: Category.CONCERT), PlaceFixtures.createPlace(placeId: 1L))
         ]
 
         expect:
