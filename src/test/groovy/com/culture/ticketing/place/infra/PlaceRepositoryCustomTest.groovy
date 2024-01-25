@@ -17,13 +17,13 @@ class PlaceRepositoryCustomTest extends Specification {
     def "장소 목록 조회 테스트 - 특정한 아이디보다 크고 사이즈 제한"() {
 
         given:
-        List<Place> places = List.of(
+        List<Place> places = [
                 PlaceFixtures.createPlace(1L),
                 PlaceFixtures.createPlace(2L),
                 PlaceFixtures.createPlace(3L),
                 PlaceFixtures.createPlace(4L),
                 PlaceFixtures.createPlace(5L)
-        );
+        ];
         placeRepository.saveAll(places);
 
         when:

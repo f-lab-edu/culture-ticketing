@@ -78,16 +78,15 @@ class RoundPerformerServiceTest extends Specification {
     def "회차 아이디 목록으로 회차 목록 조회"() {
 
         given:
-        List<RoundPerformer> roundPerformers = List.of(
+        List<RoundPerformer> roundPerformers = [
                 RoundPerformerFixtures.createRoundPerformer(1L, 1L, 1L),
                 RoundPerformerFixtures.createRoundPerformer(2L, 2L, 2L),
                 RoundPerformerFixtures.createRoundPerformer(3L, 3L, 1L),
                 RoundPerformerFixtures.createRoundPerformer(4L, 3L, 3L),
                 RoundPerformerFixtures.createRoundPerformer(5L, 1L, 2L),
-
-        );
-        List<Long> roundIds = List.of(1L, 2L);
-        roundPerformerRepository.findByRoundIdIn(roundIds) >> List.of(roundPerformers.get(0), roundPerformers.get(1), roundPerformers.get(4))
+        ]
+        List<Long> roundIds = [1L, 2L]
+        roundPerformerRepository.findByRoundIdIn(roundIds) >> [roundPerformers.get(0), roundPerformers.get(1), roundPerformers.get(4)]
 
         when:
         List<RoundPerformer> foundRoundPerformers = roundPerformerService.findByRoundIds(roundIds);

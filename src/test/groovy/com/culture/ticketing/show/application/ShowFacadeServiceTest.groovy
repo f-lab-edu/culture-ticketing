@@ -37,40 +37,39 @@ class ShowFacadeServiceTest extends Specification {
         showService.findShowById(1L) >> ShowFixtures.createShow(1L)
         placeService.findPlaceById(1L) >> PlaceFixtures.createPlace(1L)
 
-        List<ShowSeatGradeResponse> showSeatGrades = List.of(
+        List<ShowSeatGradeResponse> showSeatGrades = [
                 ShowSeatGradeFixtures.createShowSeatGradeResponse(1L),
                 ShowSeatGradeFixtures.createShowSeatGradeResponse(2L),
                 ShowSeatGradeFixtures.createShowSeatGradeResponse(3L)
-        );
+        ]
         showSeatGradeService.findShowSeatGradesByShowId(1L) >> showSeatGrades;
 
-        List<Round> rounds = List.of(
+        List<Round> rounds = [
                 RoundFixtures.createRound(1L, 1L),
                 RoundFixtures.createRound(2L, 1L),
                 RoundFixtures.createRound(3L, 2L),
                 RoundFixtures.createRound(4L, 1L),
                 RoundFixtures.createRound(5L, 3L)
-        );
-        roundService.findByShowId(1L) >> List.of(rounds.get(0), rounds.get(1), rounds.get(3))
+        ]
+        roundService.findByShowId(1L) >> [rounds.get(0), rounds.get(1), rounds.get(3)]
 
-        List<RoundPerformer> roundPerformers = List.of(
+        List<RoundPerformer> roundPerformers = [
                 RoundPerformerFixtures.createRoundPerformer(1L, 1L, 1L),
                 RoundPerformerFixtures.createRoundPerformer(2L, 2L, 2L),
                 RoundPerformerFixtures.createRoundPerformer(3L, 3L, 1L),
                 RoundPerformerFixtures.createRoundPerformer(4L, 3L, 3L),
                 RoundPerformerFixtures.createRoundPerformer(5L, 1L, 2L)
+        ]
+        roundPerformerService.findByRoundIds([1L, 2L, 4L]) >> [roundPerformers.get(0), roundPerformers.get(1), roundPerformers.get(4)]
 
-        );
-        roundPerformerService.findByRoundIds(List.of(1L, 2L, 4L)) >> List.of(roundPerformers.get(0), roundPerformers.get(1), roundPerformers.get(4))
-
-        List<Performer> performers = List.of(
+        List<Performer> performers = [
                 PerformerFixtures.createPerformer(1L, 1L),
                 PerformerFixtures.createPerformer(2L, 1L),
                 PerformerFixtures.createPerformer(3L, 2L),
                 PerformerFixtures.createPerformer(4L, 1L),
                 PerformerFixtures.createPerformer(5L, 3L)
-        );
-        performerService.findShowPerformers(1L, Set.of(1L, 2L)) >> List.of(performers.get(0), performers.get(1))
+        ]
+        performerService.findShowPerformers(1L, Set.of(1L, 2L)) >> [performers.get(0), performers.get(1)]
 
         when:
         ShowDetailResponse response = showFacadeService.findShowById(1L);

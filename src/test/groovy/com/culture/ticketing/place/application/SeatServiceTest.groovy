@@ -133,12 +133,12 @@ class SeatServiceTest extends Specification {
     def "좌석 아이디 값 목록에 해당하는 값이 없는 경우 예외 발생"() {
 
         given:
-        Set<Long> seatIds = Set.of(1L, 2L, 3L, 4L, 5L);
-        List<Seat> foundSeats = List.of(
+        Set<Long> seatIds = [1L, 2L, 3L, 4L, 5L]
+        List<Seat> foundSeats = [
                 SeatFixtures.creatSeat(1L),
                 SeatFixtures.creatSeat(2L),
                 SeatFixtures.creatSeat(3L)
-        )
+        ]
         seatRepository.findBySeatIdIn(seatIds) >> foundSeats
 
         when:

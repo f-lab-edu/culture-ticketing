@@ -101,12 +101,12 @@ class ShowControllerTest extends Specification {
     def "전체 공연 목록 조회 성공"() {
 
         given:
-        List<ShowResponse> shows = List.of(
+        List<ShowResponse> shows = [
                 ShowResponse.from(ShowFixtures.createShow(1L), PlaceFixtures.createPlace(1L)),
                 ShowResponse.from(ShowFixtures.createShow(2L), PlaceFixtures.createPlace(1L)),
                 ShowResponse.from(ShowFixtures.createShow(3L), PlaceFixtures.createPlace(1L)),
                 ShowResponse.from(ShowFixtures.createShow(4L), PlaceFixtures.createPlace(1L))
-        );
+        ]
         Long offset = shows.get(0).showId;
         showService.findShows(offset, 3, null) >> shows.subList(1, 4)
 
@@ -126,15 +126,15 @@ class ShowControllerTest extends Specification {
     def "카테고리 별 공연 목록 조회"() {
 
         given:
-        List<ShowResponse> shows = List.of(
+        List<ShowResponse> shows = [
                 ShowResponse.from(ShowFixtures.createShow(1L, Category.CONCERT), PlaceFixtures.createPlace(1L)),
                 ShowResponse.from(ShowFixtures.createShow(2L, Category.MUSICAL), PlaceFixtures.createPlace(1L)),
                 ShowResponse.from(ShowFixtures.createShow(3L, Category.CONCERT), PlaceFixtures.createPlace(1L)),
                 ShowResponse.from(ShowFixtures.createShow(4L, Category.CLASSIC), PlaceFixtures.createPlace(1L))
-        );
+        ]
         Long offset = 0;
         Category category = Category.CONCERT;
-        showService.findShows(offset, 3, category) >> List.of(shows.get(0), shows.get(2));
+        showService.findShows(offset, 3, category) >> [shows.get(0), shows.get(2)]
 
         expect:
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/shows")
@@ -157,9 +157,9 @@ class ShowControllerTest extends Specification {
         showFacadeService.findShowById(1L) >> ShowFixtures.createShowDetailResponse(
                 1L,
                 1L,
-                List.of(1L, 2L),
-                List.of(1L, 2L, 3L),
-                List.of(1L, 2L));
+                [1L, 2L],
+                [1L, 2L, 3L],
+                [1L, 2L]);
 
         expect:
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/shows/1"))

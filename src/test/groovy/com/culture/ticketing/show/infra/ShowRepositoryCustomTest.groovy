@@ -18,13 +18,13 @@ class ShowRepositoryCustomTest extends Specification {
     def "전체 공연 목록 조회 테스트 특정한 아이디보다 크고 사이즈 제한"() {
 
         given:
-        List<Show> shows = List.of(
+        List<Show> shows = [
                 ShowFixtures.createShow(1L),
                 ShowFixtures.createShow(2L),
                 ShowFixtures.createShow(3L),
                 ShowFixtures.createShow(4L),
                 ShowFixtures.createShow(5L)
-        );
+        ]
         showRepository.saveAll(shows);
 
         when:
@@ -37,13 +37,13 @@ class ShowRepositoryCustomTest extends Specification {
     def "카테고리별 공연 목록 조회 테스트 특정한 아이디보다 크고 사이즈 제한"() {
 
         given:
-        List<Show> shows = List.of(
+        List<Show> shows = [
                 ShowFixtures.createShow(1L, Category.CONCERT),
                 ShowFixtures.createShow(2L, Category.CONCERT),
                 ShowFixtures.createShow(3L, Category.MUSICAL),
                 ShowFixtures.createShow(4L, Category.CONCERT),
                 ShowFixtures.createShow(5L, Category.CLASSIC)
-        );
+        ]
         showRepository.saveAll(shows);
 
         when:

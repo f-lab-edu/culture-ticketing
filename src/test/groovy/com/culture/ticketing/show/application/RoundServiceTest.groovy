@@ -111,14 +111,14 @@ class RoundServiceTest extends Specification {
     def "공연 아이디 값으로 회차 목록 조회"() {
 
         given:
-        List<Round> rounds = List.of(
+        List<Round> rounds = [
                 RoundFixtures.createRound(1L, 1L),
                 RoundFixtures.createRound(2L, 1L),
                 RoundFixtures.createRound(3L, 2L),
                 RoundFixtures.createRound(4L, 1L),
                 RoundFixtures.createRound(5L, 3L)
-        );
-        roundRepository.findByShowId(1L) >> List.of(rounds.get(0), rounds.get(1), rounds.get(3))
+        ]
+        roundRepository.findByShowId(1L) >> [rounds.get(0), rounds.get(1), rounds.get(3)]
 
         when:
         List<Round> foundRounds = roundService.findByShowId(1L);

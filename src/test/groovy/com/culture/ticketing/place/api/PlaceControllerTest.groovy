@@ -34,13 +34,13 @@ class PlaceControllerTest extends Specification {
     def "장소 목록 조회"() {
 
         given:
-        List<PlaceResponse> places = List.of(
+        List<PlaceResponse> places = [
                 new PlaceResponse(PlaceFixtures.createPlace(1L)),
                 new PlaceResponse(PlaceFixtures.createPlace(2L)),
                 new PlaceResponse(PlaceFixtures.createPlace(3L)),
                 new PlaceResponse(PlaceFixtures.createPlace(4L)),
                 new PlaceResponse(PlaceFixtures.createPlace(5L))
-        )
+        ]
         Long offset = places.get(0).placeId;
         placeService.findPlaces(offset, 3) >> places.subList(1, 4)
 

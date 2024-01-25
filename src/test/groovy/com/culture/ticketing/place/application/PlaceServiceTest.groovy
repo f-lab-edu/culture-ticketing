@@ -20,13 +20,13 @@ class PlaceServiceTest extends Specification {
     def "장소 목록 조회"() {
 
         given:
-        List<Place> places = List.of(
+        List<Place> places = [
                 PlaceFixtures.createPlace(1L),
                 PlaceFixtures.createPlace(2L),
                 PlaceFixtures.createPlace(3L),
                 PlaceFixtures.createPlace(4L),
                 PlaceFixtures.createPlace(5L)
-        );
+        ]
         placeRepository.findByPlaceIdGreaterThanLimit(1L, 3) >> places.subList(1, 4)
 
         when:
@@ -221,7 +221,7 @@ class PlaceServiceTest extends Specification {
     def "장소 아이디 목록으로 장소 목록 조회"() {
 
         given:
-        List<Long> placeIds = List.of(1L, 2L, 3L, 4L, 5L);
+        List<Long> placeIds = [1L, 2L, 3L, 4L, 5L]
         List<Place> places = placeIds.stream()
                 .map(PlaceFixtures::createPlace)
                 .collect(Collectors.toList());
