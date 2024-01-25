@@ -39,7 +39,7 @@ class ShowFloorServiceTest extends Specification {
         }
     }
 
-    def "공연 플로어 생성 시 공연 좌석 등급 아이디 값이 null 인 경우 예외 발생"() {
+    def "공연 플로어 생성 시 요청 값에 null 이 존재하는 경우 예외 발생"() {
 
         given:
         ShowFloorSaveRequest request = ShowFloorSaveRequest.builder()
@@ -56,13 +56,13 @@ class ShowFloorServiceTest extends Specification {
         e.message == "공연 좌석 등급 아이디를 입력해주세요."
     }
 
-    def "공연 플로어 생성 시 공연 플로어 구역명이 null 인 경우 예외 발생"() {
+    def "공연 플로어 생성 시 요청 값에 적절하지 않은 값이 들어간 경우 예외 발생"() {
 
         given:
         ShowFloorSaveRequest request = ShowFloorSaveRequest.builder()
                 .showSeatGradeId(1L)
-                .showFloorName(null)
-                .count(700)
+                .showFloorName(showFloorName)
+                .count(count)
                 .build();
 
         when:
@@ -70,41 +70,13 @@ class ShowFloorServiceTest extends Specification {
 
         then:
         def e = thrown(IllegalArgumentException.class)
-        e.message == "공연 플로어 구역명을 입력해주세요."
-    }
+        e.message == expected
 
-    def "공연 플로어 생성 시 공연 플로어 구역명이 빈 값인 경우 예외 발생"() {
-
-        given:
-        ShowFloorSaveRequest request = ShowFloorSaveRequest.builder()
-                .showSeatGradeId(1L)
-                .showFloorName("")
-                .count(700)
-                .build();
-
-        when:
-        showFloorService.createShowFloor(request);
-
-        then:
-        def e = thrown(IllegalArgumentException.class)
-        e.message == "공연 플로어 구역명을 입력해주세요."
-    }
-
-    def "공연 플로어 생성 시 인원수가 0 이하 인 경우 예외 발생"() {
-
-        given:
-        ShowFloorSaveRequest request = ShowFloorSaveRequest.builder()
-                .showSeatGradeId(1L)
-                .showFloorName("F1")
-                .count(0)
-                .build();
-
-        when:
-        showFloorService.createShowFloor(request);
-
-        then:
-        def e = thrown(IllegalArgumentException.class)
-        e.message == "공연 플로어 인원수를 1 이상 숫자로 입력해주세요."
+        where:
+        showFloorName | count || expected
+        null          | 700   || "공연 플로어 구역명을 입력해주세요."
+        ""            | 700   || "공연 플로어 구역명을 입력해주세요."
+        "F1"          | 0     || "공연 플로어 인원수를 1 이상 숫자로 입력해주세요."
     }
 
     def "공연 플로어 생성 시 공연 좌석 등급 아이디 값에 해당하는 공연 좌석 등급이 존재하지 않을 경우 예외 발생"() {

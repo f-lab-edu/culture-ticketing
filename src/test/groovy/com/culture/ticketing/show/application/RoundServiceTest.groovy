@@ -63,12 +63,12 @@ class RoundServiceTest extends Specification {
         }
     }
 
-    def "회차 생성 시 공연 아이디가 null 인 경우 예외 생성"() {
+    def "회차 생성 시 요청 값에 null 이 존재하는 경우 예외 생성"() {
 
         given:
         RoundSaveRequest request = RoundSaveRequest.builder()
-                .showId(null)
-                .roundStartDateTime(LocalDateTime.of(2024, 1, 1, 10, 0, 0))
+                .showId(showId)
+                .roundStartDateTime(roundStartDateTime)
                 .build();
 
         when:
@@ -76,23 +76,12 @@ class RoundServiceTest extends Specification {
 
         then:
         def e = thrown(NullPointerException.class)
-        e.message == "공연 아이디를 입력해주세요."
-    }
+        e.message == expected
 
-    def "회차 생성 시 회차 시작 일시가 null 인 경우 예외 생성"() {
-
-        given:
-        RoundSaveRequest request = RoundSaveRequest.builder()
-                .showId(1L)
-                .roundStartDateTime(null)
-                .build();
-
-        when:
-        roundService.createRound(request);
-
-        then:
-        def e = thrown(NullPointerException.class)
-        e.message == "시작 회차 일시를 입력해주세요."
+        where:
+        showId | roundStartDateTime || expected
+        null | LocalDateTime.of(2024, 1, 1, 10, 0, 0) || "공연 아이디를 입력해주세요."
+        1L | null || "시작 회차 일시를 입력해주세요."
     }
 
     def "회차 아이디로 회차 조회 시 존재하지 않는 경우 예외 발생"() {

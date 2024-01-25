@@ -3,7 +3,6 @@ package com.culture.ticketing.place.application
 import com.culture.ticketing.place.SeatFixtures
 import com.culture.ticketing.place.application.dto.PlaceSeatSaveRequest
 import com.culture.ticketing.place.domain.Seat
-import com.culture.ticketing.place.exception.AreaNotFoundException
 import com.culture.ticketing.place.exception.DuplicatedPlaceSeatException
 import com.culture.ticketing.place.exception.SeatNotFoundException
 import com.culture.ticketing.place.infra.SeatRepository
@@ -42,7 +41,7 @@ class SeatServiceTest extends Specification {
         }
     }
 
-    def "좌석 생성 시 구역 아이디가 null 인 경우 예외 발생"() {
+    def "좌석 생성 시 요청 값에 null 이 존재하는 경우 예외 발생"() {
 
         given:
         PlaceSeatSaveRequest request = PlaceSeatSaveRequest.builder()
@@ -59,12 +58,12 @@ class SeatServiceTest extends Specification {
         e.message == "구역 아이디를 입력해주세요."
     }
 
-    def "좌석 생성 시 좌석 행이 0 이하 인 경우 예외 발생"() {
+    def "좌석 생성 시 요청 값에 적절하지 않은 값이 들어간 경우 예외 발생"() {
 
         given:
         PlaceSeatSaveRequest request = PlaceSeatSaveRequest.builder()
-                .seatRow(0)
-                .seatNumber(1)
+                .seatRow(seatRow)
+                .seatNumber(seatNumber)
                 .areaId(1L)
                 .build();
 
@@ -73,43 +72,12 @@ class SeatServiceTest extends Specification {
 
         then:
         def e = thrown(IllegalArgumentException.class)
-        e.message == "좌석 행을 1 이상 숫자로 입력해주세요."
-    }
+        e.message == expected
 
-    def "좌석 생성 시 좌석 번호가 0이하 인 경우 예외 발생"() {
-
-        given:
-        PlaceSeatSaveRequest request = PlaceSeatSaveRequest.builder()
-                .seatRow(1)
-                .seatNumber(0)
-                .areaId(1L)
-                .build();
-
-        when:
-        seatService.createPlaceSeat(request);
-
-        then:
-        def e = thrown(IllegalArgumentException.class)
-        e.message == "좌석 번호를 1 이상 숫자로 입력해주세요."
-    }
-
-    def "좌석 생성 시 구역 아이디 값에 해당하는 구역이 존재하지 않는 경우 예외 발생"() {
-
-        given:
-        Long areaId = 1L;
-        PlaceSeatSaveRequest request = PlaceSeatSaveRequest.builder()
-                .seatRow(1)
-                .seatNumber(1)
-                .areaId(areaId)
-                .build();
-        areaService.notExistsById(areaId) >> true
-
-        when:
-        seatService.createPlaceSeat(request);
-
-        then:
-        def e = thrown(AreaNotFoundException.class)
-        e.message == String.format("존재하지 않는 구역입니다. (areaId = %d)", areaId)
+        where:
+        seatRow | seatNumber || expected
+        0       | 1          || "좌석 행을 1 이상 숫자로 입력해주세요."
+        1       | 0          || "좌석 번호를 1 이상 숫자로 입력해주세요."
     }
 
     def "좌석 생성 시 이미 동일한 정보의 좌석이 존재하는 경우 예외 발생"() {

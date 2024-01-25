@@ -18,12 +18,12 @@ class RoundPerformerServiceTest extends Specification {
     private RoundService roundService = Mock();
     private RoundPerformerService roundPerformerService = new RoundPerformerService(roundPerformerRepository, performerService, roundService);
 
-    def "회차 출연자 목록 생성 시 회차 아이디가 null 인 경우 예외 발생"() {
+    def "회차 출연자 목록 생성 시 요청 값에 null 이 존재하는 경우 예외 발생"() {
 
         given:
         RoundPerformersSaveRequest request = RoundPerformersSaveRequest.builder()
-                .roundId(null)
-                .performerIds(Set.of(1L, 2L, 3L))
+                .roundId(roundId)
+                .performerIds(performerIds)
                 .build();
 
         when:
@@ -31,23 +31,12 @@ class RoundPerformerServiceTest extends Specification {
 
         then:
         def e = thrown(NullPointerException.class)
-        e.message == "회차 아이디를 입력해주세요."
-    }
+        e.message == expected
 
-    def "회차 출연자 목록 생성 시 출연자 아이디 목록이 null 인 경우 예외 발생"() {
-
-        given:
-        RoundPerformersSaveRequest request = RoundPerformersSaveRequest.builder()
-                .roundId(1L)
-                .performerIds(null)
-                .build();
-
-        when:
-        roundPerformerService.createRoundPerformers(request);
-
-        then:
-        def e = thrown(NullPointerException.class)
-        e.message == "출연자 아이디 목록을 입력해주세요."
+        where:
+        roundId | performerIds       || expected
+        null    | Set.of(1L, 2L, 3L) || "회차 아이디를 입력해주세요."
+        1L      | null               || "출연자 아이디 목록을 입력해주세요."
     }
 
     def "회차 출연자 목록 생성 성공"() {

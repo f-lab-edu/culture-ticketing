@@ -7,12 +7,7 @@ import com.culture.ticketing.show.RoundFixtures
 import com.culture.ticketing.show.RoundPerformerFixtures
 import com.culture.ticketing.show.ShowFixtures
 import com.culture.ticketing.show.ShowSeatGradeFixtures
-import com.culture.ticketing.show.application.dto.RoundWithPerformersResponse
 import com.culture.ticketing.show.application.dto.ShowDetailResponse
-import com.culture.ticketing.show.application.dto.ShowSeatGradeResponse
-import com.culture.ticketing.show.domain.Performer
-import com.culture.ticketing.show.domain.Round
-import com.culture.ticketing.show.domain.RoundPerformer
 import org.spockframework.spring.SpringBean
 import spock.lang.Specification
 

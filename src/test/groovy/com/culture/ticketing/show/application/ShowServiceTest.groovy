@@ -58,18 +58,18 @@ class ShowServiceTest extends Specification {
         }
     }
 
-    def "공연 생성 시 카테고리가 null 인 경우 예외 발생"() {
+    def "공연 생성 시 요청 값에 null 이 존재하는 경우 예외 발생"() {
 
         given:
         ShowSaveRequest request = ShowSaveRequest.builder()
-                .category(null)
+                .category(category)
                 .showName("테스트")
-                .ageRestriction(AgeRestriction.ALL)
+                .ageRestriction(ageRestriction)
                 .runningTime(120)
                 .posterImgUrl("http://abc.jpg")
-                .showStartDate(LocalDate.of(2024, 1, 1))
-                .showEndDate(LocalDate.of(2024, 5, 31))
-                .placeId(1L)
+                .showStartDate(showStartDate)
+                .showEndDate(showEndDate)
+                .placeId(placeId)
                 .build();
 
         when:
@@ -77,98 +77,19 @@ class ShowServiceTest extends Specification {
 
         then:
         def e = thrown(NullPointerException.class)
-        e.message == "공연 카테고리를 입력해주세요."
+        e.message == expected
+
+        where:
+        category         | ageRestriction     | placeId | showStartDate            | showEndDate               || expected
+        null             | AgeRestriction.ALL | 1L      | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) || "공연 카테고리를 입력해주세요."
+        Category.CONCERT | null               | 1L      | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) || "공연 관람 제한가를 입력해주세요."
+        Category.CONCERT | AgeRestriction.ALL | null    | LocalDate.of(2024, 1, 1) | LocalDate.of(2024, 5, 31) || "공연 장소 아이디를 입력해주세요."
+        Category.CONCERT | AgeRestriction.ALL | 1L      | null                     | LocalDate.of(2024, 5, 31) || "공연 시작 날짜를 입력해주세요."
+        Category.CONCERT | AgeRestriction.ALL | 1L      | LocalDate.of(2024, 1, 1) | null                      || "공연 종료 날짜를 입력해주세요."
     }
 
-    def "공연 생성 시 관람 제한가가 null 인 경우 예외 발생"() {
 
-        given:
-        ShowSaveRequest request = ShowSaveRequest.builder()
-                .category(Category.CONCERT)
-                .showName("테스트")
-                .ageRestriction(null)
-                .runningTime(120)
-                .posterImgUrl("http://abc.jpg")
-                .showStartDate(LocalDate.of(2024, 1, 1))
-                .showEndDate(LocalDate.of(2024, 5, 31))
-                .placeId(1L)
-                .build();
-
-        when:
-        showService.createShow(request);
-
-        then:
-        def e = thrown(NullPointerException.class)
-        e.message == "공연 관람 제한가를 입력해주세요."
-    }
-
-    def "공연 생성 시 장소 아이디 값이 null 인 경우 예외 발생"() {
-
-        given:
-        ShowSaveRequest request = ShowSaveRequest.builder()
-                .category(Category.CONCERT)
-                .showName("테스트")
-                .ageRestriction(AgeRestriction.ALL)
-                .runningTime(120)
-                .posterImgUrl("http://abc.jpg")
-                .showStartDate(LocalDate.of(2024, 1, 1))
-                .showEndDate(LocalDate.of(2024, 5, 31))
-                .placeId(null)
-                .build();
-
-        when:
-        showService.createShow(request);
-
-        then:
-        def e = thrown(NullPointerException.class)
-        e.message == "공연 장소 아이디를 입력해주세요."
-    }
-
-    def "공연 생성 시 공연 시작 날짜가 null 인 경우 예외 발생"() {
-
-        given:
-        ShowSaveRequest request = ShowSaveRequest.builder()
-                .category(Category.CONCERT)
-                .showName("테스트")
-                .ageRestriction(AgeRestriction.ALL)
-                .runningTime(120)
-                .posterImgUrl("http://abc.jpg")
-                .showStartDate(null)
-                .showEndDate(LocalDate.of(2024, 5, 31))
-                .placeId(1L)
-                .build();
-
-        when:
-        showService.createShow(request);
-
-        then:
-        def e = thrown(NullPointerException.class)
-        e.message == "공연 시작 날짜를 입력해주세요."
-    }
-
-    def "공연 생성 시 공연 종료 날짜가 null 인 경우 예외 발생"() {
-
-        given:
-        ShowSaveRequest request = ShowSaveRequest.builder()
-                .category(Category.CONCERT)
-                .showName("테스트")
-                .ageRestriction(AgeRestriction.ALL)
-                .runningTime(120)
-                .posterImgUrl("http://abc.jpg")
-                .showStartDate(LocalDate.of(2024, 1, 1))
-                .showEndDate(null)
-                .placeId(1L)
-                .build();
-
-        when:
-        showService.createShow(request);
-
-        then:
-        def e = thrown(NullPointerException.class)
-        e.message == "공연 종료 날짜를 입력해주세요."
-    }
-
-    def "공연 생성 시 공연 이름이 null 인 경우 예외 발생"() {
+    def "공연 생성 시 요청 값에 적절하지 않은 값이 들어간 경우 예외 발생"() {
 
         given:
         ShowSaveRequest request = ShowSaveRequest.builder()
@@ -188,94 +109,14 @@ class ShowServiceTest extends Specification {
         then:
         def e = thrown(IllegalArgumentException.class)
         e.message == "공연 이름을 입력해주세요."
-    }
 
-    def "공연 생성 시 공연 이름이 빈 값인 경우 예외 발생"() {
-
-        given:
-        ShowSaveRequest request = ShowSaveRequest.builder()
-                .category(Category.CONCERT)
-                .showName("")
-                .ageRestriction(AgeRestriction.ALL)
-                .runningTime(120)
-                .posterImgUrl("http://abc.jpg")
-                .showStartDate(LocalDate.of(2024, 1, 1))
-                .showEndDate(LocalDate.of(2024, 5, 31))
-                .placeId(1L)
-                .build();
-
-        when:
-        showService.createShow(request);
-
-        then:
-        def e = thrown(IllegalArgumentException.class)
-        e.message == "공연 이름을 입력해주세요."
-    }
-
-    def "공연 생성 시 포스터 이미지 url 이 null 인 경우 예외 발생"() {
-
-        given:
-        ShowSaveRequest request = ShowSaveRequest.builder()
-                .category(Category.CONCERT)
-                .showName("테스트")
-                .ageRestriction(AgeRestriction.ALL)
-                .runningTime(120)
-                .posterImgUrl(null)
-                .showStartDate(LocalDate.of(2024, 1, 1))
-                .showEndDate(LocalDate.of(2024, 5, 31))
-                .placeId(1L)
-                .build();
-
-        when:
-        showService.createShow(request);
-
-        then:
-        def e = thrown(IllegalArgumentException.class)
-        e.message == "공연 포스터 이미지 url을 입력해주세요."
-    }
-
-    def "공연 생성 시 포스터 이미지 url 이 빈 값인 경우 예외 발생"() {
-
-        given:
-        ShowSaveRequest request = ShowSaveRequest.builder()
-                .category(Category.CONCERT)
-                .showName("테스트")
-                .ageRestriction(AgeRestriction.ALL)
-                .runningTime(120)
-                .posterImgUrl("")
-                .showStartDate(LocalDate.of(2024, 1, 1))
-                .showEndDate(LocalDate.of(2024, 5, 31))
-                .placeId(1L)
-                .build();
-
-        when:
-        showService.createShow(request);
-
-        then:
-        def e = thrown(IllegalArgumentException.class)
-        e.message == "공연 포스터 이미지 url을 입력해주세요."
-    }
-
-    def "공연 생성 시 러닝 시간이 0이하 인 경우 예외 발생"() {
-
-        given:
-        ShowSaveRequest request = ShowSaveRequest.builder()
-                .category(Category.CONCERT)
-                .showName("테스트")
-                .ageRestriction(AgeRestriction.ALL)
-                .runningTime(0)
-                .posterImgUrl("http://abc.jpg")
-                .showStartDate(LocalDate.of(2024, 1, 1))
-                .showEndDate(LocalDate.of(2024, 5, 31))
-                .placeId(1L)
-                .build();
-
-        when:
-        showService.createShow(request);
-
-        then:
-        def e = thrown(IllegalArgumentException.class)
-        e.message == "공연 러닝 시간을 0 초과로 입력해주세요."
+        where:
+        showName | posterImgUrl     | runningTime || expected
+        null     | "http://abc.jpg" | 120         || "공연 이름을 입력해주세요."
+        ""       | "http://abc.jpg" | 120         || "공연 이름을 입력해주세요."
+        "테스트"    | null             | 120         || "공연 포스터 이미지 url을 입력해주세요."
+        "테스트"    | ""               | 120         || "공연 포스터 이미지 url을 입력해주세요."
+        "테스트"    | "http://abc.jpg" | 0           || "공연 러닝 시간을 0 초과로 입력해주세요."
     }
 
     def "공연 생성 시 장소 아이디 값에 해당하는 장소가 존재하지 않을 경우 예외 발생"() {

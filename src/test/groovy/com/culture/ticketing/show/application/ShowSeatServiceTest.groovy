@@ -43,12 +43,12 @@ class ShowSeatServiceTest extends Specification {
         }
     }
 
-    def "공연 좌석 정보 생성 시 공연 좌석 등급 아이디 값이 null 인 경우 예외 발생"() {
+    def "공연 좌석 정보 생성 시 요청 값에 null 이 존재하는 경우 예외 발생"() {
 
         given:
         ShowSeatSaveRequest request = ShowSeatSaveRequest.builder()
-                .showSeatGradeId(null)
-                .seatIds(Set.of(1L, 2L, 3L, 4L, 5L))
+                .showSeatGradeId(showSeatGradeId)
+                .seatIds(seatIds)
                 .build();
 
         when:
@@ -56,31 +56,20 @@ class ShowSeatServiceTest extends Specification {
 
         then:
         def e = thrown(NullPointerException.class)
-        e.message == "공연 좌석 등급 아이디를 입력해주세요."
+        e.message == expected
+
+        where:
+        showSeatGradeId | seatIds                    || expected
+        null            | Set.of(1L, 2L, 3L, 4L, 5L) || "공연 좌석 등급 아이디를 입력해주세요."
+        1L              | null                       || "좌석 아이디를 입력해주세요."
     }
 
-    def "공연 좌석 정보 생성 시 좌석 아이디 목록 값이 null 인 경우 예외 발생"() {
+    def "공연 좌석 정보 생성 시 요청 값에 적절하지 않은 값이 들어간 경우 예외 발생"() {
 
         given:
         ShowSeatSaveRequest request = ShowSeatSaveRequest.builder()
-                .showSeatGradeId(1L)
-                .seatIds(null)
-                .build();
-
-        when:
-        showSeatService.createShowSeat(request);
-
-        then:
-        def e = thrown(NullPointerException.class)
-        e.message == "좌석 아이디를 입력해주세요."
-    }
-
-    def "공연 좌석 정보 생성 시 좌석 아이디 목록 사이즈가 0인 경우 예외 발생"() {
-
-        given:
-        ShowSeatSaveRequest request = ShowSeatSaveRequest.builder()
-                .showSeatGradeId(1L)
-                .seatIds(Set.of())
+                .showSeatGradeId(showSeatGradeId)
+                .seatIds(seatIds as Set<Long>)
                 .build();
 
         when:
@@ -88,7 +77,11 @@ class ShowSeatServiceTest extends Specification {
 
         then:
         def e = thrown(IllegalArgumentException.class)
-        e.message == "좌석 아이디를 입력해주세요."
+        e.message == expected
+
+        where:
+        showSeatGradeId | seatIds  || expected
+        1L              | Set.of() || "좌석 아이디를 입력해주세요."
     }
 
     def "공연 좌석 정보 생성 시 공연 좌석 등급 아이디 값에 해당하는 공연 좌석 등급이 존재하지 않는 경우 예외 발생"() {
