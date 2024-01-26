@@ -4,29 +4,21 @@ import spock.lang.Specification
 
 class BookingShowSeatTest extends Specification {
 
-    def "예약_공연_좌석_생성_시_예약_번호_null_인_경우_예외_발생"() {
+    def "예약 공연 좌석 생성 시 요청 값이 null 인 경우 예외 발생"() {
 
         when:
         BookingShowSeat.builder()
-                .bookingId(null)
-                .showSeatId(1L)
+                .bookingId(bookingId)
+                .showSeatId(showSeatId)
                 .build();
 
         then:
         def e = thrown(NullPointerException.class)
-        e.message == "예약 번호를 입력해주세요."
-    }
+        e.message == expected
 
-    def "예약_공연_좌석_생성_시_공연_좌석_아이디가_null_인_경우_예외_발생"() {
-
-        when:
-        BookingShowSeat.builder()
-                .bookingId(1L)
-                .showSeatId(null)
-                .build();
-
-        then:
-        def e = thrown(NullPointerException.class)
-        e.message == "공연 좌석 아이디를 입력해주세요."
+        where:
+        bookingId | showSeatId || expected
+        null      | 1L         || "예약 번호를 입력해주세요."
+        1L        | null       || "공연 좌석 아이디를 입력해주세요."
     }
 }

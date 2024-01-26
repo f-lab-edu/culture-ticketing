@@ -14,15 +14,10 @@ import java.util.List;
 @NoArgsConstructor
 public class BookingSaveRequest {
 
-    @NotNull
     private Long userId;
-    @NotNull
     private Long roundId;
-    @PositiveOrZero
     private int totalPrice;
-    @NotNull
     private List<Long> showSeatIds;
-    @NotNull
     private List<BookingShowFloorSaveRequest> showFloors;
 
     @Builder

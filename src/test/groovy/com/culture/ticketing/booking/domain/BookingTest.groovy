@@ -4,52 +4,28 @@ import spock.lang.Specification
 
 class BookingTest extends Specification {
 
-    def "예약_생성_시_유저_아이디가_null_인_경우_예외_발생"() {
+    def "예약 생성 시 요청 값이 null 인 경우 예외 발생"() {
 
         when:
         Booking.builder()
-                .userId(null)
-                .roundId(1L)
+                .userId(userId)
+                .roundId(roundId)
                 .totalPrice(100000)
-                .bookingStatus(BookingStatus.SUCCESS)
+                .bookingStatus(bookingStatus)
                 .build();
 
         then:
         def e = thrown(NullPointerException.class)
-        e.message == "유저 아이디를 입력해주세요."
+        e.message == expected
+
+        where:
+        userId | roundId | bookingStatus         || expected
+        null   | 1L      | BookingStatus.SUCCESS || "유저 아이디를 입력해주세요."
+        1L     | null    | BookingStatus.SUCCESS || "회차 아이디를 입력해주세요."
+        1L     | 1L      | null                  || "예약 상태를 입력해주세요."
     }
 
-    def "예약_생성_시_회차_아이디가_null_인_경우_예외_발생"() {
-
-        when:
-        Booking.builder()
-                .userId(1L)
-                .roundId(null)
-                .totalPrice(100000)
-                .bookingStatus(BookingStatus.SUCCESS)
-                .build();
-
-        then:
-        def e = thrown(NullPointerException.class)
-        e.message == "회차 아이디를 입력해주세요."
-    }
-
-    def "예약_생성_시_예약_상태가_null_인_경우_예외_발생"() {
-
-        when:
-        Booking.builder()
-                .userId(1L)
-                .roundId(1L)
-                .totalPrice(100000)
-                .bookingStatus(null)
-                .build();
-
-        then:
-        def e = thrown(NullPointerException.class)
-        e.message == "예약 상태를 입력해주세요."
-    }
-
-    def "예약_생성_시_총_가격이_0미만_인_경우_예외_발생"() {
+    def "예약 생성 시 요청 값이 적절하지 않은 경우 예외 발생"() {
 
         when:
         Booking.builder()

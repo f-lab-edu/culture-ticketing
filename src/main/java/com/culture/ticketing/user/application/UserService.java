@@ -21,6 +21,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Transactional
     public void createUser(UserSaveRequest request) {
 
         Preconditions.checkArgument(StringUtils.hasText(request.getEmail()), "이메일을 입력해주세요.");
@@ -35,7 +36,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void checkDuplicatedUserEmailExists(String email) {
+    private void checkDuplicatedUserEmailExists(String email) {
         userRepository.findByEmail(email).ifPresent((user) -> {
             throw new DuplicatedUserEmailException();
         });

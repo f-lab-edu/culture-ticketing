@@ -4,35 +4,26 @@ import spock.lang.Specification
 
 class BookingShowFloorTest extends Specification {
 
-    def "예약_공연_플로어_정보_생성_시_예약_번호가_null_인_경우_예외_발생"() {
+    def "예약 공연 플로어 정보 생성 시 요청 값이 null 인 경우 예외 발생"() {
 
         when:
         BookingShowFloor.builder()
-                .bookingId(null)
-                .showFloorId(1L)
+                .bookingId(bookingId)
+                .showFloorId(showFloorId)
                 .entryOrder(100)
                 .build();
 
         then:
         def e = thrown(NullPointerException.class);
-        e.message == "예약 번호를 입력해주세요."
+        e.message == expected
+
+        where:
+        bookingId | showFloorId || expected
+        null      | 1L          || "예약 번호를 입력해주세요."
+        1L        | null        || "공연 플로어 아이디를 입력새주세요."
     }
 
-    def "예약_공연_플로어_정보_생성_시_공연_플로어_아이디가_null_인_경우_예외_발생"() {
-
-        when:
-        BookingShowFloor.builder()
-                .bookingId(1L)
-                .showFloorId(null)
-                .entryOrder(100)
-                .build();
-
-        then:
-        def e = thrown(NullPointerException.class);
-        e.message == "공연 플로어 아이디를 입력새주세요."
-    }
-
-    def "예약_공연_플로어_정보_생성_시_공연_플로어_입장번호가_0이하_인_경우_예외_발생"() {
+    def "예약 공연 플로어 정보 생성 시 요청 값이 적절하지 않은 경우 예외 발생"() {
 
         when:
         BookingShowFloor.builder()

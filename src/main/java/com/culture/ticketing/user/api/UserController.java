@@ -20,7 +20,7 @@ public class UserController {
     }
 
     @PostMapping
-    public void postUser(@Valid @RequestBody UserSaveRequest request) {
+    public void postUser(@RequestBody UserSaveRequest request) {
 
         userService.createUser(request);
     }
