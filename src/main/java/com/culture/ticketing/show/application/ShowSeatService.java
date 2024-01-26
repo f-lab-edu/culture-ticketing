@@ -41,4 +41,10 @@ public class ShowSeatService {
         List<ShowSeat> showSeats = request.toEntities();
         showSeatRepository.saveAll(showSeats);
     }
+
+    @Transactional(readOnly = true)
+    public int countByShowSeatGradeId(Long showSeatGradeId) {
+
+        return countByShowSeatGradeId(showSeatGradeId);
+    }
 }
