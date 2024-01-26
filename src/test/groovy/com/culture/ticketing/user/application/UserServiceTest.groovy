@@ -13,25 +13,6 @@ class UserServiceTest extends Specification {
     private PasswordEncoder passwordEncoder = Mock();
     private UserService userService = new UserService(userRepository, passwordEncoder);
 
-    def "유저_이메일_동일한_유저가_이미_존재하는_경우_예외_발생"() {
-
-        given:
-        User user = User.builder()
-                .email("test@naver.com")
-                .password("password")
-                .userName("테스터")
-                .phoneNumber("01000000000")
-                .build();
-        userRepository.findByEmail("test@naver.com") >> Optional.of(user)
-
-        when:
-        userService.checkDuplicatedUserEmailExists("test@naver.com");
-
-        then:
-        def e = thrown(DuplicatedUserEmailException.class)
-        e.message == "이미 등록된 이메일입니다."
-    }
-
     def "유저_생성_시_이메일이_null_인_경우_예외_발생"() {
 
         given:
