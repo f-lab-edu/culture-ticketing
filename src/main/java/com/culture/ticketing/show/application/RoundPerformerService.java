@@ -1,6 +1,8 @@
 package com.culture.ticketing.show.application;
 
+import com.culture.ticketing.show.application.dto.PerformerResponse;
 import com.culture.ticketing.show.application.dto.RoundPerformersSaveRequest;
+import com.culture.ticketing.show.domain.Performer;
 import com.culture.ticketing.show.domain.Round;
 import com.culture.ticketing.show.domain.RoundPerformer;
 import com.culture.ticketing.show.infra.RoundPerformerRepository;
@@ -8,7 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class RoundPerformerService {
@@ -37,8 +42,18 @@ public class RoundPerformerService {
     }
 
     @Transactional(readOnly = true)
-    public List<RoundPerformer> findByRoundIds(List<Long> roundIds) {
+    public Map<Long, List<PerformerResponse>> findPerformersMapByRoundId(Long showId, List<Long> roundIds) {
 
-        return roundPerformerRepository.findByRoundIdIn(roundIds);
+        List<RoundPerformer> roundPerformers = roundPerformerRepository.findByRoundIdIn(roundIds);
+        List<Long> performerIds = roundPerformers.stream()
+                .map(RoundPerformer::getPerformerId)
+                .collect(Collectors.toList());
+
+        Map<Long, Performer> performerMapById = performerService.findShowPerformers(showId, performerIds).stream()
+                .collect(Collectors.toMap(Performer::getPerformerId, Function.identity()));
+
+        return roundPerformers.stream()
+                .collect(Collectors.groupingBy(RoundPerformer::getRoundId, Collectors.mapping(roundPerformer ->
+                        new PerformerResponse(performerMapById.get(roundPerformer.getPerformerId())), Collectors.toList())));
     }
 }
