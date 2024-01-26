@@ -10,9 +10,7 @@ import javax.validation.constraints.Positive;
 @NoArgsConstructor
 public class BookingShowFloorSaveRequest {
 
-    @NotNull
     private Long showFloorId;
-    @Positive
     private int entryOrder;
 
     public BookingShowFloorSaveRequest(Long showFloorId, int entryOrder) {
