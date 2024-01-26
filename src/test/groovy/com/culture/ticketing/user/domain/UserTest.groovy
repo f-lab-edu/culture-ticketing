@@ -4,123 +4,29 @@ import spock.lang.Specification
 
 class UserTest extends Specification {
 
-    def "유저_이메일이_null_인_경우_예외_발생"() {
+    def "유저 생성 시 요청 값이 적절하지 않은 경우 예외 발생"() {
 
         when:
         User.builder()
-                .email(null)
-                .password("password")
-                .userName("테스터")
-                .phoneNumber("01000000000")
+                .email(email)
+                .password(password)
+                .userName(userName)
+                .phoneNumber(phoneNumber)
                 .build();
 
         then:
         def e = thrown(IllegalArgumentException.class)
-        e.message == "이메일을 입력해주세요."
-    }
+        e.message == expected
 
-    def "유저_이메일이_빈_값인_경우_예외_발생"() {
-
-        when:
-        User.builder()
-                .email("")
-                .password("password")
-                .userName("테스터")
-                .phoneNumber("01000000000")
-                .build();
-
-        then:
-        def e = thrown(IllegalArgumentException.class)
-        e.message == "이메일을 입력해주세요."
-    }
-
-    def "비밀번호가_null_인_경우_예외_발생"() {
-
-        when:
-        User.builder()
-                .email("test@naver.com")
-                .password(null)
-                .userName("테스터")
-                .phoneNumber("01000000000")
-                .build();
-
-        then:
-        def e = thrown(IllegalArgumentException.class)
-        e.message == "비밀번호를 입력해주세요."
-    }
-
-    def "비밀번호가_빈_값인_경우_예외_발생"() {
-
-        when:
-        User.builder()
-                .email("test@naver.com")
-                .password("")
-                .userName("테스터")
-                .phoneNumber("01000000000")
-                .build();
-
-        then:
-        def e = thrown(IllegalArgumentException.class)
-        e.message == "비밀번호를 입력해주세요."
-    }
-
-    def "유저_이름이_null_인_경우_예외_발생"() {
-
-        when:
-        User.builder()
-                .email("test@naver.com")
-                .password("password")
-                .userName(null)
-                .phoneNumber("01000000000")
-                .build();
-
-        then:
-        def e = thrown(IllegalArgumentException.class)
-        e.message == "이름을 입력해주세요."
-    }
-
-    def "유저_이름이_빈_값인_경우_예외_발생"() {
-
-        when:
-        User.builder()
-                .email("test@naver.com")
-                .password("password")
-                .userName("")
-                .phoneNumber("01000000000")
-                .build();
-
-        then:
-        def e = thrown(IllegalArgumentException.class)
-        e.message == "이름을 입력해주세요."
-    }
-
-    def "연락처가_null_인_경우_예외_발생"() {
-
-        when:
-        User.builder()
-                .email("test@naver.com")
-                .password("password")
-                .userName("테스터")
-                .phoneNumber(null)
-                .build();
-
-        then:
-        def e = thrown(IllegalArgumentException.class)
-        e.message == "연락처를 입력해주세요."
-    }
-
-    def "연락처가_빈_값인_경우_예외_발생"() {
-
-        when:
-        User.builder()
-                .email("test@naver.com")
-                .password("password")
-                .userName("테스터")
-                .phoneNumber("")
-                .build();
-
-        then:
-        def e = thrown(IllegalArgumentException.class)
-        e.message == "연락처를 입력해주세요."
+        where:
+        email            | password   | userName | phoneNumber   || expected
+        null             | "password" | "테스터"    | "01000000000" || "이메일을 입력해주세요."
+        ""               | "password" | "테스터"    | "01000000000" || "이메일을 입력해주세요."
+        "test@naver.com" | null       | "테스터"    | "01000000000" || "비밀번호를 입력해주세요."
+        "test@naver.com" | ""         | "테스터"    | "01000000000" || "비밀번호를 입력해주세요."
+        "test@naver.com" | "password" | null     | "01000000000" || "이름을 입력해주세요."
+        "test@naver.com" | "password" | ""       | "01000000000" || "이름을 입력해주세요."
+        "test@naver.com" | "password" | "테스터"    | null          || "연락처를 입력해주세요."
+        "test@naver.com" | "password" | "테스터"    | ""            || "연락처를 입력해주세요."
     }
 }
