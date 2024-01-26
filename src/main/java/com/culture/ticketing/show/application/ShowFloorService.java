@@ -1,6 +1,5 @@
 package com.culture.ticketing.show.application;
 
-import com.culture.ticketing.common.response.BaseResponseStatus;
 import com.culture.ticketing.show.application.dto.ShowFloorSaveRequest;
 import com.culture.ticketing.show.domain.ShowFloor;
 import com.culture.ticketing.show.exception.ShowSeatGradeNotFoundException;
@@ -11,10 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.Objects;
-
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_FLOOR_NAME;
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_SEAT_GRADE_ID;
-import static com.culture.ticketing.common.response.BaseResponseStatus.NEGATIVE_SHOW_FLOOR_COUNT;
 
 @Service
 public class ShowFloorService {
@@ -30,15 +25,14 @@ public class ShowFloorService {
     @Transactional
     public void createShowFloor(ShowFloorSaveRequest request) {
 
-        Objects.requireNonNull(request.getShowSeatGradeId(), EMPTY_SHOW_SEAT_GRADE_ID.getMessage(request.getShowSeatGradeId()));
-        Preconditions.checkArgument(StringUtils.hasText(request.getShowFloorName()), EMPTY_SHOW_FLOOR_NAME.getMessage());
-        Preconditions.checkArgument(request.getCount() > 0, NEGATIVE_SHOW_FLOOR_COUNT.getMessage());
+        Objects.requireNonNull(request.getShowSeatGradeId(), "공연 좌석 등급 아이디를 입력해주세요.");
+        Preconditions.checkArgument(StringUtils.hasText(request.getShowFloorName()), "공연 플로어 구역명을 입력해주세요.");
+        Preconditions.checkArgument(request.getCount() > 0, "공연 플로어 인원수를 1 이상 숫자로 입력해주세요.");
 
-        if (!showSeatGradeService.existsById(request.getShowSeatGradeId())) {
+        if (showSeatGradeService.notExistsById(request.getShowSeatGradeId())) {
             throw new ShowSeatGradeNotFoundException(request.getShowSeatGradeId());
         }
 
-        ShowFloor showFloor = request.toEntity();
-        showFloorRepository.save(showFloor);
+        showFloorRepository.save(request.toEntity());
     }
 }

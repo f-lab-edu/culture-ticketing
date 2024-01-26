@@ -1,21 +1,14 @@
 package com.culture.ticketing.place.domain;
 
 import com.culture.ticketing.common.entity.BaseEntity;
-import com.culture.ticketing.common.exception.BaseException;
-import com.culture.ticketing.common.response.BaseResponseStatus;
 import com.google.common.base.Preconditions;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.util.Objects;
-
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_PLACE_ID;
-import static com.culture.ticketing.common.response.BaseResponseStatus.NEGATIVE_SEAT_NUMBER;
-import static com.culture.ticketing.common.response.BaseResponseStatus.NEGATIVE_SEAT_ROW;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -28,12 +21,6 @@ public class Seat extends BaseEntity {
     @Column(name = "seat_id", nullable = false, updatable = false)
     private Long seatId;
 
-    @Column(name = "coordinate_x", nullable = false)
-    private int coordinateX;
-
-    @Column(name = "coordinate_y", nullable = false)
-    private int coordinateY;
-
     @Column(name = "seat_row", nullable = false)
     private int seatRow;
 
@@ -44,14 +31,13 @@ public class Seat extends BaseEntity {
     private Long areaId;
 
     @Builder
-    public Seat(int coordinateX, int coordinateY, int seatRow, int seatNumber, Long areaId) {
+    public Seat(Long seatId, int seatRow, int seatNumber, Long areaId) {
 
-        Objects.requireNonNull(areaId, EMPTY_PLACE_ID.getMessage());
-        Preconditions.checkArgument(seatRow > 0, NEGATIVE_SEAT_ROW.getMessage());
-        Preconditions.checkArgument(seatNumber > 0, NEGATIVE_SEAT_NUMBER.getMessage());
+        Objects.requireNonNull(areaId, "구역 아이디를 입력해주세요.");
+        Preconditions.checkArgument(seatRow > 0, "좌석 행을 1 이상 숫자로 입력해주세요.");
+        Preconditions.checkArgument(seatNumber > 0, "좌석 번호를 1 이상 숫자로 입력해주세요.");
 
-        this.coordinateX = coordinateX;
-        this.coordinateY = coordinateY;
+        this.seatId = seatId;
         this.seatRow = seatRow;
         this.seatNumber = seatNumber;
         this.areaId = areaId;

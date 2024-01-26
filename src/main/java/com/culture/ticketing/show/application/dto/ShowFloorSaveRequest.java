@@ -1,6 +1,7 @@
 package com.culture.ticketing.show.application.dto;
 
 import com.culture.ticketing.show.domain.ShowFloor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,18 +15,21 @@ public class ShowFloorSaveRequest {
 
     @NotBlank
     private String showFloorName;
-    private int coordinateX;
-    private int coordinateY;
     @Positive
     private int count;
     @NotNull
     private Long showSeatGradeId;
 
+    @Builder
+    public ShowFloorSaveRequest(String showFloorName, int count, Long showSeatGradeId) {
+        this.showFloorName = showFloorName;
+        this.count = count;
+        this.showSeatGradeId = showSeatGradeId;
+    }
+
     public ShowFloor toEntity() {
         return ShowFloor.builder()
                 .showFloorName(showFloorName)
-                .coordinateX(coordinateX)
-                .coordinateY(coordinateY)
                 .count(count)
                 .showSeatGradeId(showSeatGradeId)
                 .build();

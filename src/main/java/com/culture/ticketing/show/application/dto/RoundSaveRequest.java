@@ -2,14 +2,13 @@ package com.culture.ticketing.show.application.dto;
 
 import com.culture.ticketing.show.domain.Round;
 import com.culture.ticketing.show.domain.Show;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
 
 @Getter
 @NoArgsConstructor
@@ -20,7 +19,12 @@ public class RoundSaveRequest {
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'hh:mm:ss")
     private LocalDateTime roundStartDateTime;
-    private Set<Long> performerIds;
+
+    @Builder
+    public RoundSaveRequest(Long showId, LocalDateTime roundStartDateTime) {
+        this.showId = showId;
+        this.roundStartDateTime = roundStartDateTime;
+    }
 
     public Round toEntity(Show show) {
         return Round.builder()

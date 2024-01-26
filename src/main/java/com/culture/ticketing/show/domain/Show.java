@@ -12,15 +12,6 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_AGE_RESTRICTION;
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_CATEGORY;
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_END_DATE;
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_NAME;
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_PLACE_ID;
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_POSTER_IMG_URL;
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_START_DATE;
-import static com.culture.ticketing.common.response.BaseResponseStatus.NOT_POSITIVE_SHOW_RUNNING_TIME;
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -55,19 +46,20 @@ public class Show extends BaseEntity {
     private Long placeId;
 
     @Builder
-    public Show(Category category, String showName, AgeRestriction ageRestriction,
+    public Show(Long showId, Category category, String showName, AgeRestriction ageRestriction,
                 int runningTime, String notice, String posterImgUrl, String description,
                 LocalDate showStartDate, LocalDate showEndDate, Long placeId) {
 
-        Objects.requireNonNull(category, EMPTY_SHOW_CATEGORY.getMessage());
-        Objects.requireNonNull(ageRestriction, EMPTY_SHOW_AGE_RESTRICTION.getMessage());
-        Objects.requireNonNull(placeId, EMPTY_SHOW_PLACE_ID.getMessage());
-        Objects.requireNonNull(showStartDate, EMPTY_SHOW_START_DATE.getMessage());
-        Objects.requireNonNull(showEndDate, EMPTY_SHOW_END_DATE.getMessage());
-        Preconditions.checkArgument(StringUtils.hasText(showName), EMPTY_SHOW_NAME.getMessage());
-        Preconditions.checkArgument(StringUtils.hasText(posterImgUrl), EMPTY_SHOW_POSTER_IMG_URL.getMessage());
-        Preconditions.checkArgument(runningTime > 0, NOT_POSITIVE_SHOW_RUNNING_TIME.getMessage());
+        Objects.requireNonNull(category, "공연 카테고리를 입력해주세요.");
+        Objects.requireNonNull(ageRestriction, "공연 카테고리를 입력해주세요.");
+        Objects.requireNonNull(placeId, "공연 장소 아이디를 입력해주세요.");
+        Objects.requireNonNull(showStartDate, "공연 시작 날짜를 입력해주세요.");
+        Objects.requireNonNull(showEndDate, "공연 종료 날짜를 입력해주세요.");
+        Preconditions.checkArgument(StringUtils.hasText(showName), "공연 이름을 입력해주세요.");
+        Preconditions.checkArgument(StringUtils.hasText(posterImgUrl), "공연 포스터 이미지 url을 입력해주세요.");
+        Preconditions.checkArgument(runningTime > 0, "공연 러닝 시간을 0 초과로 입력해주세요.");
 
+        this.showId = showId;
         this.category = category;
         this.showName = showName;
         this.ageRestriction = ageRestriction;

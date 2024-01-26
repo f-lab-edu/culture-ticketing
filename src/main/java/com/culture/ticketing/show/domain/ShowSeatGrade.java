@@ -11,10 +11,6 @@ import org.springframework.util.StringUtils;
 import javax.persistence.*;
 import java.util.Objects;
 
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_ID;
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_SEAT_GRADE;
-import static com.culture.ticketing.common.response.BaseResponseStatus.NEGATIVE_SHOW_SEAT_PRICE;
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -38,9 +34,9 @@ public class ShowSeatGrade extends BaseEntity {
     @Builder
     public ShowSeatGrade(String seatGrade, int price, Long showId) {
 
-        Objects.requireNonNull(showId, EMPTY_SHOW_ID.getMessage());
-        Preconditions.checkArgument(StringUtils.hasText(seatGrade), EMPTY_SHOW_SEAT_GRADE.getMessage());
-        Preconditions.checkArgument(price > 0, NEGATIVE_SHOW_SEAT_PRICE.getMessage());
+        Objects.requireNonNull(showId, "공연 아이디를 입력해주세요.");
+        Preconditions.checkArgument(StringUtils.hasText(seatGrade), "공연 좌석 등급을 입력해주세요.");
+        Preconditions.checkArgument(price >= 0, "공연 좌석 가격을 0 이상으로 입력해주세요.");
 
         this.seatGrade = seatGrade;
         this.price = price;

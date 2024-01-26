@@ -1,11 +1,8 @@
 package com.culture.ticketing.place.exception;
 
-import com.culture.ticketing.common.exception.BaseException;
-import com.culture.ticketing.common.response.BaseResponseStatus;
-
-public class PlaceNotFoundException extends BaseException {
+public class PlaceNotFoundException extends RuntimeException {
 
     public PlaceNotFoundException(Long placeId) {
-        super(BaseResponseStatus.NOT_FOUND_PLACE, placeId);
+        super(String.format("존재하지 않는 장소입니다. (placeId = %d)", placeId));
     }
 }

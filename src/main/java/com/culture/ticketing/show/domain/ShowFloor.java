@@ -15,10 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Objects;
 
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_FLOOR_NAME;
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_SHOW_SEAT_GRADE_ID;
-import static com.culture.ticketing.common.response.BaseResponseStatus.NEGATIVE_SHOW_FLOOR_COUNT;
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -33,12 +29,6 @@ public class ShowFloor {
     @Column(name = "show_floor_name", nullable = false)
     private String showFloorName;
 
-    @Column(name = "coordinate_x", nullable = false)
-    private int coordinateX;
-
-    @Column(name = "coordinate_y", nullable = false)
-    private int coordinateY;
-
     @Column(name = "count", nullable = false)
     private int count;
 
@@ -46,15 +36,13 @@ public class ShowFloor {
     private Long showSeatGradeId;
 
     @Builder
-    public ShowFloor(String showFloorName, int coordinateX, int coordinateY, int count, Long showSeatGradeId) {
+    public ShowFloor(String showFloorName, int count, Long showSeatGradeId) {
 
-        Objects.requireNonNull(showSeatGradeId, EMPTY_SHOW_SEAT_GRADE_ID.getMessage(showSeatGradeId));
-        Preconditions.checkArgument(StringUtils.hasText(showFloorName), EMPTY_SHOW_FLOOR_NAME.getMessage());
-        Preconditions.checkArgument(count > 0, NEGATIVE_SHOW_FLOOR_COUNT.getMessage());
+        Objects.requireNonNull(showSeatGradeId, "공연 좌석 등급 아이디를 입력해주세요.");
+        Preconditions.checkArgument(StringUtils.hasText(showFloorName), "공연 플로어 구역명을 입력해주세요.");
+        Preconditions.checkArgument(count > 0, "공연 플로어 인원수를 1 이상 숫자로 입력해주세요.");
 
         this.showFloorName = showFloorName;
-        this.coordinateX = coordinateX;
-        this.coordinateY = coordinateY;
         this.count = count;
         this.showSeatGradeId = showSeatGradeId;
     }

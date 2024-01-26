@@ -1,6 +1,7 @@
 package com.culture.ticketing.place.application.dto;
 
 import com.culture.ticketing.place.domain.Seat;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,8 +13,6 @@ import javax.validation.constraints.Positive;
 @NoArgsConstructor
 public class PlaceSeatSaveRequest {
 
-    private int coordinateX;
-    private int coordinateY;
     @Positive
     private int seatRow;
     @Positive
@@ -21,10 +20,15 @@ public class PlaceSeatSaveRequest {
     @NotNull
     private Long areaId;
 
+    @Builder
+    public PlaceSeatSaveRequest(int seatRow, int seatNumber, Long areaId) {
+        this.seatRow = seatRow;
+        this.seatNumber = seatNumber;
+        this.areaId = areaId;
+    }
+
     public Seat toEntity() {
         return Seat.builder()
-                .coordinateX(coordinateX)
-                .coordinateY(coordinateY)
                 .seatRow(seatRow)
                 .seatNumber(seatNumber)
                 .areaId(areaId)

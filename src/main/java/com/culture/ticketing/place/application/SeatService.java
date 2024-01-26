@@ -4,16 +4,16 @@ import com.culture.ticketing.place.application.dto.PlaceSeatSaveRequest;
 import com.culture.ticketing.place.domain.Seat;
 import com.culture.ticketing.place.exception.AreaNotFoundException;
 import com.culture.ticketing.place.exception.DuplicatedPlaceSeatException;
+import com.culture.ticketing.place.exception.SeatNotFoundException;
 import com.culture.ticketing.place.infra.SeatRepository;
 import com.google.common.base.Preconditions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
-
-import static com.culture.ticketing.common.response.BaseResponseStatus.EMPTY_PLACE_ID;
-import static com.culture.ticketing.common.response.BaseResponseStatus.NEGATIVE_SEAT_NUMBER;
-import static com.culture.ticketing.common.response.BaseResponseStatus.NEGATIVE_SEAT_ROW;
+import java.util.Set;
 
 @Service
 public class SeatService {
@@ -29,11 +29,11 @@ public class SeatService {
     @Transactional
     public void createPlaceSeat(PlaceSeatSaveRequest request) {
 
-        Objects.requireNonNull(request.getAreaId(), EMPTY_PLACE_ID.getMessage());
-        Preconditions.checkArgument(request.getSeatRow() > 0, NEGATIVE_SEAT_ROW.getMessage());
-        Preconditions.checkArgument(request.getSeatNumber() > 0, NEGATIVE_SEAT_NUMBER.getMessage());
+        Objects.requireNonNull(request.getAreaId(), "구역 아이디를 입력해주세요.");
+        Preconditions.checkArgument(request.getSeatRow() > 0, "좌석 행을 1 이상 숫자로 입력해주세요.");
+        Preconditions.checkArgument(request.getSeatNumber() > 0, "좌석 번호를 1 이상 숫자로 입력해주세요.");
 
-        if (!areaService.existsById(request.getAreaId())) {
+        if (areaService.notExistsById(request.getAreaId())) {
             throw new AreaNotFoundException(request.getAreaId());
         }
 
@@ -43,13 +43,22 @@ public class SeatService {
     }
 
     private void checkDuplicatedSeat(Seat seat) {
-        seatRepository.findByAreaIdAndCoordinateXAndCoordinateY(seat.getAreaId(), seat.getCoordinateX(), seat.getCoordinateY())
-                .ifPresent(s -> {
-                    throw new DuplicatedPlaceSeatException();
-                });
         seatRepository.findByAreaIdAndSeatRowAndSeatNumber(seat.getAreaId(), seat.getSeatRow(), seat.getSeatNumber())
                 .ifPresent(s -> {
                     throw new DuplicatedPlaceSeatException();
                 });
+    }
+
+    @Transactional(readOnly = true)
+    public void checkSeatsExists(Set<Long> seatIds) {
+
+        Set<Long> copySeatIds = new HashSet<>(seatIds);
+        List<Seat> foundSeats = seatRepository.findBySeatIdIn(copySeatIds);
+        if (copySeatIds.size() != foundSeats.size()) {
+            for (Seat foundSeat : foundSeats) {
+                copySeatIds.remove(foundSeat.getSeatId());
+            }
+            throw new SeatNotFoundException(copySeatIds.toString());
+        }
     }
 }
