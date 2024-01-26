@@ -1,6 +1,7 @@
 package com.culture.ticketing.show.application.dto;
 
 import com.culture.ticketing.show.domain.ShowSeat;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +18,12 @@ public class ShowSeatSaveRequest {
     private Long showSeatGradeId;
     @NotNull
     private Set<Long> seatIds;
+
+    @Builder
+    public ShowSeatSaveRequest(Long showSeatGradeId, Set<Long> seatIds) {
+        this.showSeatGradeId = showSeatGradeId;
+        this.seatIds = seatIds;
+    }
 
     public List<ShowSeat> toEntities() {
         return seatIds.stream()

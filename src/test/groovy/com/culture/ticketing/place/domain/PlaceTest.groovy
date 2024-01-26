@@ -4,7 +4,7 @@ import spock.lang.Specification
 
 class PlaceTest extends Specification {
 
-    def "Place_생성_시_위도가_null_이면_예외_발생"() {
+    def "Place 생성 시 위도가 null 이면 예외 발생"() {
 
         when:
         Place.builder()
@@ -19,7 +19,7 @@ class PlaceTest extends Specification {
         e.message == "정확한 장소 위도를 입력해주세요."
     }
 
-    def "Place_생성_시_경도가_null_이면_예외_발생"() {
+    def "Place 생성 시 경도가 null 이면 예외 발생"() {
 
         when:
         Place.builder()
@@ -34,7 +34,7 @@ class PlaceTest extends Specification {
         e.message == "정확한 장소 경도를 입력해주세요."
     }
 
-    def "Place_생성_시_장소 주소가_null_이면_예외_발생"() {
+    def "Place 생성 시 장소 주소가 null 이면 예외 발생"() {
 
         when:
         Place.builder()
@@ -49,7 +49,7 @@ class PlaceTest extends Specification {
         e.message == "장소 주소를 입력해주세요."
     }
 
-    def "Place_생성_시_장소 주소가_빈_값_이면_예외_발생"() {
+    def "Place 생성 시 장소 주소가 빈 값이면 예외 발생"() {
 
         when:
         Place.builder()
@@ -64,7 +64,7 @@ class PlaceTest extends Specification {
         e.message == "장소 주소를 입력해주세요."
     }
 
-    def "Place_생성_시_위도_범위가_-90_미만인_경우_예외_발생"() {
+    def "Place 생성 시 위도 범위가 -90 미만인 경우 예외 발생"() {
 
         when:
         Place.builder()
@@ -79,7 +79,7 @@ class PlaceTest extends Specification {
         e.message == "장소 위도 범위를 벗어난 입력값입니다."
     }
 
-    def "Place_생성_시_위도_범위가_90_초과인_경우_예외_발생"() {
+    def "Place 생성 시 위도 범위가 90 초과인 경우 예외 발생"() {
 
         when:
         Place.builder()
@@ -94,7 +94,7 @@ class PlaceTest extends Specification {
         e.message == "장소 위도 범위를 벗어난 입력값입니다."
     }
 
-    def "Place_생성_시_경도_범위가_-180_미만인_경우_예외_발생"() {
+    def "Place 생성 시 경도 범위가 -180 미만인 경우 예외 발생"() {
 
         when:
         Place.builder()
@@ -109,7 +109,7 @@ class PlaceTest extends Specification {
         e.message == "장소 경도 범위를 벗어난 입력값입니다."
     }
 
-    def "Place_생성_시_경도_범위가_180_초과인_경우_예외_발생"() {
+    def "Place 생성 시 경도 범위가 180 초과인 경우 예외 발생"() {
 
         when:
         Place.builder()
