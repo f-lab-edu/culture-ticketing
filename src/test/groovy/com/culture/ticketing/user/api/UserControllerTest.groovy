@@ -28,7 +28,7 @@ class UserControllerTest extends Specification {
     @SpringBean
     private UserService userService = Mock();
 
-    def "유저_생성_성공"() {
+    def "유저 생성 성공"() {
 
         given:
         UserSaveRequest request = UserSaveRequest.builder()

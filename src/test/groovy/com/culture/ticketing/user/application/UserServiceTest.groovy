@@ -41,7 +41,7 @@ class UserServiceTest extends Specification {
         "test@naver.com" | "password" | "테스터"    | ""            || "연락처를 입력해주세요."
     }
 
-    def "유저_생성_시_유저_이메일_동일한_유저가_이미_존재하는_경우_예외_발생"() {
+    def "유저 생성 시 유저 이메일 동일한 유저가 이미 존재하는 경우 예외 발생"() {
 
         given:
         UserSaveRequest request = UserSaveRequest.builder()
