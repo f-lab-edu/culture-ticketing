@@ -21,7 +21,7 @@ class BookingFacadeServiceTest extends Specification {
     private ShowSeatGradeService showSeatGradeService = Mock();
     private BookingFacadeService bookingFacadeService = new BookingFacadeService(bookingService, bookingShowFloorService, bookingShowSeatService, showSeatService, showFloorService, showSeatGradeService);
 
-    def "예약_생성_시_유저_아이디가_null_인_경우_예외_발생"() {
+    def "예약 생성 시 요청 값이 null 인 경우 예외 발생"() {
 
         given:
         List<Long> showSeatIds = [1L, 2L]
@@ -30,8 +30,8 @@ class BookingFacadeServiceTest extends Specification {
                 new BookingShowFloorSaveRequest(1L, 131)
         ]
         BookingSaveRequest request = BookingSaveRequest.builder()
-                .userId(null)
-                .roundId(1L)
+                .userId(userId)
+                .roundId(roundId)
                 .totalPrice(100000)
                 .showSeatIds(showSeatIds)
                 .showFloors(bookingShowFloors)
@@ -42,47 +42,23 @@ class BookingFacadeServiceTest extends Specification {
 
         then:
         def e = thrown(NullPointerException.class)
-        e.message == "유저 아이디를 입력해주세요."
+        e.message == expected
+
+        where:
+        userId | roundId || expected
+        null   | 1L      || "유저 아이디를 입력해주세요."
+        1L     | null    || "회차 아이디를 입력해주세요."
     }
 
-    def "예약_생성_시_회차_아이디가_null_인_경우_예외_발생"() {
+    def "예약 생성 시 요청 값이 적절하지 않은 경우 예외 발생"() {
 
         given:
-        List<Long> showSeatIds = [1L, 2L]
-        List<BookingShowFloorSaveRequest> bookingShowFloors = [
-                new BookingShowFloorSaveRequest(1L, 100),
-                new BookingShowFloorSaveRequest(1L, 131),
-        ]
-        BookingSaveRequest request = BookingSaveRequest.builder()
-                .userId(1L)
-                .roundId(null)
-                .totalPrice(100000)
-                .showSeatIds(showSeatIds)
-                .showFloors(bookingShowFloors)
-                .build();
-
-        when:
-        bookingFacadeService.createBooking(request);
-
-        then:
-        def e = thrown(NullPointerException.class)
-        e.message == "회차 아이디를 입력해주세요."
-    }
-
-    def "예약_생성_시_가격이_0미만_인_경우_예외_발생"() {
-
-        given:
-        List<Long> showSeatIds = [1L, 2L]
-        List<BookingShowFloorSaveRequest> bookingShowFloors = [
-                new BookingShowFloorSaveRequest(1L, 100),
-                new BookingShowFloorSaveRequest(1L, 131),
-        ]
         BookingSaveRequest request = BookingSaveRequest.builder()
                 .userId(1L)
                 .roundId(1L)
-                .totalPrice(-1)
+                .totalPrice(totalPrice)
                 .showSeatIds(showSeatIds)
-                .showFloors(bookingShowFloors)
+                .showFloors(showFloors)
                 .build();
 
         when:
@@ -90,73 +66,14 @@ class BookingFacadeServiceTest extends Specification {
 
         then:
         def e = thrown(IllegalArgumentException.class)
-        e.message == "총 가격은 0 이상 숫자로 입력해주세요."
-    }
+        e.message == expected
 
-    def "예약_생성_시_예약_좌석_정보가_null_인_경우_예외_발생"() {
-
-        given:
-        List<Long> showSeatIds = null;
-        List<BookingShowFloorSaveRequest> bookingShowFloors = [
-                new BookingShowFloorSaveRequest(1L, 100),
-                new BookingShowFloorSaveRequest(1L, 131),
-        ]
-        BookingSaveRequest request = BookingSaveRequest.builder()
-                .userId(1L)
-                .roundId(1L)
-                .totalPrice(100000)
-                .showSeatIds(showSeatIds)
-                .showFloors(bookingShowFloors)
-                .build();
-
-        when:
-        bookingFacadeService.createBooking(request);
-
-        then:
-        def e = thrown(IllegalArgumentException.class)
-        e.message == "예약 좌석 정보를 입력해주세요."
-    }
-
-    def "예약_생성_시_예약_플로어_정보가_null_인_경우_예외_발생"() {
-
-        given:
-        List<Long> showSeatIds = [1L, 2L]
-        List<BookingShowFloorSaveRequest> bookingShowFloors = null
-        BookingSaveRequest request = BookingSaveRequest.builder()
-                .userId(1L)
-                .roundId(1L)
-                .totalPrice(100000)
-                .showSeatIds(showSeatIds)
-                .showFloors(bookingShowFloors)
-                .build();
-
-        when:
-        bookingFacadeService.createBooking(request);
-
-        then:
-        def e = thrown(IllegalArgumentException.class)
-        e.message == "예약 좌석 정보를 입력해주세요."
-    }
-
-    def "예약_생성_시_예약_좌석_정보와_예약_플로어_정보가_하나도_없는_경우_예외_발생"() {
-
-        given:
-        List<Long> showSeatIds = []
-        List<BookingShowFloorSaveRequest> bookingShowFloors = []
-        BookingSaveRequest request = BookingSaveRequest.builder()
-                .userId(1L)
-                .roundId(1L)
-                .totalPrice(100000)
-                .showSeatIds(showSeatIds)
-                .showFloors(bookingShowFloors)
-                .build();
-
-        when:
-        bookingFacadeService.createBooking(request);
-
-        then:
-        def e = thrown(IllegalArgumentException.class)
-        e.message == "예약 좌석 정보를 입력해주세요."
+        where:
+        totalPrice | showSeatIds | showFloors                                                                           || expected
+        -1         | [1L, 2L]    | [new BookingShowFloorSaveRequest(1L, 100), new BookingShowFloorSaveRequest(1L, 131)] || "총 가격은 0 이상 숫자로 입력해주세요."
+        100000     | null        | [new BookingShowFloorSaveRequest(1L, 100), new BookingShowFloorSaveRequest(1L, 131)] || "예약 좌석 정보를 입력해주세요."
+        100000     | [1L, 2L]    | null                                                                                 || "예약 좌석 정보를 입력해주세요."
+        100000     | []          | []                                                                                   || "예약 좌석 정보를 입력해주세요."
     }
 
     def "예약_총_금액_일치_여부_확인"() {
