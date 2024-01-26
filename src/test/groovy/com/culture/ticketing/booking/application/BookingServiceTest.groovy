@@ -7,16 +7,12 @@ import com.culture.ticketing.show.application.RoundService
 import com.culture.ticketing.show.exception.RoundNotFoundException
 import com.culture.ticketing.user.application.UserService
 import com.culture.ticketing.user.exception.UserNotFoundException
-import org.spockframework.spring.SpringBean
 import spock.lang.Specification
 
 class BookingServiceTest extends Specification {
 
-    @SpringBean
     private BookingRepository bookingRepository = Mock();
-    @SpringBean
     private UserService userService = Mock();
-    @SpringBean
     private RoundService roundService = Mock();
     private BookingService bookingService = new BookingService(bookingRepository, userService, roundService);
 

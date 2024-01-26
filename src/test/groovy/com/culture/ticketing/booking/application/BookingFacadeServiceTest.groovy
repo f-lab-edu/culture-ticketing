@@ -9,22 +9,15 @@ import com.culture.ticketing.show.application.ShowSeatService
 import com.culture.ticketing.show.domain.ShowFloor
 import com.culture.ticketing.show.domain.ShowSeat
 import com.culture.ticketing.show.domain.ShowSeatGrade
-import org.spockframework.spring.SpringBean
 import spock.lang.Specification
 
 class BookingFacadeServiceTest extends Specification {
 
-    @SpringBean
     private BookingService bookingService = Mock();
-    @SpringBean
     private BookingShowFloorService bookingShowFloorService = Mock();
-    @SpringBean
     private BookingShowSeatService bookingShowSeatService = Mock();
-    @SpringBean
     private ShowSeatService showSeatService = Mock();
-    @SpringBean
     private ShowFloorService showFloorService = Mock();
-    @SpringBean
     private ShowSeatGradeService showSeatGradeService = Mock();
     private BookingFacadeService bookingFacadeService = new BookingFacadeService(bookingService, bookingShowFloorService, bookingShowSeatService, showSeatService, showFloorService, showSeatGradeService);
 
