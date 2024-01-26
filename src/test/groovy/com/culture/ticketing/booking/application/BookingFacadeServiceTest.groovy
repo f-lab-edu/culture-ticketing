@@ -24,11 +24,11 @@ class BookingFacadeServiceTest extends Specification {
     def "예약_생성_시_유저_아이디가_null_인_경우_예외_발생"() {
 
         given:
-        List<Long> showSeatIds = List.of(1L, 2L);
-        List<BookingShowFloorSaveRequest> bookingShowFloors = List.of(
+        List<Long> showSeatIds = [1L, 2L]
+        List<BookingShowFloorSaveRequest> bookingShowFloors = [
                 new BookingShowFloorSaveRequest(1L, 100),
-                new BookingShowFloorSaveRequest(1L, 131),
-        );
+                new BookingShowFloorSaveRequest(1L, 131)
+        ]
         BookingSaveRequest request = BookingSaveRequest.builder()
                 .userId(null)
                 .roundId(1L)
@@ -48,11 +48,11 @@ class BookingFacadeServiceTest extends Specification {
     def "예약_생성_시_회차_아이디가_null_인_경우_예외_발생"() {
 
         given:
-        List<Long> showSeatIds = List.of(1L, 2L);
-        List<BookingShowFloorSaveRequest> bookingShowFloors = List.of(
+        List<Long> showSeatIds = [1L, 2L]
+        List<BookingShowFloorSaveRequest> bookingShowFloors = [
                 new BookingShowFloorSaveRequest(1L, 100),
                 new BookingShowFloorSaveRequest(1L, 131),
-        );
+        ]
         BookingSaveRequest request = BookingSaveRequest.builder()
                 .userId(1L)
                 .roundId(null)
@@ -72,11 +72,11 @@ class BookingFacadeServiceTest extends Specification {
     def "예약_생성_시_가격이_0미만_인_경우_예외_발생"() {
 
         given:
-        List<Long> showSeatIds = List.of(1L, 2L);
-        List<BookingShowFloorSaveRequest> bookingShowFloors = List.of(
+        List<Long> showSeatIds = [1L, 2L]
+        List<BookingShowFloorSaveRequest> bookingShowFloors = [
                 new BookingShowFloorSaveRequest(1L, 100),
                 new BookingShowFloorSaveRequest(1L, 131),
-        );
+        ]
         BookingSaveRequest request = BookingSaveRequest.builder()
                 .userId(1L)
                 .roundId(1L)
@@ -97,10 +97,10 @@ class BookingFacadeServiceTest extends Specification {
 
         given:
         List<Long> showSeatIds = null;
-        List<BookingShowFloorSaveRequest> bookingShowFloors = List.of(
+        List<BookingShowFloorSaveRequest> bookingShowFloors = [
                 new BookingShowFloorSaveRequest(1L, 100),
                 new BookingShowFloorSaveRequest(1L, 131),
-        );
+        ]
         BookingSaveRequest request = BookingSaveRequest.builder()
                 .userId(1L)
                 .roundId(1L)
@@ -120,7 +120,7 @@ class BookingFacadeServiceTest extends Specification {
     def "예약_생성_시_예약_플로어_정보가_null_인_경우_예외_발생"() {
 
         given:
-        List<Long> showSeatIds = List.of(1L, 2L);
+        List<Long> showSeatIds = [1L, 2L]
         List<BookingShowFloorSaveRequest> bookingShowFloors = null
         BookingSaveRequest request = BookingSaveRequest.builder()
                 .userId(1L)
@@ -141,8 +141,8 @@ class BookingFacadeServiceTest extends Specification {
     def "예약_생성_시_예약_좌석_정보와_예약_플로어_정보가_하나도_없는_경우_예외_발생"() {
 
         given:
-        List<Long> showSeatIds = List.of();
-        List<BookingShowFloorSaveRequest> bookingShowFloors = List.of();
+        List<Long> showSeatIds = []
+        List<BookingShowFloorSaveRequest> bookingShowFloors = []
         BookingSaveRequest request = BookingSaveRequest.builder()
                 .userId(1L)
                 .roundId(1L)
@@ -161,10 +161,10 @@ class BookingFacadeServiceTest extends Specification {
 
     def "예약_총_금액_일치_여부_확인"() {
         given:
-        List<Long> showSeatIds = List.of(1L);
-        List<BookingShowFloorSaveRequest> bookingShowFloors = List.of(
+        List<Long> showSeatIds = [1L]
+        List<BookingShowFloorSaveRequest> bookingShowFloors = [
                 new BookingShowFloorSaveRequest(1L, 100)
-        );
+        ]
 
         showSeatService.findByIds(showSeatIds) >> List.of(
                 ShowSeat.builder()
@@ -207,10 +207,10 @@ class BookingFacadeServiceTest extends Specification {
     def "예약_생성_성공"() {
 
         given:
-        List<Long> showSeatIds = List.of(1L);
-        List<BookingShowFloorSaveRequest> bookingShowFloors = List.of(
+        List<Long> showSeatIds = [1L]
+        List<BookingShowFloorSaveRequest> bookingShowFloors = [
                 new BookingShowFloorSaveRequest(1L, 100)
-        );
+        ]
 
         showSeatService.findByIds(showSeatIds) >> List.of(
                 ShowSeat.builder()

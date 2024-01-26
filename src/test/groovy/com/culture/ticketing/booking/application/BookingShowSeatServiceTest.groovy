@@ -11,7 +11,7 @@ class BookingShowSeatServiceTest extends Specification {
     def "공연_좌석_예약_성공"() {
 
         when:
-        bookingShowSeatService.createBookingShowSeats(List.of(1L, 2L, 3L), 1L);
+        bookingShowSeatService.createBookingShowSeats([1L, 2L, 3L], 1L);
 
         then:
         1 * bookingShowSeatRepository.saveAll(_)

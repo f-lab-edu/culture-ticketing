@@ -12,10 +12,10 @@ class BookingShowFloorServiceTest extends Specification {
     def "공연_플로어_예약_성공"() {
 
         given:
-        List<BookingShowFloorSaveRequest> bookingShowFloors = List.of(
+        List<BookingShowFloorSaveRequest> bookingShowFloors = [
                 new BookingShowFloorSaveRequest(1L, 100),
-                new BookingShowFloorSaveRequest(1L, 131),
-        );
+                new BookingShowFloorSaveRequest(1L, 131)
+        ]
 
         when:
         bookingShowFloorService.createBookingShowFloors(bookingShowFloors, 1L);
