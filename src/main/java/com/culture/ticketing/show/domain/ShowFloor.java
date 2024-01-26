@@ -36,12 +36,13 @@ public class ShowFloor {
     private Long showSeatGradeId;
 
     @Builder
-    public ShowFloor(String showFloorName, int count, Long showSeatGradeId) {
+    public ShowFloor(Long showFloorId, String showFloorName, int count, Long showSeatGradeId) {
 
         Objects.requireNonNull(showSeatGradeId, "공연 좌석 등급 아이디를 입력해주세요.");
         Preconditions.checkArgument(StringUtils.hasText(showFloorName), "공연 플로어 구역명을 입력해주세요.");
         Preconditions.checkArgument(count > 0, "공연 플로어 인원수를 1 이상 숫자로 입력해주세요.");
 
+        this.showFloorId = showFloorId;
         this.showFloorName = showFloorName;
         this.count = count;
         this.showSeatGradeId = showSeatGradeId;

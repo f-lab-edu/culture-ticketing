@@ -36,6 +36,11 @@ public class RoundService {
         });
     }
 
+    @Transactional(readOnly = true)
+    public boolean notExistsById(Long roundId) {
+        return !roundRepository.existsById(roundId);
+    }
+
     @Transactional
     public void createRound(RoundSaveRequest request) {
 

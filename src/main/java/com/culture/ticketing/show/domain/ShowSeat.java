@@ -26,11 +26,12 @@ public class ShowSeat {
     private Long seatId;
 
     @Builder
-    public ShowSeat(Long showSeatGradeId, Long seatId) {
+    public ShowSeat(Long showSeatId, Long showSeatGradeId, Long seatId) {
 
         Objects.requireNonNull(showSeatGradeId, "공연 좌석 등급 아이디를 입력해주세요.");
         Objects.requireNonNull(seatId, "좌석 아이디를 입력해주세요.");
 
+        this.showSeatId = showSeatId;
         this.showSeatGradeId = showSeatGradeId;
         this.seatId = seatId;
     }

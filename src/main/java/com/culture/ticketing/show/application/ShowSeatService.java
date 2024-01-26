@@ -42,6 +42,13 @@ public class ShowSeatService {
         showSeatRepository.saveAll(showSeats);
     }
 
+
+    @Transactional(readOnly = true)
+    public List<ShowSeat> findByIds(List<Long> showSeatIds) {
+
+        return showSeatRepository.findAllById(showSeatIds);
+    }
+
     @Transactional(readOnly = true)
     public int countByShowSeatGradeId(Long showSeatGradeId) {
 
