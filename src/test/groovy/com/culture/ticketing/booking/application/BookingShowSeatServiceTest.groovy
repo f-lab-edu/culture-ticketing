@@ -8,7 +8,7 @@ class BookingShowSeatServiceTest extends Specification {
     private BookingShowSeatRepository bookingShowSeatRepository = Mock();
     private BookingShowSeatService bookingShowSeatService = new BookingShowSeatService(bookingShowSeatRepository);
 
-    def "공연_좌석_예약_성공"() {
+    def "공연 좌석 예약 성공"() {
 
         when:
         bookingShowSeatService.createBookingShowSeats([1L, 2L, 3L], 1L);

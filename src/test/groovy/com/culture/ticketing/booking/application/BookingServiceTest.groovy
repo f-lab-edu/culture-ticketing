@@ -16,7 +16,7 @@ class BookingServiceTest extends Specification {
     private RoundService roundService = Mock();
     private BookingService bookingService = new BookingService(bookingRepository, userService, roundService);
 
-    def "예약_생성_시_해당_유저가_없는_경우_예외_발생"() {
+    def "예약 생성 시 해당 유저가 없는 경우 예외 발생"() {
 
         given:
         Booking booking = BookingFixtures.createBooking(1L);
@@ -30,7 +30,7 @@ class BookingServiceTest extends Specification {
         e.message == "유저가 존재하지 않습니다. (userId = 1)"
     }
 
-    def "예약_생성_시_해당_회차가_없는_경우_예외_발생"() {
+    def "예약 생성 시 해당 회차가 없는 경우 예외 발생"() {
 
         given:
         Booking booking = BookingFixtures.createBooking(1L);
@@ -44,7 +44,7 @@ class BookingServiceTest extends Specification {
         e.message == "존재하지 않는 회차입니다. (roundId = 1)"
     }
 
-    def "예약_생성_성공"() {
+    def "예약 생성 성공"() {
 
         given:
         Booking booking = BookingFixtures.createBooking(1L);

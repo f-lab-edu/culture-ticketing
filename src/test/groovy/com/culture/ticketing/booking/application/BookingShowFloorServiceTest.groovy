@@ -9,7 +9,7 @@ class BookingShowFloorServiceTest extends Specification {
     private BookingShowFloorRepository bookingShowFloorRepository = Mock();
     private BookingShowFloorService bookingShowFloorService = new BookingShowFloorService(bookingShowFloorRepository);
 
-    def "공연_플로어_예약_성공"() {
+    def "공연 플로어 예약 성공"() {
 
         given:
         List<BookingShowFloorSaveRequest> bookingShowFloors = [

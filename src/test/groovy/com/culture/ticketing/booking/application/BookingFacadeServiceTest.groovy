@@ -76,7 +76,7 @@ class BookingFacadeServiceTest extends Specification {
         100000     | []          | []                                                                                   || "예약 좌석 정보를 입력해주세요."
     }
 
-    def "예약_총_금액_일치_여부_확인"() {
+    def "예약 총 금액 일치 여부 확인"() {
         given:
         List<Long> showSeatIds = [1L]
         List<BookingShowFloorSaveRequest> bookingShowFloors = [
@@ -121,7 +121,7 @@ class BookingFacadeServiceTest extends Specification {
         e.message == "입력된 예약의 총 금액이 알맞지 않습니다."
     }
 
-    def "예약_생성_성공"() {
+    def "예약 생성 성공"() {
 
         given:
         List<Long> showSeatIds = [1L]

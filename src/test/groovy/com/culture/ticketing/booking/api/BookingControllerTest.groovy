@@ -29,7 +29,7 @@ class BookingControllerTest extends Specification {
     @SpringBean
     private BookingFacadeService bookingFacadeService = Mock();
 
-    def "예약_생성_성공"() {
+    def "예약 생성 성공"() {
 
         given:
         List<Long> showSeatIds = List.of(1L);
