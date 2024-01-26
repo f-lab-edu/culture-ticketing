@@ -34,7 +34,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void checkDuplicatedUserEmailExists(String email) {
+    private void checkDuplicatedUserEmailExists(String email) {
         userRepository.findByEmail(email).ifPresent((user) -> {
             throw new DuplicatedUserEmailException();
         });
