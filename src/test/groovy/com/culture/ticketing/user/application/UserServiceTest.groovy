@@ -4,15 +4,12 @@ import com.culture.ticketing.user.application.dto.UserSaveRequest
 import com.culture.ticketing.user.domain.User
 import com.culture.ticketing.user.exception.DuplicatedUserEmailException
 import com.culture.ticketing.user.infra.UserRepository
-import org.spockframework.spring.SpringBean
 import org.springframework.security.crypto.password.PasswordEncoder
 import spock.lang.Specification
 
 class UserServiceTest extends Specification {
 
-    @SpringBean
     private UserRepository userRepository = Mock();
-    @SpringBean
     private PasswordEncoder passwordEncoder = Mock();
     private UserService userService = new UserService(userRepository, passwordEncoder);
 
