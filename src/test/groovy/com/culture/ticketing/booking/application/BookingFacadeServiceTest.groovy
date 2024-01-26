@@ -2,6 +2,8 @@ package com.culture.ticketing.booking.application
 
 import com.culture.ticketing.booking.application.dto.BookingSaveRequest
 import com.culture.ticketing.booking.application.dto.BookingShowFloorSaveRequest
+import com.culture.ticketing.booking.domain.Booking
+import com.culture.ticketing.booking.domain.BookingStatus
 import com.culture.ticketing.booking.exception.BookingTotalPriceNotMatchException
 import com.culture.ticketing.show.application.ShowFloorService
 import com.culture.ticketing.show.application.ShowSeatGradeService
@@ -83,22 +85,22 @@ class BookingFacadeServiceTest extends Specification {
                 new BookingShowFloorSaveRequest(1L, 100)
         ]
 
-        showSeatService.findByIds(showSeatIds) >> List.of(
+        showSeatService.findByIds(showSeatIds) >> [
                 ShowSeat.builder()
                         .showSeatId(1L)
                         .showSeatGradeId(1L)
                         .seatId(1L)
                         .build()
-        )
-        showFloorService.findByIds(List.of(1L)) >> List.of(
+        ]
+        showFloorService.findByIds([1L]) >> [
                 ShowFloor.builder()
                         .showFloorId(1L)
                         .showFloorName("F1")
                         .count(700)
                         .showSeatGradeId(2L)
                         .build()
-        )
-        showSeatGradeService.findByIds(List.of(1L, 2L)) >> List.of(
+        ]
+        showSeatGradeService.findByIds([1L, 2L]) >> [
                 ShowSeatGrade.builder()
                         .showSeatGradeId(1L)
                         .showId(1L)
@@ -111,7 +113,7 @@ class BookingFacadeServiceTest extends Specification {
                         .seatGrade("VIP")
                         .price(160000)
                         .build()
-        )
+        ]
 
         when:
         bookingFacadeService.checkBookingTotalPrice(showSeatIds, bookingShowFloors, 200000);
@@ -129,22 +131,22 @@ class BookingFacadeServiceTest extends Specification {
                 new BookingShowFloorSaveRequest(1L, 100)
         ]
 
-        showSeatService.findByIds(showSeatIds) >> List.of(
+        showSeatService.findByIds(showSeatIds) >> [
                 ShowSeat.builder()
                         .showSeatId(1L)
                         .showSeatGradeId(1L)
                         .seatId(1L)
                         .build()
-        )
-        showFloorService.findByIds(List.of(1L)) >> List.of(
+        ]
+        showFloorService.findByIds([1L]) >> [
                 ShowFloor.builder()
                         .showFloorId(1L)
                         .showFloorName("F1")
                         .count(700)
                         .showSeatGradeId(2L)
                         .build()
-        )
-        showSeatGradeService.findByIds(List.of(1L, 2L)) >> List.of(
+        ]
+        showSeatGradeService.findByIds([1L, 2L]) >> [
                 ShowSeatGrade.builder()
                         .showSeatGradeId(1L)
                         .showId(1L)
@@ -157,7 +159,7 @@ class BookingFacadeServiceTest extends Specification {
                         .seatGrade("VIP")
                         .price(160000)
                         .build()
-        )
+        ]
 
         BookingSaveRequest request = BookingSaveRequest.builder()
                 .userId(1L)
@@ -171,9 +173,37 @@ class BookingFacadeServiceTest extends Specification {
         bookingFacadeService.createBooking(request);
 
         then:
-        1 * bookingService.createBooking(_)
-        1 * bookingShowSeatService.createBookingShowSeats(_, _)
-        1 * bookingShowFloorService.createBookingShowFloors(_, _)
+        1 * bookingService.createBooking(_) >> { args ->
+
+            def savedBooking = args.get(0) as Booking
+
+            savedBooking.userId == 1L
+            savedBooking.roundId == 1L
+            savedBooking.totalPrice == 260000
+            savedBooking.bookingStatus == BookingStatus.SUCCESS
+        }
+        1 * bookingShowSeatService.createBookingShowSeats(_, _) >> { args ->
+
+            def savedShowSeatIds = args.get(0) as List<Long>
+            def savedBookingId = args.get(1) as Long
+
+            savedBookingId == 1L
+            savedShowSeatIds.size() == 1
+            savedShowSeatIds == [1L]
+
+            return args
+        }
+        1 * bookingShowFloorService.createBookingShowFloors(_, _) >> { args ->
+
+            def savedBookingShowFloor = args.get(0) as List<BookingShowFloorSaveRequest>
+            def savedBookingId = args.get(1) as Long
+
+            savedBookingId == 1L
+            savedBookingShowFloor.size() == 1
+            savedBookingShowFloor.showFloorId == [1L]
+
+            return args
+        }
     }
 
 

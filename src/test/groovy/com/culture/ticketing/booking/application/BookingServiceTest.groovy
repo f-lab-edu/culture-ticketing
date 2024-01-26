@@ -53,6 +53,11 @@ class BookingServiceTest extends Specification {
         bookingService.createBooking(booking);
 
         then:
-        1 * bookingRepository.save(_)
+        1 * bookingRepository.save(_) >> { args ->
+
+            def savedBooking = args.get(0) as Booking
+
+            savedBooking.bookingId == 1L
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.culture.ticketing.booking.application
 
 import com.culture.ticketing.booking.application.dto.BookingShowFloorSaveRequest
+import com.culture.ticketing.booking.domain.BookingShowFloor
 import com.culture.ticketing.booking.infra.BookingShowFloorRepository
 import spock.lang.Specification
 
@@ -21,6 +22,16 @@ class BookingShowFloorServiceTest extends Specification {
         bookingShowFloorService.createBookingShowFloors(bookingShowFloors, 1L);
 
         then:
-        1 * bookingShowFloorRepository.saveAll(_)
+        1 * bookingShowFloorRepository.saveAll(_) >> { args ->
+
+            def savedBookingShowFloors = args.get(0) as List<BookingShowFloor>
+
+            savedBookingShowFloors.size() == 2
+            savedBookingShowFloors.bookingId == [1L, 1L]
+            savedBookingShowFloors.showFloorId == [1L, 1L]
+            savedBookingShowFloors.entryOrder == [100, 131]
+
+            return savedBookingShowFloors
+        }
     }
 }
