@@ -45,6 +45,6 @@ public class ShowSeatService {
     @Transactional(readOnly = true)
     public int countByShowSeatGradeId(Long showSeatGradeId) {
 
-        return countByShowSeatGradeId(showSeatGradeId);
+        return showSeatRepository.countByShowSeatGradeId(showSeatGradeId);
     }
 }
