@@ -29,6 +29,8 @@ class RoundControllerTest extends Specification {
     private ObjectMapper objectMapper;
     @SpringBean
     private RoundService roundService = Mock();
+    @SpringBean
+    private ShowFacadeService showFacadeService = Mock();
 
     def "회차 생성 성공"() {
 
