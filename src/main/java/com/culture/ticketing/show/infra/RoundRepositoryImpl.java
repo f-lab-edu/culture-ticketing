@@ -40,7 +40,7 @@ public class RoundRepositoryImpl extends BaseRepositoryImpl implements RoundRepo
                 .selectFrom(round)
                 .where(
                         round.showId.eq(showId),
-                        round.roundStartDateTime.between(roundStartDate.atTime(0, 0, 0), roundStartDate.atTime(11, 59, 59))
+                        round.roundStartDateTime.between(roundStartDate.atTime(0, 0, 0), roundStartDate.atTime(23, 59, 59))
                 )
                 .fetch();
     }
