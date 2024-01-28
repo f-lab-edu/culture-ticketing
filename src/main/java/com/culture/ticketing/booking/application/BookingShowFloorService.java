@@ -30,4 +30,10 @@ public class BookingShowFloorService {
                 .collect(Collectors.toList());
         bookingShowFloorRepository.saveAll(bookingShowFloors);
     }
+
+    @Transactional(readOnly = true)
+    public List<BookingShowFloor> findByBookingIds(List<Long> bookingIds) {
+
+        return bookingShowFloorRepository.findByBookingIdIn(bookingIds);
+    }
 }
