@@ -10,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class ShowFloorService {
@@ -41,5 +43,12 @@ public class ShowFloorService {
     public List<ShowFloor> findByIds(List<Long> showFloorIds) {
 
         return showFloorRepository.findAllById(showFloorIds);
+    }
+
+    @Transactional(readOnly = true)
+    public Map<Long, Long> countMapByShowSeatGradeId(List<Long> showSeatGradeIds) {
+
+        return showFloorRepository.findByShowSeatGradeIdIn(showSeatGradeIds).stream()
+                .collect(Collectors.groupingBy(ShowFloor::getShowSeatGradeId, Collectors.summingLong(ShowFloor::getCount)));
     }
 }
