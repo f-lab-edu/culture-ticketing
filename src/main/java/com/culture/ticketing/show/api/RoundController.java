@@ -5,6 +5,7 @@ import com.culture.ticketing.show.application.ShowFacadeService;
 import com.culture.ticketing.show.application.dto.RoundResponse;
 import com.culture.ticketing.show.application.dto.RoundSaveRequest;
 import com.culture.ticketing.show.application.dto.RoundWithPerformersAndShowSeatsResponse;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,8 +41,9 @@ public class RoundController {
         return roundService.findRoundsByShowId(showId);
     }
 
-    @GetMapping
-    public List<RoundWithPerformersAndShowSeatsResponse> getRoundsByShowIdAndRoundStartDate(@RequestParam("showId") Long showId, @RequestParam("roundStartDate") LocalDate roundStartDate) {
+    @GetMapping("/calendar")
+    public List<RoundWithPerformersAndShowSeatsResponse> getRoundsByShowIdAndRoundStartDate(@RequestParam("showId") Long showId,
+                                                                                            @RequestParam("roundStartDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate roundStartDate) {
 
         return showFacadeService.findRoundsByShowIdAndRoundStartDate(showId, roundStartDate);
     }
