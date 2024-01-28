@@ -2,6 +2,7 @@ package com.culture.ticketing.booking.application;
 
 import com.culture.ticketing.booking.domain.BookingShowSeat;
 import com.culture.ticketing.booking.infra.BookingShowSeatRepository;
+import com.culture.ticketing.show.application.ShowSeatService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,5 +28,11 @@ public class BookingShowSeatService {
                         .build())
                 .collect(Collectors.toList());
         bookingShowSeatRepository.saveAll(bookingShowSeats);
+    }
+
+    @Transactional(readOnly = true)
+    public List<BookingShowSeat> findByBookingIds(List<Long> bookingIds) {
+
+        return bookingShowSeatRepository.findByBookingIdIn(bookingIds);
     }
 }
