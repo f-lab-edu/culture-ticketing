@@ -1,5 +1,6 @@
 package com.culture.ticketing.show.application;
 
+import com.culture.ticketing.booking.application.BookingFacadeService;
 import com.culture.ticketing.place.application.PlaceService;
 import com.culture.ticketing.place.domain.Place;
 import com.culture.ticketing.show.application.dto.PerformerResponse;
@@ -27,16 +28,16 @@ public class ShowFacadeService {
     private final RoundPerformerService roundPerformerService;
     private final ShowSeatGradeService showSeatGradeService;
     private final PlaceService placeService;
-    private final ShowSeatService showSeatService;
+    private final BookingFacadeService bookingFacadeService;
 
     public ShowFacadeService(ShowService showService, RoundService roundService, RoundPerformerService roundPerformerService,
-                             ShowSeatGradeService showSeatGradeService, PlaceService placeService, ShowSeatService showSeatService) {
+                             PlaceService placeService, ShowSeatGradeService showSeatGradeService, BookingFacadeService bookingFacadeService) {
         this.showService = showService;
         this.roundService = roundService;
         this.roundPerformerService = roundPerformerService;
         this.showSeatGradeService = showSeatGradeService;
         this.placeService = placeService;
-        this.showSeatService = showSeatService;
+        this.bookingFacadeService = bookingFacadeService;
     }
 
     @Transactional(readOnly = true)
@@ -68,27 +69,22 @@ public class ShowFacadeService {
     @Transactional(readOnly = true)
     public List<RoundWithPerformersAndShowSeatsResponse> findRoundsByShowIdAndRoundStartDate(Long showId, LocalDate roundStartDate) {
         List<Round> rounds = roundService.findRoundsByShowIdAndRoundStartDate(showId, roundStartDate);
+        System.out.println(roundStartDate + "***");
         List<Long> roundIds = rounds.stream()
                 .map(Round::getRoundId)
                 .collect(Collectors.toList());
 
         Map<Long, List<PerformerResponse>> performersMapByRoundId = roundPerformerService.findPerformersMapByRoundId(showId, roundIds);
 
-        List<ShowSeatGradeResponse> showSeatGrades = showSeatGradeService.findShowSeatGradesByShowId(showId);
-        List<ShowSeatGradeWithCountResponse> showSeatGradeWithCountResponses = showSeatGrades.stream()
-                .map(showSeatGrade -> new ShowSeatGradeWithCountResponse(
-                        showSeatGrade.getShowSeatGradeId(),
-                        showSeatGrade.getSeatGrade(),
-                        showSeatService.countByShowSeatGradeId(showSeatGrade.getShowSeatGradeId())
-                ))
-                .collect(Collectors.toList());
+        Map<Long, Map<Long, Long>> showSeatAvailableCountMapByShowSeatGradeIdAndRoundId = bookingFacadeService.findShowSeatAvailableCountMapByShowSeatGradeIdAndRoundId(showId, roundIds);
 
         return rounds.stream()
                 .map(round -> new RoundWithPerformersAndShowSeatsResponse(
                         round,
-                        performersMapByRoundId.getOrDefault(round.getRoundId(), Collections.emptyList()),
-                        showSeatGradeWithCountResponses
+                        performersMapByRoundId.get(round.getRoundId()),
+                        ShowSeatGradeWithCountResponse.from(showSeatAvailableCountMapByShowSeatGradeIdAndRoundId.get(round.getRoundId()))
                 ))
                 .collect(Collectors.toList());
     }
+
 }
