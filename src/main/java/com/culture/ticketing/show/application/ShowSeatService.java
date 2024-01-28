@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class ShowSeatService {
@@ -50,8 +52,9 @@ public class ShowSeatService {
     }
 
     @Transactional(readOnly = true)
-    public int countByShowSeatGradeId(Long showSeatGradeId) {
+    public Map<Long, Long> countMapByShowSeatGradeId(List<Long> showSeatGradeIds) {
 
-        return showSeatRepository.countByShowSeatGradeId(showSeatGradeId);
+        return showSeatRepository.findByShowSeatGradeIdIn(showSeatGradeIds).stream()
+                .collect(Collectors.groupingBy(ShowSeat::getShowSeatGradeId, Collectors.counting()));
     }
 }
