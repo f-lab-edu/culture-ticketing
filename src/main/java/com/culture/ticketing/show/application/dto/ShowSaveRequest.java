@@ -11,7 +11,7 @@ import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor
-@SuppressWarnings("Duplicates")
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class ShowSaveRequest {
 
     private Category category;
