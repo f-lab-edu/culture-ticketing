@@ -8,7 +8,6 @@ import com.culture.ticketing.show.application.dto.ShowResponse;
 import com.culture.ticketing.show.domain.Category;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -24,7 +23,7 @@ public class ShowController {
     }
 
     @PostMapping
-    public void postShow(@Valid @RequestBody ShowSaveRequest request) {
+    public void postShow(@RequestBody ShowSaveRequest request) {
 
         showService.createShow(request);
     }

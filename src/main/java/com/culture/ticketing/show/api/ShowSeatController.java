@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-
 @RestController
 @RequestMapping("/api/v1/show-seats")
 public class ShowSeatController {
@@ -20,7 +18,7 @@ public class ShowSeatController {
     }
 
     @PostMapping
-    public void postShowSeat(@Valid @RequestBody ShowSeatSaveRequest request) {
+    public void postShowSeat(@RequestBody ShowSeatSaveRequest request) {
 
         showSeatService.createShowSeat(request);
     }

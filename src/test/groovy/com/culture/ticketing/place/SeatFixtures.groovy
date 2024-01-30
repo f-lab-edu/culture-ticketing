@@ -4,12 +4,12 @@ import com.culture.ticketing.place.domain.Seat
 
 class SeatFixtures {
 
-    static Seat creatSeat(Long seatId, int seatRow = 1, int seatNumber = 1, Long areaId = 1L) {
+    static Seat creatSeat(Map map = [:]) {
         return Seat.builder()
-                .seatId(seatId)
-                .seatRow(seatRow)
-                .seatNumber(seatNumber)
-                .areaId(areaId)
+                .seatId(map.getOrDefault("seatId", 1L) as Long)
+                .seatRow(map.getOrDefault("seatRow", 1) as Integer)
+                .seatNumber(map.getOrDefault("seatNumber", 1) as Integer)
+                .areaId(map.getOrDefault("areaId", 1L) as Long)
                 .build();
     }
 }

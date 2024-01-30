@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-
 @RestController
 @RequestMapping("/api/v1/seats")
 public class SeatController {
@@ -20,7 +18,7 @@ public class SeatController {
     }
 
     @PostMapping
-    public void postPlaceSeat(@Valid @RequestBody PlaceSeatSaveRequest request) {
+    public void postPlaceSeat(@RequestBody PlaceSeatSaveRequest request) {
 
         seatService.createPlaceSeat(request);
     }

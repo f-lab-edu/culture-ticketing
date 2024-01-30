@@ -35,7 +35,7 @@ public class ShowService {
     public void createShow(ShowSaveRequest request) {
 
         Objects.requireNonNull(request.getCategory(), "공연 카테고리를 입력해주세요.");
-        Objects.requireNonNull(request.getAgeRestriction(), "공연 카테고리를 입력해주세요.");
+        Objects.requireNonNull(request.getAgeRestriction(), "공연 관람 제한가를 입력해주세요.");
         Objects.requireNonNull(request.getPlaceId(), "공연 장소 아이디를 입력해주세요.");
         Objects.requireNonNull(request.getShowStartDate(), "공연 시작 날짜를 입력해주세요.");
         Objects.requireNonNull(request.getShowEndDate(), "공연 종료 날짜를 입력해주세요.");
@@ -82,7 +82,7 @@ public class ShowService {
                 .collect(Collectors.toList());
     }
 
-    private void checkPlaceExistInShows(List<Show> shows, Map<Long, Place> placeMapByPlaceId) {
+    protected void checkPlaceExistInShows(List<Show> shows, Map<Long, Place> placeMapByPlaceId) {
 
         for (Show show : shows) {
             if (!placeMapByPlaceId.containsKey(show.getPlaceId())) {
