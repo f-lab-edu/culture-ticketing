@@ -31,8 +31,7 @@ public class UserService {
 
         checkDuplicatedUserEmailExists(request.getEmail());
 
-        User user = request.toEntity();
-        user.changePassword(passwordEncoder.encode(user.getPassword()));
+        User user = request.toEntity(passwordEncoder);
         userRepository.save(user);
     }
 
