@@ -1,12 +1,15 @@
 package com.culture.ticketing.show.application;
 
 import com.culture.ticketing.booking.application.BookingFacadeService;
+import com.culture.ticketing.place.application.AreaService;
 import com.culture.ticketing.place.application.PlaceService;
+import com.culture.ticketing.place.domain.Area;
 import com.culture.ticketing.place.domain.Place;
 import com.culture.ticketing.show.application.dto.PerformerResponse;
 import com.culture.ticketing.show.application.dto.RoundWithPerformersAndShowSeatsResponse;
 import com.culture.ticketing.show.application.dto.RoundWithPerformersResponse;
 import com.culture.ticketing.show.application.dto.ShowDetailResponse;
+import com.culture.ticketing.show.application.dto.ShowPlaceAreaResponse;
 import com.culture.ticketing.show.application.dto.ShowSeatGradeResponse;
 import com.culture.ticketing.show.application.dto.ShowSeatGradeWithCountResponse;
 import com.culture.ticketing.show.domain.Round;
@@ -30,14 +33,17 @@ public class ShowFacadeService {
     private final PlaceService placeService;
     private final BookingFacadeService bookingFacadeService;
 
+    private final AreaService areaService;
+
     public ShowFacadeService(ShowService showService, RoundService roundService, RoundPerformerService roundPerformerService,
-                             PlaceService placeService, ShowSeatGradeService showSeatGradeService, BookingFacadeService bookingFacadeService) {
+                             PlaceService placeService, ShowSeatGradeService showSeatGradeService, BookingFacadeService bookingFacadeService, AreaService areaService) {
         this.showService = showService;
         this.roundService = roundService;
         this.roundPerformerService = roundPerformerService;
         this.showSeatGradeService = showSeatGradeService;
         this.placeService = placeService;
         this.bookingFacadeService = bookingFacadeService;
+        this.areaService = areaService;
     }
 
     @Transactional(readOnly = true)
@@ -87,4 +93,14 @@ public class ShowFacadeService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public List<ShowPlaceAreaResponse> findAreasByShowId(Long showId) {
+        Show show = showService.findShowById(showId);
+        Place place = placeService.findPlaceById(show.getPlaceId());
+        List<Area> areas = areaService.findByPlaceId(place.getPlaceId());
+
+        return areas.stream()
+                .map(ShowPlaceAreaResponse::from)
+                .collect(Collectors.toList());
+    }
 }

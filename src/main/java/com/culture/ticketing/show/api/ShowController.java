@@ -3,6 +3,7 @@ package com.culture.ticketing.show.api;
 import com.culture.ticketing.show.application.ShowFacadeService;
 import com.culture.ticketing.show.application.ShowService;
 import com.culture.ticketing.show.application.dto.ShowDetailResponse;
+import com.culture.ticketing.show.application.dto.ShowPlaceAreaResponse;
 import com.culture.ticketing.show.application.dto.ShowSaveRequest;
 import com.culture.ticketing.show.application.dto.ShowResponse;
 import com.culture.ticketing.show.domain.Category;
@@ -41,5 +42,11 @@ public class ShowController {
     public ShowDetailResponse getShowById(@PathVariable("showId") Long showId) {
 
         return showFacadeService.findShowById(showId);
+    }
+
+    @GetMapping("/{showId}/place-areas")
+    public List<ShowPlaceAreaResponse> getShowPlaceAreasByShowId(@PathVariable("showId") Long showId) {
+
+        return showFacadeService.findAreasByShowId(showId);
     }
 }

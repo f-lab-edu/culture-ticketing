@@ -7,6 +7,7 @@ import com.culture.ticketing.place.infra.AreaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -35,5 +36,10 @@ public class AreaService {
         }
 
         areaRepository.save(request.toEntity());
+    }
+
+    public List<Area> findByPlaceId(Long placeId) {
+
+        return areaRepository.findByPlaceId(placeId);
     }
 }
