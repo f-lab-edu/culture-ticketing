@@ -1,6 +1,8 @@
 package com.culture.ticketing.show.application;
 
+import com.culture.ticketing.show.application.dto.ShowFloorResponse;
 import com.culture.ticketing.show.application.dto.ShowFloorSaveRequest;
+import com.culture.ticketing.show.application.dto.ShowSeatGradeResponse;
 import com.culture.ticketing.show.domain.ShowFloor;
 import com.culture.ticketing.show.exception.ShowSeatGradeNotFoundException;
 import com.culture.ticketing.show.infra.ShowFloorRepository;
@@ -50,5 +52,17 @@ public class ShowFloorService {
 
         return showFloorRepository.findByShowSeatGradeIdIn(showSeatGradeIds).stream()
                 .collect(Collectors.groupingBy(ShowFloor::getShowSeatGradeId, Collectors.summingLong(ShowFloor::getCount)));
+    }
+
+    public List<ShowFloorResponse> findByShowId(Long showId) {
+
+        List<ShowSeatGradeResponse> showSeatGrades = showSeatGradeService.findShowSeatGradesByShowId(showId);
+        List<Long> showSeatGradeIds = showSeatGrades.stream()
+                .map(ShowSeatGradeResponse::getShowSeatGradeId)
+                .collect(Collectors.toList());
+
+        return showFloorRepository.findByShowSeatGradeIdIn(showSeatGradeIds).stream()
+                .map(ShowFloorResponse::from)
+                .collect(Collectors.toList());
     }
 }
