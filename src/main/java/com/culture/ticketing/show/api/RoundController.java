@@ -41,7 +41,7 @@ public class RoundController {
         return roundService.findRoundsByShowId(showId);
     }
 
-    @GetMapping("/calendar")
+    @GetMapping("/detail")
     public List<RoundWithPerformersAndShowSeatsResponse> getRoundsByShowIdAndRoundStartDate(@RequestParam("showId") Long showId,
                                                                                             @RequestParam("roundStartDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate roundStartDate) {
 
