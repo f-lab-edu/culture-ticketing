@@ -87,4 +87,17 @@ class UserServiceTest extends Specification {
         def e = thrown(DuplicatedUserEmailException.class)
         e.message == "이미 등록된 이메일입니다."
     }
+
+    def "유저 아이디로 유저 존재 여부 확인"() {
+
+        given:
+        Long userId = 1L;
+        userRepository.existsById(userId) >> true
+
+        when:
+        boolean response = userService.notExistsById(userId);
+
+        then:
+        !response
+    }
 }
