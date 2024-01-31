@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-
 @RestController
 @RequestMapping("/api/v1/show-seat-grades")
 public class ShowSeatGradeController {
@@ -20,7 +18,7 @@ public class ShowSeatGradeController {
     }
 
     @PostMapping
-    public void postShowSeatGrade(@Valid @RequestBody ShowSeatGradeSaveRequest request) {
+    public void postShowSeatGrade(@RequestBody ShowSeatGradeSaveRequest request) {
 
         showSeatGradeService.createShowSeatGrade(request);
     }

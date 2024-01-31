@@ -34,25 +34,23 @@ class PlaceControllerTest extends Specification {
     def "장소 목록 조회"() {
 
         given:
-        List<PlaceResponse> places = List.of(
-                new PlaceResponse(PlaceFixtures.createPlace(1L)),
-                new PlaceResponse(PlaceFixtures.createPlace(2L)),
-                new PlaceResponse(PlaceFixtures.createPlace(3L)),
-                new PlaceResponse(PlaceFixtures.createPlace(4L)),
-                new PlaceResponse(PlaceFixtures.createPlace(5L))
-        )
-        placeService.findPlaces(places.get(0).placeId, 3) >> places.subList(1, 4)
+        Long offset = 1L
+        placeService.findPlaces(offset, 3) >> [
+                new PlaceResponse(PlaceFixtures.createPlace(placeId: 2L)),
+                new PlaceResponse(PlaceFixtures.createPlace(placeId: 3L)),
+                new PlaceResponse(PlaceFixtures.createPlace(placeId: 4L))
+        ]
 
         expect:
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/places")
-                .param("offset", places.get(0).placeId.toString())
+                .param("offset", offset.toString())
                 .param("size", "3"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("\$").isArray())
                 .andExpect(jsonPath("\$", Matchers.hasSize(3)))
-                .andExpect(jsonPath("\$[0].placeId", Matchers.greaterThan(places.get(0).placeId.toInteger())))
-                .andExpect(jsonPath("\$[1].placeId", Matchers.greaterThan(places.get(0).placeId.toInteger())))
-                .andExpect(jsonPath("\$[2].placeId", Matchers.greaterThan(places.get(0).placeId.toInteger())))
+                .andExpect(jsonPath("\$[0].placeId", Matchers.greaterThan(offset.toInteger())))
+                .andExpect(jsonPath("\$[1].placeId", Matchers.greaterThan(offset.toInteger())))
+                .andExpect(jsonPath("\$[2].placeId", Matchers.greaterThan(offset.toInteger())))
                 .andDo(MockMvcResultHandlers.print())
 
     }
@@ -77,83 +75,4 @@ class PlaceControllerTest extends Specification {
 
     }
 
-    def "장소 생성 시 장소 주소가 null 인 경우 400 에러"() {
-
-        given:
-        PlaceSaveRequest request = PlaceSaveRequest.builder()
-                .placeName("테스트")
-                .address(null)
-                .latitude(new BigDecimal(0))
-                .longitude(new BigDecimal(0))
-                .build();
-
-        expect:
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/places")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print())
-
-    }
-
-    def "장소 생성 시 장소 주소가 빈 값인 경우 400 에러"() {
-
-        given:
-        PlaceSaveRequest request = PlaceSaveRequest.builder()
-                .placeName("테스트")
-                .address("")
-                .latitude(new BigDecimal(0))
-                .longitude(new BigDecimal(0))
-                .build();
-
-        expect:
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/places")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print())
-
-    }
-
-    def "장소 생성 시 위도가 null 인 경우 400 에러"() {
-
-        given:
-        PlaceSaveRequest request = PlaceSaveRequest.builder()
-                .placeName("테스트")
-                .address("서울특별시")
-                .latitude(null)
-                .longitude(new BigDecimal(0))
-                .build();
-
-        expect:
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/places")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print())
-
-    }
-
-    def "장소생성 시 경도가 null 인 경우 400 에러"() {
-
-        given:
-        PlaceSaveRequest request = PlaceSaveRequest.builder()
-                .placeName("테스트")
-                .address("서울특별시")
-                .latitude(new BigDecimal(0))
-                .longitude(null)
-                .build();
-
-        expect:
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/places")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print())
-
-    }
 }

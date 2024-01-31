@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.Column;
@@ -39,7 +40,7 @@ public class User extends BaseEntity {
     private String phoneNumber;
 
     @Builder
-    public User(Long userId, String email, String password, String userName, String phoneNumber) {
+    public User(Long userId, String email, String password, String userName, String phoneNumber, PasswordEncoder passwordEncoder) {
 
         Preconditions.checkArgument(StringUtils.hasText(email), "이메일을 입력해주세요.");
         Preconditions.checkArgument(StringUtils.hasText(password), "비밀번호를 입력해주세요.");
@@ -48,13 +49,13 @@ public class User extends BaseEntity {
 
         this.userId = userId;
         this.email = email;
-        this.password = password;
+        this.password = passwordEncoder.encode(password);
         this.userName = userName;
         this.phoneNumber = phoneNumber;
     }
 
-    public void changePassword(String password) {
+    public void changePassword(String password, PasswordEncoder passwordEncoder) {
         Preconditions.checkArgument(StringUtils.hasText(password), "비밀번호를 입력해주세요.");
-        this.password = password;
+        this.password = passwordEncoder.encode(password);
     }
 }

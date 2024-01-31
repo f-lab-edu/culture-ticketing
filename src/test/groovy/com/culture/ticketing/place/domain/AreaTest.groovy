@@ -4,7 +4,7 @@ import spock.lang.Specification
 
 class AreaTest extends Specification {
 
-    def "구역 생성 시 장소 아이디가 null 인 경우 예외 발생"() {
+    def "구역 생성 시 요청 값에 null 이 존재하는 경우 예외 발생"() {
 
         when:
         Area.builder()

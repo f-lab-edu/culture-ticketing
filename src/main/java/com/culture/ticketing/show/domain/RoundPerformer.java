@@ -29,11 +29,12 @@ public class RoundPerformer {
     private Long performerId;
 
     @Builder
-    public RoundPerformer(Long roundId, Long performerId) {
+    public RoundPerformer(Long roundPerformerId, Long roundId, Long performerId) {
 
         Objects.requireNonNull(roundId, "회차 아이디를 입력해주세요.");
         Objects.requireNonNull(performerId, "출연자 아이디를 입력해주세요.");
 
+        this.roundPerformerId = roundPerformerId;
         this.roundId = roundId;
         this.performerId = performerId;
     }

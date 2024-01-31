@@ -16,6 +16,7 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "shows")
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class Show extends BaseEntity {
 
     @Id
@@ -51,7 +52,7 @@ public class Show extends BaseEntity {
                 LocalDate showStartDate, LocalDate showEndDate, Long placeId) {
 
         Objects.requireNonNull(category, "공연 카테고리를 입력해주세요.");
-        Objects.requireNonNull(ageRestriction, "공연 카테고리를 입력해주세요.");
+        Objects.requireNonNull(ageRestriction, "공연 관람 제한가를 입력해주세요.");
         Objects.requireNonNull(placeId, "공연 장소 아이디를 입력해주세요.");
         Objects.requireNonNull(showStartDate, "공연 시작 날짜를 입력해주세요.");
         Objects.requireNonNull(showEndDate, "공연 종료 날짜를 입력해주세요.");

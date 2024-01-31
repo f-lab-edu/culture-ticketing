@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -24,7 +23,7 @@ public class RoundController {
     }
 
     @PostMapping
-    public void postRound(@Valid @RequestBody RoundSaveRequest request) {
+    public void postRound(@RequestBody RoundSaveRequest request) {
 
         roundService.createRound(request);
     }

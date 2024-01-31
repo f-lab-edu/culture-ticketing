@@ -1,16 +1,16 @@
-package com.culture.ticketing.place;
+package com.culture.ticketing.place
 
 import com.culture.ticketing.place.domain.Place;
 
 class PlaceFixtures {
 
-    static Place createPlace(Long placeId, String placeName = "장소 테스트", String address = "서울특별시", Double latitude = 36.1, Double longitude = 102.6) {
+    static Place createPlace(Map map = [:]) {
         return Place.builder()
-                .placeId(placeId)
-                .placeName(placeName)
-                .address(address)
-                .latitude(new BigDecimal(latitude))
-                .longitude(new BigDecimal(longitude))
+                .placeId(map.getOrDefault("placeId", 1L) as Long)
+                .placeName(map.getOrDefault("placeName", "장소 테스트") as String)
+                .address(map.getOrDefault("address", "서울특별시") as String)
+                .latitude(map.getOrDefault("latitude", 36.1) as BigDecimal)
+                .longitude(map.getOrDefault("longitude", 102.6) as BigDecimal)
                 .build();
     }
 }

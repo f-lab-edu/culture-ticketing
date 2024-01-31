@@ -51,7 +51,7 @@ class UserServiceTest extends Specification {
                 .phoneNumber("01000000000")
                 .build();
 
-        userRepository.findByEmail("test@naver.com") >> Optional.of(request.toEntity())
+        userRepository.findByEmail("test@naver.com") >> Optional.of(request.toEntity(passwordEncoder))
 
         when:
         userService.createUser(request)
