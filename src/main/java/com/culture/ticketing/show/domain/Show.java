@@ -16,6 +16,7 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "shows")
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class Show extends BaseEntity {
 
     @Id
