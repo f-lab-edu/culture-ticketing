@@ -1,6 +1,7 @@
 package com.culture.ticketing.show.application
 
 import com.culture.ticketing.show.RoundFixtures
+import com.culture.ticketing.show.application.dto.RoundResponse
 import com.culture.ticketing.show.application.dto.RoundSaveRequest
 import com.culture.ticketing.show.domain.AgeRestriction
 import com.culture.ticketing.show.domain.Category
@@ -173,5 +174,23 @@ class RoundServiceTest extends Specification {
         then:
         def e = thrown(OutOfRangeRoundDateTimeException.class)
         e.message == "공연 가능한 회차 날짜 범위를 벗어난 입력값입니다."
+    }
+
+    def "공연 아이디 값으로 회차 응답 목록 조회"() {
+
+        given:
+        roundRepository.findByShowId(1L) >> [
+                RoundFixtures.createRound(roundId: 1L, showId: 1L),
+                RoundFixtures.createRound(roundId: 2L, showId: 1L),
+                RoundFixtures.createRound(roundId: 3L, showId: 1L)
+        ]
+
+        when:
+        List<RoundResponse> foundRoundResponses = roundService.findRoundResponsesByShowId(1L);
+
+        then:
+        foundRoundResponses.size() == 3
+        foundRoundResponses.collect(round -> round.roundId) == [1L, 2L, 3L]
+
     }
 }
