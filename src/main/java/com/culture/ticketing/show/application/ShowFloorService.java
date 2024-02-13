@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,6 +46,8 @@ public class ShowFloorService {
     public int getTotalPriceByShowFloorIds(List<Long> showFloorIds) {
 
         List<ShowFloor> showFloors = showFloorRepository.findAllById(showFloorIds);
+        Map<Long, ShowFloor> showFloorMapById = showFloors.stream()
+                .collect(Collectors.toMap(ShowFloor::getShowFloorId, Function.identity()));
 
         List<Long> showSeatGradeIds = showFloors.stream()
                 .map(ShowFloor::getShowSeatGradeId)
@@ -53,8 +56,8 @@ public class ShowFloorService {
         Map<Long, Integer> priceMapByShowSeatGradeId = showSeatGradeService.findByIds(showSeatGradeIds).stream()
                 .collect(Collectors.toMap(ShowSeatGrade::getShowSeatGradeId, ShowSeatGrade::getPrice));
 
-        return showFloors.stream()
-                .mapToInt(showFloor -> priceMapByShowSeatGradeId.get(showFloor.getShowSeatGradeId()))
+        return showFloorIds.stream()
+                .mapToInt(showFloorId -> priceMapByShowSeatGradeId.get(showFloorMapById.get(showFloorId).getShowSeatGradeId()))
                 .sum();
     }
 }
