@@ -1,5 +1,7 @@
 package com.culture.ticketing.show.application
 
+import com.culture.ticketing.show.ShowFloorFixtures
+import com.culture.ticketing.show.ShowSeatGradeFixtures
 import com.culture.ticketing.show.application.dto.ShowFloorSaveRequest
 import com.culture.ticketing.show.domain.ShowFloor
 import com.culture.ticketing.show.exception.ShowSeatGradeNotFoundException
@@ -93,5 +95,25 @@ class ShowFloorServiceTest extends Specification {
         then:
         def e = thrown(ShowSeatGradeNotFoundException.class)
         e.message == String.format("존재하지 않는 공연 좌석 등급입니다. (showSeatGradeId = %d)", showSeatGradeId)
+    }
+
+    def "공연플로어 아이디 목록으로 총 가격 합계 구하기"() {
+
+        given:
+        List<Long> showFloorIds = [1L, 1L, 2L]
+        showFloorRepository.findAllById(showFloorIds) >> [
+                ShowFloorFixtures.createShowFloor(showFloorId: 1L, showSeatGradeId: 1L),
+                ShowFloorFixtures.createShowFloor(showFloorId: 2L, showSeatGradeId: 2L)
+        ]
+        showSeatGradeService.findByIds([1L, 2L]) >> [
+                ShowSeatGradeFixtures.createShowSeatGrade(showSeatGradeId: 1L, price: 100000),
+                ShowSeatGradeFixtures.createShowSeatGrade(showSeatGradeId: 2L, price: 50000),
+        ]
+
+        when:
+        int totalPrice = showFloorService.getTotalPriceByShowFloorIds(showFloorIds);
+
+        then:
+        totalPrice == 250000
     }
 }
