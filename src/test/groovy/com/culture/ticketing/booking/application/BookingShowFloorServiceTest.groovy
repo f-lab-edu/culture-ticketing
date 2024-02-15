@@ -23,7 +23,7 @@ class BookingShowFloorServiceTest extends Specification {
         showFloorService.getTotalPriceByShowFloorIds([1L, 1L, 2L]) >> 250000
 
         when:
-        int response = bookingShowFloorService.getTotalPriceByShowFloorIds(showFloors);
+        int response = bookingShowFloorService.getTotalPriceByShowFloors(showFloors);
 
         then:
         response == 250000

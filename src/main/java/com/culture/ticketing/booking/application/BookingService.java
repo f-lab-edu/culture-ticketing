@@ -49,7 +49,7 @@ public class BookingService {
             throw new RoundNotFoundException(request.getRoundId());
         }
 
-        int priceSum = bookingShowSeatService.getTotalPriceByShowSeatIds(request.getShowSeatIds()) + bookingShowFloorService.getTotalPriceByShowFloorIds(request.getShowFloors());
+        int priceSum = bookingShowSeatService.getTotalPriceByShowSeatIds(request.getShowSeatIds()) + bookingShowFloorService.getTotalPriceByShowFloors(request.getShowFloors());
         if (request.getTotalPrice() != priceSum) {
             throw new BookingTotalPriceNotMatchException();
         }
