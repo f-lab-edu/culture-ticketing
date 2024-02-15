@@ -9,9 +9,12 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Objects;
 
@@ -26,25 +29,26 @@ public class BookingShowFloor extends BaseEntity {
     @Column(name = "booking_show_floor_id", nullable = false, updatable = false)
     private Long bookingShowFloorId;
 
-    @Column(name = "booking_id", nullable = false)
-    private Long bookingId;
-
     @Column(name = "show_floor_id", nullable = false)
     private Long showFloorId;
 
     @Column(name = "entry_order", nullable = false)
     private int entryOrder;
 
-    @Builder
-    public BookingShowFloor(Long bookingShowFloorId, Long bookingId, Long showFloorId, int entryOrder) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "booking_id")
+    private Booking booking;
 
-        Objects.requireNonNull(bookingId, "예약 번호를 입력해주세요.");
+    @Builder
+    public BookingShowFloor(Long bookingShowFloorId, Long showFloorId, int entryOrder, Booking booking) {
+
+        Objects.requireNonNull(booking, "예약 정보를 입력해주세요.");
         Objects.requireNonNull(showFloorId, "공연 플로어 아이디를 입력새주세요.");
         Preconditions.checkArgument(entryOrder > 0, "플로어 입장 번호는 1 이상 숫자로 입력해주세요.");
 
         this.bookingShowFloorId = bookingShowFloorId;
-        this.bookingId = bookingId;
         this.showFloorId = showFloorId;
         this.entryOrder = entryOrder;
+        this.booking = booking;
     }
 }

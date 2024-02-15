@@ -8,9 +8,12 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Objects;
 
@@ -25,21 +28,21 @@ public class BookingShowSeat extends BaseEntity {
     @Column(name = "booking_show_seat_id", nullable = false, updatable = false)
     private Long bookingShowSeatId;
 
-    @Column(name = "booking_id", nullable = false)
-    private Long bookingId;
-
     @Column(name = "show_seat_id", nullable = false)
     private Long showSeatId;
 
-    @Builder
-    public BookingShowSeat(Long bookingShowSeatId, Long bookingId, Long showSeatId) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "booking_id")
+    private Booking booking;
 
-        Objects.requireNonNull(bookingId, "예약 번호를 입력해주세요.");
+    @Builder
+    public BookingShowSeat(Long bookingShowSeatId, Long showSeatId, Booking booking) {
+
+        Objects.requireNonNull(booking, "예약 정보를 입력해주세요.");
         Objects.requireNonNull(showSeatId, "공연 좌석 아이디를 입력해주세요.");
 
         this.bookingShowSeatId = bookingShowSeatId;
-        this.bookingId = bookingId;
         this.showSeatId = showSeatId;
-
+        this.booking = booking;
     }
 }
