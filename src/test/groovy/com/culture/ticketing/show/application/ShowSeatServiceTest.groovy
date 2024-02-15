@@ -103,7 +103,7 @@ class ShowSeatServiceTest extends Specification {
     def "공연좌석 아이디 목록으로 총 가격 합계 구하기"() {
 
         given:
-        List<Long> showSeatIds = [1L, 2L]
+        Set<Long> showSeatIds = [1L, 2L]
         showSeatRepository.findAllById(showSeatIds) >> [
                 ShowSeatFixtures.createShowSeat(showSeatId: 1L, showSeatGradeId: 1L),
                 ShowSeatFixtures.createShowSeat(showSeatId: 2L, showSeatGradeId: 2L),
