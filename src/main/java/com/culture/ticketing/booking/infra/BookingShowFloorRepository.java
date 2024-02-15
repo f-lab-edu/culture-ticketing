@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BookingShowFloorRepository extends JpaRepository<BookingShowFloor, Long> {
+public interface BookingShowFloorRepository extends JpaRepository<BookingShowFloor, Long>, BookingShowFloorRepositoryCustom {
 }

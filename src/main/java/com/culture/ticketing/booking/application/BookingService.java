@@ -1,12 +1,10 @@
 package com.culture.ticketing.booking.application;
 
 import com.culture.ticketing.booking.application.dto.BookingSaveRequest;
-import com.culture.ticketing.booking.application.dto.BookingShowFloorSaveRequest;
+import com.culture.ticketing.booking.exception.AlreadyBookingShowSeatsExistsException;
 import com.culture.ticketing.booking.exception.BookingTotalPriceNotMatchException;
 import com.culture.ticketing.booking.infra.BookingRepository;
 import com.culture.ticketing.show.application.RoundService;
-import com.culture.ticketing.show.application.ShowFloorService;
-import com.culture.ticketing.show.application.ShowSeatService;
 import com.culture.ticketing.show.exception.RoundNotFoundException;
 import com.culture.ticketing.user.application.UserService;
 import com.culture.ticketing.user.exception.UserNotFoundException;
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 public class BookingService {
@@ -55,6 +52,11 @@ public class BookingService {
         int priceSum = bookingShowSeatService.getTotalPriceByShowSeatIds(request.getShowSeatIds()) + bookingShowFloorService.getTotalPriceByShowFloorIds(request.getShowFloors());
         if (request.getTotalPrice() != priceSum) {
             throw new BookingTotalPriceNotMatchException();
+        }
+
+        if (bookingShowSeatService.hasAlreadyBookingShowSeatsByRoundId(request.getRoundId(), request.getShowSeatIds())
+                || bookingShowFloorService.hasAlreadyBookingShowFloorsByRoundId(request.getRoundId(), request.getShowFloors())) {
+            throw new AlreadyBookingShowSeatsExistsException();
         }
 
         bookingRepository.save(request.toEntity());
