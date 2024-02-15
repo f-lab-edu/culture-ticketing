@@ -23,15 +23,16 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final UserService userService;
     private final RoundService roundService;
-    private final ShowSeatService showSeatService;
-    private final ShowFloorService showFloorService;
+    private final BookingShowSeatService bookingShowSeatService;
+    private final BookingShowFloorService bookingShowFloorService;
 
-    public BookingService(BookingRepository bookingRepository, UserService userService, RoundService roundService, ShowSeatService showSeatService, ShowFloorService showFloorService) {
+    public BookingService(BookingRepository bookingRepository, UserService userService, RoundService roundService,
+                          BookingShowSeatService bookingShowSeatService, BookingShowFloorService bookingShowFloorService) {
         this.bookingRepository = bookingRepository;
         this.userService = userService;
         this.roundService = roundService;
-        this.showSeatService = showSeatService;
-        this.showFloorService = showFloorService;
+        this.bookingShowSeatService = bookingShowSeatService;
+        this.bookingShowFloorService = bookingShowFloorService;
     }
 
     @Transactional
@@ -51,11 +52,7 @@ public class BookingService {
             throw new RoundNotFoundException(request.getRoundId());
         }
 
-        int priceSum = showSeatService.getTotalPriceByShowSeatIds(request.getShowSeatIds())
-                + showFloorService.getTotalPriceByShowFloorIds(request.getShowFloors().stream()
-                .map(BookingShowFloorSaveRequest::getShowFloorId)
-                .collect(Collectors.toSet()));
-
+        int priceSum = bookingShowSeatService.getTotalPriceByShowSeatIds(request.getShowSeatIds()) + bookingShowFloorService.getTotalPriceByShowFloorIds(request.getShowFloors());
         if (request.getTotalPrice() != priceSum) {
             throw new BookingTotalPriceNotMatchException();
         }

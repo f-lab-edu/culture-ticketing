@@ -1,33 +1,29 @@
 package com.culture.ticketing.booking.application;
 
 import com.culture.ticketing.booking.application.dto.BookingShowFloorSaveRequest;
-import com.culture.ticketing.booking.domain.BookingShowFloor;
 import com.culture.ticketing.booking.infra.BookingShowFloorRepository;
+import com.culture.ticketing.show.application.ShowFloorService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class BookingShowFloorService {
 
     private final BookingShowFloorRepository bookingShowFloorRepository;
+    private final ShowFloorService showFloorService;
 
-    public BookingShowFloorService(BookingShowFloorRepository bookingShowFloorRepository) {
+    public BookingShowFloorService(BookingShowFloorRepository bookingShowFloorRepository, ShowFloorService showFloorService) {
         this.bookingShowFloorRepository = bookingShowFloorRepository;
+        this.showFloorService = showFloorService;
     }
 
-    @Transactional
-    public void createBookingShowFloors(List<BookingShowFloorSaveRequest> showFloors, Long bookingId) {
-
-        List<BookingShowFloor> bookingShowFloors = showFloors.stream()
-                .map(showFloor -> BookingShowFloor.builder()
-                        .bookingId(bookingId)
-                        .showFloorId(showFloor.getShowFloorId())
-                        .entryOrder(showFloor.getEntryOrder())
-                        .build())
-                .collect(Collectors.toList());
-        bookingShowFloorRepository.saveAll(bookingShowFloors);
+    @Transactional(readOnly = true)
+    public int getTotalPriceByShowFloorIds(Set<BookingShowFloorSaveRequest> showFloors) {
+        return showFloorService.getTotalPriceByShowFloorIds(showFloors.stream()
+                .map(BookingShowFloorSaveRequest::getShowFloorId)
+                .collect(Collectors.toSet()));
     }
 }
