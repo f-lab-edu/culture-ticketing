@@ -44,7 +44,7 @@ public class ShowFloorService {
     }
 
     @Transactional(readOnly = true)
-    public int getTotalPriceByShowFloorIds(Set<Long> showFloorIds) {
+    public int getTotalPriceByShowFloorIds(List<Long> showFloorIds) {
 
         List<ShowFloor> showFloors = showFloorRepository.findAllById(showFloorIds);
         Map<Long, ShowFloor> showFloorMapById = showFloors.stream()

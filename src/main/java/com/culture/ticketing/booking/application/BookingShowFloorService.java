@@ -25,7 +25,7 @@ public class BookingShowFloorService {
     public int getTotalPriceByShowFloorIds(Set<BookingShowFloorSaveRequest> showFloors) {
         return showFloorService.getTotalPriceByShowFloorIds(showFloors.stream()
                 .map(BookingShowFloorSaveRequest::getShowFloorId)
-                .collect(Collectors.toSet()));
+                .collect(Collectors.toList()));
     }
 
     @Transactional(readOnly = true)
