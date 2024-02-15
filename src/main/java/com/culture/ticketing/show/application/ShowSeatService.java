@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,7 +47,7 @@ public class ShowSeatService {
     }
 
     @Transactional(readOnly = true)
-    public int getTotalPriceByShowSeatIds(List<Long> showSeatIds) {
+    public int getTotalPriceByShowSeatIds(Set<Long> showSeatIds) {
 
         List<ShowSeat> showSeats = showSeatRepository.findAllById(showSeatIds);
 

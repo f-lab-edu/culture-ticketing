@@ -8,8 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
@@ -19,11 +19,11 @@ public class BookingSaveRequest {
     private Long userId;
     private Long roundId;
     private int totalPrice;
-    private List<Long> showSeatIds = new ArrayList<>();
-    private List<BookingShowFloorSaveRequest> showFloors = new ArrayList<>();
+    private Set<Long> showSeatIds = new HashSet<>();
+    private Set<BookingShowFloorSaveRequest> showFloors = new HashSet<>();
 
     @Builder
-    public BookingSaveRequest(Long userId, Long roundId, int totalPrice, List<Long> showSeatIds, List<BookingShowFloorSaveRequest> showFloors) {
+    public BookingSaveRequest(Long userId, Long roundId, int totalPrice, Set<Long> showSeatIds, Set<BookingShowFloorSaveRequest> showFloors) {
         this.userId = userId;
         this.roundId = roundId;
         this.totalPrice = totalPrice;
@@ -39,21 +39,21 @@ public class BookingSaveRequest {
                 .bookingStatus(BookingStatus.SUCCESS)
                 .build();
 
-        List<BookingShowSeat> bookingShowSeats = showSeatIds.stream()
+        Set<BookingShowSeat> bookingShowSeats = showSeatIds.stream()
                 .map(showSeatId -> BookingShowSeat.builder()
                         .showSeatId(showSeatId)
                         .booking(booking)
                         .build())
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
         booking.setBookingShowSeats(bookingShowSeats);
 
-        List<BookingShowFloor> bookingShowFloors = showFloors.stream()
+        Set<BookingShowFloor> bookingShowFloors = showFloors.stream()
                 .map(showFloor -> BookingShowFloor.builder()
                         .showFloorId(showFloor.getShowFloorId())
                         .entryOrder(showFloor.getEntryOrder())
                         .booking(booking)
                         .build())
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
         booking.setBookingShowFloors(bookingShowFloors);
 
         return booking;

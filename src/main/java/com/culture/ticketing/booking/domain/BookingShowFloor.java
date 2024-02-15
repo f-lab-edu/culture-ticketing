@@ -51,4 +51,17 @@ public class BookingShowFloor extends BaseEntity {
         this.entryOrder = entryOrder;
         this.booking = booking;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BookingShowFloor showFloor = (BookingShowFloor) o;
+        return entryOrder == showFloor.entryOrder && bookingShowFloorId.equals(showFloor.bookingShowFloorId) && showFloorId.equals(showFloor.showFloorId) && booking.equals(showFloor.booking);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(bookingShowFloorId, showFloorId, entryOrder, booking);
+    }
 }

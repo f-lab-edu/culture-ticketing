@@ -2,7 +2,6 @@ package com.culture.ticketing.booking.application;
 
 import com.culture.ticketing.booking.application.dto.BookingSaveRequest;
 import com.culture.ticketing.booking.application.dto.BookingShowFloorSaveRequest;
-import com.culture.ticketing.booking.domain.Booking;
 import com.culture.ticketing.booking.exception.BookingTotalPriceNotMatchException;
 import com.culture.ticketing.booking.infra.BookingRepository;
 import com.culture.ticketing.show.application.RoundService;
@@ -55,7 +54,7 @@ public class BookingService {
         int priceSum = showSeatService.getTotalPriceByShowSeatIds(request.getShowSeatIds())
                 + showFloorService.getTotalPriceByShowFloorIds(request.getShowFloors().stream()
                 .map(BookingShowFloorSaveRequest::getShowFloorId)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toSet()));
 
         if (request.getTotalPrice() != priceSum) {
             throw new BookingTotalPriceNotMatchException();

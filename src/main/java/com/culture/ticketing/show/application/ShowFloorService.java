@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -43,7 +44,7 @@ public class ShowFloorService {
     }
 
     @Transactional(readOnly = true)
-    public int getTotalPriceByShowFloorIds(List<Long> showFloorIds) {
+    public int getTotalPriceByShowFloorIds(Set<Long> showFloorIds) {
 
         List<ShowFloor> showFloors = showFloorRepository.findAllById(showFloorIds);
         Map<Long, ShowFloor> showFloorMapById = showFloors.stream()
