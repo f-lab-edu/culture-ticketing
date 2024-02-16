@@ -2,6 +2,7 @@ package com.culture.ticketing.show.application;
 
 import com.culture.ticketing.show.application.dto.PerformerResponse;
 import com.culture.ticketing.show.application.dto.RoundPerformersSaveRequest;
+import com.culture.ticketing.show.application.dto.RoundWithPerformersResponse;
 import com.culture.ticketing.show.domain.Performer;
 import com.culture.ticketing.show.domain.Round;
 import com.culture.ticketing.show.domain.RoundPerformer;
@@ -9,6 +10,7 @@ import com.culture.ticketing.show.infra.RoundPerformerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -42,18 +44,26 @@ public class RoundPerformerService {
     }
 
     @Transactional(readOnly = true)
-    public Map<Long, List<PerformerResponse>> findPerformersMapByRoundId(Long showId, List<Long> roundIds) {
+    public List<RoundWithPerformersResponse> findRoundsWitPerformersByShowId(Long showId) {
 
-        List<RoundPerformer> roundPerformers = roundPerformerRepository.findByRoundIdIn(roundIds);
-        List<Long> performerIds = roundPerformers.stream()
-                .map(RoundPerformer::getPerformerId)
+        List<Round> rounds = roundService.findByShowId(showId);
+        List<Long> roundIds = rounds.stream()
+                .map(Round::getRoundId)
                 .collect(Collectors.toList());
 
-        Map<Long, Performer> performerMapById = performerService.findShowPerformers(showId, performerIds).stream()
-                .collect(Collectors.toMap(Performer::getPerformerId, Function.identity()));
+        Map<Long, PerformerResponse> performerMapById = performerService.findPerformersByShowId(showId).stream()
+                .collect(Collectors.toMap(PerformerResponse::getPerformerId, Function.identity()));
 
-        return roundPerformers.stream()
-                .collect(Collectors.groupingBy(RoundPerformer::getRoundId, Collectors.mapping(roundPerformer ->
-                        new PerformerResponse(performerMapById.get(roundPerformer.getPerformerId())), Collectors.toList())));
+        List<RoundPerformer> roundPerformers = roundPerformerRepository.findByRoundIdIn(roundIds);
+
+        Map<Long, List<PerformerResponse>> performersMapByRoundId = roundPerformers.stream()
+                .collect(Collectors.groupingBy(RoundPerformer::getRoundId,
+                        Collectors.mapping(roundPerformer -> performerMapById.get(roundPerformer.getPerformerId()), Collectors.toList())));
+
+        return rounds.stream()
+                .map(round -> new RoundWithPerformersResponse(
+                        round,
+                        performersMapByRoundId.getOrDefault(round.getRoundId(), Collections.emptyList())))
+                .collect(Collectors.toList());
     }
 }

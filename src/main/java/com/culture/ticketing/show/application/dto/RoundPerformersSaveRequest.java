@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -14,9 +13,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class RoundPerformersSaveRequest {
 
-    @NotNull
     private Long roundId;
-    @NotNull
     private Set<Long> performerIds;
 
     @Builder

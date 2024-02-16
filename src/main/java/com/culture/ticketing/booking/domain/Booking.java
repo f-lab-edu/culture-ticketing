@@ -7,13 +7,19 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -35,8 +41,15 @@ public class Booking extends BaseEntity {
     @Column(name = "total_price", nullable = false)
     private int totalPrice;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "booking_status", nullable = false)
     private BookingStatus bookingStatus;
+
+    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
+    private Set<BookingShowSeat> bookingShowSeats = new HashSet<>();
+
+    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
+    private Set<BookingShowFloor> bookingShowFloors = new HashSet<>();
 
     @Builder
     public Booking(Long bookingId, Long userId, Long roundId, int totalPrice , BookingStatus bookingStatus) {
@@ -51,5 +64,13 @@ public class Booking extends BaseEntity {
         this.roundId = roundId;
         this.totalPrice = totalPrice;
         this.bookingStatus = bookingStatus;
+    }
+
+    public void setBookingShowSeats(Set<BookingShowSeat> bookingShowSeats) {
+        this.bookingShowSeats = bookingShowSeats;
+    }
+
+    public void setBookingShowFloors(Set<BookingShowFloor> bookingShowFloors) {
+        this.bookingShowFloors = bookingShowFloors;
     }
 }

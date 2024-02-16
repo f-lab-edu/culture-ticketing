@@ -43,52 +43,6 @@ public class BookingFacadeService {
         this.showFloorService = showFloorService;
         this.showSeatGradeService = showSeatGradeService;
     }
-
-    @Transactional
-    public void createBooking(BookingSaveRequest request) {
-
-        Objects.requireNonNull(request.getUserId(), "유저 아이디를 입력해주세요.");
-        Objects.requireNonNull(request.getRoundId(), "회차 아이디를 입력해주세요.");
-        Preconditions.checkArgument(request.getTotalPrice() >= 0, "총 가격은 0 이상 숫자로 입력해주세요.");
-        Preconditions.checkArgument(request.getShowSeatIds() != null && request.getShowFloors() != null &&
-                (request.getShowSeatIds().size() != 0 || request.getShowFloors().size() != 0), "예약 좌석 정보를 입력해주세요.");
-
-        checkBookingTotalPrice(request.getShowSeatIds(), request.getShowFloors(), request.getTotalPrice());
-
-        Booking booking = request.toEntity();
-        bookingService.createBooking(booking);
-        bookingShowSeatService.createBookingShowSeats(request.getShowSeatIds(), booking.getBookingId());
-        bookingShowFloorService.createBookingShowFloors(request.getShowFloors(), booking.getBookingId());
-    }
-
-    protected void checkBookingTotalPrice(List<Long> showSeatIds, List<BookingShowFloorSaveRequest> bookingShowFloors, int totalPrice) {
-        List<ShowSeat> showSeats = showSeatService.findByIds(showSeatIds);
-        List<ShowFloor> showFloors = showFloorService.findByIds(bookingShowFloors.stream()
-                .map(BookingShowFloorSaveRequest::getShowFloorId)
-                .collect(Collectors.toList()));
-
-        List<Long> showSeatGradeIds = showSeats.stream()
-                .map(ShowSeat::getShowSeatGradeId)
-                .collect(Collectors.toList());
-        showSeatGradeIds.addAll(showFloors.stream()
-                .map(ShowFloor::getShowSeatGradeId)
-                .collect(Collectors.toList()));
-        Map<Long, Integer> priceMapByShowSeatGradeId = showSeatGradeService.findByIds(showSeatGradeIds).stream()
-                .collect(Collectors.toMap(ShowSeatGrade::getShowSeatGradeId, ShowSeatGrade::getPrice));
-
-        int priceSum = 0;
-        priceSum += showSeats.stream()
-                .mapToInt(showSeat -> priceMapByShowSeatGradeId.get(showSeat.getShowSeatGradeId()))
-                .sum();
-        priceSum += showFloors.stream()
-                .mapToInt(showFloor -> priceMapByShowSeatGradeId.get(showFloor.getShowSeatGradeId()))
-                .sum();
-
-        if (totalPrice != priceSum) {
-            throw new BookingTotalPriceNotMatchException();
-        }
-    }
-
     @Transactional(readOnly = true)
     public Map<Long, Map<Long, Long>> findShowSeatAvailableCountMapByShowSeatGradeIdAndRoundId(Long showId, List<Long> roundIds) {
 
@@ -114,7 +68,7 @@ public class BookingFacadeService {
                 .collect(Collectors.toMap(ShowSeat::getShowSeatId, Function.identity()));
         Map<Long, List<ShowSeat>> showSeatsMapByRoundId = bookingShowSeats.stream()
                 .collect(Collectors.groupingBy(
-                        bookingShowSeat -> roundIdMapByBookingId.get(bookingShowSeat.getBookingId()),
+                        bookingShowSeat -> roundIdMapByBookingId.get(bookingShowSeat.getBooking().getBookingId()),
                         Collectors.mapping(bookingShowSeat -> showSeatMapById.get(bookingShowSeat.getShowSeatId()), Collectors.toList())
                 ));
 
@@ -126,7 +80,7 @@ public class BookingFacadeService {
                 .collect(Collectors.toMap(ShowFloor::getShowFloorId, Function.identity()));
         Map<Long, List<ShowFloor>> showFloorsMapByRoundId = bookingShowFloors.stream()
                 .collect(Collectors.groupingBy(
-                        bookingShowFloor -> roundIdMapByBookingId.get(bookingShowFloor.getBookingId()),
+                        bookingShowFloor -> roundIdMapByBookingId.get(bookingShowFloor.getBooking().getBookingId()),
                         Collectors.mapping(bookingShowFloor -> showFloorMapById.get(bookingShowFloor.getShowFloorId()), Collectors.toList())
                 ));
 

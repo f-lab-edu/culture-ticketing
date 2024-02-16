@@ -1,6 +1,6 @@
 package com.culture.ticketing.booking.api
 
-import com.culture.ticketing.booking.application.BookingFacadeService
+import com.culture.ticketing.booking.application.BookingService
 import com.culture.ticketing.booking.application.dto.BookingSaveRequest
 import com.culture.ticketing.booking.application.dto.BookingShowFloorSaveRequest
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -27,15 +27,15 @@ class BookingControllerTest extends Specification {
     @Autowired
     private ObjectMapper objectMapper;
     @SpringBean
-    private BookingFacadeService bookingFacadeService = Mock();
+    private BookingService bookingService = Mock();
 
     def "예약 생성 성공"() {
 
         given:
-        List<Long> showSeatIds = List.of(1L);
-        List<BookingShowFloorSaveRequest> bookingShowFloors = List.of(
+        Set<Long> showSeatIds = [1L]
+        Set<BookingShowFloorSaveRequest> bookingShowFloors = [
                 new BookingShowFloorSaveRequest(1L, 100)
-        );
+        ]
         BookingSaveRequest request = BookingSaveRequest.builder()
                 .userId(1L)
                 .roundId(1L)

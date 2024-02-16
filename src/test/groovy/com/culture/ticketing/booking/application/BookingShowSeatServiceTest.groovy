@@ -1,29 +1,40 @@
 package com.culture.ticketing.booking.application
 
-import com.culture.ticketing.booking.domain.BookingShowSeat
+import com.culture.ticketing.booking.domain.BookingStatus
 import com.culture.ticketing.booking.infra.BookingShowSeatRepository
+import com.culture.ticketing.show.application.ShowSeatService
 import spock.lang.Specification
 
 class BookingShowSeatServiceTest extends Specification {
 
     private BookingShowSeatRepository bookingShowSeatRepository = Mock();
-    private BookingShowSeatService bookingShowSeatService = new BookingShowSeatService(bookingShowSeatRepository);
+    private ShowSeatService showSeatService = Mock();
+    private BookingShowSeatService bookingShowSeatService = new BookingShowSeatService(bookingShowSeatRepository, showSeatService);
 
-    def "공연 좌석 예약 성공"() {
+    def "예약 좌석 목록의 총 가격 합계 구하기"() {
+
+        given:
+        Set<Long> showSeatIds = [1L, 2L]
+        showSeatService.getTotalPriceByShowSeatIds(showSeatIds) >> 300000
 
         when:
-        bookingShowSeatService.createBookingShowSeats([1L, 2L, 3L], 1L);
+        int response = bookingShowSeatService.getTotalPriceByShowSeatIds(showSeatIds);
 
         then:
-        1 * bookingShowSeatRepository.saveAll(_) >> { args ->
+        response == 300000
+    }
 
-            def savedBookingShowSeats = args.get(0) as List<BookingShowSeat>
+    def "예약 좌석 목록 중 해당 회차에 이미 예약된 좌석이 있는지 확인"() {
 
-            savedBookingShowSeats.size() == 3
-            savedBookingShowSeats.bookingId == [1L, 1L, 1L]
-            savedBookingShowSeats.showSeatId == [1L, 2L, 3L]
+        given:
+        Long roundId = 1L;
+        Set<Long> showSeatIds = [1L, 2L];
+        bookingShowSeatRepository.existsByShowSeatIdInAndBooking_RoundIdAndBooking_BookingStatus(showSeatIds, roundId, BookingStatus.SUCCESS) >> true
 
-            return savedBookingShowSeats
-        }
+        when:
+        boolean response = bookingShowSeatService.hasAlreadyBookingShowSeatsByRoundId(roundId, showSeatIds);
+
+        then:
+        response
     }
 }

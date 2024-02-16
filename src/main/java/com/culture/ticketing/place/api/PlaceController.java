@@ -5,7 +5,6 @@ import com.culture.ticketing.place.application.dto.PlaceResponse;
 import com.culture.ticketing.place.application.dto.PlaceSaveRequest;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,7 +18,7 @@ public class PlaceController {
     }
 
     @PostMapping
-    public void postPlace(@Valid @RequestBody PlaceSaveRequest request) {
+    public void postPlace(@RequestBody PlaceSaveRequest request) {
 
         placeService.createPlace(request);
     }

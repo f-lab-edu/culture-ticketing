@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-
 @RestController
 @RequestMapping("/api/v1/areas")
 public class AreaController {
@@ -20,7 +18,7 @@ public class AreaController {
     }
 
     @PostMapping
-    public void postArea(@Valid @RequestBody PlaceAreaSaveRequest request) {
+    public void postArea(@RequestBody PlaceAreaSaveRequest request) {
 
         areaService.createPlaceArea(request);
     }

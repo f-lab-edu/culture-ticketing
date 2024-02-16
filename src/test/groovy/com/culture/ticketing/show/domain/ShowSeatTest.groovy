@@ -4,29 +4,21 @@ import spock.lang.Specification
 
 class ShowSeatTest extends Specification {
 
-    def "공연 좌석 정보 생성 시 공연 좌석 등급 아이디 값이 null 인 경우 예외 발생"() {
+    def "공연 좌석 정보 생성 시 요청 값에 null 이 존재하는 경우 예외 발생"() {
 
         when:
         ShowSeat.builder()
-                .showSeatGradeId(null)
-                .seatId(1L)
+                .showSeatGradeId(showSeatGradeId)
+                .seatId(seatId)
                 .build();
 
         then:
         def e = thrown(NullPointerException.class)
-        e.message == "공연 좌석 등급 아이디를 입력해주세요."
-    }
+        e.message == expected
 
-    def "공연 좌석 정보 생성 시 좌석 아이디 값이 null 인 경우 예외 발생"() {
-
-        when:
-        ShowSeat.builder()
-                .showSeatGradeId(1L)
-                .seatId(null)
-                .build();
-
-        then:
-        def e = thrown(NullPointerException.class)
-        e.message == "좌석 아이디를 입력해주세요."
+        where:
+        showSeatGradeId | seatId || expected
+        null            | 1L     || "공연 좌석 등급 아이디를 입력해주세요."
+        1L              | null   || "좌석 아이디를 입력해주세요."
     }
 }

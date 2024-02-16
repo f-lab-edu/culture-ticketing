@@ -1,37 +1,49 @@
 package com.culture.ticketing.booking.application
 
 import com.culture.ticketing.booking.application.dto.BookingShowFloorSaveRequest
-import com.culture.ticketing.booking.domain.BookingShowFloor
+import com.culture.ticketing.booking.domain.BookingStatus
 import com.culture.ticketing.booking.infra.BookingShowFloorRepository
+import com.culture.ticketing.show.application.ShowFloorService
 import spock.lang.Specification
 
 class BookingShowFloorServiceTest extends Specification {
 
     private BookingShowFloorRepository bookingShowFloorRepository = Mock();
-    private BookingShowFloorService bookingShowFloorService = new BookingShowFloorService(bookingShowFloorRepository);
+    private ShowFloorService showFloorService = Mock();
+    private BookingShowFloorService bookingShowFloorService = new BookingShowFloorService(bookingShowFloorRepository, showFloorService);
 
-    def "공연 플로어 예약 성공"() {
+    def "예약 플로어 목록의 총 가격 합계 구하기"() {
 
         given:
-        List<BookingShowFloorSaveRequest> bookingShowFloors = [
-                new BookingShowFloorSaveRequest(1L, 100),
-                new BookingShowFloorSaveRequest(1L, 131)
+        Set<BookingShowFloorSaveRequest> showFloors = [
+                new BookingShowFloorSaveRequest(1L, 1),
+                new BookingShowFloorSaveRequest(1L, 2),
+                new BookingShowFloorSaveRequest(2L, 3)
         ]
+        showFloorService.getTotalPriceByShowFloorIds([1L, 1L, 2L]) >> 250000
 
         when:
-        bookingShowFloorService.createBookingShowFloors(bookingShowFloors, 1L);
+        int response = bookingShowFloorService.getTotalPriceByShowFloors(showFloors);
 
         then:
-        1 * bookingShowFloorRepository.saveAll(_) >> { args ->
+        response == 250000
+    }
 
-            def savedBookingShowFloors = args.get(0) as List<BookingShowFloor>
+    def "예약 플로어 목록 중 해당 회차에 이미 예약된 좌석이 있는지 확인"() {
 
-            savedBookingShowFloors.size() == 2
-            savedBookingShowFloors.bookingId == [1L, 1L]
-            savedBookingShowFloors.showFloorId == [1L, 1L]
-            savedBookingShowFloors.entryOrder == [100, 131]
+        given:
+        Long roundId = 1L;
+        Set<BookingShowFloorSaveRequest> showFloors = [
+                new BookingShowFloorSaveRequest(1L, 1),
+                new BookingShowFloorSaveRequest(1L, 2),
+                new BookingShowFloorSaveRequest(2L, 3)
+        ]
+        bookingShowFloorRepository.existsByShowFloorsInAndBooking_RoundIdAndBooking_BookingStatus(showFloors, roundId, BookingStatus.SUCCESS) >> true
 
-            return savedBookingShowFloors
-        }
+        when:
+        boolean response = bookingShowFloorService.hasAlreadyBookingShowFloorsByRoundId(roundId, showFloors);
+
+        then:
+        response
     }
 }

@@ -53,7 +53,7 @@ public class PerformerService {
     public void checkShowPerformersExists(Long showId, Set<Long> performerIds) {
 
         Set<Long> copyPerformerIds = new HashSet<>(performerIds);
-        List<Performer> foundPerformers = findShowPerformers(showId, copyPerformerIds);
+        List<Performer> foundPerformers = performerRepository.findByShowIdAndPerformerIdIn(showId, performerIds);
         if (foundPerformers.size() != copyPerformerIds.size()) {
             for (Performer performer : foundPerformers) {
                 copyPerformerIds.remove(performer.getPerformerId());
@@ -62,8 +62,4 @@ public class PerformerService {
         }
     }
 
-    @Transactional(readOnly = true)
-    public List<Performer> findShowPerformers(Long showId, Collection<Long> performerIds) {
-        return performerRepository.findByShowIdAndPerformerIdIn(showId, performerIds);
-    }
 }
