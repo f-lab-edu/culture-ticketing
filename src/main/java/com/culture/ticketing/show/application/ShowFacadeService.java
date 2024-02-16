@@ -49,7 +49,7 @@ public class ShowFacadeService {
     @Transactional(readOnly = true)
     public List<RoundWithPerformersAndShowSeatsResponse> findRoundsByShowIdAndRoundStartDate(Long showId, LocalDate roundStartDate) {
 
-        List<RoundWithPerformersResponse> roundsWithPerformers = roundPerformerService.findRoundsWitPerformersByShowId(showId);
+        List<RoundWithPerformersResponse> roundsWithPerformers = roundPerformerService.findRoundsWitPerformersByShowIdAndRoundStartDate(showId, roundStartDate);
         List<Long> roundIds = roundsWithPerformers.stream()
                 .map(RoundWithPerformersResponse::getRoundId)
                 .collect(Collectors.toList());

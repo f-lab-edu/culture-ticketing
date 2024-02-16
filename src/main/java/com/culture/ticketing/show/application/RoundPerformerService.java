@@ -3,13 +3,13 @@ package com.culture.ticketing.show.application;
 import com.culture.ticketing.show.application.dto.PerformerResponse;
 import com.culture.ticketing.show.application.dto.RoundPerformersSaveRequest;
 import com.culture.ticketing.show.application.dto.RoundWithPerformersResponse;
-import com.culture.ticketing.show.domain.Performer;
 import com.culture.ticketing.show.domain.Round;
 import com.culture.ticketing.show.domain.RoundPerformer;
 import com.culture.ticketing.show.infra.RoundPerformerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -44,9 +44,19 @@ public class RoundPerformerService {
     }
 
     @Transactional(readOnly = true)
+    public List<RoundWithPerformersResponse> findRoundsWitPerformersByShowIdAndRoundStartDate(Long showId, LocalDate roundStartDate) {
+
+        return findRoundsWitPerformersByRounds(showId, roundService.findRoundsByShowIdAndRoundStartDate(showId, roundStartDate));
+    }
+
+    @Transactional(readOnly = true)
     public List<RoundWithPerformersResponse> findRoundsWitPerformersByShowId(Long showId) {
 
-        List<Round> rounds = roundService.findByShowId(showId);
+        return findRoundsWitPerformersByRounds(showId, roundService.findByShowId(showId));
+    }
+
+    private List<RoundWithPerformersResponse> findRoundsWitPerformersByRounds(Long showId, List<Round> rounds) {
+
         List<Long> roundIds = rounds.stream()
                 .map(Round::getRoundId)
                 .collect(Collectors.toList());
