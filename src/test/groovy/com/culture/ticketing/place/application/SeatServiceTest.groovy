@@ -3,6 +3,7 @@ package com.culture.ticketing.place.application
 import com.culture.ticketing.place.SeatFixtures
 import com.culture.ticketing.place.application.dto.PlaceSeatSaveRequest
 import com.culture.ticketing.place.domain.Seat
+import com.culture.ticketing.place.exception.AreaNotFoundException
 import com.culture.ticketing.place.exception.DuplicatedPlaceSeatException
 import com.culture.ticketing.place.exception.SeatNotFoundException
 import com.culture.ticketing.place.infra.SeatRepository
@@ -93,6 +94,25 @@ class SeatServiceTest extends Specification {
         then:
         def e = thrown(DuplicatedPlaceSeatException.class)
         e.message == "해당 장소에 동일한 좌석이 이미 존재합니다."
+    }
+
+    def "좌석 생성 시 구역 존재하지 않는 경우 예외 발생"() {
+
+        given:
+        Long areaId = 1L;
+        PlaceSeatSaveRequest request = PlaceSeatSaveRequest.builder()
+                .seatRow(1)
+                .seatNumber(1)
+                .areaId(areaId)
+                .build();
+        areaService.notExistsById(areaId) >> true
+
+        when:
+        seatService.createPlaceSeat(request);
+
+        then:
+        def e = thrown(AreaNotFoundException.class)
+        e.message == String.format("존재하지 않는 구역입니다. (areaId = %d)", areaId)
     }
 
     def "좌석 아이디 값 목록에 해당하는 값이 없는 경우 예외 발생"() {

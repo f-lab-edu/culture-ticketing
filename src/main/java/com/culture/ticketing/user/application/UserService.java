@@ -41,4 +41,9 @@ public class UserService {
         });
     }
 
+    @Transactional(readOnly = true)
+    public boolean notExistsById(Long userId) {
+        return !userRepository.existsById(userId);
+    }
+
 }

@@ -3,6 +3,7 @@ package com.culture.ticketing.show.application;
 import com.culture.ticketing.place.application.SeatService;
 import com.culture.ticketing.show.application.dto.ShowSeatSaveRequest;
 import com.culture.ticketing.show.domain.ShowSeat;
+import com.culture.ticketing.show.domain.ShowSeatGrade;
 import com.culture.ticketing.show.exception.ShowSeatGradeNotFoundException;
 import com.culture.ticketing.show.infra.ShowSeatRepository;
 import com.google.common.base.Preconditions;
@@ -10,7 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ShowSeatService {
@@ -40,5 +44,22 @@ public class ShowSeatService {
 
         List<ShowSeat> showSeats = request.toEntities();
         showSeatRepository.saveAll(showSeats);
+    }
+
+    @Transactional(readOnly = true)
+    public int getTotalPriceByShowSeatIds(Set<Long> showSeatIds) {
+
+        List<ShowSeat> showSeats = showSeatRepository.findAllById(showSeatIds);
+
+        List<Long> showSeatGradeIds = showSeats.stream()
+                .map(ShowSeat::getShowSeatGradeId)
+                .collect(Collectors.toList());
+
+        Map<Long, Integer> priceMapByShowSeatGradeId = showSeatGradeService.findByIds(showSeatGradeIds).stream()
+                .collect(Collectors.toMap(ShowSeatGrade::getShowSeatGradeId, ShowSeatGrade::getPrice));
+
+        return showSeats.stream()
+                .mapToInt(showSeat -> priceMapByShowSeatGradeId.get(showSeat.getShowSeatGradeId()))
+                .sum();
     }
 }
