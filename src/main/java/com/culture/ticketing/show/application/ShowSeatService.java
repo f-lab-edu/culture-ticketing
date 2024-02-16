@@ -1,7 +1,6 @@
 package com.culture.ticketing.show.application;
 
 import com.culture.ticketing.place.application.SeatService;
-import com.culture.ticketing.show.application.dto.ShowSeatGradeResponse;
 import com.culture.ticketing.show.application.dto.ShowSeatSaveRequest;
 import com.culture.ticketing.show.domain.ShowSeat;
 import com.culture.ticketing.show.domain.ShowSeatGrade;
@@ -69,5 +68,10 @@ public class ShowSeatService {
 
         return showSeatRepository.findByShowSeatGradeIdIn(showSeatGradeIds).stream()
                 .collect(Collectors.groupingBy(ShowSeat::getShowSeatGradeId, Collectors.counting()));
+    }
+
+    public List<ShowSeat> findByIds(List<Long> showSeatIds) {
+
+        return showSeatRepository.findAllById(showSeatIds);
     }
 }

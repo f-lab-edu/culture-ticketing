@@ -66,4 +66,9 @@ public class ShowFloorService {
         return showFloorRepository.findByShowSeatGradeIdIn(showSeatGradeIds).stream()
                 .collect(Collectors.groupingBy(ShowFloor::getShowSeatGradeId, Collectors.summingLong(ShowFloor::getCount)));
     }
+
+    public List<ShowFloor> findByIds(List<Long> showFloorIds) {
+
+        return showFloorRepository.findAllById(showFloorIds);
+    }
 }
