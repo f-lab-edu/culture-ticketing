@@ -54,12 +54,12 @@ public class ShowFacadeService {
                 .map(RoundWithPerformersResponse::getRoundId)
                 .collect(Collectors.toList());
 
-        Map<Long, Map<Long, Long>> showSeatAvailableCountMapByShowSeatGradeIdAndRoundId = bookingFacadeService.findShowSeatAvailableCountMapByShowSeatGradeIdAndRoundId(showId, roundIds);
+        Map<Long, Map<ShowSeatGradeResponse, Long>> showSeatAvailableCountMapByShowSeatGradeAndRoundId = bookingFacadeService.findShowSeatAvailableCountMapByShowSeatGradeAndRoundId(showId, roundIds);
 
         return roundsWithPerformers.stream()
                 .map(roundWithPerformers -> new RoundWithPerformersAndShowSeatsResponse(
                         roundWithPerformers,
-                        ShowSeatGradeWithCountResponse.from(showSeatAvailableCountMapByShowSeatGradeIdAndRoundId.get(roundWithPerformers.getRoundId()))
+                        ShowSeatGradeWithCountResponse.from(showSeatAvailableCountMapByShowSeatGradeAndRoundId.get(roundWithPerformers.getRoundId()))
                 ))
                 .collect(Collectors.toList());
     }

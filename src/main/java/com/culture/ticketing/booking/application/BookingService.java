@@ -62,9 +62,4 @@ public class BookingService {
         bookingRepository.save(request.toEntity());
     }
 
-    @Transactional(readOnly = true)
-    public List<Booking> findSuccessBookingsByRoundIds(List<Long> roundIds) {
-
-        return bookingRepository.findByRoundIdInAndBookingStatus(roundIds, BookingStatus.SUCCESS);
-    }
 }
