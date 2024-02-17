@@ -59,7 +59,8 @@ public class ShowSeatService {
                 .collect(Collectors.toMap(ShowSeatGrade::getShowSeatGradeId, ShowSeatGrade::getPrice));
 
         return showSeats.stream()
-                .mapToInt(showSeat -> priceMapByShowSeatGradeId.get(showSeat.getShowSeatGradeId()))
+                .map(ShowSeat::getShowSeatGradeId)
+                .mapToInt(priceMapByShowSeatGradeId::get)
                 .sum();
     }
 
