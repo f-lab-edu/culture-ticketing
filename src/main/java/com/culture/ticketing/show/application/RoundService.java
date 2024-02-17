@@ -81,7 +81,7 @@ public class RoundService {
     }
 
     @Transactional(readOnly = true)
-    public List<RoundResponse> findRoundsByShowId(Long showId) {
+    public List<RoundResponse> findRoundResponsesByShowId(Long showId) {
 
         List<Round> rounds = roundRepository.findByShowId(showId);
 

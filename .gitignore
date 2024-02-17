@@ -36,3 +36,8 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### prometheus & grafana
+grafana/
+prometheus/volume/
+prometheus/config/query_log_file.log

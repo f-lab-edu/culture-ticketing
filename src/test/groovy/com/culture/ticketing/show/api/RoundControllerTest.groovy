@@ -1,8 +1,11 @@
 package com.culture.ticketing.show.api
 
+import com.culture.ticketing.show.RoundFixtures
 import com.culture.ticketing.show.application.RoundService
+import com.culture.ticketing.show.application.dto.RoundResponse
 import com.culture.ticketing.show.application.dto.RoundSaveRequest
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.hamcrest.Matchers
 import org.spockframework.spring.SpringBean
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -16,6 +19,7 @@ import spock.lang.Specification
 
 import java.time.LocalDateTime
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @WebMvcTest(RoundController.class)
@@ -48,4 +52,24 @@ class RoundControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
+    def "공연별 회차 목록 조회 성공"() {
+
+        given:
+        roundService.findRoundResponsesByShowId(1L) >> [
+                RoundResponse.from(RoundFixtures.createRound(roundId: 1L, showId: 1L)),
+                RoundResponse.from(RoundFixtures.createRound(roundId: 2L, showId: 1L)),
+                RoundResponse.from(RoundFixtures.createRound(roundId: 3L, showId: 1L))
+        ]
+
+        expect:
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/rounds")
+                .param("showId", "1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("\$").isArray())
+                .andExpect(jsonPath("\$", Matchers.hasSize(3)))
+                .andExpect(jsonPath("\$[0].roundId").value(1))
+                .andExpect(jsonPath("\$[1].roundId").value(2))
+                .andExpect(jsonPath("\$[2].roundId").value(3))
+                .andDo(MockMvcResultHandlers.print())
+    }
 }
