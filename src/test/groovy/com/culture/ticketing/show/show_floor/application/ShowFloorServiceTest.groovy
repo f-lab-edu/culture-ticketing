@@ -116,4 +116,39 @@ class ShowFloorServiceTest extends Specification {
         then:
         totalPrice == 250000
     }
+
+    def "아이디 목록으로 공연 플로어 목록 조회"() {
+
+        given:
+        List<Long> showFloorIds = [1L, 2L]
+        showFloorRepository.findAllById(showFloorIds) >> [
+                ShowFloorFixtures.createShowFloor(showFloorId: 1L),
+                ShowFloorFixtures.createShowFloor(showFloorId: 2L)
+        ]
+
+        when:
+        List<ShowFloor> response = showFloorService.findByIds(showFloorIds);
+
+        then:
+        response.size() == 2
+        response.showFloorId == [1L, 2L]
+    }
+
+    def "공연 플로어 등급 아이디 별로 공연 플로어 좌석 수 맵핑 구하기"() {
+
+        given:
+        List<Long> showFloorGradeIds = [1L, 2L]
+        showFloorRepository.findByShowFloorGradeIdIn(showFloorGradeIds) >> [
+                ShowFloorFixtures.createShowFloor(showFloorId: 1L, showFloorGradeId: 1L, count: 700),
+                ShowFloorFixtures.createShowFloor(showFloorId: 2L, showFloorGradeId: 1L, count: 500),
+                ShowFloorFixtures.createShowFloor(showFloorId: 3L, showFloorGradeId: 2L, count: 500)
+        ]
+
+        when:
+        Map<Long, Long> countMapByShowFloorGradeId = showFloorService.countMapByShowFloorGradeId(showFloorGradeIds);
+
+        then:
+        countMapByShowFloorGradeId.get(1L) == 1200
+        countMapByShowFloorGradeId.get(2L) == 500
+    }
 }

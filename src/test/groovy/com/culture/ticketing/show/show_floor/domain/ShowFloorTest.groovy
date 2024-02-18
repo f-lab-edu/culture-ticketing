@@ -22,14 +22,14 @@ class ShowFloorTest extends Specification {
 
         when:
         ShowFloor.builder()
-                .showFloorName(null)
-                .count(700)
+                .showFloorName(showFloorName)
+                .count(count)
                 .showFloorGradeId(1L)
                 .build();
 
         then:
         def e = thrown(IllegalArgumentException.class)
-        e.message == "공연 플로어 구역명을 입력해주세요."
+        e.message == expected
 
         where:
         showFloorName | count || expected
