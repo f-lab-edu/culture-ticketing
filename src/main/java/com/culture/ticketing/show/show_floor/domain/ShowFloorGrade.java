@@ -40,7 +40,7 @@ public class ShowFloorGrade extends BaseEntity {
     public ShowFloorGrade(Long showFloorGradeId, String showFloorGradeName, int price, Long showId) {
 
         Objects.requireNonNull(showId, "공연 아이디를 입력해주세요.");
-        Preconditions.checkArgument(StringUtils.hasText(showFloorGradeName), "공연 플로어 등급을 입력해주세요.");
+        Preconditions.checkArgument(StringUtils.hasText(showFloorGradeName), "공연 플로어 등급명을 입력해주세요.");
         Preconditions.checkArgument(price >= 0, "공연 플로어 가격을 0 이상으로 입력해주세요.");
 
         this.showFloorGradeId = showFloorGradeId;

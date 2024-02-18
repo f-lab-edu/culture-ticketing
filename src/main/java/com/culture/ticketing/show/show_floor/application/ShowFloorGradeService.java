@@ -42,7 +42,7 @@ public class ShowFloorGradeService {
 
         Objects.requireNonNull(request.getShowId(), "공연 아이디를 입력해주세요.");
         Preconditions.checkArgument(StringUtils.hasText(request.getShowFloorGradeName()), "공연 플로어 등급명을 입력해주세요.");
-        Preconditions.checkArgument(request.getPrice() >= 0, "공연 좌석 가격을 0 이상으로 입력해주세요.");
+        Preconditions.checkArgument(request.getPrice() >= 0, "공연 플로어 가격을 0 이상으로 입력해주세요.");
     }
 
     @Transactional(readOnly = true)
