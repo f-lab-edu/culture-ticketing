@@ -111,7 +111,7 @@ class ShowSeatGradeServiceTest extends Specification {
         !response
     }
 
-    def "공연_아이디로_공연_좌석_등급_목록_조회"() {
+    def "공연 아이디로 공연 좌석 등급 목록 조회"() {
 
         given:
         showSeatGradeRepository.findByShowId(1L) >> [
@@ -125,5 +125,22 @@ class ShowSeatGradeServiceTest extends Specification {
 
         then:
         response.size() == 3
+    }
+
+    def "공연 좌석 등급 아이디 목록으로 공연 좌석 등급 목록 조회"() {
+
+        given:
+        List<Long> showSeatGradeIds = [1L, 2L];
+        showSeatGradeRepository.findAllById(showSeatGradeIds) >> [
+                ShowSeatGradeFixtures.createShowSeatGrade(showSeatGradeId: 1L),
+                ShowSeatGradeFixtures.createShowSeatGrade(showSeatGradeId: 2L)
+        ]
+
+        when:
+        List<ShowSeatGrade> response = showSeatGradeService.findByIds(showSeatGradeIds);
+
+        then:
+        response.size() == 2
+        response.showSeatGradeId == [1L, 2L]
     }
 }

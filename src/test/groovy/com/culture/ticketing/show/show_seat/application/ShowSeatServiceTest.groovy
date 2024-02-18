@@ -119,4 +119,39 @@ class ShowSeatServiceTest extends Specification {
         then:
         totalPrice == 350000
     }
+
+    def "공연 좌석 아이디 목록으로 공연 좌석 목록 조회"() {
+
+        given:
+        List<Long> showSeatIds = [1L, 2L]
+        showSeatRepository.findAllById(showSeatIds) >> [
+                ShowSeatFixtures.createShowSeat(showSeatId: 1L),
+                ShowSeatFixtures.createShowSeat(showSeatId: 2L)
+        ]
+
+        when:
+        List<ShowSeat> response = showSeatService.findByIds(showSeatIds);
+
+        then:
+        response.size() == 2
+        response.showSeatId == [1L, 2L]
+    }
+
+    def "공연 등급 아이디별 공연 좌석 수 맵핑 값 구하기"() {
+
+        given:
+        List<Long> showSeatGradeIds = [1L, 2L];
+        showSeatRepository.findByShowSeatGradeIdIn(showSeatGradeIds) >> [
+                ShowSeatFixtures.createShowSeat(showSeatId: 1L, showSeatGradeId: 1L),
+                ShowSeatFixtures.createShowSeat(showSeatId: 2L, showSeatGradeId: 1L),
+                ShowSeatFixtures.createShowSeat(showSeatId: 3L, showSeatGradeId: 2L)
+        ]
+
+        when:
+        Map<Long, Long> countMapByShowSeatGradeId = showSeatService.countMapByShowSeatGradeId(showSeatGradeIds);
+
+        then:
+        countMapByShowSeatGradeId.get(1L) == 2
+        countMapByShowSeatGradeId.get(2L) == 1
+    }
 }
