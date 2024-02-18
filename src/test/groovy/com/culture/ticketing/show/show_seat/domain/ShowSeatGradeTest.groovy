@@ -1,6 +1,5 @@
 package com.culture.ticketing.show.show_seat.domain
 
-import com.culture.ticketing.show.show_seat.domain.ShowSeatGrade
 import spock.lang.Specification
 
 class ShowSeatGradeTest extends Specification {
@@ -9,7 +8,7 @@ class ShowSeatGradeTest extends Specification {
 
         when:
         ShowSeatGrade.builder()
-                .seatGrade("VIP")
+                .showSeatGradeName("R")
                 .price(100000)
                 .showId(null)
                 .build();
@@ -23,7 +22,7 @@ class ShowSeatGradeTest extends Specification {
 
         when:
         ShowSeatGrade.builder()
-                .seatGrade(seatGrade)
+                .showSeatGradeName(showSeatGradeName)
                 .price(price)
                 .showId(1L)
                 .build();
@@ -33,9 +32,9 @@ class ShowSeatGradeTest extends Specification {
         e.message == expected
 
         where:
-        seatGrade | price  || expected
-        null      | 100000 || "공연 좌석 등급을 입력해주세요."
-        ""        | 100000 || "공연 좌석 등급을 입력해주세요."
-        "VIP"     | -1     || "공연 좌석 가격을 0 이상으로 입력해주세요."
+        showSeatGradeName | price  || expected
+        null              | 100000 || "공연 좌석 등급을 입력해주세요."
+        ""                | 100000 || "공연 좌석 등급을 입력해주세요."
+        "VIP"             | -1     || "공연 좌석 가격을 0 이상으로 입력해주세요."
     }
 }

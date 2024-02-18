@@ -1,6 +1,5 @@
 package com.culture.ticketing.show.show_seat.domain
 
-import com.culture.ticketing.show.show_seat.domain.ShowSeat
 import spock.lang.Specification
 
 class ShowSeatTest extends Specification {

@@ -1,6 +1,5 @@
 package com.culture.ticketing.show.show_seat.api
 
-import com.culture.ticketing.show.show_seat.api.ShowSeatController
 import com.culture.ticketing.show.show_seat.application.ShowSeatService
 import com.culture.ticketing.show.show_seat.application.dto.ShowSeatSaveRequest
 import com.fasterxml.jackson.databind.ObjectMapper

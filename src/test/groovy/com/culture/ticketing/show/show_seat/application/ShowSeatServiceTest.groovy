@@ -4,8 +4,6 @@ import com.culture.ticketing.place.application.SeatService
 import com.culture.ticketing.show.show_seat.ShowSeatFixtures
 import com.culture.ticketing.show.show_seat.ShowSeatGradeFixtures
 import com.culture.ticketing.show.show_seat.application.dto.ShowSeatSaveRequest
-import com.culture.ticketing.show.show_seat.application.ShowSeatGradeService
-import com.culture.ticketing.show.show_seat.application.ShowSeatService
 import com.culture.ticketing.show.show_seat.domain.ShowSeat
 import com.culture.ticketing.show.show_seat.exception.ShowSeatGradeNotFoundException
 import com.culture.ticketing.show.show_seat.infra.ShowSeatRepository

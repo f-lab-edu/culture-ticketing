@@ -1,6 +1,5 @@
 package com.culture.ticketing.show.show_seat.api
 
-import com.culture.ticketing.show.show_seat.api.ShowSeatGradeController
 import com.culture.ticketing.show.show_seat.application.ShowSeatGradeService
 import com.culture.ticketing.show.show_seat.application.dto.ShowSeatGradeSaveRequest
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -32,7 +31,7 @@ class ShowSeatGradeControllerTest extends Specification {
 
         given:
         ShowSeatGradeSaveRequest request = ShowSeatGradeSaveRequest.builder()
-                .seatGrade("VIP")
+                .showSeatGradeName("R")
                 .price(100000)
                 .showId(1L)
                 .build();
