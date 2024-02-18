@@ -1,13 +1,13 @@
 package com.culture.ticketing.booking.application;
 
-import com.culture.ticketing.show.application.ShowFloorGradeService;
-import com.culture.ticketing.show.application.ShowFloorService;
-import com.culture.ticketing.show.application.ShowSeatGradeService;
-import com.culture.ticketing.show.application.ShowSeatService;
-import com.culture.ticketing.show.application.dto.ShowFloorGradeResponse;
-import com.culture.ticketing.show.application.dto.ShowSeatGradeResponse;
-import com.culture.ticketing.show.domain.ShowFloor;
-import com.culture.ticketing.show.domain.ShowSeat;
+import com.culture.ticketing.show.show_floor.application.ShowFloorGradeService;
+import com.culture.ticketing.show.show_floor.application.ShowFloorService;
+import com.culture.ticketing.show.show_seat.application.ShowSeatGradeService;
+import com.culture.ticketing.show.show_seat.application.ShowSeatService;
+import com.culture.ticketing.show.show_floor.application.dto.ShowFloorGradeResponse;
+import com.culture.ticketing.show.show_seat.application.dto.ShowSeatGradeResponse;
+import com.culture.ticketing.show.show_floor.domain.ShowFloor;
+import com.culture.ticketing.show.show_seat.domain.ShowSeat;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

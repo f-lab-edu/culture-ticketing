@@ -2,7 +2,7 @@ package com.culture.ticketing.booking.application
 
 import com.culture.ticketing.booking.domain.BookingStatus
 import com.culture.ticketing.booking.infra.BookingShowSeatRepository
-import com.culture.ticketing.show.application.ShowSeatService
+import com.culture.ticketing.show.show_seat.application.ShowSeatService
 import spock.lang.Specification
 
 class BookingShowSeatServiceTest extends Specification {

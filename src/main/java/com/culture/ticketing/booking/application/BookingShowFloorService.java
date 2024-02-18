@@ -4,8 +4,8 @@ import com.culture.ticketing.booking.application.dto.BookingShowFloorSaveRequest
 import com.culture.ticketing.booking.domain.BookingShowFloor;
 import com.culture.ticketing.booking.domain.BookingStatus;
 import com.culture.ticketing.booking.infra.BookingShowFloorRepository;
-import com.culture.ticketing.show.application.ShowFloorService;
-import com.culture.ticketing.show.domain.ShowFloor;
+import com.culture.ticketing.show.show_floor.application.ShowFloorService;
+import com.culture.ticketing.show.show_floor.domain.ShowFloor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -3,8 +3,8 @@ package com.culture.ticketing.booking.application;
 import com.culture.ticketing.booking.domain.BookingShowSeat;
 import com.culture.ticketing.booking.domain.BookingStatus;
 import com.culture.ticketing.booking.infra.BookingShowSeatRepository;
-import com.culture.ticketing.show.application.ShowSeatService;
-import com.culture.ticketing.show.domain.ShowSeat;
+import com.culture.ticketing.show.show_seat.application.ShowSeatService;
+import com.culture.ticketing.show.show_seat.domain.ShowSeat;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

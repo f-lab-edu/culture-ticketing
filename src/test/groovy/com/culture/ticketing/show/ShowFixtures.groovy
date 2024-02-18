@@ -6,6 +6,8 @@ import com.culture.ticketing.show.application.dto.ShowResponse
 import com.culture.ticketing.show.domain.AgeRestriction
 import com.culture.ticketing.show.domain.Category
 import com.culture.ticketing.show.domain.Show
+import com.culture.ticketing.show.round_performer.RoundFixtures
+import com.culture.ticketing.show.show_seat.ShowSeatGradeFixtures
 
 import java.time.LocalDate
 import java.util.stream.Collectors

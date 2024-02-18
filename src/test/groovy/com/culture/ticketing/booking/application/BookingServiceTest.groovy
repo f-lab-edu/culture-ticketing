@@ -7,8 +7,8 @@ import com.culture.ticketing.booking.domain.BookingStatus
 import com.culture.ticketing.booking.exception.AlreadyBookingShowSeatsExistsException
 import com.culture.ticketing.booking.exception.BookingTotalPriceNotMatchException
 import com.culture.ticketing.booking.infra.BookingRepository
-import com.culture.ticketing.show.application.RoundService
-import com.culture.ticketing.show.exception.RoundNotFoundException
+import com.culture.ticketing.show.round_performer.application.RoundService
+import com.culture.ticketing.show.round_performer.exception.RoundNotFoundException
 import com.culture.ticketing.user.application.UserService
 import com.culture.ticketing.user.exception.UserNotFoundException
 import spock.lang.Specification

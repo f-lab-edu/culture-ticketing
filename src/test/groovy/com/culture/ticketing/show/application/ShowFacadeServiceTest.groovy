@@ -2,12 +2,16 @@ package com.culture.ticketing.show.application
 
 import com.culture.ticketing.place.PlaceFixtures
 import com.culture.ticketing.place.application.PlaceService
-import com.culture.ticketing.show.PerformerFixtures
-import com.culture.ticketing.show.RoundFixtures
-import com.culture.ticketing.show.RoundPerformerFixtures
+import com.culture.ticketing.show.round_performer.PerformerFixtures
+import com.culture.ticketing.show.round_performer.RoundFixtures
+import com.culture.ticketing.show.round_performer.RoundPerformerFixtures
 import com.culture.ticketing.show.ShowFixtures
-import com.culture.ticketing.show.ShowSeatGradeFixtures
+import com.culture.ticketing.show.show_seat.ShowSeatGradeFixtures
 import com.culture.ticketing.show.application.dto.ShowDetailResponse
+import com.culture.ticketing.show.round_performer.application.PerformerService
+import com.culture.ticketing.show.round_performer.application.RoundPerformerService
+import com.culture.ticketing.show.round_performer.application.RoundService
+import com.culture.ticketing.show.show_seat.application.ShowSeatGradeService
 import spock.lang.Specification
 
 class ShowFacadeServiceTest extends Specification {
