@@ -1,7 +1,6 @@
 package com.culture.ticketing.show.round_performer.infra
 
 import com.culture.ticketing.show.round_performer.domain.Round
-import com.culture.ticketing.show.round_performer.infra.RoundRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest

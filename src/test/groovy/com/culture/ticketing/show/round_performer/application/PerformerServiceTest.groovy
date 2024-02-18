@@ -2,7 +2,6 @@ package com.culture.ticketing.show.round_performer.application
 
 import com.culture.ticketing.show.application.ShowService
 import com.culture.ticketing.show.round_performer.PerformerFixtures
-import com.culture.ticketing.show.round_performer.application.PerformerService
 import com.culture.ticketing.show.round_performer.domain.Performer
 import com.culture.ticketing.show.round_performer.application.dto.PerformerResponse
 import com.culture.ticketing.show.round_performer.application.dto.PerformerSaveRequest
@@ -107,16 +106,16 @@ class PerformerServiceTest extends Specification {
         response.collect(performer -> performer.performerId) == [1L, 2L, 4L]
     }
 
-    def "공연 아이디와 출연자 아이디 목록으로 출연자 목록 조회"() {
+    def "공연 아이디로 출연자 목록 조회"() {
 
         given:
-        performerRepository.findByShowIdAndPerformerIdIn(1L, [1L, 2L, 3L]) >> [
+        performerRepository.findByShowId(1L) >> [
                 PerformerFixtures.createPerformer(performerId: 1L, showId: 1L),
                 PerformerFixtures.createPerformer(performerId: 2L, showId: 1L)
         ]
 
         when:
-        List<Performer> foundPerformers = performerService.findShowPerformers(1L, [1L, 2L, 3L]);
+        List<PerformerResponse> foundPerformers = performerService.findPerformersByShowId(1L);
 
         then:
         foundPerformers.collect(performer -> performer.performerId) == [1L, 2L]

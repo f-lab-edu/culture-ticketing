@@ -2,7 +2,6 @@ package com.culture.ticketing.show.round_performer.application
 
 import com.culture.ticketing.show.application.ShowService
 import com.culture.ticketing.show.round_performer.RoundFixtures
-import com.culture.ticketing.show.round_performer.application.RoundService
 import com.culture.ticketing.show.round_performer.application.dto.RoundResponse
 import com.culture.ticketing.show.round_performer.application.dto.RoundSaveRequest
 import com.culture.ticketing.show.domain.AgeRestriction

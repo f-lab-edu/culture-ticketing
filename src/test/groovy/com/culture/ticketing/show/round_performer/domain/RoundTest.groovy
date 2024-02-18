@@ -1,6 +1,5 @@
 package com.culture.ticketing.show.round_performer.domain
 
-import com.culture.ticketing.show.round_performer.domain.Round
 import spock.lang.Specification
 
 import java.time.LocalDateTime

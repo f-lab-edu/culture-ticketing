@@ -1,6 +1,5 @@
 package com.culture.ticketing.show.round_performer.domain
 
-import com.culture.ticketing.show.round_performer.domain.RoundPerformer
 import spock.lang.Specification
 
 class RoundPerformerTest extends Specification {

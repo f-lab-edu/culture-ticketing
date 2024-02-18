@@ -1,6 +1,5 @@
 package com.culture.ticketing.show.round_performer.domain
 
-import com.culture.ticketing.show.round_performer.domain.Performer
 import spock.lang.Specification
 
 class PerformerTest extends Specification {

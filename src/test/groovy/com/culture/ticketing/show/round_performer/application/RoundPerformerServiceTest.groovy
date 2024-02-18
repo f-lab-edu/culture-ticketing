@@ -1,11 +1,11 @@
 package com.culture.ticketing.show.round_performer.application
 
-import com.culture.ticketing.show.round_performer.application.PerformerService
-import com.culture.ticketing.show.round_performer.application.RoundPerformerService
-import com.culture.ticketing.show.round_performer.application.RoundService
+import com.culture.ticketing.show.round_performer.PerformerFixtures
+import com.culture.ticketing.show.round_performer.application.dto.PerformerResponse
 import com.culture.ticketing.show.round_performer.application.dto.RoundPerformersSaveRequest
 import com.culture.ticketing.show.round_performer.RoundPerformerFixtures
 import com.culture.ticketing.show.round_performer.RoundFixtures
+import com.culture.ticketing.show.round_performer.application.dto.RoundWithPerformersResponse
 import com.culture.ticketing.show.round_performer.infra.RoundPerformerRepository
 import com.culture.ticketing.show.round_performer.domain.RoundPerformer
 import spock.lang.Specification
@@ -63,21 +63,31 @@ class RoundPerformerServiceTest extends Specification {
         }
     }
 
-    def "회차 아이디 목록으로 회차 목록 조회"() {
+    def "공연 아이디로 회차 및 출연자 정보 목록 조회"() {
 
         given:
-        List<Long> roundIds = [1L, 2L]
-        roundPerformerRepository.findByRoundIdIn(roundIds) >> [
+        Long showId = 1L;
+        roundService.findByShowId(showId) >> [
+                RoundFixtures.createRound(roundId: 1L),
+                RoundFixtures.createRound(roundId: 2L)
+        ]
+        performerService.findPerformersByShowId(showId) >> [
+                new PerformerResponse(PerformerFixtures.createPerformer(performerId: 1L)),
+                new PerformerResponse(PerformerFixtures.createPerformer(performerId: 2L))
+        ]
+        roundPerformerRepository.findByRoundIdIn([1L, 2L]) >> [
                 RoundPerformerFixtures.createRoundPerformer(roundPerformerId: 1L, roundId: 1L, performerId: 1L),
                 RoundPerformerFixtures.createRoundPerformer(roundPerformerId: 2L, roundId: 2L, performerId: 2L),
                 RoundPerformerFixtures.createRoundPerformer(roundPerformerId: 5L, roundId: 1L, performerId: 2L),
         ]
 
         when:
-        List<RoundPerformer> foundRoundPerformers = roundPerformerService.findByRoundIds(roundIds);
+        List<RoundWithPerformersResponse> foundRoundPerformers = roundPerformerService.findRoundsWitPerformersByShowId(showId);
 
         then:
-        foundRoundPerformers.collect(round -> roundIds.contains(round.roundId)).size() == 3
-        foundRoundPerformers.collect(round -> round.roundPerformerId) == [1L, 2L, 5L]
+        foundRoundPerformers.size() == 2
+        foundRoundPerformers.roundId == [1L, 2L]
+        foundRoundPerformers.get(0).performers.performerId == [1L, 2L]
+        foundRoundPerformers.get(1).performers.performerId == [2L]
     }
 }
