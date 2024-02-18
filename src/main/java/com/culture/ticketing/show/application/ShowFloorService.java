@@ -2,8 +2,8 @@ package com.culture.ticketing.show.application;
 
 import com.culture.ticketing.show.application.dto.ShowFloorSaveRequest;
 import com.culture.ticketing.show.domain.ShowFloor;
-import com.culture.ticketing.show.domain.ShowSeatGrade;
-import com.culture.ticketing.show.exception.ShowSeatGradeNotFoundException;
+import com.culture.ticketing.show.domain.ShowFloorGrade;
+import com.culture.ticketing.show.exception.ShowFloorGradeNotFoundException;
 import com.culture.ticketing.show.infra.ShowFloorRepository;
 import com.google.common.base.Preconditions;
 import org.springframework.stereotype.Service;
@@ -20,11 +20,11 @@ import java.util.stream.Collectors;
 public class ShowFloorService {
 
     private final ShowFloorRepository showFloorRepository;
-    private final ShowSeatGradeService showSeatGradeService;
+    private final ShowFloorGradeService showFloorGradeService;
 
-    public ShowFloorService(ShowFloorRepository showFloorRepository, ShowSeatGradeService showSeatGradeService) {
+    public ShowFloorService(ShowFloorRepository showFloorRepository, ShowFloorGradeService showFloorGradeService) {
         this.showFloorRepository = showFloorRepository;
-        this.showSeatGradeService = showSeatGradeService;
+        this.showFloorGradeService = showFloorGradeService;
     }
 
     @Transactional
@@ -32,8 +32,8 @@ public class ShowFloorService {
 
         checkValidShowFloorSaveRequest(request);
 
-        if (showSeatGradeService.notExistsById(request.getShowSeatGradeId())) {
-            throw new ShowSeatGradeNotFoundException(request.getShowSeatGradeId());
+        if (showFloorGradeService.notExistsById(request.getShowFloorGradeId())) {
+            throw new ShowFloorGradeNotFoundException(request.getShowFloorGradeId());
         }
 
         showFloorRepository.save(request.toEntity());
@@ -41,7 +41,7 @@ public class ShowFloorService {
 
     private void checkValidShowFloorSaveRequest(ShowFloorSaveRequest request) {
 
-        Objects.requireNonNull(request.getShowSeatGradeId(), "공연 좌석 등급 아이디를 입력해주세요.");
+        Objects.requireNonNull(request.getShowFloorGradeId(), "공연 플로어 등급 아이디를 입력해주세요.");
         Preconditions.checkArgument(StringUtils.hasText(request.getShowFloorName()), "공연 플로어 구역명을 입력해주세요.");
         Preconditions.checkArgument(request.getCount() > 0, "공연 플로어 인원수를 1 이상 숫자로 입력해주세요.");
     }
@@ -53,25 +53,25 @@ public class ShowFloorService {
         Map<Long, ShowFloor> showFloorMapById = showFloors.stream()
                 .collect(Collectors.toMap(ShowFloor::getShowFloorId, Function.identity()));
 
-        List<Long> showSeatGradeIds = showFloors.stream()
-                .map(ShowFloor::getShowSeatGradeId)
+        List<Long> showFloorGradeIds = showFloors.stream()
+                .map(ShowFloor::getShowFloorGradeId)
                 .collect(Collectors.toList());
 
-        Map<Long, Integer> priceMapByShowSeatGradeId = showSeatGradeService.findByIds(showSeatGradeIds).stream()
-                .collect(Collectors.toMap(ShowSeatGrade::getShowSeatGradeId, ShowSeatGrade::getPrice));
+        Map<Long, Integer> priceMapByShowFloorGradeId = showFloorGradeService.findByIds(showFloorGradeIds).stream()
+                .collect(Collectors.toMap(ShowFloorGrade::getShowFloorGradeId, ShowFloorGrade::getPrice));
 
         return showFloorIds.stream()
                 .map(showFloorMapById::get)
-                .map(ShowFloor::getShowSeatGradeId)
-                .mapToInt(priceMapByShowSeatGradeId::get)
+                .map(ShowFloor::getShowFloorGradeId)
+                .mapToInt(priceMapByShowFloorGradeId::get)
                 .sum();
     }
 
     @Transactional(readOnly = true)
-    public Map<Long, Long> countMapByShowSeatGradeId(List<Long> showSeatGradeIds) {
+    public Map<Long, Long> countMapByShowFloorGradeId(List<Long> showFloorGradeIds) {
 
-        return showFloorRepository.findByShowSeatGradeIdIn(showSeatGradeIds).stream()
-                .collect(Collectors.groupingBy(ShowFloor::getShowSeatGradeId, Collectors.summingLong(ShowFloor::getCount)));
+        return showFloorRepository.findByShowFloorGradeIdIn(showFloorGradeIds).stream()
+                .collect(Collectors.groupingBy(ShowFloor::getShowFloorGradeId, Collectors.summingLong(ShowFloor::getCount)));
     }
 
     public List<ShowFloor> findByIds(List<Long> showFloorIds) {

@@ -10,13 +10,13 @@ import java.util.stream.Collectors;
 public class ShowSeatGradeWithCountResponse {
 
     private final Long showSeatGradeId;
-    private final String seatGrade;
+    private final String showSeatGradeName;
     private final int price;
     private final Long availableSeatsCount;
 
     public ShowSeatGradeWithCountResponse(ShowSeatGradeResponse showSeatGrade, Long availableSeatsCount) {
         this.showSeatGradeId = showSeatGrade.getShowSeatGradeId();
-        this.seatGrade = showSeatGrade.getShowSeatGradeName();
+        this.showSeatGradeName = showSeatGrade.getShowSeatGradeName();
         this.price = showSeatGrade.getPrice();
         this.availableSeatsCount = availableSeatsCount;
     }

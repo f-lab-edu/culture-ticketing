@@ -6,6 +6,8 @@ import com.culture.ticketing.place.domain.Place;
 import com.culture.ticketing.show.application.dto.RoundWithPerformersAndShowSeatsResponse;
 import com.culture.ticketing.show.application.dto.RoundWithPerformersResponse;
 import com.culture.ticketing.show.application.dto.ShowDetailResponse;
+import com.culture.ticketing.show.application.dto.ShowFloorGradeResponse;
+import com.culture.ticketing.show.application.dto.ShowFloorGradeWithCountResponse;
 import com.culture.ticketing.show.application.dto.ShowSeatGradeResponse;
 import com.culture.ticketing.show.application.dto.ShowSeatGradeWithCountResponse;
 import com.culture.ticketing.show.domain.Show;
@@ -23,14 +25,17 @@ public class ShowFacadeService {
     private final ShowService showService;
     private final RoundPerformerService roundPerformerService;
     private final ShowSeatGradeService showSeatGradeService;
+    private final ShowFloorGradeService showFloorGradeService;
     private final PlaceService placeService;
     private final BookingFacadeService bookingFacadeService;
 
-    public ShowFacadeService(ShowService showService, RoundPerformerService roundPerformerService, ShowSeatGradeService showSeatGradeService,
+    public ShowFacadeService(ShowService showService, RoundPerformerService roundPerformerService,
+                             ShowSeatGradeService showSeatGradeService, ShowFloorGradeService showFloorGradeService,
                              PlaceService placeService, BookingFacadeService bookingFacadeService) {
         this.showService = showService;
         this.roundPerformerService = roundPerformerService;
         this.showSeatGradeService = showSeatGradeService;
+        this.showFloorGradeService = showFloorGradeService;
         this.placeService = placeService;
         this.bookingFacadeService = bookingFacadeService;
     }
@@ -42,8 +47,9 @@ public class ShowFacadeService {
         Place place = placeService.findPlaceById(show.getPlaceId());
         List<RoundWithPerformersResponse> rounds = roundPerformerService.findRoundsWitPerformersByShowId(showId);
         List<ShowSeatGradeResponse> showSeatGrades = showSeatGradeService.findShowSeatGradesByShowId(showId);
+        List<ShowFloorGradeResponse> showFloorGrades = showFloorGradeService.findShowFloorGradesByShowId(showId);
 
-        return ShowDetailResponse.from(show, place, rounds, showSeatGrades);
+        return ShowDetailResponse.from(show, place, rounds, showSeatGrades, showFloorGrades);
     }
 
     @Transactional(readOnly = true)
@@ -55,11 +61,13 @@ public class ShowFacadeService {
                 .collect(Collectors.toList());
 
         Map<Long, Map<ShowSeatGradeResponse, Long>> showSeatAvailableCountMapByShowSeatGradeAndRoundId = bookingFacadeService.findShowSeatAvailableCountMapByShowSeatGradeAndRoundId(showId, roundIds);
+        Map<Long, Map<ShowFloorGradeResponse, Long>> showFloorAvailableCountMapByShowSeatGradeAndRoundId = bookingFacadeService.findShowFloorAvailableCountMapByShowFloorGradeAndRoundId(showId, roundIds);
 
         return roundsWithPerformers.stream()
                 .map(roundWithPerformers -> new RoundWithPerformersAndShowSeatsResponse(
                         roundWithPerformers,
-                        ShowSeatGradeWithCountResponse.from(showSeatAvailableCountMapByShowSeatGradeAndRoundId.get(roundWithPerformers.getRoundId()))
+                        ShowSeatGradeWithCountResponse.from(showSeatAvailableCountMapByShowSeatGradeAndRoundId.get(roundWithPerformers.getRoundId())),
+                        ShowFloorGradeWithCountResponse.from(showFloorAvailableCountMapByShowSeatGradeAndRoundId.get(roundWithPerformers.getRoundId()))
                 ))
                 .collect(Collectors.toList());
     }

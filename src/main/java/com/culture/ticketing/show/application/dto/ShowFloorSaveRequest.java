@@ -11,20 +11,20 @@ public class ShowFloorSaveRequest {
 
     private String showFloorName;
     private int count;
-    private Long showSeatGradeId;
+    private Long showFloorGradeId;
 
     @Builder
-    public ShowFloorSaveRequest(String showFloorName, int count, Long showSeatGradeId) {
+    public ShowFloorSaveRequest(String showFloorName, int count, Long showFloorGradeId) {
         this.showFloorName = showFloorName;
         this.count = count;
-        this.showSeatGradeId = showSeatGradeId;
+        this.showFloorGradeId = showFloorGradeId;
     }
 
     public ShowFloor toEntity() {
         return ShowFloor.builder()
                 .showFloorName(showFloorName)
                 .count(count)
-                .showSeatGradeId(showSeatGradeId)
+                .showFloorGradeId(showFloorGradeId)
                 .build();
     }
 }

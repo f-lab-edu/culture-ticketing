@@ -9,5 +9,6 @@ import java.util.List;
 
 @Repository
 public interface ShowFloorRepository extends JpaRepository<ShowFloor, Long> {
-    List<ShowFloor> findByShowSeatGradeIdIn(Collection<Long> showSeatGradeIds);
+
+    List<ShowFloor> findByShowFloorGradeIdIn(Collection<Long> showFloorGradeIds);
 }

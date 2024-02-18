@@ -32,19 +32,19 @@ public class ShowFloor {
     @Column(name = "count", nullable = false)
     private int count;
 
-    @Column(name = "show_seat_grade_id", nullable = false)
-    private Long showSeatGradeId;
+    @Column(name = "show_floor_grade_id", nullable = false)
+    private Long showFloorGradeId;
 
     @Builder
-    public ShowFloor(Long showFloorId, String showFloorName, int count, Long showSeatGradeId) {
+    public ShowFloor(Long showFloorId, String showFloorName, int count, Long showFloorGradeId) {
 
-        Objects.requireNonNull(showSeatGradeId, "공연 좌석 등급 아이디를 입력해주세요.");
+        Objects.requireNonNull(showFloorGradeId, "공연 플로어 등급 아이디를 입력해주세요.");
         Preconditions.checkArgument(StringUtils.hasText(showFloorName), "공연 플로어 구역명을 입력해주세요.");
         Preconditions.checkArgument(count > 0, "공연 플로어 인원수를 1 이상 숫자로 입력해주세요.");
 
         this.showFloorId = showFloorId;
         this.showFloorName = showFloorName;
         this.count = count;
-        this.showSeatGradeId = showSeatGradeId;
+        this.showFloorGradeId = showFloorGradeId;
     }
 }
