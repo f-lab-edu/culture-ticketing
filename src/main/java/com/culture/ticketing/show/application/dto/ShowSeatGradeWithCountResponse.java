@@ -16,7 +16,7 @@ public class ShowSeatGradeWithCountResponse {
 
     public ShowSeatGradeWithCountResponse(ShowSeatGradeResponse showSeatGrade, Long availableSeatsCount) {
         this.showSeatGradeId = showSeatGrade.getShowSeatGradeId();
-        this.seatGrade = showSeatGrade.getSeatGrade();
+        this.seatGrade = showSeatGrade.getShowSeatGradeName();
         this.price = showSeatGrade.getPrice();
         this.availableSeatsCount = availableSeatsCount;
     }

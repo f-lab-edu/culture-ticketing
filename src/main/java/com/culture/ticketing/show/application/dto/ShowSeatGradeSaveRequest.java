@@ -9,20 +9,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ShowSeatGradeSaveRequest {
 
-    private String seatGrade;
+    private String showSeatGradeName;
     private int price;
     private Long showId;
 
     @Builder
-    public ShowSeatGradeSaveRequest(String seatGrade, int price, Long showId) {
-        this.seatGrade = seatGrade;
+    public ShowSeatGradeSaveRequest(String showSeatGradeName, int price, Long showId) {
+        this.showSeatGradeName = showSeatGradeName;
         this.price = price;
         this.showId = showId;
     }
 
     public ShowSeatGrade toEntity() {
         return ShowSeatGrade.builder()
-                .seatGrade(seatGrade)
+                .showSeatGradeName(showSeatGradeName)
                 .price(price)
                 .showId(showId)
                 .build();

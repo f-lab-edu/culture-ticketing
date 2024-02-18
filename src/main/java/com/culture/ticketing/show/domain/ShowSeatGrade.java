@@ -22,8 +22,8 @@ public class ShowSeatGrade extends BaseEntity {
     @Column(name = "show_seat_grade_id", nullable = false, updatable = false)
     private Long showSeatGradeId;
 
-    @Column(name = "seat_type", nullable = false)
-    private String seatGrade;
+    @Column(name = "show_seat_grade_name", nullable = false)
+    private String showSeatGradeName;
 
     @Column(name = "price", nullable = false)
     private int price;
@@ -32,14 +32,14 @@ public class ShowSeatGrade extends BaseEntity {
     private Long showId;
 
     @Builder
-    public ShowSeatGrade(Long showSeatGradeId, String seatGrade, int price, Long showId) {
+    public ShowSeatGrade(Long showSeatGradeId, String showSeatGradeName, int price, Long showId) {
 
         Objects.requireNonNull(showId, "공연 아이디를 입력해주세요.");
-        Preconditions.checkArgument(StringUtils.hasText(seatGrade), "공연 좌석 등급을 입력해주세요.");
+        Preconditions.checkArgument(StringUtils.hasText(showSeatGradeName), "공연 좌석 등급을 입력해주세요.");
         Preconditions.checkArgument(price >= 0, "공연 좌석 가격을 0 이상으로 입력해주세요.");
 
         this.showSeatGradeId = showSeatGradeId;
-        this.seatGrade = seatGrade;
+        this.showSeatGradeName = showSeatGradeName;
         this.price = price;
         this.showId = showId;
     }

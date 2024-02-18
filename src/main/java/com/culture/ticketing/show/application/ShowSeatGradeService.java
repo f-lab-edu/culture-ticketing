@@ -40,7 +40,7 @@ public class ShowSeatGradeService {
     private void checkValidShowSeatGradeSaveRequest(ShowSeatGradeSaveRequest request) {
 
         Objects.requireNonNull(request.getShowId(), "공연 아이디를 입력해주세요.");
-        Preconditions.checkArgument(StringUtils.hasText(request.getSeatGrade()), "공연 좌석 등급을 입력해주세요.");
+        Preconditions.checkArgument(StringUtils.hasText(request.getShowSeatGradeName()), "공연 좌석 등급을 입력해주세요.");
         Preconditions.checkArgument(request.getPrice() >= 0, "공연 좌석 가격을 0 이상으로 입력해주세요.");
     }
 
