@@ -7,5 +7,5 @@ import java.util.Set;
 
 public interface BookingShowFloorRepositoryCustom {
 
-    boolean existsByShowFloorsInAndBooking_RoundIdAndBooking_BookingStatus(Set<BookingShowFloorSaveRequest> showFloors, Long roundId, BookingStatus bookingStatus);
+    boolean existsAlreadyBookingShowFloorsInRound(Set<BookingShowFloorSaveRequest> showFloors, Long roundId, BookingStatus bookingStatus);
 }

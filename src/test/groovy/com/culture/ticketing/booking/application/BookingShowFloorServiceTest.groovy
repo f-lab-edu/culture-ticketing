@@ -38,7 +38,7 @@ class BookingShowFloorServiceTest extends Specification {
                 new BookingShowFloorSaveRequest(1L, 2),
                 new BookingShowFloorSaveRequest(2L, 3)
         ]
-        bookingShowFloorRepository.existsByShowFloorsInAndBooking_RoundIdAndBooking_BookingStatus(showFloors, roundId, BookingStatus.SUCCESS) >> true
+        bookingShowFloorRepository.existsAlreadyBookingShowFloorsInRound(showFloors, roundId, BookingStatus.SUCCESS) >> true
 
         when:
         boolean response = bookingShowFloorService.hasAlreadyBookingShowFloorsByRoundId(roundId, showFloors);

@@ -35,7 +35,7 @@ public class BookingShowFloorService {
 
     @Transactional(readOnly = true)
     public boolean hasAlreadyBookingShowFloorsByRoundId(Long roundId, Set<BookingShowFloorSaveRequest> showFloors) {
-        return bookingShowFloorRepository.existsByShowFloorsInAndBooking_RoundIdAndBooking_BookingStatus(showFloors, roundId, BookingStatus.SUCCESS);
+        return bookingShowFloorRepository.existsAlreadyBookingShowFloorsInRound(showFloors, roundId, BookingStatus.SUCCESS);
     }
 
     @Transactional(readOnly = true)

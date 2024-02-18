@@ -26,7 +26,7 @@ class BookingShowFloorRepositoryCustomTest extends Specification {
         bookingShowFloorRepository.save(bookingShowFloor);
 
         when:
-        boolean response = bookingShowFloorRepository.existsByShowFloorsInAndBooking_RoundIdAndBooking_BookingStatus(showFloors, 1L, BookingStatus.SUCCESS);
+        boolean response = bookingShowFloorRepository.existsAlreadyBookingShowFloorsInRound(showFloors, 1L, BookingStatus.SUCCESS);
 
         then:
         response == expected

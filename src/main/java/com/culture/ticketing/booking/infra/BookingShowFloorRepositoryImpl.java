@@ -21,7 +21,7 @@ public class BookingShowFloorRepositoryImpl extends BaseRepositoryImpl implement
     }
 
     @Override
-    public boolean existsByShowFloorsInAndBooking_RoundIdAndBooking_BookingStatus(Set<BookingShowFloorSaveRequest> showFloors, Long roundId, BookingStatus bookingStatus) {
+    public boolean existsAlreadyBookingShowFloorsInRound(Set<BookingShowFloorSaveRequest> showFloors, Long roundId, BookingStatus bookingStatus) {
         return queryFactory
                 .selectFrom(bookingShowFloor)
                 .where(
