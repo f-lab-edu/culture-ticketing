@@ -145,7 +145,7 @@ class BookingServiceTest extends Specification {
                 .showFloors(showFloors)
                 .build();
         bookingShowSeatService.getTotalPriceByShowSeatIds(showSeatIds) >> 100000
-        bookingShowFloorService.getTotalPriceByShowFloors(showFloors) >> 200000
+        bookingShowFloorService.getTotalPriceByShowFloorIds([1L, 1L]) >> 200000
 
         when:
         bookingService.createBooking(request);
@@ -172,7 +172,7 @@ class BookingServiceTest extends Specification {
                 .showFloors(showFloors)
                 .build();
         bookingShowSeatService.getTotalPriceByShowSeatIds(showSeatIds) >> 100000
-        bookingShowFloorService.getTotalPriceByShowFloors(showFloors) >> 200000
+        bookingShowFloorService.getTotalPriceByShowFloorIds([1L, 1L]) >> 200000
         bookingShowSeatService.hasAlreadyBookingShowSeatsByRoundId(roundId, showSeatIds) >> existsShowSeats
         bookingShowFloorService.hasAlreadyBookingShowFloorsByRoundId(roundId, showFloors) >> existsShowFloors
 
@@ -207,7 +207,7 @@ class BookingServiceTest extends Specification {
                 .showFloors(showFloors)
                 .build();
         bookingShowSeatService.getTotalPriceByShowSeatIds(showSeatIds) >> 100000
-        bookingShowFloorService.getTotalPriceByShowFloors(showFloors) >> 200000
+        bookingShowFloorService.getTotalPriceByShowFloorIds([1L, 1L]) >> 200000
         bookingShowSeatService.hasAlreadyBookingShowSeatsByRoundId(roundId, showSeatIds) >> false
         bookingShowFloorService.hasAlreadyBookingShowFloorsByRoundId(roundId, showFloors) >> false
 

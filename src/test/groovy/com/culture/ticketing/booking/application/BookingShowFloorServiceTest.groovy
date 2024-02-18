@@ -15,15 +15,11 @@ class BookingShowFloorServiceTest extends Specification {
     def "예약 플로어 목록의 총 가격 합계 구하기"() {
 
         given:
-        Set<BookingShowFloorSaveRequest> showFloors = [
-                new BookingShowFloorSaveRequest(1L, 1),
-                new BookingShowFloorSaveRequest(1L, 2),
-                new BookingShowFloorSaveRequest(2L, 3)
-        ]
-        showFloorService.getTotalPriceByShowFloorIds([1L, 1L, 2L]) >> 250000
+        List<Long> showFloorIds = [1L, 1L, 2L]
+        showFloorService.getTotalPriceByShowFloorIds(showFloorIds) >> 250000
 
         when:
-        int response = bookingShowFloorService.getTotalPriceByShowFloors(showFloors);
+        int response = bookingShowFloorService.getTotalPriceByShowFloorIds(showFloorIds);
 
         then:
         response == 250000

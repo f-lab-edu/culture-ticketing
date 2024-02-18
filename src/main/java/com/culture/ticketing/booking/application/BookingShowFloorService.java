@@ -27,10 +27,8 @@ public class BookingShowFloorService {
     }
 
     @Transactional(readOnly = true)
-    public int getTotalPriceByShowFloors(Set<BookingShowFloorSaveRequest> showFloors) {
-        return showFloorService.getTotalPriceByShowFloorIds(showFloors.stream()
-                .map(BookingShowFloorSaveRequest::getShowFloorId)
-                .collect(Collectors.toList()));
+    public int getTotalPriceByShowFloorIds(List<Long> showFloorIds) {
+        return showFloorService.getTotalPriceByShowFloorIds(showFloorIds);
     }
 
     @Transactional(readOnly = true)
