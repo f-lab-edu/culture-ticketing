@@ -1,6 +1,5 @@
 package com.culture.ticketing.show.show_floor.api
 
-import com.culture.ticketing.show.show_floor.api.ShowFloorController
 import com.culture.ticketing.show.show_floor.application.ShowFloorService
 import com.culture.ticketing.show.show_floor.application.dto.ShowFloorSaveRequest
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -32,7 +31,7 @@ class ShowFloorControllerTest extends Specification {
 
         given:
         ShowFloorSaveRequest request = ShowFloorSaveRequest.builder()
-                .showSeatGradeId(1L)
+                .showFloorGradeId(1L)
                 .showFloorName("F1")
                 .count(700)
                 .build();

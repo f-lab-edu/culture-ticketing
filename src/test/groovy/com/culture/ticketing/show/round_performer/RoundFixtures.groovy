@@ -18,7 +18,7 @@ class RoundFixtures {
     }
 
     static RoundWithPerformersResponse createRoundWithPerformersResponse(Map map = [:]) {
-        return RoundWithPerformersResponse.from(
+        return new RoundWithPerformersResponse(
                 createRound(roundId: map.getOrDefault("roundId", 1L) as Long),
                 (map.getOrDefault("performerIds", []) as List<Long>).stream()
                 .map(performerId -> PerformerFixtures.createPerformer(performerId: performerId))

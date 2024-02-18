@@ -1,6 +1,5 @@
 package com.culture.ticketing.show.show_floor.domain
 
-import com.culture.ticketing.show.show_floor.domain.ShowFloor
 import spock.lang.Specification
 
 class ShowFloorTest extends Specification {
@@ -11,12 +10,12 @@ class ShowFloorTest extends Specification {
         ShowFloor.builder()
                 .showFloorName("F1")
                 .count(700)
-                .showSeatGradeId(null)
+                .showFloorGradeId(null)
                 .build();
 
         then:
         def e = thrown(NullPointerException.class)
-        e.message == "공연 좌석 등급 아이디를 입력해주세요."
+        e.message == "공연 플로어 등급 아이디를 입력해주세요."
     }
 
     def "공연 플로어 생성 시 요청 값에 적절하지 않은 값이 들어간 경우 예외 발생"() {
@@ -25,7 +24,7 @@ class ShowFloorTest extends Specification {
         ShowFloor.builder()
                 .showFloorName(null)
                 .count(700)
-                .showSeatGradeId(1L)
+                .showFloorGradeId(1L)
                 .build();
 
         then:

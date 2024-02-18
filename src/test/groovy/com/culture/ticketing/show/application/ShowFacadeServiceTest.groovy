@@ -1,28 +1,30 @@
 package com.culture.ticketing.show.application
 
+import com.culture.ticketing.booking.application.BookingFacadeService
 import com.culture.ticketing.place.PlaceFixtures
 import com.culture.ticketing.place.application.PlaceService
 import com.culture.ticketing.show.round_performer.PerformerFixtures
 import com.culture.ticketing.show.round_performer.RoundFixtures
 import com.culture.ticketing.show.round_performer.RoundPerformerFixtures
 import com.culture.ticketing.show.ShowFixtures
+import com.culture.ticketing.show.show_floor.application.ShowFloorGradeService
 import com.culture.ticketing.show.show_seat.ShowSeatGradeFixtures
 import com.culture.ticketing.show.application.dto.ShowDetailResponse
-import com.culture.ticketing.show.round_performer.application.PerformerService
 import com.culture.ticketing.show.round_performer.application.RoundPerformerService
-import com.culture.ticketing.show.round_performer.application.RoundService
 import com.culture.ticketing.show.show_seat.application.ShowSeatGradeService
+import com.culture.ticketing.show.show_seat.application.dto.ShowSeatGradeResponse
 import spock.lang.Specification
 
 class ShowFacadeServiceTest extends Specification {
 
     private ShowService showService = Mock();
-    private RoundService roundService = Mock();
     private RoundPerformerService roundPerformerService = Mock();
     private ShowSeatGradeService showSeatGradeService = Mock();
+    private ShowFloorGradeService showFloorGradeService = Mock();
     private PlaceService placeService = Mock();
-    private PerformerService performerService = Mock();
-    private ShowFacadeService showFacadeService = new ShowFacadeService(showService, roundService, roundPerformerService, showSeatGradeService, placeService, performerService);
+    private BookingFacadeService bookingFacadeService = Mock();
+    private ShowFacadeService showFacadeService = new ShowFacadeService(showService, roundPerformerService, showSeatGradeService,
+            showFloorGradeService, placeService, bookingFacadeService);
 
     def "공연 아이디로 공연 상세 조회"() {
         given:
@@ -30,9 +32,9 @@ class ShowFacadeServiceTest extends Specification {
         placeService.findPlaceById(1L) >> PlaceFixtures.createPlace(placeId: 1L)
 
         showSeatGradeService.findShowSeatGradesByShowId(1L) >> [
-                ShowSeatGradeFixtures.createShowSeatGradeResponse(showSeatGradeId: 1L),
-                ShowSeatGradeFixtures.createShowSeatGradeResponse(showSeatGradeId: 2L),
-                ShowSeatGradeFixtures.createShowSeatGradeResponse(showSeatGradeId: 3L)
+                new ShowSeatGradeResponse(ShowSeatGradeFixtures.createShowSeatGrade(showSeatGradeId: 1L)),
+                new ShowSeatGradeResponse(ShowSeatGradeFixtures.createShowSeatGrade(showSeatGradeId: 2L)),
+                new ShowSeatGradeResponse(ShowSeatGradeFixtures.createShowSeatGrade(showSeatGradeId: 3L))
         ];
 
         roundService.findByShowId(1L) >> [

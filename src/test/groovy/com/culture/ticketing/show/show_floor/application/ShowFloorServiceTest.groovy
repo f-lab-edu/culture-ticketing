@@ -1,30 +1,28 @@
 package com.culture.ticketing.show.show_floor.application
 
 import com.culture.ticketing.show.show_floor.ShowFloorFixtures
-import com.culture.ticketing.show.show_seat.ShowSeatGradeFixtures
+import com.culture.ticketing.show.show_floor.ShowFloorGradeFixtures
+import com.culture.ticketing.show.show_floor.exception.ShowFloorGradeNotFoundException
 import com.culture.ticketing.show.show_floor.application.dto.ShowFloorSaveRequest
-import com.culture.ticketing.show.show_floor.application.ShowFloorService
-import com.culture.ticketing.show.show_seat.application.ShowSeatGradeService
 import com.culture.ticketing.show.show_floor.domain.ShowFloor
-import com.culture.ticketing.show.show_seat.exception.ShowSeatGradeNotFoundException
 import com.culture.ticketing.show.show_floor.infra.ShowFloorRepository
 import spock.lang.Specification
 
 class ShowFloorServiceTest extends Specification {
 
     private ShowFloorRepository showFloorRepository = Mock();
-    private ShowSeatGradeService showSeatGradeService = Mock();
-    private ShowFloorService showFloorService = new ShowFloorService(showFloorRepository, showSeatGradeService);
+    private ShowFloorGradeService showFloorGradeService = Mock();
+    private ShowFloorService showFloorService = new ShowFloorService(showFloorRepository, showFloorGradeService);
 
     def "공연 플로어 생성 성공"() {
 
         given:
         ShowFloorSaveRequest request = ShowFloorSaveRequest.builder()
-                .showSeatGradeId(1L)
+                .showFloorGradeId(1L)
                 .showFloorName("F1")
                 .count(700)
                 .build();
-        showSeatGradeService.notExistsById(1L) >> false
+        showFloorGradeService.notExistsById(1L) >> false
 
         when:
         showFloorService.createShowFloor(request);
@@ -34,7 +32,7 @@ class ShowFloorServiceTest extends Specification {
 
             def savedShowFloor = args.get(0) as ShowFloor
 
-            savedShowFloor.showSeatGradeId == 1L
+            savedShowFloor.showFloorGradeId == 1L
             savedShowFloor.showFloorName == "F1"
             savedShowFloor.count == 700
         }
@@ -44,7 +42,7 @@ class ShowFloorServiceTest extends Specification {
 
         given:
         ShowFloorSaveRequest request = ShowFloorSaveRequest.builder()
-                .showSeatGradeId(null)
+                .showFloorGradeId(null)
                 .showFloorName("F1")
                 .count(700)
                 .build();
@@ -54,14 +52,14 @@ class ShowFloorServiceTest extends Specification {
 
         then:
         def e = thrown(NullPointerException.class)
-        e.message == "공연 좌석 등급 아이디를 입력해주세요."
+        e.message == "공연 플로어 등급 아이디를 입력해주세요."
     }
 
     def "공연 플로어 생성 시 요청 값에 적절하지 않은 값이 들어간 경우 예외 발생"() {
 
         given:
         ShowFloorSaveRequest request = ShowFloorSaveRequest.builder()
-                .showSeatGradeId(1L)
+                .showFloorGradeId(1L)
                 .showFloorName(showFloorName)
                 .count(count)
                 .build();
@@ -80,23 +78,23 @@ class ShowFloorServiceTest extends Specification {
         "F1"          | 0     || "공연 플로어 인원수를 1 이상 숫자로 입력해주세요."
     }
 
-    def "공연 플로어 생성 시 공연 좌석 등급 아이디 값에 해당하는 공연 좌석 등급이 존재하지 않을 경우 예외 발생"() {
+    def "공연 플로어 생성 시 공연 플로어 등급 아이디 값에 해당하는 공연 플로어 등급이 존재하지 않을 경우 예외 발생"() {
 
         given:
-        Long showSeatGradeId = 1L;
+        Long showFloorGradeId = 1L;
         ShowFloorSaveRequest request = ShowFloorSaveRequest.builder()
-                .showSeatGradeId(showSeatGradeId)
+                .showFloorGradeId(showFloorGradeId)
                 .showFloorName("F1")
                 .count(700)
                 .build();
-        showSeatGradeService.notExistsById(showSeatGradeId) >> true
+        showFloorGradeService.notExistsById(showFloorGradeId) >> true
 
         when:
         showFloorService.createShowFloor(request);
 
         then:
-        def e = thrown(ShowSeatGradeNotFoundException.class)
-        e.message == String.format("존재하지 않는 공연 좌석 등급입니다. (showSeatGradeId = %d)", showSeatGradeId)
+        def e = thrown(ShowFloorGradeNotFoundException.class)
+        e.message == String.format("존재하지 않는 공연 플로어 등급입니다. (showFloorGradeId = %d)", showFloorGradeId)
     }
 
     def "공연플로어 아이디 목록으로 총 가격 합계 구하기"() {
@@ -104,12 +102,12 @@ class ShowFloorServiceTest extends Specification {
         given:
         List<Long> showFloorIds = [1L, 1L, 2L]
         showFloorRepository.findAllById(showFloorIds) >> [
-                ShowFloorFixtures.createShowFloor(showFloorId: 1L, showSeatGradeId: 1L),
-                ShowFloorFixtures.createShowFloor(showFloorId: 2L, showSeatGradeId: 2L)
+                ShowFloorFixtures.createShowFloor(showFloorId: 1L, showFloorGradeId: 1L),
+                ShowFloorFixtures.createShowFloor(showFloorId: 2L, showFloorGradeId: 2L)
         ]
-        showSeatGradeService.findByIds([1L, 2L]) >> [
-                ShowSeatGradeFixtures.createShowSeatGrade(showSeatGradeId: 1L, price: 100000),
-                ShowSeatGradeFixtures.createShowSeatGrade(showSeatGradeId: 2L, price: 50000),
+        showFloorGradeService.findByIds([1L, 2L]) >> [
+                ShowFloorGradeFixtures.createShowFloorGrade(showFloorGradeId: 1L, price: 100000),
+                ShowFloorGradeFixtures.createShowFloorGrade(showFloorGradeId: 2L, price: 50000),
         ]
 
         when:
