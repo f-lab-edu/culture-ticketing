@@ -33,14 +33,19 @@ public class RoundPerformerService {
     @Transactional
     public void createRoundPerformers(RoundPerformersSaveRequest request) {
 
-        Objects.requireNonNull(request.getRoundId(), "회차 아이디를 입력해주세요.");
-        Objects.requireNonNull(request.getPerformerIds(), "출연자 아이디 목록을 입력해주세요.");
+        checkValidRoundPerformersSaveRequest(request);
 
         Round round = roundService.findById(request.getRoundId());
 
         performerService.checkShowPerformersExists(round.getShowId(), request.getPerformerIds());
 
         roundPerformerRepository.saveAll(request.toEntities());
+    }
+
+    private void checkValidRoundPerformersSaveRequest(RoundPerformersSaveRequest request) {
+
+        Objects.requireNonNull(request.getRoundId(), "회차 아이디를 입력해주세요.");
+        Objects.requireNonNull(request.getPerformerIds(), "출연자 아이디 목록을 입력해주세요.");
     }
 
     @Transactional(readOnly = true)

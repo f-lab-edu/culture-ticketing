@@ -32,14 +32,19 @@ public class PerformerService {
     @Transactional
     public void createPerformer(PerformerSaveRequest request) {
 
-        Objects.requireNonNull(request.getShowId(), "공연 아이디를 입력해주세요.");
-        Preconditions.checkArgument(StringUtils.hasText(request.getPerformerName()), "출연자 이름을 입력해주세요.");
+        checkValidPerformerSaveRequest(request);
 
         if (showService.notExistsById(request.getShowId())) {
             throw new ShowNotFoundException(request.getShowId());
         }
 
         performerRepository.save(request.toEntity());
+    }
+
+    private void checkValidPerformerSaveRequest(PerformerSaveRequest request) {
+
+        Objects.requireNonNull(request.getShowId(), "공연 아이디를 입력해주세요.");
+        Preconditions.checkArgument(StringUtils.hasText(request.getPerformerName()), "출연자 이름을 입력해주세요.");
     }
 
     @Transactional(readOnly = true)

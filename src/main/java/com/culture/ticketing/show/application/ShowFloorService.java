@@ -30,15 +30,20 @@ public class ShowFloorService {
     @Transactional
     public void createShowFloor(ShowFloorSaveRequest request) {
 
-        Objects.requireNonNull(request.getShowSeatGradeId(), "공연 좌석 등급 아이디를 입력해주세요.");
-        Preconditions.checkArgument(StringUtils.hasText(request.getShowFloorName()), "공연 플로어 구역명을 입력해주세요.");
-        Preconditions.checkArgument(request.getCount() > 0, "공연 플로어 인원수를 1 이상 숫자로 입력해주세요.");
+        checkValidShowFloorSaveRequest(request);
 
         if (showSeatGradeService.notExistsById(request.getShowSeatGradeId())) {
             throw new ShowSeatGradeNotFoundException(request.getShowSeatGradeId());
         }
 
         showFloorRepository.save(request.toEntity());
+    }
+
+    private void checkValidShowFloorSaveRequest(ShowFloorSaveRequest request) {
+
+        Objects.requireNonNull(request.getShowSeatGradeId(), "공연 좌석 등급 아이디를 입력해주세요.");
+        Preconditions.checkArgument(StringUtils.hasText(request.getShowFloorName()), "공연 플로어 구역명을 입력해주세요.");
+        Preconditions.checkArgument(request.getCount() > 0, "공연 플로어 인원수를 1 이상 숫자로 입력해주세요.");
     }
 
     @Transactional(readOnly = true)

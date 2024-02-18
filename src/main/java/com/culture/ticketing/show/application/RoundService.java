@@ -44,8 +44,7 @@ public class RoundService {
     @Transactional
     public void createRound(RoundSaveRequest request) {
 
-        Objects.requireNonNull(request.getShowId(), "공연 아이디를 입력해주세요.");
-        Objects.requireNonNull(request.getRoundStartDateTime(), "시작 회차 일시를 입력해주세요.");
+        checkValidRoundSaveRequest(request);
 
         Show show = showService.findShowById(request.getShowId());
         Round round = request.toEntity(show);
@@ -54,6 +53,12 @@ public class RoundService {
         checkDuplicatedRoundDateTime(round);
 
         roundRepository.save(round);
+    }
+
+    private void checkValidRoundSaveRequest(RoundSaveRequest request) {
+
+        Objects.requireNonNull(request.getShowId(), "공연 아이디를 입력해주세요.");
+        Objects.requireNonNull(request.getRoundStartDateTime(), "시작 회차 일시를 입력해주세요.");
     }
 
     private void checkDuplicatedRoundDateTime(Round round) {

@@ -27,6 +27,13 @@ public class PlaceService {
     @Transactional
     public void createPlace(PlaceSaveRequest request) {
 
+        checkValidPlaceSaveRequest(request);
+
+        placeRepository.save(request.toEntity());
+    }
+
+    private void checkValidPlaceSaveRequest(PlaceSaveRequest request) {
+
         Objects.requireNonNull(request.getLatitude(), "정확한 장소 위도를 입력해주세요.");
         Objects.requireNonNull(request.getLongitude(), "정확한 장소 경도를 입력해주세요.");
         Preconditions.checkArgument(StringUtils.hasText(request.getAddress()), "장소 주소를 입력해주세요.");
@@ -34,8 +41,6 @@ public class PlaceService {
                 && request.getLatitude().compareTo(BigDecimal.valueOf(90)) <= 0, "장소 위도 범위를 벗어난 입력값입니다.");
         Preconditions.checkArgument(request.getLongitude().compareTo(BigDecimal.valueOf(-180)) >= 0
                 && request.getLongitude().compareTo(BigDecimal.valueOf(180)) <= 0, "장소 경도 범위를 벗어난 입력값입니다.");
-
-        placeRepository.save(request.toEntity());
     }
 
     @Transactional(readOnly = true)

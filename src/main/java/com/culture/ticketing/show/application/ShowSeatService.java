@@ -32,9 +32,7 @@ public class ShowSeatService {
     @Transactional
     public void createShowSeat(ShowSeatSaveRequest request) {
 
-        Objects.requireNonNull(request.getShowSeatGradeId(), "공연 좌석 등급 아이디를 입력해주세요.");
-        Objects.requireNonNull(request.getSeatIds(), "좌석 아이디를 입력해주세요.");
-        Preconditions.checkArgument(request.getSeatIds().size() != 0, "좌석 아이디를 입력해주세요.");
+        checkValidShowSeatSaveRequest(request);
 
         if (showSeatGradeService.notExistsById(request.getShowSeatGradeId())) {
             throw new ShowSeatGradeNotFoundException(request.getShowSeatGradeId());
@@ -44,6 +42,13 @@ public class ShowSeatService {
 
         List<ShowSeat> showSeats = request.toEntities();
         showSeatRepository.saveAll(showSeats);
+    }
+
+    private void checkValidShowSeatSaveRequest(ShowSeatSaveRequest request) {
+
+        Objects.requireNonNull(request.getShowSeatGradeId(), "공연 좌석 등급 아이디를 입력해주세요.");
+        Objects.requireNonNull(request.getSeatIds(), "좌석 아이디를 입력해주세요.");
+        Preconditions.checkArgument(request.getSeatIds().size() != 0, "좌석 아이디를 입력해주세요.");
     }
 
     @Transactional(readOnly = true)
