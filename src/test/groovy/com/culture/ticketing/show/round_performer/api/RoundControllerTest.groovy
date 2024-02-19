@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import spock.lang.Specification
 
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
@@ -72,6 +73,32 @@ class RoundControllerTest extends Specification {
                 .andExpect(jsonPath("\$[0].roundId").value(1))
                 .andExpect(jsonPath("\$[1].roundId").value(2))
                 .andExpect(jsonPath("\$[2].roundId").value(3))
+                .andDo(MockMvcResultHandlers.print())
+    }
+
+    def "공연 아이디와 날짜로 회차, 출연자, 좌석 정보 조회 성공"() {
+
+        given:
+        showFacadeService.findRoundsByShowIdAndRoundStartDate(1L, LocalDate.of(2024, 1, 1)) >> [
+                RoundFixtures.createRoundWithPerformersAndShowSeatsResponse(roundId: 1L, performerIds: [1L, 2L], showSeatGradeIds: [1L, 2L], showFloorGradeIds: [1L, 2L]),
+                RoundFixtures.createRoundWithPerformersAndShowSeatsResponse(roundId: 2L, performerIds: [1L, 2L], showSeatGradeIds: [1L, 2L], showFloorGradeIds: [1L, 2L])
+        ]
+
+        expect:
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/rounds/detail")
+                .param("showId", "1")
+                .param("roundStartDate", "2024-01-01"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("\$").isArray())
+                .andExpect(jsonPath("\$", Matchers.hasSize(2)))
+                .andExpect(jsonPath("\$[0].roundId").value(1))
+                .andExpect(jsonPath("\$[0].performers", Matchers.hasSize(2)))
+                .andExpect(jsonPath("\$[0].showSeatGrades", Matchers.hasSize(2)))
+                .andExpect(jsonPath("\$[0].showFloorGrades", Matchers.hasSize(2)))
+                .andExpect(jsonPath("\$[1].roundId").value(2))
+                .andExpect(jsonPath("\$[1].performers", Matchers.hasSize(2)))
+                .andExpect(jsonPath("\$[1].showSeatGrades", Matchers.hasSize(2)))
+                .andExpect(jsonPath("\$[1].showFloorGrades", Matchers.hasSize(2)))
                 .andDo(MockMvcResultHandlers.print())
     }
 }

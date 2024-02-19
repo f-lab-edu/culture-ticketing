@@ -194,4 +194,41 @@ class RoundServiceTest extends Specification {
         foundRoundResponses.collect(round -> round.roundId) == [1L, 2L, 3L]
 
     }
+
+    def "아이디에 해당하는 회차가 존재하는지 여부 확인"() {
+
+        given:
+        Long roundId = 1L;
+        roundRepository.existsById(roundId) >> true
+
+        when:
+        boolean response = roundService.notExistsById(roundId);
+
+        then:
+        !response
+    }
+
+    def "공연 아이디와 날짜로 회차 목록 조회"() {
+
+        given:
+        roundRepository.findByShowIdAndRoundStartDate(1L, LocalDate.of(2024, 1, 1)) >> [
+                RoundFixtures.createRound(
+                        roundId: 1L,
+                        roundStartDateTime: LocalDateTime.of(2024, 1, 1, 10, 0, 0),
+                        roundEndDateTime: LocalDateTime.of(2024, 1, 1, 12, 0, 0)
+                ),
+                RoundFixtures.createRound(
+                        roundId: 2L,
+                        roundStartDateTime: LocalDateTime.of(2024, 1, 1, 17, 0, 0),
+                        roundEndDateTime: LocalDateTime.of(2024, 1, 1, 19, 0, 0)
+                )
+        ]
+
+        when:
+        List<Round> response = roundService.findRoundsByShowIdAndRoundStartDate(1L, LocalDate.of(2024, 1, 1));
+
+        then:
+        response.size() == 2
+        response.roundId == [1L, 2L]
+    }
 }
