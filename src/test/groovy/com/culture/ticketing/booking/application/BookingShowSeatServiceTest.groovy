@@ -1,8 +1,12 @@
 package com.culture.ticketing.booking.application
 
+import com.culture.ticketing.booking.BookingFixtures
+import com.culture.ticketing.booking.BookingShowSeatFixtures
 import com.culture.ticketing.booking.domain.BookingStatus
 import com.culture.ticketing.booking.infra.BookingShowSeatRepository
+import com.culture.ticketing.show.show_seat.ShowSeatFixtures
 import com.culture.ticketing.show.show_seat.application.ShowSeatService
+import com.culture.ticketing.show.show_seat.domain.ShowSeat
 import spock.lang.Specification
 
 class BookingShowSeatServiceTest extends Specification {
@@ -36,5 +40,41 @@ class BookingShowSeatServiceTest extends Specification {
 
         then:
         response
+    }
+
+    def "회차 목록 내 회차별 예약된 공연 좌석 목록 조회"() {
+
+        given:
+        List<Long> roundIds = [1L, 2L];
+        bookingShowSeatRepository.findByBooking_RoundIdInAndBooking_BookingStatus(roundIds, BookingStatus.SUCCESS) >> [
+                BookingShowSeatFixtures.createBookingShowSeat(
+                        bookingShowSeatId: 1L,
+                        showSeatId: 1L,
+                        booking: BookingFixtures.createBooking(roundId: 1L)
+                ),
+                BookingShowSeatFixtures.createBookingShowSeat(
+                        bookingShowSeatId: 2L,
+                        showSeatId: 2L,
+                        booking: BookingFixtures.createBooking(roundId: 2L)
+                ),
+                BookingShowSeatFixtures.createBookingShowSeat(
+                        bookingShowSeatId: 3L,
+                        showSeatId: 2L,
+                        booking: BookingFixtures.createBooking(roundId: 1L)
+                )
+        ]
+        showSeatService.findByIds([1L, 2L, 2L]) >> [
+                ShowSeatFixtures.createShowSeat(showSeatId: 1L),
+                ShowSeatFixtures.createShowSeat(showSeatId: 2L)
+        ]
+
+        when:
+        Map<Long, List<ShowSeat>> response = bookingShowSeatService.findBookingShowSeatsMapByRoundId(roundIds);
+
+        then:
+        response.get(1L).size() == 2
+        response.get(1L).showSeatId == [1L, 2L]
+        response.get(2L).size() == 1
+        response.get(2L).showSeatId == [2L]
     }
 }
