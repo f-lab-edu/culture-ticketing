@@ -77,7 +77,7 @@ public class BookingFacadeService {
                 .collect(Collectors.toMap(Function.identity(), roundId -> {
 
                     Map<Long, Long> bookingShowFloorCntMapByShowFloorGradeId = bookingShowFloorsMapByRoundId.getOrDefault(roundId, new ArrayList<>()).stream()
-                            .collect(Collectors.groupingBy(ShowFloor::getShowFloorId, Collectors.counting()));
+                            .collect(Collectors.groupingBy(ShowFloor::getShowFloorGradeId, Collectors.counting()));
 
                     return showFloorGrades.stream()
                             .collect(Collectors.toMap(Function.identity(), showFloorGrade -> showFloorCntMapByShowSeatGradeId.getOrDefault(showFloorGrade.getShowFloorGradeId(), 0L)
