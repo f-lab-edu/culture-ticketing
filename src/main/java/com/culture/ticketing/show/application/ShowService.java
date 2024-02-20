@@ -34,20 +34,25 @@ public class ShowService {
     @Transactional
     public void createShow(ShowSaveRequest request) {
 
-        Objects.requireNonNull(request.getCategory(), "공연 카테고리를 입력해주세요.");
-        Objects.requireNonNull(request.getAgeRestriction(), "공연 카테고리를 입력해주세요.");
-        Objects.requireNonNull(request.getPlaceId(), "공연 장소 아이디를 입력해주세요.");
-        Objects.requireNonNull(request.getShowStartDate(), "공연 시작 날짜를 입력해주세요.");
-        Objects.requireNonNull(request.getShowEndDate(), "공연 종료 날짜를 입력해주세요.");
-        Preconditions.checkArgument(StringUtils.hasText(request.getShowName()), "공연 이름을 입력해주세요.");
-        Preconditions.checkArgument(StringUtils.hasText(request.getPosterImgUrl()), "공연 포스터 이미지 url을 입력해주세요.");
-        Preconditions.checkArgument(request.getRunningTime() > 0, "공연 러닝 시간을 0 초과로 입력해주세요.");
+        checkValidShowSaveRequest(request);
 
         if (placeService.notExistsById(request.getPlaceId())) {
             throw new PlaceNotFoundException(request.getPlaceId());
         }
 
         showRepository.save(request.toEntity());
+    }
+
+    private void checkValidShowSaveRequest(ShowSaveRequest request) {
+
+        Objects.requireNonNull(request.getCategory(), "공연 카테고리를 입력해주세요.");
+        Objects.requireNonNull(request.getAgeRestriction(), "공연 관람 제한가를 입력해주세요.");
+        Objects.requireNonNull(request.getPlaceId(), "공연 장소 아이디를 입력해주세요.");
+        Objects.requireNonNull(request.getShowStartDate(), "공연 시작 날짜를 입력해주세요.");
+        Objects.requireNonNull(request.getShowEndDate(), "공연 종료 날짜를 입력해주세요.");
+        Preconditions.checkArgument(StringUtils.hasText(request.getShowName()), "공연 이름을 입력해주세요.");
+        Preconditions.checkArgument(StringUtils.hasText(request.getPosterImgUrl()), "공연 포스터 이미지 url을 입력해주세요.");
+        Preconditions.checkArgument(request.getRunningTime() > 0, "공연 러닝 시간을 0 초과로 입력해주세요.");
     }
 
     @Transactional(readOnly = true)
@@ -82,7 +87,7 @@ public class ShowService {
                 .collect(Collectors.toList());
     }
 
-    private void checkPlaceExistInShows(List<Show> shows, Map<Long, Place> placeMapByPlaceId) {
+    protected void checkPlaceExistInShows(List<Show> shows, Map<Long, Place> placeMapByPlaceId) {
 
         for (Show show : shows) {
             if (!placeMapByPlaceId.containsKey(show.getPlaceId())) {

@@ -29,13 +29,18 @@ public class AreaService {
     @Transactional
     public void createPlaceArea(PlaceAreaSaveRequest request) {
 
-        Objects.requireNonNull(request.getPlaceId(), "장소 아이디를 입력해주세요.");
+        checkValidPlaceAreaSaveRequest(request);
 
         if (placeService.notExistsById(request.getPlaceId())) {
             throw new PlaceNotFoundException(request.getPlaceId());
         }
 
         areaRepository.save(request.toEntity());
+    }
+
+    private void checkValidPlaceAreaSaveRequest(PlaceAreaSaveRequest request) {
+
+        Objects.requireNonNull(request.getPlaceId(), "장소 아이디를 입력해주세요.");
     }
 
     public List<Area> findByPlaceId(Long placeId) {

@@ -29,9 +29,7 @@ public class SeatService {
     @Transactional
     public void createPlaceSeat(PlaceSeatSaveRequest request) {
 
-        Objects.requireNonNull(request.getAreaId(), "구역 아이디를 입력해주세요.");
-        Preconditions.checkArgument(request.getSeatRow() > 0, "좌석 행을 1 이상 숫자로 입력해주세요.");
-        Preconditions.checkArgument(request.getSeatNumber() > 0, "좌석 번호를 1 이상 숫자로 입력해주세요.");
+        checkValidPlaceSeatSaveRequest(request);
 
         if (areaService.notExistsById(request.getAreaId())) {
             throw new AreaNotFoundException(request.getAreaId());
@@ -40,6 +38,13 @@ public class SeatService {
         Seat seat = request.toEntity();
         checkDuplicatedSeat(seat);
         seatRepository.save(seat);
+    }
+
+    private void checkValidPlaceSeatSaveRequest(PlaceSeatSaveRequest request) {
+
+        Objects.requireNonNull(request.getAreaId(), "구역 아이디를 입력해주세요.");
+        Preconditions.checkArgument(request.getSeatRow() > 0, "좌석 행을 1 이상 숫자로 입력해주세요.");
+        Preconditions.checkArgument(request.getSeatNumber() > 0, "좌석 번호를 1 이상 숫자로 입력해주세요.");
     }
 
     private void checkDuplicatedSeat(Seat seat) {

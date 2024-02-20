@@ -1,16 +1,14 @@
 package com.culture.ticketing.place.application
 
 import com.culture.ticketing.place.application.dto.PlaceAreaSaveRequest
+import com.culture.ticketing.place.domain.Area
 import com.culture.ticketing.place.exception.PlaceNotFoundException
 import com.culture.ticketing.place.infra.AreaRepository
-import org.spockframework.spring.SpringBean
 import spock.lang.Specification
 
 class AreaServiceTest extends Specification {
 
-    @SpringBean
     private AreaRepository areaRepository = Mock();
-    @SpringBean
     private PlaceService placeService = Mock();
     private AreaService areaService = new AreaService(areaRepository, placeService);
 
@@ -27,10 +25,16 @@ class AreaServiceTest extends Specification {
         areaService.createPlaceArea(request);
 
         then:
-        1 * areaRepository.save(_)
+        1 * areaRepository.save(_) >> { args ->
+
+            def savedArea = args.get(0) as Area
+
+            savedArea.areaName == "테스트"
+            savedArea.placeId == 1L
+        }
     }
 
-    def "구역 생성 시 장소 아이디가 null 인 경우 예외 발생"() {
+    def "구역 생성 시 요청 값에 null 이 존재하는 경우 예외 발생"() {
 
         given:
         PlaceAreaSaveRequest request = PlaceAreaSaveRequest.builder()
