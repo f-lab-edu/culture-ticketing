@@ -43,6 +43,7 @@ public class AreaService {
         Objects.requireNonNull(request.getPlaceId(), "장소 아이디를 입력해주세요.");
     }
 
+    @Transactional(readOnly = true)
     public List<Area> findByShowId(Long showId) {
 
         return areaRepository.findByShowId(showId);

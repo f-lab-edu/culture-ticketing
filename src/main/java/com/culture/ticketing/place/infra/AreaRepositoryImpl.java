@@ -21,9 +21,9 @@ public class AreaRepositoryImpl extends BaseRepositoryImpl implements AreaReposi
     public List<Area> findByShowId(Long showId) {
         return queryFactory
                 .selectFrom(area)
-                .join(seat)
-                .join(showSeat)
-                .join(showSeatGrade)
+                .join(seat).on(seat.areaId.eq(area.areaId))
+                .join(showSeat).on(showSeat.seatId.eq(seat.seatId))
+                .join(showSeatGrade).on(showSeatGrade.showSeatGradeId.eq(showSeat.showSeatGradeId))
                 .where(showSeatGrade.showId.eq(showId))
                 .groupBy(area.areaId)
                 .fetch();
