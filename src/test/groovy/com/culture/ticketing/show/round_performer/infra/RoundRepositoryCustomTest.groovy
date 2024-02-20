@@ -1,7 +1,7 @@
 package com.culture.ticketing.show.round_performer.infra
 
-import com.culture.ticketing.show.round_performer.RoundFixtures
 import com.culture.ticketing.show.round_performer.domain.Round
+import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
@@ -16,6 +16,11 @@ class RoundRepositoryCustomTest extends Specification {
 
     @Autowired
     private RoundRepository roundRepository;
+
+    @BeforeEach
+    void setup() {
+        roundRepository.deleteAll();
+    }
 
     def "회차 중 같은 공연 일시 겹치는 회차 조회"() {
 

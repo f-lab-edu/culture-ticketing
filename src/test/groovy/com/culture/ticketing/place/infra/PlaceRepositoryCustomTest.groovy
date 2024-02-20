@@ -2,6 +2,7 @@ package com.culture.ticketing.place.infra
 
 import com.culture.ticketing.place.PlaceFixtures
 import com.culture.ticketing.place.domain.Place
+import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
@@ -13,6 +14,11 @@ class PlaceRepositoryCustomTest extends Specification {
 
     @Autowired
     private PlaceRepository placeRepository;
+
+    @BeforeEach
+    void setup() {
+        placeRepository.deleteAll();
+    }
 
     def "장소 목록 조회 테스트 - 특정한 아이디보다 크고 사이즈 제한"() {
 

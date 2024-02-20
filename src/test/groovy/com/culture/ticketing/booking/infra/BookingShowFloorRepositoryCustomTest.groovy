@@ -6,6 +6,7 @@ import com.culture.ticketing.booking.application.dto.BookingShowFloorSaveRequest
 import com.culture.ticketing.booking.domain.Booking
 import com.culture.ticketing.booking.domain.BookingShowFloor
 import com.culture.ticketing.booking.domain.BookingStatus
+import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
@@ -16,7 +17,15 @@ import spock.lang.Specification
 class BookingShowFloorRepositoryCustomTest extends Specification {
 
     @Autowired
+    private BookingRepository bookingRepository;
+    @Autowired
     private BookingShowFloorRepository bookingShowFloorRepository;
+
+    @BeforeEach
+    void setup() {
+        bookingShowFloorRepository.deleteAll();
+        bookingRepository.deleteAll();
+    }
 
     def "예약하려는 예약 플로어 목록 중 해당 회차에 이미 예약됐는지 확인"() {
 

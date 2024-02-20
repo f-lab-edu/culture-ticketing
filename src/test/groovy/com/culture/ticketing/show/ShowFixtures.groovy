@@ -19,7 +19,7 @@ class ShowFixtures {
 
     static Show createShow(Map map = [:]) {
         return Show.builder()
-                .showId(map.getOrDefault("showId", 1L) as Long)
+                .showId(map.getOrDefault("showId", null) as Long)
                 .category(map.getOrDefault("category", Category.CONCERT) as Category)
                 .showName(map.getOrDefault("showName", "테스트") as String)
                 .ageRestriction(map.getOrDefault("ageRestriction", AgeRestriction.ALL) as AgeRestriction)
