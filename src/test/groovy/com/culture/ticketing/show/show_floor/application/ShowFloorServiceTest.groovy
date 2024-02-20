@@ -2,6 +2,7 @@ package com.culture.ticketing.show.show_floor.application
 
 import com.culture.ticketing.show.show_floor.ShowFloorFixtures
 import com.culture.ticketing.show.show_floor.ShowFloorGradeFixtures
+import com.culture.ticketing.show.show_floor.application.dto.ShowFloorCountMapByShowFloorGradeId
 import com.culture.ticketing.show.show_floor.exception.ShowFloorGradeNotFoundException
 import com.culture.ticketing.show.show_floor.application.dto.ShowFloorSaveRequest
 import com.culture.ticketing.show.show_floor.domain.ShowFloor
@@ -145,10 +146,10 @@ class ShowFloorServiceTest extends Specification {
         ]
 
         when:
-        Map<Long, Long> countMapByShowFloorGradeId = showFloorService.countMapByShowFloorGradeId(showFloorGradeIds);
+        ShowFloorCountMapByShowFloorGradeId countMapByShowFloorGradeId = showFloorService.countMapByShowFloorGradeId(showFloorGradeIds);
 
         then:
-        countMapByShowFloorGradeId.get(1L) == 1200
-        countMapByShowFloorGradeId.get(2L) == 500
+        countMapByShowFloorGradeId.getShowFloorCountByShowFloorGradeId(1L) == 1200
+        countMapByShowFloorGradeId.getShowFloorCountByShowFloorGradeId(2L) == 500
     }
 }

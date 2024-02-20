@@ -1,6 +1,15 @@
 package com.culture.ticketing.show.application
 
+import com.culture.ticketing.booking.BookingFixtures
+import com.culture.ticketing.booking.BookingShowFloorFixtures
+import com.culture.ticketing.booking.BookingShowSeatFixtures
 import com.culture.ticketing.booking.application.BookingFacadeService
+import com.culture.ticketing.booking.application.dto.BookingShowFloorsMapByRoundIdResponse
+import com.culture.ticketing.booking.application.dto.BookingShowSeatsMapByRoundIdResponse
+import com.culture.ticketing.booking.application.dto.ShowFloorGradeWithCountMapByRoundIdResponse
+import com.culture.ticketing.booking.application.dto.ShowSeatGradeWithCountMapByRoundIdResponse
+import com.culture.ticketing.booking.domain.BookingShowFloor
+import com.culture.ticketing.booking.domain.BookingShowSeat
 import com.culture.ticketing.place.PlaceFixtures
 import com.culture.ticketing.place.application.PlaceService
 import com.culture.ticketing.show.round_performer.PerformerFixtures
@@ -9,14 +18,21 @@ import com.culture.ticketing.show.ShowFixtures
 import com.culture.ticketing.show.round_performer.application.dto.PerformerResponse
 import com.culture.ticketing.show.round_performer.application.dto.RoundWithPerformersAndShowSeatsResponse
 import com.culture.ticketing.show.round_performer.application.dto.RoundWithPerformersResponse
+import com.culture.ticketing.show.show_floor.ShowFloorFixtures
 import com.culture.ticketing.show.show_floor.ShowFloorGradeFixtures
 import com.culture.ticketing.show.show_floor.application.ShowFloorGradeService
+import com.culture.ticketing.show.show_floor.application.dto.ShowFloorCountMapByShowFloorGradeId
 import com.culture.ticketing.show.show_floor.application.dto.ShowFloorGradeResponse
+import com.culture.ticketing.show.show_floor.domain.ShowFloor
+import com.culture.ticketing.show.show_floor.domain.ShowFloorGrade
+import com.culture.ticketing.show.show_seat.ShowSeatFixtures
 import com.culture.ticketing.show.show_seat.ShowSeatGradeFixtures
 import com.culture.ticketing.show.application.dto.ShowDetailResponse
 import com.culture.ticketing.show.round_performer.application.RoundPerformerService
 import com.culture.ticketing.show.show_seat.application.ShowSeatGradeService
+import com.culture.ticketing.show.show_seat.application.dto.ShowSeatCountMapByShowSeatGradeIdResponse
 import com.culture.ticketing.show.show_seat.application.dto.ShowSeatGradeResponse
+import com.culture.ticketing.show.show_seat.domain.ShowSeat
 import spock.lang.Specification
 
 import java.time.LocalDate
@@ -83,63 +99,106 @@ class ShowFacadeServiceTest extends Specification {
                         [new PerformerResponse(PerformerFixtures.createPerformer(performerId: 1L))]
                 )
         ]
-        bookingFacadeService.findShowSeatAvailableCountMapByShowSeatGradeAndRoundId(showId, [1L, 2L]) >>
-                Map.of(1L,
-                        Map.of(
-                                new ShowSeatGradeResponse(ShowSeatGradeFixtures.createShowSeatGrade(showSeatGradeId: 1L, showId: 1L)), 100L,
-                                new ShowSeatGradeResponse(ShowSeatGradeFixtures.createShowSeatGrade(showSeatGradeId: 2L, showId: 1L)), 200L,
-                        ) as Map<ShowSeatGradeResponse, Long>,
-                        2L,
-                        Map.of(
-                                new ShowSeatGradeResponse(ShowSeatGradeFixtures.createShowSeatGrade(showSeatGradeId: 1L, showId: 1L)), 50L,
-                                new ShowSeatGradeResponse(ShowSeatGradeFixtures.createShowSeatGrade(showSeatGradeId: 2L, showId: 1L)), 100L,
-                        ) as Map<ShowSeatGradeResponse, Long>,
+        List<Long> roundIds = [1L, 2L];
+
+        List<ShowSeatGradeResponse> showSeatGrades = [
+                new ShowSeatGradeResponse(ShowSeatGradeFixtures.createShowSeatGrade(showSeatGradeId: 1L, showId: 1L)),
+                new ShowSeatGradeResponse(ShowSeatGradeFixtures.createShowSeatGrade(showSeatGradeId: 2L, showId: 1L))
+        ]
+        List<ShowSeat> showSeats = [
+                ShowSeatFixtures.createShowSeat(showSeatId: 1L, showSeatGradeId: 1L),
+                ShowSeatFixtures.createShowSeat(showSeatId: 2L, showSeatGradeId: 1L),
+                ShowSeatFixtures.createShowSeat(showSeatId: 3L, showSeatGradeId: 2L),
+                ShowSeatFixtures.createShowSeat(showSeatId: 4L, showSeatGradeId: 2L),
+        ]
+        List<BookingShowSeat> bookingShowSeats = [
+                BookingShowSeatFixtures.createBookingShowSeat(
+                        bookingShowSeatId: 1L,
+                        showSeatId: 1L,
+                        booking: BookingFixtures.createBooking(roundId: 1L)
+                ),
+                BookingShowSeatFixtures.createBookingShowSeat(
+                        bookingShowSeatId: 2L,
+                        showSeatId: 2L,
+                        booking: BookingFixtures.createBooking(roundId: 2L)
+                ),
+                BookingShowSeatFixtures.createBookingShowSeat(
+                        bookingShowSeatId: 3L,
+                        showSeatId: 2L,
+                        booking: BookingFixtures.createBooking(roundId: 1L)
+                ),
+                BookingShowSeatFixtures.createBookingShowSeat(
+                        bookingShowSeatId: 4L,
+                        showSeatId: 4L,
+                        booking: BookingFixtures.createBooking(roundId: 1L)
                 )
-        bookingFacadeService.findShowFloorAvailableCountMapByShowFloorGradeAndRoundId(showId, [1L, 2L]) >>
-                Map.of(1L,
-                        Map.of(
-                                new ShowFloorGradeResponse(ShowFloorGradeFixtures.createShowFloorGrade(showFloorGradeId: 1L, showId: 1L)), 100L,
-                                new ShowFloorGradeResponse(ShowFloorGradeFixtures.createShowFloorGrade(showFloorGradeId: 2L, showId: 1L)), 200L,
-                        ) as Map<ShowFloorGradeResponse, Long>,
-                        2L,
-                        Map.of(
-                                new ShowFloorGradeResponse(ShowFloorGradeFixtures.createShowFloorGrade(showFloorGradeId: 1L, showId: 1L)), 200L,
-                                new ShowFloorGradeResponse(ShowFloorGradeFixtures.createShowFloorGrade(showFloorGradeId: 2L, showId: 1L)), 300L,
-                        ) as Map<ShowSeatGradeResponse, Long>,
-                )
+        ]
+        bookingFacadeService.findShowSeatGradeWithAvailableCountMapByRoundId(showId, [1L, 2L]) >> new ShowSeatGradeWithCountMapByRoundIdResponse(
+                roundIds, showSeatGrades, new ShowSeatCountMapByShowSeatGradeIdResponse(showSeats), new BookingShowSeatsMapByRoundIdResponse(bookingShowSeats, showSeats)
+        )
+
+        List<ShowFloorGradeResponse> showFloorGrades = [
+                new ShowFloorGradeResponse(ShowFloorGradeFixtures.createShowFloorGrade(showFloorGradeId: 1L, showId: 1L)),
+                new ShowFloorGradeResponse(ShowFloorGradeFixtures.createShowFloorGrade(showFloorGradeId: 2L, showId: 1L))
+        ]
+        List<ShowFloor> showFloors = [
+                ShowFloorFixtures.createShowFloor(showFloorId: 1L, showFloorGradeId: 1L, count: 500L),
+                ShowFloorFixtures.createShowFloor(showFloorId: 2L, showFloorGradeId: 2L, count: 700L),
+        ]
+        List<BookingShowFloor> bookingShowFloors = [
+                BookingShowFloorFixtures.createBookingShowFloor(
+                        bookingShowFloorId: 1L,
+                        showFloorId: 1L,
+                        booking: BookingFixtures.createBooking(roundId: 1L)
+                ),
+                BookingShowFloorFixtures.createBookingShowFloor(
+                        bookingShowFloorId: 2L,
+                        showFloorId: 2L,
+                        booking: BookingFixtures.createBooking(roundId: 2L)
+                ),
+                BookingShowFloorFixtures.createBookingShowFloor(
+                        bookingShowFloorId: 3L,
+                        showFloorId: 2L,
+                        booking: BookingFixtures.createBooking(roundId: 1L)
+                ),
+        ]
+        bookingFacadeService.findShowFloorGradeWithAvailableCountMapByRoundId(showId, [1L, 2L]) >> new ShowFloorGradeWithCountMapByRoundIdResponse(
+                roundIds, showFloorGrades, new ShowFloorCountMapByShowFloorGradeId(showFloors), new BookingShowFloorsMapByRoundIdResponse(bookingShowFloors, showFloors)
+        )
 
         when:
         List<RoundWithPerformersAndShowSeatsResponse> response = showFacadeService.findRoundsByShowIdAndRoundStartDate(showId, roundStartDate);
 
         then:
         response.roundId == [1L, 2L]
+
         response.find(round -> round.roundId == 1L)
                 .performers.performerId == [1L, 2L]
         response.find(round -> round.roundId == 1L)
                 .showSeatGrades.find(showSeatGrade -> showSeatGrade.showSeatGradeId == 1L)
-                .availableSeatsCount == 100L
+                .availableSeatsCount == 0L
         response.find(round -> round.roundId == 1L)
                 .showSeatGrades.find(showSeatGrade -> showSeatGrade.showSeatGradeId == 2L)
-                .availableSeatsCount == 200L
+                .availableSeatsCount == 1L
         response.find(round -> round.roundId == 1L)
                 .showFloorGrades.find(showFloorGrade -> showFloorGrade.showFloorGradeId == 1L)
-                .availableFloorCount == 100L
+                .availableFloorCount == 499L
         response.find(round -> round.roundId == 1L)
                 .showFloorGrades.find(showFloorGrade -> showFloorGrade.showFloorGradeId == 2L)
-                .availableFloorCount == 200L
+                .availableFloorCount == 699L
 
         response.find(round -> round.roundId == 2L)
                 .performers.performerId == [1L]
         response.find(round -> round.roundId == 2L)
                 .showSeatGrades.find(showSeatGrade -> showSeatGrade.showSeatGradeId == 1L)
-                .availableSeatsCount == 50L
+                .availableSeatsCount == 1L
         response.find(round -> round.roundId == 2L)
                 .showSeatGrades.find(showSeatGrade -> showSeatGrade.showSeatGradeId == 2L)
-                .availableSeatsCount == 100L
+                .availableSeatsCount == 2L
         response.find(round -> round.roundId == 2L)
                 .showFloorGrades.find(showFloorGrade -> showFloorGrade.showFloorGradeId == 1L)
-                .availableFloorCount == 200L
+                .availableFloorCount == 500L
         response.find(round -> round.roundId == 2L).showFloorGrades.find(showFloorGrade -> showFloorGrade.showFloorGradeId == 2L)
-                .availableFloorCount == 300L
+                .availableFloorCount == 699L
     }
 }

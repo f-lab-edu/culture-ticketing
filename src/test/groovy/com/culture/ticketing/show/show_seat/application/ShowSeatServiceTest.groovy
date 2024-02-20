@@ -3,6 +3,7 @@ package com.culture.ticketing.show.show_seat.application
 import com.culture.ticketing.place.application.SeatService
 import com.culture.ticketing.show.show_seat.ShowSeatFixtures
 import com.culture.ticketing.show.show_seat.ShowSeatGradeFixtures
+import com.culture.ticketing.show.show_seat.application.dto.ShowSeatCountMapByShowSeatGradeIdResponse
 import com.culture.ticketing.show.show_seat.application.dto.ShowSeatSaveRequest
 import com.culture.ticketing.show.show_seat.domain.ShowSeat
 import com.culture.ticketing.show.show_seat.exception.ShowSeatGradeNotFoundException
@@ -148,10 +149,10 @@ class ShowSeatServiceTest extends Specification {
         ]
 
         when:
-        Map<Long, Long> countMapByShowSeatGradeId = showSeatService.countMapByShowSeatGradeId(showSeatGradeIds);
+        ShowSeatCountMapByShowSeatGradeIdResponse countMapByShowSeatGradeId = showSeatService.countMapByShowSeatGradeId(showSeatGradeIds);
 
         then:
-        countMapByShowSeatGradeId.get(1L) == 2
-        countMapByShowSeatGradeId.get(2L) == 1
+        countMapByShowSeatGradeId.getShowSeatCountByShowSeatGradeId(1L) == 2
+        countMapByShowSeatGradeId.getShowSeatCountByShowSeatGradeId(2L) == 1
     }
 }

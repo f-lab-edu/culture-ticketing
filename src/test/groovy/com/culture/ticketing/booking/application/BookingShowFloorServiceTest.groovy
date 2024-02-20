@@ -3,6 +3,7 @@ package com.culture.ticketing.booking.application
 import com.culture.ticketing.booking.BookingFixtures
 import com.culture.ticketing.booking.BookingShowFloorFixtures
 import com.culture.ticketing.booking.application.dto.BookingShowFloorSaveRequest
+import com.culture.ticketing.booking.application.dto.BookingShowFloorsMapByRoundIdResponse
 import com.culture.ticketing.booking.domain.BookingStatus
 import com.culture.ticketing.booking.infra.BookingShowFloorRepository
 import com.culture.ticketing.show.show_floor.ShowFloorFixtures
@@ -69,17 +70,17 @@ class BookingShowFloorServiceTest extends Specification {
                 ),
         ]
         showFloorService.findByIds([1L, 2L, 2L]) >> [
-                ShowFloorFixtures.createShowFloor(showFloorId: 1L),
-                ShowFloorFixtures.createShowFloor(showFloorId: 2L),
+                ShowFloorFixtures.createShowFloor(showFloorId: 1L, showFloorGradeId: 1L),
+                ShowFloorFixtures.createShowFloor(showFloorId: 2L, showFloorGradeId: 2L),
         ]
 
         when:
-        Map<Long, List<ShowFloor>> response = bookingShowFloorService.findBookingShowFloorsMapByRoundId(roundIds);
+        BookingShowFloorsMapByRoundIdResponse response = bookingShowFloorService.findBookingShowFloorsMapByRoundId(roundIds);
 
         then:
-        response.get(1L).size() == 2
-        response.get(1L).showFloorId == [1L, 2L]
-        response.get(2L).size() == 1
-        response.get(2L).showFloorId == [2L]
+        response.getBookingFloorCountByRoundIdAndShowFloorGradeId(1L, 1L) == 1L
+        response.getBookingFloorCountByRoundIdAndShowFloorGradeId(1L, 2L) == 1L
+        response.getBookingFloorCountByRoundIdAndShowFloorGradeId(2L, 1L) == 0L
+        response.getBookingFloorCountByRoundIdAndShowFloorGradeId(2L, 2L) == 1L
     }
 }
