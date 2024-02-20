@@ -3,6 +3,8 @@ package com.culture.ticketing.show.show_floor.application
 import com.culture.ticketing.show.show_floor.ShowFloorFixtures
 import com.culture.ticketing.show.show_floor.ShowFloorGradeFixtures
 import com.culture.ticketing.show.show_floor.application.dto.ShowFloorCountMapByShowFloorGradeId
+import com.culture.ticketing.show.show_floor.application.dto.ShowFloorGradeResponse
+import com.culture.ticketing.show.show_floor.application.dto.ShowFloorResponse
 import com.culture.ticketing.show.show_floor.exception.ShowFloorGradeNotFoundException
 import com.culture.ticketing.show.show_floor.application.dto.ShowFloorSaveRequest
 import com.culture.ticketing.show.show_floor.domain.ShowFloor
@@ -151,5 +153,27 @@ class ShowFloorServiceTest extends Specification {
         then:
         countMapByShowFloorGradeId.getShowFloorCountByShowFloorGradeId(1L) == 1200
         countMapByShowFloorGradeId.getShowFloorCountByShowFloorGradeId(2L) == 500
+    }
+
+    def "공연 아이디로 공연 플로어 목록 조회"() {
+
+        given:
+        showFloorGradeService.findShowFloorGradesByShowId(1L) >> [
+                new ShowFloorGradeResponse(ShowFloorGradeFixtures.createShowFloorGrade(showFloorGradeId: 1L, showId: 1L)),
+                new ShowFloorGradeResponse(ShowFloorGradeFixtures.createShowFloorGrade(showFloorGradeId: 2L, showId: 1L)),
+        ]
+
+        showFloorRepository.findByShowFloorGradeIdIn([1L, 2L]) >> [
+                ShowFloorFixtures.createShowFloor(showFloorId: 1L, showFloorGradeId: 1L),
+                ShowFloorFixtures.createShowFloor(showFloorId: 2L, showFloorGradeId: 1L),
+                ShowFloorFixtures.createShowFloor(showFloorId: 3L, showFloorGradeId: 2L),
+        ]
+
+        when:
+        List<ShowFloorResponse> response = showFloorService.findByShowId(1L);
+
+        then:
+        response.size() == 3
+        response.showFloorId == [1L, 2L, 3L]
     }
 }
