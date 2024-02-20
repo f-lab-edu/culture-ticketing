@@ -7,7 +7,7 @@ class BookingShowSeatFixtures {
 
     static createBookingShowSeat(Map map = [:]) {
         BookingShowSeat bookingShowSeat = BookingShowSeat.builder()
-                .bookingShowSeatId(map.getOrDefault("bookingShowSeatId", 1L) as Long)
+                .bookingShowSeatId(map.getOrDefault("bookingShowSeatId", null) as Long)
                 .showSeatId(map.getOrDefault("showSeatId", 1L) as Long)
                 .booking(map.getOrDefault("booking", BookingFixtures.createBooking()) as Booking)
                 .build();
