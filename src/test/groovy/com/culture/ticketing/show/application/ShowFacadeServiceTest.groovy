@@ -10,9 +10,11 @@ import com.culture.ticketing.booking.application.dto.ShowFloorGradeWithCountMapB
 import com.culture.ticketing.booking.application.dto.ShowSeatGradeWithCountMapByRoundIdResponse
 import com.culture.ticketing.booking.domain.BookingShowFloor
 import com.culture.ticketing.booking.domain.BookingShowSeat
+import com.culture.ticketing.place.AreaFixtures
 import com.culture.ticketing.place.PlaceFixtures
 import com.culture.ticketing.place.application.AreaService
 import com.culture.ticketing.place.application.PlaceService
+import com.culture.ticketing.show.application.dto.ShowPlaceAreaResponse
 import com.culture.ticketing.show.round_performer.PerformerFixtures
 import com.culture.ticketing.show.round_performer.RoundFixtures
 import com.culture.ticketing.show.ShowFixtures
@@ -202,5 +204,23 @@ class ShowFacadeServiceTest extends Specification {
                 .availableFloorCount == 500L
         response.find(round -> round.roundId == 2L).showFloorGrades.find(showFloorGrade -> showFloorGrade.showFloorGradeId == 2L)
                 .availableFloorCount == 699L
+    }
+
+    def "공연 아이디로 구역 목록 조회"() {
+
+        given:
+        showService.findShowById(1L) >> ShowFixtures.createShow(showId: 1L)
+        areaService.findByShowId(1L) >> [
+                AreaFixtures.createArea(areaId: 1L),
+                AreaFixtures.createArea(areaId: 2L),
+                AreaFixtures.createArea(areaId: 3L),
+        ]
+
+        when:
+        List<ShowPlaceAreaResponse> response = showFacadeService.findAreasByShowId(1L);
+
+        then:
+        response.size() == 3
+        response.areaId == [1L, 2L, 3L]
     }
 }

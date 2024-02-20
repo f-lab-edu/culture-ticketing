@@ -27,10 +27,11 @@ public class Area extends BaseEntity {
     private Long placeId;
 
     @Builder
-    public Area(String areaName, Long placeId) {
+    public Area(Long areaId, String areaName, Long placeId) {
 
         Objects.requireNonNull(placeId, "장소 아이디를 입력해주세요.");
 
+        this.areaId = areaId;
         this.areaName = areaName;
         this.placeId = placeId;
     }

@@ -1,9 +1,11 @@
 package com.culture.ticketing.show.api
 
+import com.culture.ticketing.place.AreaFixtures
 import com.culture.ticketing.place.PlaceFixtures
 import com.culture.ticketing.show.ShowFixtures
 import com.culture.ticketing.show.application.ShowFacadeService
 import com.culture.ticketing.show.application.ShowService
+import com.culture.ticketing.show.application.dto.ShowPlaceAreaResponse
 import com.culture.ticketing.show.application.dto.ShowResponse
 import com.culture.ticketing.show.application.dto.ShowSaveRequest
 import com.culture.ticketing.show.domain.AgeRestriction
@@ -133,6 +135,26 @@ class ShowControllerTest extends Specification {
                 .andExpect(jsonPath("\$.rounds[1].performers", Matchers.hasSize(3)))
                 .andExpect(jsonPath("\$.showSeatGrades", Matchers.hasSize(2)))
                 .andExpect(jsonPath("\$.showFloorGrades", Matchers.hasSize(2)))
+                .andDo(MockMvcResultHandlers.print())
+    }
+
+    def "공연 아이디로 구역 목록 조회"() {
+
+        given:
+        showFacadeService.findAreasByShowId(1L) >> [
+                ShowPlaceAreaResponse.from(AreaFixtures.createArea(areaId: 1L)),
+                ShowPlaceAreaResponse.from(AreaFixtures.createArea(areaId: 2L)),
+                ShowPlaceAreaResponse.from(AreaFixtures.createArea(areaId: 3L)),
+        ]
+
+        expect:
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/shows/1/place-areas"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("\$").exists())
+                .andExpect(jsonPath("\$", Matchers.hasSize(3)))
+                .andExpect(jsonPath("\$[0].areaId").value(1L))
+                .andExpect(jsonPath("\$[1].areaId").value(2L))
+                .andExpect(jsonPath("\$[2].areaId").value(3L))
                 .andDo(MockMvcResultHandlers.print())
     }
 }
