@@ -1,6 +1,8 @@
 package com.culture.ticketing.show.application;
 
 import com.culture.ticketing.booking.application.BookingFacadeService;
+import com.culture.ticketing.booking.application.dto.ShowFloorGradeWithCountMapByRoundIdResponse;
+import com.culture.ticketing.booking.application.dto.ShowSeatGradeWithCountMapByRoundIdResponse;
 import com.culture.ticketing.place.application.PlaceService;
 import com.culture.ticketing.place.domain.Place;
 import com.culture.ticketing.show.round_performer.application.RoundPerformerService;
@@ -8,9 +10,7 @@ import com.culture.ticketing.show.round_performer.application.dto.RoundWithPerfo
 import com.culture.ticketing.show.round_performer.application.dto.RoundWithPerformersResponse;
 import com.culture.ticketing.show.application.dto.ShowDetailResponse;
 import com.culture.ticketing.show.show_floor.application.dto.ShowFloorGradeResponse;
-import com.culture.ticketing.show.show_floor.application.dto.ShowFloorGradeWithCountResponse;
 import com.culture.ticketing.show.show_seat.application.dto.ShowSeatGradeResponse;
-import com.culture.ticketing.show.show_seat.application.dto.ShowSeatGradeWithCountResponse;
 import com.culture.ticketing.show.domain.Show;
 import com.culture.ticketing.show.show_floor.application.ShowFloorGradeService;
 import com.culture.ticketing.show.show_seat.application.ShowSeatGradeService;
@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,14 +62,14 @@ public class ShowFacadeService {
                 .map(RoundWithPerformersResponse::getRoundId)
                 .collect(Collectors.toList());
 
-        Map<Long, Map<ShowSeatGradeResponse, Long>> showSeatAvailableCountMapByShowSeatGradeAndRoundId = bookingFacadeService.findShowSeatAvailableCountMapByShowSeatGradeAndRoundId(showId, roundIds);
-        Map<Long, Map<ShowFloorGradeResponse, Long>> showFloorAvailableCountMapByShowSeatGradeAndRoundId = bookingFacadeService.findShowFloorAvailableCountMapByShowFloorGradeAndRoundId(showId, roundIds);
+        ShowSeatGradeWithCountMapByRoundIdResponse showSeatGradeWithAvailableCountMapByRoundId = bookingFacadeService.findShowSeatGradeWithAvailableCountMapByRoundId(showId, roundIds);
+        ShowFloorGradeWithCountMapByRoundIdResponse showFloorGradeWithAvailableCountMapByRoundId = bookingFacadeService.findShowFloorGradeWithAvailableCountMapByRoundId(showId, roundIds);
 
         return roundsWithPerformers.stream()
                 .map(roundWithPerformers -> new RoundWithPerformersAndShowSeatsResponse(
                         roundWithPerformers,
-                        ShowSeatGradeWithCountResponse.from(showSeatAvailableCountMapByShowSeatGradeAndRoundId.get(roundWithPerformers.getRoundId())),
-                        ShowFloorGradeWithCountResponse.from(showFloorAvailableCountMapByShowSeatGradeAndRoundId.get(roundWithPerformers.getRoundId()))
+                        showSeatGradeWithAvailableCountMapByRoundId.getByRoundId(roundWithPerformers.getRoundId()),
+                        showFloorGradeWithAvailableCountMapByRoundId.getByRoundId(roundWithPerformers.getRoundId())
                 ))
                 .collect(Collectors.toList());
     }

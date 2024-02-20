@@ -2,10 +2,6 @@ package com.culture.ticketing.show.show_seat.application.dto;
 
 import lombok.Getter;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 @Getter
 public class ShowSeatGradeWithCountResponse {
 
@@ -19,11 +15,5 @@ public class ShowSeatGradeWithCountResponse {
         this.showSeatGradeName = showSeatGrade.getShowSeatGradeName();
         this.price = showSeatGrade.getPrice();
         this.availableSeatsCount = availableSeatsCount;
-    }
-
-    public static List<ShowSeatGradeWithCountResponse> from(Map<ShowSeatGradeResponse, Long> availableShowSeatCntMapByShowSeatGrade) {
-        return availableShowSeatCntMapByShowSeatGrade.keySet().stream()
-                .map(showSeatGrade -> new ShowSeatGradeWithCountResponse(showSeatGrade, availableShowSeatCntMapByShowSeatGrade.get(showSeatGrade)))
-                .collect(Collectors.toList());
     }
 }

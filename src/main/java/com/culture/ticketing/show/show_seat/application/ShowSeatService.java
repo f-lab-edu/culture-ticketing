@@ -1,6 +1,7 @@
 package com.culture.ticketing.show.show_seat.application;
 
 import com.culture.ticketing.place.application.SeatService;
+import com.culture.ticketing.show.show_seat.application.dto.ShowSeatCountMapByShowSeatGradeIdResponse;
 import com.culture.ticketing.show.show_seat.application.dto.ShowSeatSaveRequest;
 import com.culture.ticketing.show.show_seat.domain.ShowSeat;
 import com.culture.ticketing.show.show_seat.domain.ShowSeatGrade;
@@ -70,10 +71,9 @@ public class ShowSeatService {
     }
 
     @Transactional(readOnly = true)
-    public Map<Long, Long> countMapByShowSeatGradeId(List<Long> showSeatGradeIds) {
+    public ShowSeatCountMapByShowSeatGradeIdResponse countMapByShowSeatGradeId(List<Long> showSeatGradeIds) {
 
-        return showSeatRepository.findByShowSeatGradeIdIn(showSeatGradeIds).stream()
-                .collect(Collectors.groupingBy(ShowSeat::getShowSeatGradeId, Collectors.counting()));
+        return new ShowSeatCountMapByShowSeatGradeIdResponse(showSeatRepository.findByShowSeatGradeIdIn(showSeatGradeIds));
     }
 
     public List<ShowSeat> findByIds(List<Long> showSeatIds) {

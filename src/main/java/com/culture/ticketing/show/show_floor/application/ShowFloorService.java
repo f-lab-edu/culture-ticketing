@@ -1,5 +1,6 @@
 package com.culture.ticketing.show.show_floor.application;
 
+import com.culture.ticketing.show.show_floor.application.dto.ShowFloorCountMapByShowFloorGradeId;
 import com.culture.ticketing.show.show_floor.application.dto.ShowFloorSaveRequest;
 import com.culture.ticketing.show.show_floor.domain.ShowFloor;
 import com.culture.ticketing.show.show_floor.domain.ShowFloorGrade;
@@ -68,10 +69,9 @@ public class ShowFloorService {
     }
 
     @Transactional(readOnly = true)
-    public Map<Long, Long> countMapByShowFloorGradeId(List<Long> showFloorGradeIds) {
+    public ShowFloorCountMapByShowFloorGradeId countMapByShowFloorGradeId(List<Long> showFloorGradeIds) {
 
-        return showFloorRepository.findByShowFloorGradeIdIn(showFloorGradeIds).stream()
-                .collect(Collectors.groupingBy(ShowFloor::getShowFloorGradeId, Collectors.summingLong(ShowFloor::getCount)));
+        return new ShowFloorCountMapByShowFloorGradeId(showFloorRepository.findByShowFloorGradeIdIn(showFloorGradeIds));
     }
 
     public List<ShowFloor> findByIds(List<Long> showFloorIds) {
