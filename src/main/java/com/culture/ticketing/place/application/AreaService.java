@@ -43,8 +43,8 @@ public class AreaService {
         Objects.requireNonNull(request.getPlaceId(), "장소 아이디를 입력해주세요.");
     }
 
-    public List<Area> findByPlaceId(Long placeId) {
+    public List<Area> findByShowId(Long showId) {
 
-        return areaRepository.findByPlaceId(placeId);
+        return areaRepository.findByShowId(showId);
     }
 }

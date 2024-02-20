@@ -82,8 +82,7 @@ public class ShowFacadeService {
     @Transactional(readOnly = true)
     public List<ShowPlaceAreaResponse> findAreasByShowId(Long showId) {
         Show show = showService.findShowById(showId);
-        Place place = placeService.findPlaceById(show.getPlaceId());
-        List<Area> areas = areaService.findByPlaceId(place.getPlaceId());
+        List<Area> areas = areaService.findByShowId(show.getShowId());
 
         return areas.stream()
                 .map(ShowPlaceAreaResponse::from)
