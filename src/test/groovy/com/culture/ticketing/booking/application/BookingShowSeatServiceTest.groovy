@@ -34,7 +34,7 @@ class BookingShowSeatServiceTest extends Specification {
         given:
         Long roundId = 1L;
         Set<Long> showSeatIds = [1L, 2L];
-        bookingShowSeatRepository.existsByShowSeatIdInAndBooking_RoundIdAndBooking_BookingStatus(showSeatIds, roundId, BookingStatus.SUCCESS) >> true
+        bookingShowSeatRepository.existsAlreadyBookingShowSeatsInRound(showSeatIds, roundId) >> true
 
         when:
         boolean response = bookingShowSeatService.hasAlreadyBookingShowSeatsByRoundId(roundId, showSeatIds);
@@ -47,7 +47,7 @@ class BookingShowSeatServiceTest extends Specification {
 
         given:
         List<Long> roundIds = [1L, 2L];
-        bookingShowSeatRepository.findByBooking_RoundIdInAndBooking_BookingStatus(roundIds, BookingStatus.SUCCESS) >> [
+        bookingShowSeatRepository.findSuccessBookingShowSeatsByRoundIdIn(roundIds) >> [
                 BookingShowSeatFixtures.createBookingShowSeat(
                         bookingShowSeatId: 1L,
                         showSeatId: 1L,

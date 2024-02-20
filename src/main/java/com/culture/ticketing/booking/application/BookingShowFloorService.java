@@ -32,13 +32,13 @@ public class BookingShowFloorService {
 
     @Transactional(readOnly = true)
     public boolean hasAlreadyBookingShowFloorsByRoundId(Long roundId, Set<BookingShowFloorSaveRequest> showFloors) {
-        return bookingShowFloorRepository.existsAlreadyBookingShowFloorsInRound(showFloors, roundId, BookingStatus.SUCCESS);
+        return bookingShowFloorRepository.existsAlreadyBookingShowFloorsInRound(showFloors, roundId);
     }
 
     @Transactional(readOnly = true)
     public BookingShowFloorsMapByRoundIdResponse findBookingShowFloorsMapByRoundId(List<Long> roundIds) {
 
-        List<BookingShowFloor> bookingShowFloors = bookingShowFloorRepository.findByBooking_RoundIdInAndBooking_BookingStatus(roundIds, BookingStatus.SUCCESS);
+        List<BookingShowFloor> bookingShowFloors = bookingShowFloorRepository.findSuccessBookingShowFloorsByRoundIdIn(roundIds);
         List<Long> showFloorIds = bookingShowFloors.stream()
                 .map(BookingShowFloor::getShowFloorId)
                 .collect(Collectors.toList());

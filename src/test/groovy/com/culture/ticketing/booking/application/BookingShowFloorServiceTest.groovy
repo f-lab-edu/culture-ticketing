@@ -39,7 +39,7 @@ class BookingShowFloorServiceTest extends Specification {
                 new BookingShowFloorSaveRequest(1L, 2),
                 new BookingShowFloorSaveRequest(2L, 3)
         ]
-        bookingShowFloorRepository.existsAlreadyBookingShowFloorsInRound(showFloors, roundId, BookingStatus.SUCCESS) >> true
+        bookingShowFloorRepository.existsAlreadyBookingShowFloorsInRound(showFloors, roundId) >> true
 
         when:
         boolean response = bookingShowFloorService.hasAlreadyBookingShowFloorsByRoundId(roundId, showFloors);
@@ -52,7 +52,7 @@ class BookingShowFloorServiceTest extends Specification {
 
         given:
         List<Long> roundIds = [1L, 2L];
-        bookingShowFloorRepository.findByBooking_RoundIdInAndBooking_BookingStatus(roundIds, BookingStatus.SUCCESS) >> [
+        bookingShowFloorRepository.findSuccessBookingShowFloorsByRoundIdIn(roundIds) >> [
                 BookingShowFloorFixtures.createBookingShowFloor(
                         bookingShowFloorId: 1L,
                         showFloorId: 1L,

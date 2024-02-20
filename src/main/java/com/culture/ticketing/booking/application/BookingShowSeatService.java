@@ -31,13 +31,13 @@ public class BookingShowSeatService {
 
     @Transactional(readOnly = true)
     public boolean hasAlreadyBookingShowSeatsByRoundId(Long roundId, Set<Long> showSeatIds) {
-        return bookingShowSeatRepository.existsByShowSeatIdInAndBooking_RoundIdAndBooking_BookingStatus(showSeatIds, roundId, BookingStatus.SUCCESS);
+        return bookingShowSeatRepository.existsAlreadyBookingShowSeatsInRound(showSeatIds, roundId);
     }
 
     @Transactional(readOnly = true)
     public BookingShowSeatsMapByRoundIdResponse findBookingShowSeatsMapByRoundId(List<Long> roundIds) {
 
-        List<BookingShowSeat> bookingShowSeats = bookingShowSeatRepository.findByBooking_RoundIdInAndBooking_BookingStatus(roundIds, BookingStatus.SUCCESS);
+        List<BookingShowSeat> bookingShowSeats = bookingShowSeatRepository.findSuccessBookingShowSeatsByRoundIdIn(roundIds);
         List<Long> showSeatIds = bookingShowSeats.stream()
                 .map(BookingShowSeat::getShowSeatId)
                 .collect(Collectors.toList());
