@@ -16,7 +16,7 @@ public class BookingShowSeatMapByShowSeatIdResponse {
                 .collect(Collectors.toMap(BookingShowSeat::getShowSeatId, Function.identity()));
     }
 
-    public boolean existsByShowSeatId(Long showSeatId) {
-        return bookingShowSeatMapByShowSeatId.containsKey(showSeatId);
+    public boolean notExistsByShowSeatId(Long showSeatId) {
+        return !bookingShowSeatMapByShowSeatId.containsKey(showSeatId);
     }
 }

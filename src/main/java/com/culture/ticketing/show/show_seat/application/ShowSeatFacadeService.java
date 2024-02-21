@@ -54,7 +54,7 @@ public class ShowSeatFacadeService {
                         showSeat,
                         seatMapBySeatId.getById(showSeat.getSeatId()),
                         showSeatGradeMapById.getById(showSeat.getShowSeatGradeId()),
-                        bookingShowSeatMapByShowSeatId.existsByShowSeatId(showSeat.getShowSeatId())
+                        bookingShowSeatMapByShowSeatId.notExistsByShowSeatId(showSeat.getShowSeatId())
                         ))
                 .collect(Collectors.toList());
     }
