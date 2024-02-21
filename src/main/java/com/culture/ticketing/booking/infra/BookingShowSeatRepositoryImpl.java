@@ -19,7 +19,7 @@ public class BookingShowSeatRepositoryImpl extends BaseRepositoryImpl implements
 
 
     @Override
-    public List<BookingShowSeat> findByRoundIdAndShowSeatIds(Long roundId, Set<Long> showSeatIds) {
+    public List<BookingShowSeat> findSuccessBookingShowSeatsByRoundIdAndShowSeatIds(Long roundId, Set<Long> showSeatIds) {
         return queryFactory
                 .selectFrom(bookingShowSeat)
                 .where(

@@ -8,7 +8,7 @@ import java.util.Set;
 
 public interface BookingShowSeatRepositoryCustom {
 
-    List<BookingShowSeat> findByRoundIdAndShowSeatIds(Long roundId, Set<Long> showSeatIds);
+    List<BookingShowSeat> findSuccessBookingShowSeatsByRoundIdAndShowSeatIds(Long roundId, Set<Long> showSeatIds);
 
     List<BookingShowSeat> findSuccessBookingShowSeatsByRoundIdIn(Collection<Long> roundIds);
 }

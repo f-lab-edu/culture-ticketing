@@ -30,12 +30,12 @@ public class BookingShowSeatService {
 
     @Transactional(readOnly = true)
     public boolean hasAlreadyBookingShowSeatsByRoundId(Long roundId, Set<Long> showSeatIds) {
-        return bookingShowSeatRepository.findByRoundIdAndShowSeatIds(roundId, showSeatIds).size() > 0;
+        return bookingShowSeatRepository.findSuccessBookingShowSeatsByRoundIdAndShowSeatIds(roundId, showSeatIds).size() > 0;
     }
 
     @Transactional(readOnly = true)
     public List<BookingShowSeat> findByRoundIdAndShowSeatIds(Long roundId, Set<Long> showSeatIds) {
-        return bookingShowSeatRepository.findByRoundIdAndShowSeatIds(roundId, showSeatIds);
+        return bookingShowSeatRepository.findSuccessBookingShowSeatsByRoundIdAndShowSeatIds(roundId, showSeatIds);
     }
 
     @Transactional(readOnly = true)
