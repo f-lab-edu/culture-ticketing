@@ -8,7 +8,7 @@ import java.util.Set;
 
 public interface BookingShowSeatRepositoryCustom {
 
-    boolean existsAlreadyBookingShowSeatsInRound(Set<Long> showSeatIds, Long roundId);
+    List<BookingShowSeat> findByRoundIdAndShowSeatIds(Long roundId, Set<Long> showSeatIds);
 
     List<BookingShowSeat> findSuccessBookingShowSeatsByRoundIdIn(Collection<Long> roundIds);
 }

@@ -19,7 +19,7 @@ public class BookingShowSeatRepositoryImpl extends BaseRepositoryImpl implements
 
 
     @Override
-    public boolean existsAlreadyBookingShowSeatsInRound(Set<Long> showSeatIds, Long roundId) {
+    public List<BookingShowSeat> findByRoundIdAndShowSeatIds(Long roundId, Set<Long> showSeatIds) {
         return queryFactory
                 .selectFrom(bookingShowSeat)
                 .where(
@@ -27,7 +27,7 @@ public class BookingShowSeatRepositoryImpl extends BaseRepositoryImpl implements
                         bookingShowSeat.booking.roundId.eq(roundId),
                         bookingShowSeat.booking.bookingStatus.eq(BookingStatus.SUCCESS)
                 )
-                .fetch().size() > 0;
+                .fetch();
     }
 
     @Override
