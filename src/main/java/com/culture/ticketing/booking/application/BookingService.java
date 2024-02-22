@@ -4,8 +4,8 @@ import com.culture.ticketing.booking.application.dto.BookingSaveRequest;
 import com.culture.ticketing.booking.exception.AlreadyBookingShowSeatsExistsException;
 import com.culture.ticketing.booking.exception.BookingTotalPriceNotMatchException;
 import com.culture.ticketing.booking.infra.BookingRepository;
-import com.culture.ticketing.show.application.RoundService;
-import com.culture.ticketing.show.exception.RoundNotFoundException;
+import com.culture.ticketing.show.round_performer.application.RoundService;
+import com.culture.ticketing.show.round_performer.exception.RoundNotFoundException;
 import com.culture.ticketing.user.application.UserService;
 import com.culture.ticketing.user.exception.UserNotFoundException;
 import com.google.common.base.Preconditions;
@@ -35,11 +35,7 @@ public class BookingService {
     @Transactional
     public void createBooking(BookingSaveRequest request) {
 
-        Objects.requireNonNull(request.getUserId(), "유저 아이디를 입력해주세요.");
-        Objects.requireNonNull(request.getRoundId(), "회차 아이디를 입력해주세요.");
-        Preconditions.checkArgument(request.getTotalPrice() >= 0, "총 가격은 0 이상 숫자로 입력해주세요.");
-        Preconditions.checkArgument(request.getShowSeatIds() != null && request.getShowFloors() != null &&
-                (request.getShowSeatIds().size() != 0 || request.getShowFloors().size() != 0), "예약 좌석 정보를 입력해주세요.");
+        checkValidBookingSaveRequest(request);
 
         if (userService.notExistsById(request.getUserId())) {
             throw new UserNotFoundException(request.getUserId());
@@ -49,7 +45,7 @@ public class BookingService {
             throw new RoundNotFoundException(request.getRoundId());
         }
 
-        int priceSum = bookingShowSeatService.getTotalPriceByShowSeatIds(request.getShowSeatIds()) + bookingShowFloorService.getTotalPriceByShowFloors(request.getShowFloors());
+        int priceSum = bookingShowSeatService.getTotalPriceByShowSeatIds(request.getShowSeatIds()) + bookingShowFloorService.getTotalPriceByShowFloorIds(request.getShowFloorIds());
         if (request.getTotalPrice() != priceSum) {
             throw new BookingTotalPriceNotMatchException();
         }
@@ -62,4 +58,12 @@ public class BookingService {
         bookingRepository.save(request.toEntity());
     }
 
+    private void checkValidBookingSaveRequest(BookingSaveRequest request) {
+
+        Objects.requireNonNull(request.getUserId(), "유저 아이디를 입력해주세요.");
+        Objects.requireNonNull(request.getRoundId(), "회차 아이디를 입력해주세요.");
+        Preconditions.checkArgument(request.getTotalPrice() >= 0, "총 가격은 0 이상 숫자로 입력해주세요.");
+        Preconditions.checkArgument(request.getShowSeatIds() != null && request.getShowFloors() != null &&
+                (request.getShowSeatIds().size() != 0 || request.getShowFloors().size() != 0), "예약 좌석 정보를 입력해주세요.");
+    }
 }

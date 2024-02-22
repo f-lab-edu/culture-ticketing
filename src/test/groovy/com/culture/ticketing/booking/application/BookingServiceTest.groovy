@@ -7,8 +7,8 @@ import com.culture.ticketing.booking.domain.BookingStatus
 import com.culture.ticketing.booking.exception.AlreadyBookingShowSeatsExistsException
 import com.culture.ticketing.booking.exception.BookingTotalPriceNotMatchException
 import com.culture.ticketing.booking.infra.BookingRepository
-import com.culture.ticketing.show.application.RoundService
-import com.culture.ticketing.show.exception.RoundNotFoundException
+import com.culture.ticketing.show.round_performer.application.RoundService
+import com.culture.ticketing.show.round_performer.exception.RoundNotFoundException
 import com.culture.ticketing.user.application.UserService
 import com.culture.ticketing.user.exception.UserNotFoundException
 import spock.lang.Specification
@@ -145,7 +145,7 @@ class BookingServiceTest extends Specification {
                 .showFloors(showFloors)
                 .build();
         bookingShowSeatService.getTotalPriceByShowSeatIds(showSeatIds) >> 100000
-        bookingShowFloorService.getTotalPriceByShowFloors(showFloors) >> 200000
+        bookingShowFloorService.getTotalPriceByShowFloorIds([1L, 1L]) >> 200000
 
         when:
         bookingService.createBooking(request);
@@ -172,7 +172,7 @@ class BookingServiceTest extends Specification {
                 .showFloors(showFloors)
                 .build();
         bookingShowSeatService.getTotalPriceByShowSeatIds(showSeatIds) >> 100000
-        bookingShowFloorService.getTotalPriceByShowFloors(showFloors) >> 200000
+        bookingShowFloorService.getTotalPriceByShowFloorIds([1L, 1L]) >> 200000
         bookingShowSeatService.hasAlreadyBookingShowSeatsByRoundId(roundId, showSeatIds) >> existsShowSeats
         bookingShowFloorService.hasAlreadyBookingShowFloorsByRoundId(roundId, showFloors) >> existsShowFloors
 
@@ -207,7 +207,7 @@ class BookingServiceTest extends Specification {
                 .showFloors(showFloors)
                 .build();
         bookingShowSeatService.getTotalPriceByShowSeatIds(showSeatIds) >> 100000
-        bookingShowFloorService.getTotalPriceByShowFloors(showFloors) >> 200000
+        bookingShowFloorService.getTotalPriceByShowFloorIds([1L, 1L]) >> 200000
         bookingShowSeatService.hasAlreadyBookingShowSeatsByRoundId(roundId, showSeatIds) >> false
         bookingShowFloorService.hasAlreadyBookingShowFloorsByRoundId(roundId, showFloors) >> false
 

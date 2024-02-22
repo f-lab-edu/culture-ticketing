@@ -118,7 +118,8 @@ class ShowControllerTest extends Specification {
                 placeId: 1L,
                 roundIds: [1L, 2L],
                 performerIds: [1L, 2L, 3L],
-                showSeatGradeIds: [1L, 2L]
+                showSeatGradeIds: [1L, 2L],
+                showFloorGradeIds: [1L, 2L]
         );
 
         expect:
@@ -131,6 +132,7 @@ class ShowControllerTest extends Specification {
                 .andExpect(jsonPath("\$.rounds[0].performers", Matchers.hasSize(3)))
                 .andExpect(jsonPath("\$.rounds[1].performers", Matchers.hasSize(3)))
                 .andExpect(jsonPath("\$.showSeatGrades", Matchers.hasSize(2)))
+                .andExpect(jsonPath("\$.showFloorGrades", Matchers.hasSize(2)))
                 .andDo(MockMvcResultHandlers.print())
     }
 }

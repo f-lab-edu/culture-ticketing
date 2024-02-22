@@ -24,15 +24,20 @@ public class UserService {
     @Transactional
     public void createUser(UserSaveRequest request) {
 
-        Preconditions.checkArgument(StringUtils.hasText(request.getEmail()), "이메일을 입력해주세요.");
-        Preconditions.checkArgument(StringUtils.hasText(request.getPassword()), "비밀번호를 입력해주세요.");
-        Preconditions.checkArgument(StringUtils.hasText(request.getUserName()), "이름을 입력해주세요.");
-        Preconditions.checkArgument(StringUtils.hasText(request.getPhoneNumber()), "연락처를 입력해주세요.");
+        checkValidUserSaveRequest(request);
 
         checkDuplicatedUserEmailExists(request.getEmail());
 
         User user = request.toEntity(passwordEncoder);
         userRepository.save(user);
+    }
+
+    private void checkValidUserSaveRequest(UserSaveRequest request) {
+
+        Preconditions.checkArgument(StringUtils.hasText(request.getEmail()), "이메일을 입력해주세요.");
+        Preconditions.checkArgument(StringUtils.hasText(request.getPassword()), "비밀번호를 입력해주세요.");
+        Preconditions.checkArgument(StringUtils.hasText(request.getUserName()), "이름을 입력해주세요.");
+        Preconditions.checkArgument(StringUtils.hasText(request.getPhoneNumber()), "연락처를 입력해주세요.");
     }
 
     private void checkDuplicatedUserEmailExists(String email) {

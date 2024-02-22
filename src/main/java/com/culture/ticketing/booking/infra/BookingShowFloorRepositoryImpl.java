@@ -1,6 +1,7 @@
 package com.culture.ticketing.booking.infra;
 
 import com.culture.ticketing.booking.application.dto.BookingShowFloorSaveRequest;
+import com.culture.ticketing.booking.domain.BookingShowFloor;
 import com.culture.ticketing.booking.domain.BookingStatus;
 import com.culture.ticketing.common.infra.BaseRepositoryImpl;
 import com.querydsl.core.types.Expression;
@@ -20,14 +21,26 @@ public class BookingShowFloorRepositoryImpl extends BaseRepositoryImpl implement
         super(em);
     }
 
+
     @Override
-    public boolean existsByShowFloorsInAndBooking_RoundIdAndBooking_BookingStatus(Set<BookingShowFloorSaveRequest> showFloors, Long roundId, BookingStatus bookingStatus) {
+    public List<BookingShowFloor> findSuccessBookingShowFloorsByRoundIdIn(Collection<Long> roundIds) {
+        return queryFactory
+                .selectFrom(bookingShowFloor)
+                .where(
+                        bookingShowFloor.booking.roundId.in(roundIds),
+                        bookingShowFloor.booking.bookingStatus.eq(BookingStatus.SUCCESS)
+                )
+                .fetch();
+    }
+
+    @Override
+    public boolean existsAlreadyBookingShowFloorsInRound(Set<BookingShowFloorSaveRequest> showFloors, Long roundId) {
         return queryFactory
                 .selectFrom(bookingShowFloor)
                 .where(
                         Expressions.list(bookingShowFloor.showFloorId, bookingShowFloor.entryOrder).in(searchShowFloorsIn(showFloors)),
                         bookingShowFloor.booking.roundId.eq(roundId),
-                        bookingShowFloor.booking.bookingStatus.eq(bookingStatus)
+                        bookingShowFloor.booking.bookingStatus.eq(BookingStatus.SUCCESS)
                 )
                 .fetch().size() > 0;
     }
@@ -42,4 +55,6 @@ public class BookingShowFloorRepositoryImpl extends BaseRepositoryImpl implement
 
         return tuples.toArray(new Expression[0]);
     }
+
+
 }

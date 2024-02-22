@@ -6,6 +6,11 @@ import com.culture.ticketing.show.application.dto.ShowResponse
 import com.culture.ticketing.show.domain.AgeRestriction
 import com.culture.ticketing.show.domain.Category
 import com.culture.ticketing.show.domain.Show
+import com.culture.ticketing.show.round_performer.RoundFixtures
+import com.culture.ticketing.show.show_floor.ShowFloorGradeFixtures
+import com.culture.ticketing.show.show_floor.application.dto.ShowFloorGradeResponse
+import com.culture.ticketing.show.show_seat.ShowSeatGradeFixtures
+import com.culture.ticketing.show.show_seat.application.dto.ShowSeatGradeResponse
 
 import java.time.LocalDate
 import java.util.stream.Collectors
@@ -14,7 +19,7 @@ class ShowFixtures {
 
     static Show createShow(Map map = [:]) {
         return Show.builder()
-                .showId(map.getOrDefault("showId", 1L) as Long)
+                .showId(map.getOrDefault("showId", null) as Long)
                 .category(map.getOrDefault("category", Category.CONCERT) as Category)
                 .showName(map.getOrDefault("showName", "테스트") as String)
                 .ageRestriction(map.getOrDefault("ageRestriction", AgeRestriction.ALL) as AgeRestriction)
@@ -46,7 +51,10 @@ class ShowFixtures {
                         ))
                         .collect(Collectors.toList()))
                 .showSeatGrades((map.getOrDefault("showSeatGradeIds", []) as List<Long>).stream()
-                        .map(showSeatGradeId -> ShowSeatGradeFixtures.createShowSeatGradeResponse(showSeatGradeId: showSeatGradeId))
+                        .map(showSeatGradeId -> new ShowSeatGradeResponse(ShowSeatGradeFixtures.createShowSeatGrade(showSeatGradeId: showSeatGradeId)))
+                        .collect(Collectors.toList()))
+                .showFloorGrades((map.getOrDefault("showFloorGradeIds", []) as List<Long>).stream()
+                        .map(showFloorGradeId -> new ShowFloorGradeResponse(ShowFloorGradeFixtures.createShowFloorGrade(showFloorGradeId: showFloorGradeId)))
                         .collect(Collectors.toList()))
                 .build();
     }
