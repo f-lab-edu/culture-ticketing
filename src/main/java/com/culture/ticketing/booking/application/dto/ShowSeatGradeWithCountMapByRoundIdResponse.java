@@ -13,8 +13,10 @@ public class ShowSeatGradeWithCountMapByRoundIdResponse {
 
     private final Map<Long, List<ShowSeatGradeWithCountResponse>> showSeatGradeWithCountMapByRoundId;
 
-    public ShowSeatGradeWithCountMapByRoundIdResponse(List<Long> roundIds, List<ShowSeatGradeResponse> showSeatGrades,
-                                                      ShowSeatCountMapByShowSeatGradeIdResponse showSeatCountMapByShowSeatGradeId, BookingShowSeatsMapByRoundIdResponse bookingShowSeatsMapByRoundId) {
+    public ShowSeatGradeWithCountMapByRoundIdResponse(List<Long> roundIds,
+                                                      List<ShowSeatGradeResponse> showSeatGrades,
+                                                      ShowSeatCountMapByShowSeatGradeIdResponse showSeatCountMapByShowSeatGradeId,
+                                                      BookingShowSeatsMapByRoundIdResponse bookingShowSeatsMapByRoundId) {
         this.showSeatGradeWithCountMapByRoundId = roundIds.stream()
                 .collect(Collectors.toMap(Function.identity(), roundId -> showSeatGrades.stream()
                         .map(showSeatGrade -> new ShowSeatGradeWithCountResponse(showSeatGrade, showSeatCountMapByShowSeatGradeId.getShowSeatCountByShowSeatGradeId(showSeatGrade.getShowSeatGradeId())

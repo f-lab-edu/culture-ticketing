@@ -6,7 +6,7 @@ import com.culture.ticketing.booking.application.dto.ShowFloorGradeWithCountMapB
 import com.culture.ticketing.booking.application.dto.ShowSeatGradeWithCountMapByRoundIdResponse;
 import com.culture.ticketing.show.show_floor.application.ShowFloorGradeService;
 import com.culture.ticketing.show.show_floor.application.ShowFloorService;
-import com.culture.ticketing.show.show_floor.application.dto.ShowFloorCountMapByShowFloorGradeId;
+import com.culture.ticketing.show.show_floor.application.dto.ShowFloorCountMapByShowFloorGradeIdResponse;
 import com.culture.ticketing.show.show_seat.application.ShowSeatGradeService;
 import com.culture.ticketing.show.show_seat.application.ShowSeatService;
 import com.culture.ticketing.show.show_floor.application.dto.ShowFloorGradeResponse;
@@ -61,7 +61,7 @@ public class BookingFacadeService {
                 .map(ShowFloorGradeResponse::getShowFloorGradeId)
                 .collect(Collectors.toList());
 
-        ShowFloorCountMapByShowFloorGradeId showFloorCountMapByShowFloorGradeId = showFloorService.countMapByShowFloorGradeId(showFloorGradeIds);
+        ShowFloorCountMapByShowFloorGradeIdResponse showFloorCountMapByShowFloorGradeId = showFloorService.countMapByShowFloorGradeId(showFloorGradeIds);
 
         BookingShowFloorsMapByRoundIdResponse bookingShowFloorsMapByRoundId = bookingShowFloorService.findBookingShowFloorsMapByRoundId(roundIds);
 

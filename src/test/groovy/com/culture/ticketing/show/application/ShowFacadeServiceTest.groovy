@@ -24,10 +24,9 @@ import com.culture.ticketing.show.round_performer.application.dto.RoundWithPerfo
 import com.culture.ticketing.show.show_floor.ShowFloorFixtures
 import com.culture.ticketing.show.show_floor.ShowFloorGradeFixtures
 import com.culture.ticketing.show.show_floor.application.ShowFloorGradeService
-import com.culture.ticketing.show.show_floor.application.dto.ShowFloorCountMapByShowFloorGradeId
+import com.culture.ticketing.show.show_floor.application.dto.ShowFloorCountMapByShowFloorGradeIdResponse
 import com.culture.ticketing.show.show_floor.application.dto.ShowFloorGradeResponse
 import com.culture.ticketing.show.show_floor.domain.ShowFloor
-import com.culture.ticketing.show.show_floor.domain.ShowFloorGrade
 import com.culture.ticketing.show.show_seat.ShowSeatFixtures
 import com.culture.ticketing.show.show_seat.ShowSeatGradeFixtures
 import com.culture.ticketing.show.application.dto.ShowDetailResponse
@@ -167,7 +166,7 @@ class ShowFacadeServiceTest extends Specification {
                 ),
         ]
         bookingFacadeService.findShowFloorGradeWithAvailableCountMapByRoundId(showId, [1L, 2L]) >> new ShowFloorGradeWithCountMapByRoundIdResponse(
-                roundIds, showFloorGrades, new ShowFloorCountMapByShowFloorGradeId(showFloors), new BookingShowFloorsMapByRoundIdResponse(bookingShowFloors, showFloors)
+                roundIds, showFloorGrades, new ShowFloorCountMapByShowFloorGradeIdResponse(showFloors), new BookingShowFloorsMapByRoundIdResponse(bookingShowFloors, showFloors)
         )
 
         when:

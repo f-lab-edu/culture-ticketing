@@ -2,7 +2,7 @@ package com.culture.ticketing.show.show_floor.application
 
 import com.culture.ticketing.show.show_floor.ShowFloorFixtures
 import com.culture.ticketing.show.show_floor.ShowFloorGradeFixtures
-import com.culture.ticketing.show.show_floor.application.dto.ShowFloorCountMapByShowFloorGradeId
+import com.culture.ticketing.show.show_floor.application.dto.ShowFloorCountMapByShowFloorGradeIdResponse
 import com.culture.ticketing.show.show_floor.application.dto.ShowFloorGradeResponse
 import com.culture.ticketing.show.show_floor.application.dto.ShowFloorResponse
 import com.culture.ticketing.show.show_floor.exception.ShowFloorGradeNotFoundException
@@ -148,7 +148,7 @@ class ShowFloorServiceTest extends Specification {
         ]
 
         when:
-        ShowFloorCountMapByShowFloorGradeId countMapByShowFloorGradeId = showFloorService.countMapByShowFloorGradeId(showFloorGradeIds);
+        ShowFloorCountMapByShowFloorGradeIdResponse countMapByShowFloorGradeId = showFloorService.countMapByShowFloorGradeId(showFloorGradeIds);
 
         then:
         countMapByShowFloorGradeId.getShowFloorCountByShowFloorGradeId(1L) == 1200

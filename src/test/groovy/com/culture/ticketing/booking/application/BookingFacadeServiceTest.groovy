@@ -13,7 +13,7 @@ import com.culture.ticketing.show.show_floor.ShowFloorFixtures
 import com.culture.ticketing.show.show_floor.ShowFloorGradeFixtures
 import com.culture.ticketing.show.show_floor.application.ShowFloorGradeService
 import com.culture.ticketing.show.show_floor.application.ShowFloorService
-import com.culture.ticketing.show.show_floor.application.dto.ShowFloorCountMapByShowFloorGradeId
+import com.culture.ticketing.show.show_floor.application.dto.ShowFloorCountMapByShowFloorGradeIdResponse
 import com.culture.ticketing.show.show_floor.application.dto.ShowFloorGradeResponse
 import com.culture.ticketing.show.show_floor.domain.ShowFloor
 import com.culture.ticketing.show.show_seat.ShowSeatFixtures
@@ -95,7 +95,7 @@ class BookingFacadeServiceTest extends Specification {
                 ShowFloorFixtures.createShowFloor(showFloorId: 1L, showFloorGradeId: 1L, count: 500L),
                 ShowFloorFixtures.createShowFloor(showFloorId: 2L, showFloorGradeId: 2L, count: 700L)
         ]
-        showFloorService.countMapByShowFloorGradeId([1L, 2L]) >> new ShowFloorCountMapByShowFloorGradeId(showFloors)
+        showFloorService.countMapByShowFloorGradeId([1L, 2L]) >> new ShowFloorCountMapByShowFloorGradeIdResponse(showFloors)
         List<BookingShowFloor> bookingShowFloors = [
                 BookingShowFloorFixtures.createBookingShowFloor(
                         bookingShowFloorId: 1L,

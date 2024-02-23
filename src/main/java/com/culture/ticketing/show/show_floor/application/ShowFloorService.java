@@ -1,7 +1,7 @@
 package com.culture.ticketing.show.show_floor.application;
 
 import com.culture.ticketing.show.show_floor.application.dto.ShowFloorResponse;
-import com.culture.ticketing.show.show_floor.application.dto.ShowFloorCountMapByShowFloorGradeId;
+import com.culture.ticketing.show.show_floor.application.dto.ShowFloorCountMapByShowFloorGradeIdResponse;
 import com.culture.ticketing.show.show_floor.application.dto.ShowFloorGradeResponse;
 import com.culture.ticketing.show.show_floor.application.dto.ShowFloorSaveRequest;
 import com.culture.ticketing.show.show_floor.domain.ShowFloor;
@@ -71,9 +71,9 @@ public class ShowFloorService {
     }
 
     @Transactional(readOnly = true)
-    public ShowFloorCountMapByShowFloorGradeId countMapByShowFloorGradeId(List<Long> showFloorGradeIds) {
+    public ShowFloorCountMapByShowFloorGradeIdResponse countMapByShowFloorGradeId(List<Long> showFloorGradeIds) {
 
-        return new ShowFloorCountMapByShowFloorGradeId(showFloorRepository.findByShowFloorGradeIdIn(showFloorGradeIds));
+        return new ShowFloorCountMapByShowFloorGradeIdResponse(showFloorRepository.findByShowFloorGradeIdIn(showFloorGradeIds));
     }
 
     @Transactional(readOnly = true)
