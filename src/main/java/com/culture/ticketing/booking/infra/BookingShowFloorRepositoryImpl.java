@@ -11,7 +11,6 @@ import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import static com.culture.ticketing.booking.domain.QBookingShowFloor.bookingShowFloor;
 
@@ -34,7 +33,7 @@ public class BookingShowFloorRepositoryImpl extends BaseRepositoryImpl implement
     }
 
     @Override
-    public boolean existsAlreadyBookingShowFloorsInRound(Set<BookingShowFloorSaveRequest> showFloors, Long roundId) {
+    public boolean existsAlreadyBookingShowFloorsInRound(Collection<BookingShowFloorSaveRequest> showFloors, Long roundId) {
         return queryFactory
                 .selectFrom(bookingShowFloor)
                 .where(
