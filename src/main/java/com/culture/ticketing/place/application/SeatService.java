@@ -58,12 +58,18 @@ public class SeatService {
     public void checkSeatsExists(Set<Long> seatIds) {
 
         Set<Long> copySeatIds = new HashSet<>(seatIds);
-        List<Seat> foundSeats = seatRepository.findBySeatIdIn(copySeatIds);
+        List<Seat> foundSeats = seatRepository.findAllById(copySeatIds);
         if (copySeatIds.size() != foundSeats.size()) {
             for (Seat foundSeat : foundSeats) {
                 copySeatIds.remove(foundSeat.getSeatId());
             }
             throw new SeatNotFoundException(copySeatIds.toString());
         }
+    }
+
+    @Transactional(readOnly = true)
+    public List<Seat> findBySeatIds(List<Long> seatIds) {
+
+        return seatRepository.findAllById(seatIds);
     }
 }

@@ -6,7 +6,7 @@ class SeatFixtures {
 
     static Seat creatSeat(Map map = [:]) {
         return Seat.builder()
-                .seatId(map.getOrDefault("seatId", 1L) as Long)
+                .seatId(map.getOrDefault("seatId", null) as Long)
                 .seatRow(map.getOrDefault("seatRow", 1) as Integer)
                 .seatNumber(map.getOrDefault("seatNumber", 1) as Integer)
                 .areaId(map.getOrDefault("areaId", 1L) as Long)

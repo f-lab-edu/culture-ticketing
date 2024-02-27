@@ -155,4 +155,21 @@ class ShowSeatServiceTest extends Specification {
         countMapByShowSeatGradeId.getShowSeatCountByShowSeatGradeId(1L) == 2
         countMapByShowSeatGradeId.getShowSeatCountByShowSeatGradeId(2L) == 1
     }
+
+    def "구역 아이디로 공연 좌석 목록 조회"() {
+
+        given:
+        showSeatRepository.findByAreaId(1L) >> [
+                ShowSeatFixtures.createShowSeat(showSeatId: 1L, showSeatGradeId: 1L),
+                ShowSeatFixtures.createShowSeat(showSeatId: 2L, showSeatGradeId: 1L),
+                ShowSeatFixtures.createShowSeat(showSeatId: 3L, showSeatGradeId: 2L)
+        ]
+
+        when:
+        List<ShowSeat> response = showSeatService.findByAreaId(1L);
+
+        then:
+        response.size() == 3
+        response.showSeatId == [1L, 2L, 3L]
+    }
 }

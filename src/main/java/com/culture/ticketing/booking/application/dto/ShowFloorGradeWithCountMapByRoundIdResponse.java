@@ -1,6 +1,6 @@
 package com.culture.ticketing.booking.application.dto;
 
-import com.culture.ticketing.show.show_floor.application.dto.ShowFloorCountMapByShowFloorGradeId;
+import com.culture.ticketing.show.show_floor.application.dto.ShowFloorCountMapByShowFloorGradeIdResponse;
 import com.culture.ticketing.show.show_floor.application.dto.ShowFloorGradeResponse;
 import com.culture.ticketing.show.show_floor.application.dto.ShowFloorGradeWithCountResponse;
 
@@ -14,8 +14,10 @@ public class ShowFloorGradeWithCountMapByRoundIdResponse {
     private final Map<Long, List<ShowFloorGradeWithCountResponse>> showFloorGradeWithCountMapByRoundId;
 
 
-    public ShowFloorGradeWithCountMapByRoundIdResponse(List<Long> roundIds, List<ShowFloorGradeResponse> showFloorGrades,
-                                                       ShowFloorCountMapByShowFloorGradeId showFloorCountMapByShowSeatGradeId, BookingShowFloorsMapByRoundIdResponse bookingShowFloorsMapByRoundId) {
+    public ShowFloorGradeWithCountMapByRoundIdResponse(List<Long> roundIds,
+                                                       List<ShowFloorGradeResponse> showFloorGrades,
+                                                       ShowFloorCountMapByShowFloorGradeIdResponse showFloorCountMapByShowSeatGradeId,
+                                                       BookingShowFloorsMapByRoundIdResponse bookingShowFloorsMapByRoundId) {
         this.showFloorGradeWithCountMapByRoundId = roundIds.stream()
                 .collect(Collectors.toMap(Function.identity(), roundId -> showFloorGrades.stream()
                         .map(showFloorGrade -> new ShowFloorGradeWithCountResponse(showFloorGrade, showFloorCountMapByShowSeatGradeId.getShowFloorCountByShowFloorGradeId(showFloorGrade.getShowFloorGradeId())

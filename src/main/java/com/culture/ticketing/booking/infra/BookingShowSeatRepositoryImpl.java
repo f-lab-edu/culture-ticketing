@@ -7,7 +7,6 @@ import com.culture.ticketing.common.infra.BaseRepositoryImpl;
 import javax.persistence.EntityManager;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import static com.culture.ticketing.booking.domain.QBookingShowSeat.bookingShowSeat;
 
@@ -19,7 +18,7 @@ public class BookingShowSeatRepositoryImpl extends BaseRepositoryImpl implements
 
 
     @Override
-    public boolean existsAlreadyBookingShowSeatsInRound(Set<Long> showSeatIds, Long roundId) {
+    public List<BookingShowSeat> findSuccessBookingShowSeatsByRoundIdAndShowSeatIds(Long roundId, Collection<Long> showSeatIds) {
         return queryFactory
                 .selectFrom(bookingShowSeat)
                 .where(
@@ -27,7 +26,7 @@ public class BookingShowSeatRepositoryImpl extends BaseRepositoryImpl implements
                         bookingShowSeat.booking.roundId.eq(roundId),
                         bookingShowSeat.booking.bookingStatus.eq(BookingStatus.SUCCESS)
                 )
-                .fetch().size() > 0;
+                .fetch();
     }
 
     @Override

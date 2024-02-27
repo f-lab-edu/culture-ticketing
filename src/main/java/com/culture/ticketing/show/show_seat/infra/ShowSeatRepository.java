@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Repository
-public interface ShowSeatRepository extends JpaRepository<ShowSeat, Long> {
+public interface ShowSeatRepository extends JpaRepository<ShowSeat, Long>, ShowSeatRepositoryCustom {
 
     List<ShowSeat> findByShowSeatGradeIdIn(Collection<Long> showSeatGradeId);
 }

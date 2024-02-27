@@ -26,7 +26,7 @@ class BookingShowSeatRepositoryCustomTest extends Specification {
         bookingRepository.deleteAll();
     }
 
-    def "예약하려는 예약 좌석 목록 중 해당 회차에 이미 예약됐는지 확인"() {
+    def "회차 아이디와 공연 좌석 아이디 목록으로 "() {
 
         given:
         Booking booking = BookingFixtures.createBooking(roundId: 1L, bookingStatus: BookingStatus.SUCCESS);
@@ -34,20 +34,16 @@ class BookingShowSeatRepositoryCustomTest extends Specification {
         List<BookingShowSeat> bookingShowSeats = [
                 BookingShowSeatFixtures.createBookingShowSeat(showSeatId: 1L, booking: booking),
                 BookingShowSeatFixtures.createBookingShowSeat(showSeatId: 2L, booking: booking),
+                BookingShowSeatFixtures.createBookingShowSeat(showSeatId: 3L, booking: booking),
         ]
         bookingShowSeatRepository.saveAll(bookingShowSeats);
 
         when:
-        boolean response = bookingShowSeatRepository.existsAlreadyBookingShowSeatsInRound(showSeatIds, 1L);
+        List<BookingShowSeat> response = bookingShowSeatRepository.findSuccessBookingShowSeatsByRoundIdAndShowSeatIds(1L, Set.of(1L, 2L));
 
         then:
-        response == expected
-
-        where:
-        showSeatIds    || expected
-        Set.of(1L, 3L) || true
-        Set.of(1L, 2L) || true
-        Set.of(3L, 4L) || false
+        response.size() == 2
+        response.bookingShowSeatId == [bookingShowSeats.get(0).bookingShowSeatId, bookingShowSeats.get(1).bookingShowSeatId]
     }
 
     def "회차 아이디 목록으로 예약 좌석 목록 조회"() {

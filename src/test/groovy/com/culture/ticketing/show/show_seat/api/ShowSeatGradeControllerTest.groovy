@@ -1,8 +1,11 @@
 package com.culture.ticketing.show.show_seat.api
 
+import com.culture.ticketing.show.show_seat.ShowSeatGradeFixtures
 import com.culture.ticketing.show.show_seat.application.ShowSeatGradeService
+import com.culture.ticketing.show.show_seat.application.dto.ShowSeatGradeResponse
 import com.culture.ticketing.show.show_seat.application.dto.ShowSeatGradeSaveRequest
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.hamcrest.Matchers
 import org.spockframework.spring.SpringBean
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -14,6 +17,11 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import spock.lang.Specification
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @WebMvcTest(ShowSeatGradeController.class)
@@ -45,4 +53,24 @@ class ShowSeatGradeControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
+    def "공연 아이디로 공연 좌석 등급 목록 조회"() {
+
+        given:
+        showSeatGradeService.findShowSeatGradesByShowId(1L) >> [
+                new ShowSeatGradeResponse(ShowSeatGradeFixtures.createShowSeatGrade(showSeatGradeId: 1L)),
+                new ShowSeatGradeResponse(ShowSeatGradeFixtures.createShowSeatGrade(showSeatGradeId: 2L)),
+                new ShowSeatGradeResponse(ShowSeatGradeFixtures.createShowSeatGrade(showSeatGradeId: 3L)),
+        ]
+
+        expect:
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/show-seat-grades")
+                .param("showId", "1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("\$").exists())
+                .andExpect(jsonPath("\$", Matchers.hasSize(3)))
+                .andExpect(jsonPath("\$[0].showSeatGradeId").value(1L))
+                .andExpect(jsonPath("\$[1].showSeatGradeId").value(2L))
+                .andExpect(jsonPath("\$[2].showSeatGradeId").value(3L))
+                .andDo(MockMvcResultHandlers.print())
+    }
 }

@@ -76,8 +76,15 @@ public class ShowSeatService {
         return new ShowSeatCountMapByShowSeatGradeIdResponse(showSeatRepository.findByShowSeatGradeIdIn(showSeatGradeIds));
     }
 
+    @Transactional(readOnly = true)
     public List<ShowSeat> findByIds(List<Long> showSeatIds) {
 
         return showSeatRepository.findAllById(showSeatIds);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ShowSeat> findByAreaId(Long areaId) {
+
+        return showSeatRepository.findByAreaId(areaId);
     }
 }

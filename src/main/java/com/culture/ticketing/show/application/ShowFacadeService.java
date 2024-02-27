@@ -1,10 +1,13 @@
 package com.culture.ticketing.show.application;
 
 import com.culture.ticketing.booking.application.BookingFacadeService;
+import com.culture.ticketing.place.application.AreaService;
 import com.culture.ticketing.booking.application.dto.ShowFloorGradeWithCountMapByRoundIdResponse;
 import com.culture.ticketing.booking.application.dto.ShowSeatGradeWithCountMapByRoundIdResponse;
 import com.culture.ticketing.place.application.PlaceService;
+import com.culture.ticketing.place.domain.Area;
 import com.culture.ticketing.place.domain.Place;
+import com.culture.ticketing.show.application.dto.ShowPlaceAreaResponse;
 import com.culture.ticketing.show.round_performer.application.RoundPerformerService;
 import com.culture.ticketing.show.round_performer.application.dto.RoundWithPerformersAndShowSeatsResponse;
 import com.culture.ticketing.show.round_performer.application.dto.RoundWithPerformersResponse;
@@ -30,16 +33,18 @@ public class ShowFacadeService {
     private final ShowFloorGradeService showFloorGradeService;
     private final PlaceService placeService;
     private final BookingFacadeService bookingFacadeService;
+    private final AreaService areaService;
 
     public ShowFacadeService(ShowService showService, RoundPerformerService roundPerformerService,
                              ShowSeatGradeService showSeatGradeService, ShowFloorGradeService showFloorGradeService,
-                             PlaceService placeService, BookingFacadeService bookingFacadeService) {
+                             PlaceService placeService, BookingFacadeService bookingFacadeService, AreaService areaService) {
         this.showService = showService;
         this.roundPerformerService = roundPerformerService;
         this.showSeatGradeService = showSeatGradeService;
         this.showFloorGradeService = showFloorGradeService;
         this.placeService = placeService;
         this.bookingFacadeService = bookingFacadeService;
+        this.areaService = areaService;
     }
 
     @Transactional(readOnly = true)
@@ -71,6 +76,16 @@ public class ShowFacadeService {
                         showSeatGradeWithAvailableCountMapByRoundId.getByRoundId(roundWithPerformers.getRoundId()),
                         showFloorGradeWithAvailableCountMapByRoundId.getByRoundId(roundWithPerformers.getRoundId())
                 ))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<ShowPlaceAreaResponse> findAreasByShowId(Long showId) {
+        Show show = showService.findShowById(showId);
+        List<Area> areas = areaService.findByShowId(show.getShowId());
+
+        return areas.stream()
+                .map(ShowPlaceAreaResponse::from)
                 .collect(Collectors.toList());
     }
 }

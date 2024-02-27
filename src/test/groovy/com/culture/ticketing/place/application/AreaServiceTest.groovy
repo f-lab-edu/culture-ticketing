@@ -1,5 +1,6 @@
 package com.culture.ticketing.place.application
 
+import com.culture.ticketing.place.AreaFixtures
 import com.culture.ticketing.place.application.dto.PlaceAreaSaveRequest
 import com.culture.ticketing.place.domain.Area
 import com.culture.ticketing.place.exception.PlaceNotFoundException
@@ -79,5 +80,22 @@ class AreaServiceTest extends Specification {
 
         then:
         !response
+    }
+
+    def "공연 아이디로 구역 목록 조회"() {
+
+        given:
+        areaRepository.findByShowId(1L) >> [
+                AreaFixtures.createArea(areaId: 1L),
+                AreaFixtures.createArea(areaId: 2L),
+                AreaFixtures.createArea(areaId: 3L),
+        ]
+
+        when:
+        List<Area> response = areaService.findByShowId(1L);
+
+        then:
+        response.size() == 3
+        response.areaId == [1L, 2L, 3L]
     }
 }

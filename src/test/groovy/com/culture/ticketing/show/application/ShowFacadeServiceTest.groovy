@@ -10,8 +10,11 @@ import com.culture.ticketing.booking.application.dto.ShowFloorGradeWithCountMapB
 import com.culture.ticketing.booking.application.dto.ShowSeatGradeWithCountMapByRoundIdResponse
 import com.culture.ticketing.booking.domain.BookingShowFloor
 import com.culture.ticketing.booking.domain.BookingShowSeat
+import com.culture.ticketing.place.AreaFixtures
 import com.culture.ticketing.place.PlaceFixtures
+import com.culture.ticketing.place.application.AreaService
 import com.culture.ticketing.place.application.PlaceService
+import com.culture.ticketing.show.application.dto.ShowPlaceAreaResponse
 import com.culture.ticketing.show.round_performer.PerformerFixtures
 import com.culture.ticketing.show.round_performer.RoundFixtures
 import com.culture.ticketing.show.ShowFixtures
@@ -21,10 +24,9 @@ import com.culture.ticketing.show.round_performer.application.dto.RoundWithPerfo
 import com.culture.ticketing.show.show_floor.ShowFloorFixtures
 import com.culture.ticketing.show.show_floor.ShowFloorGradeFixtures
 import com.culture.ticketing.show.show_floor.application.ShowFloorGradeService
-import com.culture.ticketing.show.show_floor.application.dto.ShowFloorCountMapByShowFloorGradeId
+import com.culture.ticketing.show.show_floor.application.dto.ShowFloorCountMapByShowFloorGradeIdResponse
 import com.culture.ticketing.show.show_floor.application.dto.ShowFloorGradeResponse
 import com.culture.ticketing.show.show_floor.domain.ShowFloor
-import com.culture.ticketing.show.show_floor.domain.ShowFloorGrade
 import com.culture.ticketing.show.show_seat.ShowSeatFixtures
 import com.culture.ticketing.show.show_seat.ShowSeatGradeFixtures
 import com.culture.ticketing.show.application.dto.ShowDetailResponse
@@ -45,8 +47,9 @@ class ShowFacadeServiceTest extends Specification {
     private ShowFloorGradeService showFloorGradeService = Mock();
     private PlaceService placeService = Mock();
     private BookingFacadeService bookingFacadeService = Mock();
+    private AreaService areaService = Mock();
     private ShowFacadeService showFacadeService = new ShowFacadeService(showService, roundPerformerService, showSeatGradeService,
-            showFloorGradeService, placeService, bookingFacadeService);
+            showFloorGradeService, placeService, bookingFacadeService, areaService);
 
     def "공연 아이디로 공연 상세 조회"() {
         given:
@@ -163,7 +166,7 @@ class ShowFacadeServiceTest extends Specification {
                 ),
         ]
         bookingFacadeService.findShowFloorGradeWithAvailableCountMapByRoundId(showId, [1L, 2L]) >> new ShowFloorGradeWithCountMapByRoundIdResponse(
-                roundIds, showFloorGrades, new ShowFloorCountMapByShowFloorGradeId(showFloors), new BookingShowFloorsMapByRoundIdResponse(bookingShowFloors, showFloors)
+                roundIds, showFloorGrades, new ShowFloorCountMapByShowFloorGradeIdResponse(showFloors), new BookingShowFloorsMapByRoundIdResponse(bookingShowFloors, showFloors)
         )
 
         when:
@@ -200,5 +203,23 @@ class ShowFacadeServiceTest extends Specification {
                 .availableFloorCount == 500L
         response.find(round -> round.roundId == 2L).showFloorGrades.find(showFloorGrade -> showFloorGrade.showFloorGradeId == 2L)
                 .availableFloorCount == 699L
+    }
+
+    def "공연 아이디로 구역 목록 조회"() {
+
+        given:
+        showService.findShowById(1L) >> ShowFixtures.createShow(showId: 1L)
+        areaService.findByShowId(1L) >> [
+                AreaFixtures.createArea(areaId: 1L),
+                AreaFixtures.createArea(areaId: 2L),
+                AreaFixtures.createArea(areaId: 3L),
+        ]
+
+        when:
+        List<ShowPlaceAreaResponse> response = showFacadeService.findAreasByShowId(1L);
+
+        then:
+        response.size() == 3
+        response.areaId == [1L, 2L, 3L]
     }
 }

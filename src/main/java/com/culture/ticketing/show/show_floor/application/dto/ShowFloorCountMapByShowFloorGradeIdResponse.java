@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class ShowFloorCountMapByShowFloorGradeId {
+public class ShowFloorCountMapByShowFloorGradeIdResponse {
 
     private final Map<Long, Long> showFloorCountMapByShowFloorGradeId;
 
-    public ShowFloorCountMapByShowFloorGradeId(List<ShowFloor> showFloors) {
+    public ShowFloorCountMapByShowFloorGradeIdResponse(List<ShowFloor> showFloors) {
         this.showFloorCountMapByShowFloorGradeId = showFloors.stream()
                 .collect(Collectors.groupingBy(ShowFloor::getShowFloorGradeId, Collectors.summingLong(ShowFloor::getCount)));
     }

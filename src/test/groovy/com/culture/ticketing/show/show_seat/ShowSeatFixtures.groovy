@@ -6,7 +6,7 @@ class ShowSeatFixtures {
 
     static ShowSeat createShowSeat(Map map = [:]) {
         return ShowSeat.builder()
-                .showSeatId(map.getOrDefault("showSeatId", 1L) as Long)
+                .showSeatId(map.getOrDefault("showSeatId", null) as Long)
                 .showSeatGradeId(map.getOrDefault("showSeatGradeId", 1L) as Long)
                 .seatId(map.getOrDefault("seatId", 1L) as Long)
                 .build();

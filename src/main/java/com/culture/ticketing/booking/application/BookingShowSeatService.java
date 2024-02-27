@@ -2,7 +2,6 @@ package com.culture.ticketing.booking.application;
 
 import com.culture.ticketing.booking.application.dto.BookingShowSeatsMapByRoundIdResponse;
 import com.culture.ticketing.booking.domain.BookingShowSeat;
-import com.culture.ticketing.booking.domain.BookingStatus;
 import com.culture.ticketing.booking.infra.BookingShowSeatRepository;
 import com.culture.ticketing.show.show_seat.application.ShowSeatService;
 import com.culture.ticketing.show.show_seat.domain.ShowSeat;
@@ -31,7 +30,12 @@ public class BookingShowSeatService {
 
     @Transactional(readOnly = true)
     public boolean hasAlreadyBookingShowSeatsByRoundId(Long roundId, Set<Long> showSeatIds) {
-        return bookingShowSeatRepository.existsAlreadyBookingShowSeatsInRound(showSeatIds, roundId);
+        return bookingShowSeatRepository.findSuccessBookingShowSeatsByRoundIdAndShowSeatIds(roundId, showSeatIds).size() > 0;
+    }
+
+    @Transactional(readOnly = true)
+    public List<BookingShowSeat> findByRoundIdAndShowSeatIds(Long roundId, Set<Long> showSeatIds) {
+        return bookingShowSeatRepository.findSuccessBookingShowSeatsByRoundIdAndShowSeatIds(roundId, showSeatIds);
     }
 
     @Transactional(readOnly = true)

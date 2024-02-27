@@ -119,7 +119,7 @@ class SeatServiceTest extends Specification {
 
         given:
         Set<Long> seatIds = [1L, 2L, 3L, 4L, 5L]
-        seatRepository.findBySeatIdIn(seatIds) >> [
+        seatRepository.findAllById(seatIds) >> [
                 SeatFixtures.creatSeat(seatId: 1L),
                 SeatFixtures.creatSeat(seatId: 2L),
                 SeatFixtures.creatSeat(seatId: 3L)
@@ -131,5 +131,23 @@ class SeatServiceTest extends Specification {
         then:
         def e = thrown(SeatNotFoundException.class)
         e.message == "존재하지 않는 좌석입니다. (seatIds = [4, 5])"
+    }
+
+    def "좌석 아이디 목록으로 좌석 목록 조회"() {
+
+        given:
+        List<Long> seatIds = [1L, 2L, 3L, 4L, 5L]
+        seatRepository.findAllById(seatIds) >> [
+                SeatFixtures.creatSeat(seatId: 1L),
+                SeatFixtures.creatSeat(seatId: 2L),
+                SeatFixtures.creatSeat(seatId: 3L)
+        ]
+
+        when:
+        List<Seat> response = seatService.findBySeatIds(seatIds);
+
+        then:
+        response.size() == 3
+        response.seatId == [1L, 2L, 3L]
     }
 }

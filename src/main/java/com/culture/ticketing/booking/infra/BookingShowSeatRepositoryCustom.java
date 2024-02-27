@@ -4,11 +4,10 @@ import com.culture.ticketing.booking.domain.BookingShowSeat;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 public interface BookingShowSeatRepositoryCustom {
 
-    boolean existsAlreadyBookingShowSeatsInRound(Set<Long> showSeatIds, Long roundId);
+    List<BookingShowSeat> findSuccessBookingShowSeatsByRoundIdAndShowSeatIds(Long roundId, Collection<Long> showSeatIds);
 
     List<BookingShowSeat> findSuccessBookingShowSeatsByRoundIdIn(Collection<Long> roundIds);
 }

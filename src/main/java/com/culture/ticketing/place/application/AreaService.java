@@ -1,11 +1,13 @@
 package com.culture.ticketing.place.application;
 
 import com.culture.ticketing.place.application.dto.PlaceAreaSaveRequest;
+import com.culture.ticketing.place.domain.Area;
 import com.culture.ticketing.place.exception.PlaceNotFoundException;
 import com.culture.ticketing.place.infra.AreaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -39,5 +41,11 @@ public class AreaService {
     private void checkValidPlaceAreaSaveRequest(PlaceAreaSaveRequest request) {
 
         Objects.requireNonNull(request.getPlaceId(), "장소 아이디를 입력해주세요.");
+    }
+
+    @Transactional(readOnly = true)
+    public List<Area> findByShowId(Long showId) {
+
+        return areaRepository.findByShowId(showId);
     }
 }
