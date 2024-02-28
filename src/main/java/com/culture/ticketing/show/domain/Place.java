@@ -1,4 +1,4 @@
-package com.culture.ticketing.place.domain;
+package com.culture.ticketing.show.domain;
 
 import com.google.common.base.Preconditions;
 import lombok.Builder;
