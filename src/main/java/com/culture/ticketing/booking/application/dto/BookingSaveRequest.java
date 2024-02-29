@@ -1,7 +1,6 @@
 package com.culture.ticketing.booking.application.dto;
 
 import com.culture.ticketing.booking.domain.Booking;
-import com.culture.ticketing.booking.domain.BookingShowFloor;
 import com.culture.ticketing.booking.domain.BookingShowSeat;
 import com.culture.ticketing.booking.domain.BookingStatus;
 import lombok.Builder;
@@ -21,21 +20,13 @@ public class BookingSaveRequest {
     private Long roundId;
     private int totalPrice;
     private Set<Long> showSeatIds = new HashSet<>();
-    private Set<BookingShowFloorSaveRequest> showFloors = new HashSet<>();
 
     @Builder
-    public BookingSaveRequest(Long userId, Long roundId, int totalPrice, Set<Long> showSeatIds, Set<BookingShowFloorSaveRequest> showFloors) {
+    public BookingSaveRequest(Long userId, Long roundId, int totalPrice, Set<Long> showSeatIds) {
         this.userId = userId;
         this.roundId = roundId;
         this.totalPrice = totalPrice;
         this.showSeatIds = showSeatIds;
-        this.showFloors = showFloors;
-    }
-
-    public List<Long> getShowFloorIds() {
-        return showFloors.stream()
-                .map(BookingShowFloorSaveRequest::getShowFloorId)
-                .collect(Collectors.toList());
     }
 
     public Booking toEntity() {
@@ -46,22 +37,13 @@ public class BookingSaveRequest {
                 .bookingStatus(BookingStatus.SUCCESS)
                 .build();
 
-        Set<BookingShowSeat> bookingShowSeats = showSeatIds.stream()
+        List<BookingShowSeat> bookingShowSeats = showSeatIds.stream()
                 .map(showSeatId -> BookingShowSeat.builder()
                         .showSeatId(showSeatId)
                         .booking(booking)
                         .build())
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
         booking.setBookingShowSeats(bookingShowSeats);
-
-        Set<BookingShowFloor> bookingShowFloors = showFloors.stream()
-                .map(showFloor -> BookingShowFloor.builder()
-                        .showFloorId(showFloor.getShowFloorId())
-                        .entryOrder(showFloor.getEntryOrder())
-                        .booking(booking)
-                        .build())
-                .collect(Collectors.toSet());
-        booking.setBookingShowFloors(bookingShowFloors);
 
         return booking;
     }

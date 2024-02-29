@@ -3,8 +3,7 @@ package com.culture.ticketing.booking.application;
 import com.culture.ticketing.booking.application.dto.BookingShowSeatsMapByRoundIdResponse;
 import com.culture.ticketing.booking.domain.BookingShowSeat;
 import com.culture.ticketing.booking.infra.BookingShowSeatRepository;
-import com.culture.ticketing.show.show_seat.application.ShowSeatService;
-import com.culture.ticketing.show.show_seat.domain.ShowSeat;
+import com.culture.ticketing.show.application.ShowSeatService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +23,7 @@ public class BookingShowSeatService {
     }
 
     @Transactional(readOnly = true)
-    public int getTotalPriceByShowSeatIds(Set<Long> showSeatIds) {
+    public int getTotalPriceByShowIdAndShowSeatIds(Set<Long> showSeatIds) {
         return showSeatService.getTotalPriceByShowSeatIds(showSeatIds);
     }
 

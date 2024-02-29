@@ -17,9 +17,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -46,10 +46,7 @@ public class Booking extends BaseEntity {
     private BookingStatus bookingStatus;
 
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
-    private Set<BookingShowSeat> bookingShowSeats = new HashSet<>();
-
-    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
-    private Set<BookingShowFloor> bookingShowFloors = new HashSet<>();
+    private List<BookingShowSeat> bookingShowSeats = new ArrayList<>();
 
     @Builder
     public Booking(Long bookingId, Long userId, Long roundId, int totalPrice , BookingStatus bookingStatus) {
@@ -66,11 +63,8 @@ public class Booking extends BaseEntity {
         this.bookingStatus = bookingStatus;
     }
 
-    public void setBookingShowSeats(Set<BookingShowSeat> bookingShowSeats) {
+    public void setBookingShowSeats(List<BookingShowSeat> bookingShowSeats) {
         this.bookingShowSeats = bookingShowSeats;
     }
 
-    public void setBookingShowFloors(Set<BookingShowFloor> bookingShowFloors) {
-        this.bookingShowFloors = bookingShowFloors;
-    }
 }

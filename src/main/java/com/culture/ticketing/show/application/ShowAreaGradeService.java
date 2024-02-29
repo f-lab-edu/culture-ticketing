@@ -65,8 +65,8 @@ public class ShowAreaGradeService {
     }
 
     @Transactional(readOnly = true)
-    public List<ShowAreaGrade> findByIds(List<Long> showAreaGradeIds) {
+    public ShowAreaGradeMapById findShowAreaGradeMapById(List<Long> showAreaGradeIds) {
 
-        return showAreaGradeRepository.findAllById(showAreaGradeIds);
+        return new ShowAreaGradeMapById(showAreaGradeRepository.findAllById(showAreaGradeIds));
     }
 }

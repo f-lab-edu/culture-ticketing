@@ -2,7 +2,9 @@ package com.culture.ticketing.show.application;
 
 import com.culture.ticketing.show.application.dto.ShowAreaGradeMapById;
 import com.culture.ticketing.show.application.dto.ShowAreaResponse;
+import com.culture.ticketing.show.application.dto.ShowAreaResponseMapById;
 import com.culture.ticketing.show.application.dto.ShowAreaSaveRequest;
+import com.culture.ticketing.show.domain.ShowArea;
 import com.culture.ticketing.show.exception.ShowAreaGradeNotFoundException;
 import com.culture.ticketing.show.exception.ShowNotFoundException;
 import com.culture.ticketing.show.infra.ShowAreaRepository;
@@ -56,6 +58,21 @@ public class ShowAreaService {
         Preconditions.checkArgument(StringUtils.hasText(request.getShowAreaName()), "공연 구역명을 입력해주세요.");
     }
 
+    @Transactional(readOnly = true)
+    public ShowAreaResponseMapById findShowAreaMapById(List<Long> showAreaIds) {
+
+        List<ShowArea> showAreas = showAreaRepository.findAllById(showAreaIds);
+        List<Long> showAreaGradeIds = showAreas.stream()
+                .map(ShowArea::getShowAreaGradeId)
+                .collect(Collectors.toList());
+
+        ShowAreaGradeMapById showAreaGradeMapById = showAreaGradeService.findShowAreaGradeMapById(showAreaGradeIds);
+        List<ShowAreaResponse> showAreaResponses = showAreas.stream()
+                .map(showArea -> new ShowAreaResponse(showArea, showAreaGradeMapById.getById(showArea.getShowAreaGradeId())))
+                .collect(Collectors.toList());
+
+        return new ShowAreaResponseMapById(showAreaResponses);
+    }
 
     @Transactional(readOnly = true)
     public List<ShowAreaResponse> findShowAreasByShowId(Long showId) {
