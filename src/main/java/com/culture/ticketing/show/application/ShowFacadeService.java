@@ -78,14 +78,4 @@ public class ShowFacadeService {
                 ))
                 .collect(Collectors.toList());
     }
-
-    @Transactional(readOnly = true)
-    public List<ShowPlaceAreaResponse> findAreasByShowId(Long showId) {
-        Show show = showService.findShowById(showId);
-        List<Area> areas = areaService.findByShowId(show.getShowId());
-
-        return areas.stream()
-                .map(ShowPlaceAreaResponse::from)
-                .collect(Collectors.toList());
-    }
 }
