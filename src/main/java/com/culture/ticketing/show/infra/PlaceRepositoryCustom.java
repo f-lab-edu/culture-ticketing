@@ -1,6 +1,6 @@
-package com.culture.ticketing.place.infra;
+package com.culture.ticketing.show.infra;
 
-import com.culture.ticketing.place.domain.Place;
+import com.culture.ticketing.show.domain.Place;
 
 import java.util.List;
 

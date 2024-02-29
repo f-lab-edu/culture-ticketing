@@ -1,6 +1,6 @@
-package com.culture.ticketing.place.application.dto;
+package com.culture.ticketing.show.application.dto;
 
-import com.culture.ticketing.place.domain.Place;
+import com.culture.ticketing.show.domain.Place;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

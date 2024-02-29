@@ -1,7 +1,7 @@
-package com.culture.ticketing.place.infra;
+package com.culture.ticketing.show.infra;
 
 import com.culture.ticketing.common.infra.BaseRepositoryImpl;
-import com.culture.ticketing.place.domain.Place;
+import com.culture.ticketing.show.domain.Place;
 
 import javax.persistence.EntityManager;
 import java.util.List;

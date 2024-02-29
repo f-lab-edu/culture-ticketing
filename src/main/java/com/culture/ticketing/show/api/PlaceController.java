@@ -1,8 +1,8 @@
-package com.culture.ticketing.place.api;
+package com.culture.ticketing.show.api;
 
-import com.culture.ticketing.place.application.PlaceService;
-import com.culture.ticketing.place.application.dto.PlaceResponse;
-import com.culture.ticketing.place.application.dto.PlaceSaveRequest;
+import com.culture.ticketing.show.application.PlaceService;
+import com.culture.ticketing.show.application.dto.PlaceResponse;
+import com.culture.ticketing.show.application.dto.PlaceSaveRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

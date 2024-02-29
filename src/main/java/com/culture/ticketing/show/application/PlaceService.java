@@ -1,10 +1,10 @@
-package com.culture.ticketing.place.application;
+package com.culture.ticketing.show.application;
 
-import com.culture.ticketing.place.application.dto.PlaceResponse;
-import com.culture.ticketing.place.application.dto.PlaceSaveRequest;
-import com.culture.ticketing.place.domain.Place;
-import com.culture.ticketing.place.exception.PlaceNotFoundException;
-import com.culture.ticketing.place.infra.PlaceRepository;
+import com.culture.ticketing.show.application.dto.PlaceResponse;
+import com.culture.ticketing.show.application.dto.PlaceSaveRequest;
+import com.culture.ticketing.show.domain.Place;
+import com.culture.ticketing.show.exception.PlaceNotFoundException;
+import com.culture.ticketing.show.infra.PlaceRepository;
 import com.google.common.base.Preconditions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
