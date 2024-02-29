@@ -1,6 +1,7 @@
 package com.culture.ticketing.show.application.dto;
 
 import com.culture.ticketing.show.domain.ShowAreaGrade;
+import com.culture.ticketing.show.exception.ShowAreaGradeNotFoundException;
 
 import java.util.Collection;
 import java.util.Map;
@@ -18,6 +19,11 @@ public class ShowAreaGradeMapById {
     }
 
     public ShowAreaGrade getById(Long showAreaGradeId) {
+
+        if (!showAreaGradeMapById.containsKey(showAreaGradeId)) {
+            throw new ShowAreaGradeNotFoundException(showAreaGradeId);
+        }
+
         return showAreaGradeMapById.get(showAreaGradeId);
     }
 }
