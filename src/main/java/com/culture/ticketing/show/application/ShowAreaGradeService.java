@@ -1,5 +1,6 @@
 package com.culture.ticketing.show.application;
 
+import com.culture.ticketing.show.application.dto.ShowAreaGradeMapById;
 import com.culture.ticketing.show.application.dto.ShowAreaGradeResponse;
 import com.culture.ticketing.show.application.dto.ShowAreaGradeSaveRequest;
 import com.culture.ticketing.show.domain.ShowAreaGrade;
@@ -55,6 +56,12 @@ public class ShowAreaGradeService {
         return showAreaGradeRepository.findByShowId(showId).stream()
                 .map(ShowAreaGradeResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public ShowAreaGradeMapById findShowAreaGradeMapById(Long showId) {
+
+        return new ShowAreaGradeMapById(showAreaGradeRepository.findByShowId(showId));
     }
 
     @Transactional(readOnly = true)
