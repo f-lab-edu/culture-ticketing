@@ -1,8 +1,7 @@
 package com.culture.ticketing.show.application;
 
-import com.culture.ticketing.place.application.PlaceService;
-import com.culture.ticketing.place.domain.Place;
-import com.culture.ticketing.place.exception.PlaceNotFoundException;
+import com.culture.ticketing.show.application.dto.PlaceMapById;
+import com.culture.ticketing.show.exception.PlaceNotFoundException;
 import com.culture.ticketing.show.application.dto.ShowResponse;
 import com.culture.ticketing.show.application.dto.ShowSaveRequest;
 import com.culture.ticketing.show.domain.Category;
@@ -15,9 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -77,22 +74,10 @@ public class ShowService {
                 .map(Show::getPlaceId)
                 .collect(Collectors.toList());
 
-        Map<Long, Place> placeMapByPlaceId = placeService.findPlacesByIds(placeIds).stream()
-                .collect(Collectors.toMap(Place::getPlaceId, Function.identity()));
-
-        checkPlaceExistInShows(shows, placeMapByPlaceId);
+        PlaceMapById placeMapById = placeService.findPlaceMapById(placeIds);
 
         return shows.stream()
-                .map(show -> ShowResponse.from(show, placeMapByPlaceId.get(show.getPlaceId())))
+                .map(show -> ShowResponse.from(show, placeMapById.getById(show.getPlaceId())))
                 .collect(Collectors.toList());
-    }
-
-    protected void checkPlaceExistInShows(List<Show> shows, Map<Long, Place> placeMapByPlaceId) {
-
-        for (Show show : shows) {
-            if (!placeMapByPlaceId.containsKey(show.getPlaceId())) {
-                throw new PlaceNotFoundException(show.getPlaceId());
-            }
-        }
     }
 }

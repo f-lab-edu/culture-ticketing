@@ -1,7 +1,6 @@
 package com.culture.ticketing.show.application.dto;
 
-import com.culture.ticketing.place.application.dto.PlaceResponse;
-import com.culture.ticketing.place.domain.Place;
+import com.culture.ticketing.show.domain.Place;
 import com.culture.ticketing.show.domain.Show;
 import lombok.Builder;
 import lombok.Getter;

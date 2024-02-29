@@ -1,5 +1,6 @@
 package com.culture.ticketing.show.application;
 
+import com.culture.ticketing.show.application.dto.PlaceMapById;
 import com.culture.ticketing.show.application.dto.PlaceResponse;
 import com.culture.ticketing.show.application.dto.PlaceSaveRequest;
 import com.culture.ticketing.show.domain.Place;
@@ -64,7 +65,7 @@ public class PlaceService {
     }
 
     @Transactional(readOnly = true)
-    public List<Place> findPlacesByIds(List<Long> placeIds) {
-        return placeRepository.findAllById(placeIds);
+    public PlaceMapById findPlaceMapById(List<Long> placeIds) {
+        return new PlaceMapById(placeRepository.findAllById(placeIds));
     }
 }
