@@ -1,8 +1,7 @@
 package com.culture.ticketing.show.application;
 
-import com.culture.ticketing.show.application.dto.ShowAreaGradeResponseMapById;
-import com.culture.ticketing.show.application.dto.ShowAreaGradeResponse;
 import com.culture.ticketing.show.application.dto.ShowAreaGradeSaveRequest;
+import com.culture.ticketing.show.application.dto.ShowAreaGradesResponse;
 import com.culture.ticketing.show.exception.ShowNotFoundException;
 import com.culture.ticketing.show.infra.ShowAreaGradeRepository;
 import com.google.common.base.Preconditions;
@@ -10,10 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 public class ShowAreaGradeService {
@@ -51,24 +48,14 @@ public class ShowAreaGradeService {
     }
 
     @Transactional(readOnly = true)
-    public List<ShowAreaGradeResponse> findShowAreaGradesByShowId(Long showId) {
+    public ShowAreaGradesResponse findShowAreaGradesByShowId(Long showId) {
 
-        return showAreaGradeRepository.findByShowId(showId).stream()
-                .map(ShowAreaGradeResponse::new)
-                .collect(Collectors.toList());
+        return new ShowAreaGradesResponse(showAreaGradeRepository.findByShowId(showId));
     }
 
     @Transactional(readOnly = true)
-    public List<ShowAreaGradeResponse> findShowAreaGradesByIds(List<Long> showAreaGradeIds) {
+    public ShowAreaGradesResponse findShowAreaGradesByIds(List<Long> showAreaGradeIds) {
 
-        return showAreaGradeRepository.findAllById(showAreaGradeIds).stream()
-                .map(ShowAreaGradeResponse::new)
-                .collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
-    public ShowAreaGradeResponseMapById findShowAreaGradeMapById(Collection<ShowAreaGradeResponse> showAreaGrades) {
-
-        return new ShowAreaGradeResponseMapById(showAreaGrades);
+        return new ShowAreaGradesResponse(showAreaGradeRepository.findAllById(showAreaGradeIds));
     }
 }

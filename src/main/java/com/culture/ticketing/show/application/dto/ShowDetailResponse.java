@@ -16,13 +16,13 @@ public class ShowDetailResponse {
     private final List<ShowAreaGradeResponse> showAreaGrades;
 
     @Builder
-    public ShowDetailResponse(ShowResponse show, List<RoundWithPerformersResponse> rounds, List<ShowAreaGradeResponse> showAreaGrades) {
+    public ShowDetailResponse(ShowResponse show, List<RoundWithPerformersResponse> rounds, ShowAreaGradesResponse showAreaGrades) {
         this.show = show;
         this.rounds = rounds;
-        this.showAreaGrades = showAreaGrades;
+        this.showAreaGrades = showAreaGrades.getShowAreaGrades();
     }
 
-    public static ShowDetailResponse from(Show show, Place place, List<RoundWithPerformersResponse> rounds, List<ShowAreaGradeResponse> showAreaGrades) {
+    public static ShowDetailResponse from(Show show, Place place, List<RoundWithPerformersResponse> rounds, ShowAreaGradesResponse showAreaGrades) {
         return ShowDetailResponse.builder()
                 .show(ShowResponse.from(show, place))
                 .rounds(rounds)
