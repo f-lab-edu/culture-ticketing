@@ -1,5 +1,6 @@
 package com.culture.ticketing.booking.application;
 
+import com.culture.ticketing.booking.application.dto.BookingShowSeatsResponse;
 import com.culture.ticketing.booking.application.dto.RoundsShowSeatCountsResponse;
 import com.culture.ticketing.booking.domain.BookingShowSeat;
 import com.culture.ticketing.booking.infra.BookingShowSeatRepository;
@@ -35,8 +36,9 @@ public class BookingShowSeatService {
     }
 
     @Transactional(readOnly = true)
-    public List<BookingShowSeat> findByRoundIdAndShowSeatIds(Long roundId, Set<Long> showSeatIds) {
-        return bookingShowSeatRepository.findSuccessBookingShowSeatsByRoundIdAndShowSeatIds(roundId, showSeatIds);
+    public BookingShowSeatsResponse findByRoundIdAndShowSeatIds(Long roundId, List<Long> showSeatIds) {
+
+        return new BookingShowSeatsResponse(bookingShowSeatRepository.findSuccessBookingShowSeatsByRoundIdAndShowSeatIds(roundId, showSeatIds));
     }
 
     @Transactional(readOnly = true)

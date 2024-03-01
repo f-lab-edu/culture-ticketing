@@ -4,7 +4,6 @@ import com.culture.ticketing.show.application.dto.ShowAreaGradesResponse;
 import com.culture.ticketing.show.application.dto.ShowAreaResponse;
 import com.culture.ticketing.show.application.dto.ShowAreasResponse;
 import com.culture.ticketing.show.application.dto.ShowSeatCountsResponse;
-import com.culture.ticketing.show.application.dto.ShowSeatResponse;
 import com.culture.ticketing.show.application.dto.ShowSeatSaveRequest;
 import com.culture.ticketing.show.domain.ShowSeat;
 import com.culture.ticketing.show.exception.ShowAreaNotFoundException;
@@ -60,11 +59,9 @@ public class ShowSeatService {
     }
 
     @Transactional(readOnly = true)
-    public List<ShowSeatResponse> findShowSeatsByShowAreaId(Long showAreaId) {
+    public List<ShowSeat> findShowSeatsByShowAreaId(Long showAreaId) {
 
-        return showSeatRepository.findByShowAreaId(showAreaId).stream()
-                .map(ShowSeatResponse::new)
-                .collect(Collectors.toList());
+        return showSeatRepository.findByShowAreaId(showAreaId);
     }
 
     @Transactional(readOnly = true)

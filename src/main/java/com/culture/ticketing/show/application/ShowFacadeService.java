@@ -1,9 +1,12 @@
 package com.culture.ticketing.show.application;
 
 import com.culture.ticketing.booking.application.BookingShowSeatService;
+import com.culture.ticketing.booking.application.dto.BookingShowSeatsResponse;
 import com.culture.ticketing.booking.application.dto.RoundsShowSeatCountsResponse;
 import com.culture.ticketing.show.application.dto.ShowAreaGradesResponse;
+import com.culture.ticketing.show.application.dto.ShowSeatResponse;
 import com.culture.ticketing.show.domain.Place;
+import com.culture.ticketing.show.domain.ShowSeat;
 import com.culture.ticketing.show.round_performer.application.RoundPerformerService;
 import com.culture.ticketing.show.round_performer.application.RoundService;
 import com.culture.ticketing.show.round_performer.application.dto.RoundWithPerformersAndShowAreaGradesResponse;
@@ -27,15 +30,18 @@ public class ShowFacadeService {
     private final ShowAreaGradeService showAreaGradeService;
     private final PlaceService placeService;
     private final BookingShowSeatService bookingShowSeatService;
+    private final ShowSeatService showSeatService;
 
     public ShowFacadeService(ShowService showService, RoundService roundService, RoundPerformerService roundPerformerService,
-                             ShowAreaGradeService showAreaGradeService, PlaceService placeService, BookingShowSeatService bookingShowSeatService) {
+                             ShowAreaGradeService showAreaGradeService, PlaceService placeService,
+                             BookingShowSeatService bookingShowSeatService, ShowSeatService showSeatService) {
         this.showService = showService;
         this.roundService = roundService;
         this.roundPerformerService = roundPerformerService;
         this.showAreaGradeService = showAreaGradeService;
         this.placeService = placeService;
         this.bookingShowSeatService = bookingShowSeatService;
+        this.showSeatService = showSeatService;
     }
 
     @Transactional(readOnly = true)
@@ -63,6 +69,21 @@ public class ShowFacadeService {
                         roundWithPerformers,
                         roundsShowSeatCounts.getShowSeatCountsByRoundId(roundWithPerformers.getRoundId())
                 ))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<ShowSeatResponse> findShowSeatsByShowAreaIdAndRoundId(Long showAreaId, Long roundId) {
+
+        List<ShowSeat> showSeats = showSeatService.findShowSeatsByShowAreaId(showAreaId);
+        List<Long> showSeatIds = showSeats.stream()
+                .map(ShowSeat::getShowSeatId)
+                .collect(Collectors.toList());
+
+        BookingShowSeatsResponse bookingShowSeats = bookingShowSeatService.findByRoundIdAndShowSeatIds(roundId, showSeatIds);
+
+        return showSeats.stream()
+                .map(showSeat -> new ShowSeatResponse(showSeat, bookingShowSeats.isAvailableShowSeat(showSeat.getShowSeatId())))
                 .collect(Collectors.toList());
     }
 }

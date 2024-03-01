@@ -1,5 +1,6 @@
 package com.culture.ticketing.show.api;
 
+import com.culture.ticketing.show.application.ShowFacadeService;
 import com.culture.ticketing.show.application.ShowSeatService;
 import com.culture.ticketing.show.application.dto.ShowSeatResponse;
 import com.culture.ticketing.show.application.dto.ShowSeatSaveRequest;
@@ -17,9 +18,11 @@ import java.util.List;
 public class ShowSeatController {
 
     private final ShowSeatService showSeatService;
+    private final ShowFacadeService showFacadeService;
 
-    public ShowSeatController(ShowSeatService showSeatService) {
+    public ShowSeatController(ShowSeatService showSeatService, ShowFacadeService showFacadeService) {
         this.showSeatService = showSeatService;
+        this.showFacadeService = showFacadeService;
     }
 
     @PostMapping
@@ -29,8 +32,8 @@ public class ShowSeatController {
     }
 
     @GetMapping
-    public List<ShowSeatResponse> getShowSeatsByShowAreaId(@RequestParam("showAreaId") Long showAreaId) {
+    public List<ShowSeatResponse> getShowSeatsByShowAreaIdAndRoundId(@RequestParam("showAreaId") Long showAreaId, @RequestParam("roundId") Long roundId) {
 
-        return showSeatService.findShowSeatsByShowAreaId(showAreaId);
+        return showFacadeService.findShowSeatsByShowAreaIdAndRoundId(showAreaId, roundId);
     }
 }
