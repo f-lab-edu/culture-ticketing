@@ -1,9 +1,8 @@
 package com.culture.ticketing.show.application;
 
-import com.culture.ticketing.show.application.dto.ShowAreaGradeMapById;
+import com.culture.ticketing.show.application.dto.ShowAreaGradeResponseMapById;
 import com.culture.ticketing.show.application.dto.ShowAreaGradeResponse;
 import com.culture.ticketing.show.application.dto.ShowAreaGradeSaveRequest;
-import com.culture.ticketing.show.domain.ShowAreaGrade;
 import com.culture.ticketing.show.exception.ShowNotFoundException;
 import com.culture.ticketing.show.infra.ShowAreaGradeRepository;
 import com.google.common.base.Preconditions;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -59,14 +59,16 @@ public class ShowAreaGradeService {
     }
 
     @Transactional(readOnly = true)
-    public ShowAreaGradeMapById findShowAreaGradeMapById(Long showId) {
+    public List<ShowAreaGradeResponse> findShowAreaGradesByIds(List<Long> showAreaGradeIds) {
 
-        return new ShowAreaGradeMapById(showAreaGradeRepository.findByShowId(showId));
+        return showAreaGradeRepository.findAllById(showAreaGradeIds).stream()
+                .map(ShowAreaGradeResponse::new)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public ShowAreaGradeMapById findShowAreaGradeMapById(List<Long> showAreaGradeIds) {
+    public ShowAreaGradeResponseMapById findShowAreaGradeMapById(Collection<ShowAreaGradeResponse> showAreaGrades) {
 
-        return new ShowAreaGradeMapById(showAreaGradeRepository.findAllById(showAreaGradeIds));
+        return new ShowAreaGradeResponseMapById(showAreaGrades);
     }
 }

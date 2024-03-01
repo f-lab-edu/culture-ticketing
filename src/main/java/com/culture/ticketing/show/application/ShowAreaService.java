@@ -1,6 +1,7 @@
 package com.culture.ticketing.show.application;
 
-import com.culture.ticketing.show.application.dto.ShowAreaGradeMapById;
+import com.culture.ticketing.show.application.dto.ShowAreaGradeResponse;
+import com.culture.ticketing.show.application.dto.ShowAreaGradeResponseMapById;
 import com.culture.ticketing.show.application.dto.ShowAreaResponse;
 import com.culture.ticketing.show.application.dto.ShowAreaResponseMapById;
 import com.culture.ticketing.show.application.dto.ShowAreaSaveRequest;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -59,25 +61,32 @@ public class ShowAreaService {
     }
 
     @Transactional(readOnly = true)
-    public ShowAreaResponseMapById findShowAreaMapById(List<Long> showAreaIds) {
+    public ShowAreaResponseMapById findShowAreaMapById(Collection<ShowAreaResponse> showAreas) {
+
+        return new ShowAreaResponseMapById(showAreas);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ShowAreaResponse> findShowAreasByShowAreaIds(List<Long> showAreaIds) {
 
         List<ShowArea> showAreas = showAreaRepository.findAllById(showAreaIds);
         List<Long> showAreaGradeIds = showAreas.stream()
                 .map(ShowArea::getShowAreaGradeId)
                 .collect(Collectors.toList());
 
-        ShowAreaGradeMapById showAreaGradeMapById = showAreaGradeService.findShowAreaGradeMapById(showAreaGradeIds);
-        List<ShowAreaResponse> showAreaResponses = showAreas.stream()
+        List<ShowAreaGradeResponse> showAreaGrades = showAreaGradeService.findShowAreaGradesByIds(showAreaGradeIds);
+        ShowAreaGradeResponseMapById showAreaGradeMapById = showAreaGradeService.findShowAreaGradeMapById(showAreaGrades);
+
+        return showAreas.stream()
                 .map(showArea -> new ShowAreaResponse(showArea, showAreaGradeMapById.getById(showArea.getShowAreaGradeId())))
                 .collect(Collectors.toList());
-
-        return new ShowAreaResponseMapById(showAreaResponses);
     }
 
     @Transactional(readOnly = true)
     public List<ShowAreaResponse> findShowAreasByShowId(Long showId) {
 
-        ShowAreaGradeMapById showAreaGradeMapById = showAreaGradeService.findShowAreaGradeMapById(showId);
+        List<ShowAreaGradeResponse> showAreaGrades = showAreaGradeService.findShowAreaGradesByShowId(showId);
+        ShowAreaGradeResponseMapById showAreaGradeMapById = showAreaGradeService.findShowAreaGradeMapById(showAreaGrades);
 
         return showAreaRepository.findByShowId(showId).stream()
                 .map(showArea -> new ShowAreaResponse(showArea, showAreaGradeMapById.getById(showArea.getShowAreaGradeId())))

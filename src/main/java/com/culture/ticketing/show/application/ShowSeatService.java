@@ -6,7 +6,7 @@ import com.culture.ticketing.show.application.dto.ShowSeatResponse;
 import com.culture.ticketing.show.application.dto.ShowSeatSaveRequest;
 import com.culture.ticketing.show.domain.ShowSeat;
 import com.culture.ticketing.show.exception.ShowAreaNotFoundException;
-import com.culture.ticketing.place.exception.DuplicatedShowSeatException;
+import com.culture.ticketing.show.exception.DuplicatedShowSeatException;
 import com.culture.ticketing.show.infra.ShowSeatRepository;
 import com.google.common.base.Preconditions;
 import org.springframework.stereotype.Service;
@@ -34,7 +34,7 @@ public class ShowSeatService {
         checkValidShowSeatSaveRequest(request);
 
         if (showAreaService.notExistsById(request.getShowAreaId())) {
-            throw new ShowAreaNotFoundException(request.getShowAreaId()));
+            throw new ShowAreaNotFoundException(request.getShowAreaId());
         }
 
         ShowSeat showSeat = request.toEntity();
@@ -71,7 +71,8 @@ public class ShowSeatService {
                 .map(ShowSeat::getShowAreaId)
                 .collect(Collectors.toList());
 
-        ShowAreaResponseMapById showAreaMapById = showAreaService.findShowAreaMapById(showAreaIds);
+        List<ShowAreaResponse> showAreas = showAreaService.findShowAreasByShowAreaIds(showAreaIds);
+        ShowAreaResponseMapById showAreaMapById = showAreaService.findShowAreaMapById(showAreas);
 
         return showSeatRepository.findAllById(showSeatIds).stream()
                 .map(ShowSeat::getShowAreaId)

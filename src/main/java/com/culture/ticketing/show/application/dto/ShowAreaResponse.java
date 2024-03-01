@@ -1,7 +1,6 @@
 package com.culture.ticketing.show.application.dto;
 
 import com.culture.ticketing.show.domain.ShowArea;
-import com.culture.ticketing.show.domain.ShowAreaGrade;
 import lombok.Getter;
 
 @Getter
@@ -13,7 +12,7 @@ public class ShowAreaResponse {
     private final String showAreaGradeName;
     private final int price;
 
-    public ShowAreaResponse(ShowArea showArea, ShowAreaGrade showAreaGrade) {
+    public ShowAreaResponse(ShowArea showArea, ShowAreaGradeResponse showAreaGrade) {
         this.showAreaId = showArea.getShowAreaId();
         this.showAreaName = showArea.getShowAreaName();
         this.showAreaGradeId = showArea.getShowAreaGradeId();
