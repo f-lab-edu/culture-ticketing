@@ -1,8 +1,8 @@
 package com.culture.ticketing.show.round_performer.application;
 
 import com.culture.ticketing.show.application.ShowService;
-import com.culture.ticketing.show.round_performer.application.dto.PerformerResponse;
 import com.culture.ticketing.show.round_performer.application.dto.PerformerSaveRequest;
+import com.culture.ticketing.show.round_performer.application.dto.PerformersResponse;
 import com.culture.ticketing.show.round_performer.domain.Performer;
 import com.culture.ticketing.show.exception.ShowNotFoundException;
 import com.culture.ticketing.show.round_performer.exception.ShowPerformerNotMatchException;
@@ -16,7 +16,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class PerformerService {
@@ -48,10 +47,9 @@ public class PerformerService {
     }
 
     @Transactional(readOnly = true)
-    public List<PerformerResponse> findPerformersByShowId(Long showId) {
-        return performerRepository.findByShowId(showId).stream()
-                .map(PerformerResponse::new)
-                .collect(Collectors.toList());
+    public PerformersResponse findPerformersByShowId(Long showId) {
+
+        return new PerformersResponse(performerRepository.findByShowId(showId));
     }
 
     @Transactional(readOnly = true)
