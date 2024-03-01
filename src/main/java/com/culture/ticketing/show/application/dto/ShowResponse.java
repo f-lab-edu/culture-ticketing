@@ -38,7 +38,7 @@ public class ShowResponse {
         this.place = place;
     }
 
-    public static ShowResponse from(Show show, Place place) {
+    public static ShowResponse from(Show show, PlaceResponse place) {
         return ShowResponse.builder()
                 .showId(show.getShowId())
                 .showName(show.getShowName())
@@ -50,7 +50,7 @@ public class ShowResponse {
                 .runningTime(show.getRunningTime())
                 .notice(show.getNotice())
                 .description(show.getDescription())
-                .place(new PlaceResponse(place))
+                .place(place)
                 .build();
     }
 }

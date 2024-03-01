@@ -23,7 +23,7 @@ public class ShowDetailResponse {
         this.showAreaGrades = showAreaGrades.getShowAreaGrades();
     }
 
-    public static ShowDetailResponse from(Show show, Place place, RoundsWithPerformersResponse roundsWithPerformers, ShowAreaGradesResponse showAreaGrades) {
+    public static ShowDetailResponse from(Show show, PlaceResponse place, RoundsWithPerformersResponse roundsWithPerformers, ShowAreaGradesResponse showAreaGrades) {
         return ShowDetailResponse.builder()
                 .show(ShowResponse.from(show, place))
                 .roundsWithPerformers(roundsWithPerformers)

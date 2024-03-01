@@ -1,8 +1,8 @@
 package com.culture.ticketing.show.application;
 
-import com.culture.ticketing.show.application.dto.PlaceMapById;
 import com.culture.ticketing.show.application.dto.PlaceResponse;
 import com.culture.ticketing.show.application.dto.PlaceSaveRequest;
+import com.culture.ticketing.show.application.dto.PlacesResponse;
 import com.culture.ticketing.show.domain.Place;
 import com.culture.ticketing.show.exception.PlaceNotFoundException;
 import com.culture.ticketing.show.infra.PlaceRepository;
@@ -14,7 +14,6 @@ import org.springframework.util.StringUtils;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 public class PlaceService {
@@ -45,8 +44,11 @@ public class PlaceService {
     }
 
     @Transactional(readOnly = true)
-    public Place findPlaceById(Long placeId) {
-        return placeRepository.findById(placeId).orElseThrow(() -> {
+    public PlaceResponse findPlaceById(Long placeId) {
+
+        return placeRepository.findById(placeId)
+                .map(PlaceResponse::new)
+                .orElseThrow(() -> {
             throw new PlaceNotFoundException(placeId);
         });
     }
@@ -57,15 +59,14 @@ public class PlaceService {
     }
 
     @Transactional(readOnly = true)
-    public List<PlaceResponse> findPlaces(Long offset, int size) {
+    public PlacesResponse findPlaces(Long offset, int size) {
 
-        return placeRepository.findByPlaceIdGreaterThanLimit(offset, size).stream()
-                .map(PlaceResponse::new)
-                .collect(Collectors.toList());
+        return new PlacesResponse(placeRepository.findByPlaceIdGreaterThanLimit(offset, size));
     }
 
     @Transactional(readOnly = true)
-    public PlaceMapById findPlaceMapById(List<Long> placeIds) {
-        return new PlaceMapById(placeRepository.findAllById(placeIds));
+    public PlacesResponse findPlacesByIds(List<Long> placeIds) {
+
+        return new PlacesResponse(placeRepository.findAllById(placeIds));
     }
 }

@@ -3,6 +3,7 @@ package com.culture.ticketing.show.application;
 import com.culture.ticketing.booking.application.BookingShowSeatService;
 import com.culture.ticketing.booking.application.dto.BookingShowSeatsResponse;
 import com.culture.ticketing.booking.application.dto.RoundsShowSeatCountsResponse;
+import com.culture.ticketing.show.application.dto.PlaceResponse;
 import com.culture.ticketing.show.application.dto.ShowAreaGradesResponse;
 import com.culture.ticketing.show.application.dto.ShowSeatResponse;
 import com.culture.ticketing.show.domain.Place;
@@ -48,7 +49,7 @@ public class ShowFacadeService {
     public ShowDetailResponse findShowById(Long showId) {
 
         Show show = showService.findShowById(showId);
-        Place place = placeService.findPlaceById(show.getPlaceId());
+        PlaceResponse place = placeService.findPlaceById(show.getPlaceId());
         List<Round> rounds = roundService.findByShowId(showId);
         RoundsWithPerformersResponse roundsWitPerformers = roundPerformerService.findRoundsWitPerformersByShowIdAndRounds(showId, rounds);
         ShowAreaGradesResponse showAreaGrades = showAreaGradeService.findShowAreaGradesByShowId(showId);

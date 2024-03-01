@@ -1,6 +1,6 @@
 package com.culture.ticketing.show.application;
 
-import com.culture.ticketing.show.application.dto.PlaceMapById;
+import com.culture.ticketing.show.application.dto.PlacesResponse;
 import com.culture.ticketing.show.exception.PlaceNotFoundException;
 import com.culture.ticketing.show.application.dto.ShowResponse;
 import com.culture.ticketing.show.application.dto.ShowSaveRequest;
@@ -73,11 +73,10 @@ public class ShowService {
         List<Long> placeIds = shows.stream()
                 .map(Show::getPlaceId)
                 .collect(Collectors.toList());
-
-        PlaceMapById placeMapById = placeService.findPlaceMapById(placeIds);
+        PlacesResponse places = placeService.findPlacesByIds(placeIds);
 
         return shows.stream()
-                .map(show -> ShowResponse.from(show, placeMapById.getById(show.getPlaceId())))
+                .map(show -> ShowResponse.from(show, places.getByPlaceId(show.getPlaceId())))
                 .collect(Collectors.toList());
     }
 }
