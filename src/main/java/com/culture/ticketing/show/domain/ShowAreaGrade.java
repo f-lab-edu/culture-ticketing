@@ -1,5 +1,6 @@
 package com.culture.ticketing.show.domain;
 
+import com.culture.ticketing.common.entity.BaseEntity;
 import com.google.common.base.Preconditions;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -19,7 +20,7 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "show_area_grade")
-public class ShowAreaGrade {
+public class ShowAreaGrade extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

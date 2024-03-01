@@ -1,5 +1,6 @@
 package com.culture.ticketing.show.domain;
 
+import com.culture.ticketing.common.entity.BaseEntity;
 import com.google.common.base.Preconditions;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +20,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @Entity
 @Table(name = "place")
-public class Place {
+public class Place extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
