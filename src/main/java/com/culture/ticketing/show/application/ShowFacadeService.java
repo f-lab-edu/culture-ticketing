@@ -1,15 +1,16 @@
 package com.culture.ticketing.show.application;
 
-import com.culture.ticketing.booking.application.BookingFacadeService;
-import com.culture.ticketing.booking.application.dto.ShowFloorGradeWithCountMapByRoundIdResponse;
-import com.culture.ticketing.booking.application.dto.ShowSeatGradeWithCountMapByRoundIdResponse;
-import com.culture.ticketing.show.application.dto.ShowAreaGradeResponse;
+import com.culture.ticketing.booking.application.BookingShowSeatService;
+import com.culture.ticketing.booking.application.dto.RoundsShowSeatCountsResponse;
+import com.culture.ticketing.show.application.dto.ShowAreaGradesResponse;
 import com.culture.ticketing.show.domain.Place;
 import com.culture.ticketing.show.round_performer.application.RoundPerformerService;
-import com.culture.ticketing.show.round_performer.application.dto.RoundWithPerformersAndShowSeatsResponse;
-import com.culture.ticketing.show.round_performer.application.dto.RoundWithPerformersResponse;
+import com.culture.ticketing.show.round_performer.application.RoundService;
+import com.culture.ticketing.show.round_performer.application.dto.RoundWithPerformersAndShowAreaGradesResponse;
 import com.culture.ticketing.show.application.dto.ShowDetailResponse;
 import com.culture.ticketing.show.domain.Show;
+import com.culture.ticketing.show.round_performer.application.dto.RoundsWithPerformersResponse;
+import com.culture.ticketing.show.round_performer.domain.Round;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,18 +22,20 @@ import java.util.stream.Collectors;
 public class ShowFacadeService {
 
     private final ShowService showService;
+    private final RoundService roundService;
     private final RoundPerformerService roundPerformerService;
     private final ShowAreaGradeService showAreaGradeService;
     private final PlaceService placeService;
-    private final BookingFacadeService bookingFacadeService;
+    private final BookingShowSeatService bookingShowSeatService;
 
-    public ShowFacadeService(ShowService showService, RoundPerformerService roundPerformerService, ShowAreaGradeService showAreaGradeService,
-                             PlaceService placeService, BookingFacadeService bookingFacadeService) {
+    public ShowFacadeService(ShowService showService, RoundService roundService, RoundPerformerService roundPerformerService,
+                             ShowAreaGradeService showAreaGradeService, PlaceService placeService, BookingShowSeatService bookingShowSeatService) {
         this.showService = showService;
+        this.roundService = roundService;
         this.roundPerformerService = roundPerformerService;
         this.showAreaGradeService = showAreaGradeService;
         this.placeService = placeService;
-        this.bookingFacadeService = bookingFacadeService;
+        this.bookingShowSeatService = bookingShowSeatService;
     }
 
     @Transactional(readOnly = true)
@@ -40,10 +43,11 @@ public class ShowFacadeService {
 
         Show show = showService.findShowById(showId);
         Place place = placeService.findPlaceById(show.getPlaceId());
-        List<RoundWithPerformersResponse> rounds = roundPerformerService.findRoundsWitPerformersByShowId(showId);
-        List<ShowAreaGradeResponse> showAreaGrades = showAreaGradeService.findShowAreaGradesByShowId(showId);
+        List<Round> rounds = roundService.findByShowId(showId);
+        RoundsWithPerformersResponse roundsWitPerformers = roundPerformerService.findRoundsWitPerformersByShowIdAndRounds(showId, rounds);
+        ShowAreaGradesResponse showAreaGrades = showAreaGradeService.findShowAreaGradesByShowId(showId);
 
-        return ShowDetailResponse.from(show, place, rounds, showAreaGrades);
+        return ShowDetailResponse.from(show, place, roundsWitPerformers, showAreaGrades);
     }
 
     @Transactional(readOnly = true)
