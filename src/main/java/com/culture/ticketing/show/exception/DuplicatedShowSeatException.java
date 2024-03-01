@@ -1,4 +1,4 @@
-package com.culture.ticketing.place.exception;
+package com.culture.ticketing.show.exception;
 
 public class DuplicatedShowSeatException extends RuntimeException {
 

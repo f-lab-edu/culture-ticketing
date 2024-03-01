@@ -51,21 +51,17 @@ public class ShowFacadeService {
     }
 
     @Transactional(readOnly = true)
-    public List<RoundWithPerformersAndShowSeatsResponse> findRoundsByShowIdAndRoundStartDate(Long showId, LocalDate roundStartDate) {
+    public List<RoundWithPerformersAndShowAreaGradesResponse> findRoundsByShowIdAndRoundStartDate(Long showId, LocalDate roundStartDate) {
 
-        List<RoundWithPerformersResponse> roundsWithPerformers = roundPerformerService.findRoundsWitPerformersByShowIdAndRoundStartDate(showId, roundStartDate);
-        List<Long> roundIds = roundsWithPerformers.stream()
-                .map(RoundWithPerformersResponse::getRoundId)
-                .collect(Collectors.toList());
+        List<Round> rounds = roundService.findRoundsByShowIdAndRoundStartDate(showId, roundStartDate);
+        RoundsWithPerformersResponse roundsWitPerformers = roundPerformerService.findRoundsWitPerformersByShowIdAndRounds(showId, rounds);
 
-        ShowSeatGradeWithCountMapByRoundIdResponse showSeatGradeWithAvailableCountMapByRoundId = bookingFacadeService.findShowSeatGradeWithAvailableCountMapByRoundId(showId, roundIds);
-        ShowFloorGradeWithCountMapByRoundIdResponse showFloorGradeWithAvailableCountMapByRoundId = bookingFacadeService.findShowFloorGradeWithAvailableCountMapByRoundId(showId, roundIds);
+        RoundsShowSeatCountsResponse roundsShowSeatCounts = bookingShowSeatService.findRoundsShowSeatCounts(showId, roundsWitPerformers.getRoundIds());
 
-        return roundsWithPerformers.stream()
-                .map(roundWithPerformers -> new RoundWithPerformersAndShowSeatsResponse(
+        return roundsWitPerformers.getRoundWithPerformers().stream()
+                .map(roundWithPerformers -> new RoundWithPerformersAndShowAreaGradesResponse(
                         roundWithPerformers,
-                        showSeatGradeWithAvailableCountMapByRoundId.getByRoundId(roundWithPerformers.getRoundId()),
-                        showFloorGradeWithAvailableCountMapByRoundId.getByRoundId(roundWithPerformers.getRoundId())
+                        roundsShowSeatCounts.getShowSeatCountsByRoundId(roundWithPerformers.getRoundId())
                 ))
                 .collect(Collectors.toList());
     }

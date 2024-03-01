@@ -3,7 +3,6 @@ package com.culture.ticketing.show.application.dto;
 import com.culture.ticketing.show.domain.ShowArea;
 import com.culture.ticketing.show.exception.ShowAreaNotFoundException;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,13 +16,14 @@ public class ShowAreasResponse {
                 .collect(Collectors.toList());
     }
 
-    public List<ShowAreaResponse> getShowAreas() {
-        return Collections.unmodifiableList(this.showAreas);
+    public List<Long> getShowAreaIds() {
+        return this.showAreas.stream()
+                .map(ShowAreaResponse::getShowAreaId).collect(Collectors.toUnmodifiableList());
     }
 
     public ShowAreaResponse getByShowAreaId(Long showAreaId) {
         return this.showAreas.stream()
-                .filter(showArea -> showArea.getShowAreaId().equals(showArea.getShowAreaId()))
+                .filter(showArea -> showArea.getShowAreaId().equals(showAreaId))
                 .findAny()
                 .orElseThrow(() -> {
                     throw new ShowAreaNotFoundException(showAreaId);

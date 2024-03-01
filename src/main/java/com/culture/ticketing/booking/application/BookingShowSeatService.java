@@ -1,9 +1,11 @@
 package com.culture.ticketing.booking.application;
 
-import com.culture.ticketing.booking.application.dto.BookingShowSeatsMapByRoundIdResponse;
+import com.culture.ticketing.booking.application.dto.RoundsShowSeatCountsResponse;
 import com.culture.ticketing.booking.domain.BookingShowSeat;
 import com.culture.ticketing.booking.infra.BookingShowSeatRepository;
 import com.culture.ticketing.show.application.ShowSeatService;
+import com.culture.ticketing.show.application.dto.ShowSeatCountsResponse;
+import com.culture.ticketing.show.domain.ShowSeat;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,15 +40,16 @@ public class BookingShowSeatService {
     }
 
     @Transactional(readOnly = true)
-    public BookingShowSeatsMapByRoundIdResponse findBookingShowSeatsMapByRoundId(List<Long> roundIds) {
+    public RoundsShowSeatCountsResponse findRoundsShowSeatCounts(Long showId, List<Long> roundIds) {
+
+        ShowSeatCountsResponse showSeatCounts = showSeatService.findShowSeatCountsByShowId(showId);
 
         List<BookingShowSeat> bookingShowSeats = bookingShowSeatRepository.findSuccessBookingShowSeatsByRoundIdIn(roundIds);
         List<Long> showSeatIds = bookingShowSeats.stream()
                 .map(BookingShowSeat::getShowSeatId)
                 .collect(Collectors.toList());
+        List<ShowSeat> showSeatsInBooking = showSeatService.findByIds(showSeatIds);
 
-        List<ShowSeat> showSeats = showSeatService.findByIds(showSeatIds);
-
-        return new BookingShowSeatsMapByRoundIdResponse(bookingShowSeats, showSeats);
+        return new RoundsShowSeatCountsResponse(roundIds, showSeatCounts, bookingShowSeats, showSeatsInBooking);
     }
 }
