@@ -3,7 +3,6 @@ package com.culture.ticketing.show.application;
 import com.culture.ticketing.show.application.dto.PlaceResponse;
 import com.culture.ticketing.show.application.dto.PlaceSaveRequest;
 import com.culture.ticketing.show.application.dto.PlacesResponse;
-import com.culture.ticketing.show.domain.Place;
 import com.culture.ticketing.show.exception.PlaceNotFoundException;
 import com.culture.ticketing.show.infra.PlaceRepository;
 import com.google.common.base.Preconditions;

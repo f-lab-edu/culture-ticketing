@@ -14,13 +14,6 @@ public class BookingShowSeatsResponse {
         this.bookingShowSeats = bookingShowSeats;
     }
 
-    public List<Long> getShowSeatIds() {
-
-        return this.bookingShowSeats.stream()
-                .map(BookingShowSeat::getShowSeatId)
-                .collect(Collectors.toList());
-    }
-
     public List<BookingShowSeat> getBookingShowSeats() {
 
         return Collections.unmodifiableList(this.bookingShowSeats);

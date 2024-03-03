@@ -1,6 +1,5 @@
 package com.culture.ticketing.show.application.dto;
 
-import com.culture.ticketing.show.domain.Place;
 import com.culture.ticketing.show.domain.Show;
 import com.culture.ticketing.show.round_performer.application.dto.RoundWithPerformersResponse;
 import com.culture.ticketing.show.round_performer.application.dto.RoundsWithPerformersResponse;
