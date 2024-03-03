@@ -1,10 +1,9 @@
 package com.culture.ticketing.show.application
 
-import com.culture.ticketing.place.PlaceFixtures
-import com.culture.ticketing.place.application.PlaceService
+import com.culture.ticketing.show.PlaceFixtures
+import com.culture.ticketing.show.application.dto.PlacesResponse
 import com.culture.ticketing.show.infra.ShowRepository
-import com.culture.ticketing.place.domain.Place
-import com.culture.ticketing.place.exception.PlaceNotFoundException
+import com.culture.ticketing.show.exception.PlaceNotFoundException
 import com.culture.ticketing.show.ShowFixtures
 import com.culture.ticketing.show.application.dto.ShowResponse
 import com.culture.ticketing.show.application.dto.ShowSaveRequest
@@ -91,10 +90,10 @@ class ShowServiceTest extends Specification {
         given:
         ShowSaveRequest request = ShowSaveRequest.builder()
                 .category(Category.CONCERT)
-                .showName(null)
+                .showName(showName)
                 .ageRestriction(AgeRestriction.ALL)
-                .runningTime(120)
-                .posterImgUrl("http://abc.jpg")
+                .runningTime(runningTime)
+                .posterImgUrl(posterImgUrl)
                 .showStartDate(LocalDate.of(2024, 1, 1))
                 .showEndDate(LocalDate.of(2024, 5, 31))
                 .placeId(1L)
@@ -105,7 +104,7 @@ class ShowServiceTest extends Specification {
 
         then:
         def e = thrown(IllegalArgumentException.class)
-        e.message == "공연 이름을 입력해주세요."
+        e.message == expected
 
         where:
         showName | posterImgUrl     | runningTime || expected
@@ -153,18 +152,18 @@ class ShowServiceTest extends Specification {
         !response
     }
 
-    def "전체_공연_목록_조회"() {
+    def "전체 공연 목록 조회"() {
 
         given:
-        List<Show> foundShows = [
-                ShowFixtures.createShow(showId: 2L),
-                ShowFixtures.createShow(showId: 3L),
-                ShowFixtures.createShow(showId: 4L)
+        showRepository.findByShowIdGreaterThanLimitAndCategory(1L, 3, null) >> [
+                ShowFixtures.createShow(showId: 2L, placeId: 1L),
+                ShowFixtures.createShow(showId: 3L, placeId: 2L),
+                ShowFixtures.createShow(showId: 4L, placeId: 2L)
         ]
-        showRepository.findByShowIdGreaterThanLimitAndCategory(1L, 3, null) >> foundShows
-        List<Long> placeIds = foundShows.collect(show -> show.placeId);
-        placeService.findPlacesByIds(placeIds) >> placeIds.toSet().collect(placeId -> PlaceFixtures.createPlace(placeId: placeId))
-
+        placeService.findPlacesByIds([1L, 2L, 2L]) >> new PlacesResponse([
+                PlaceFixtures.createPlace(placeId: 1L),
+                PlaceFixtures.createPlace(placeId: 2L),
+        ])
         when:
         List<ShowResponse> response = showService.findShows(1L, 3, null);
 
@@ -191,36 +190,16 @@ class ShowServiceTest extends Specification {
         response.collect(show -> show.showId > 1L && show.categoryName == Category.CONCERT.getCategoryName()).size() == 2
     }
 
-    def "공연 목록의 장소 아이디에 해당하는 장소 없는 경우 예외 발생"() {
-
-        given:
-        List<Show> shows = [
-                ShowFixtures.createShow(showId: 1L),
-                ShowFixtures.createShow(showId: 2L),
-                ShowFixtures.createShow(showId: 3L),
-                ShowFixtures.createShow(showId: 4L),
-                ShowFixtures.createShow(showId: 5L)
-        ]
-        Map<Long, Place> placeMapByPlaceId = new HashMap<>();
-
-        when:
-        showService.checkPlaceExistInShows(shows, placeMapByPlaceId);
-
-        then:
-        def e = thrown(PlaceNotFoundException.class);
-        e.message == "존재하지 않는 장소입니다. (placeId = 1)"
-
-    }
-
     def "공연 아이디로 공연 조회 시 없는 경우 예외 발생"() {
         given:
-        showRepository.findById(1L) >> Optional.empty()
+        Long showId = 1L;
+        showRepository.findById(showId) >> Optional.empty()
 
         when:
-        showService.findShowById(1L);
+        showService.findShowById(showId);
 
         then:
         def e = thrown(ShowNotFoundException.class);
-        e.message == "존재하지 않는 공연입니다. (showId = 1)"
+        e.message == String.format("존재하지 않는 공연입니다. (showId = %d)", showId)
     }
 }

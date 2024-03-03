@@ -1,15 +1,17 @@
 package com.culture.ticketing.show.api
 
-import com.culture.ticketing.place.AreaFixtures
-import com.culture.ticketing.place.PlaceFixtures
+import com.culture.ticketing.show.PlaceFixtures
 import com.culture.ticketing.show.ShowFixtures
 import com.culture.ticketing.show.application.ShowFacadeService
 import com.culture.ticketing.show.application.ShowService
-import com.culture.ticketing.show.application.dto.ShowPlaceAreaResponse
+import com.culture.ticketing.show.application.dto.PlaceResponse
 import com.culture.ticketing.show.application.dto.ShowResponse
 import com.culture.ticketing.show.application.dto.ShowSaveRequest
 import com.culture.ticketing.show.domain.AgeRestriction
 import com.culture.ticketing.show.domain.Category
+import com.culture.ticketing.show.round_performer.PerformerFixtures
+import com.culture.ticketing.show.round_performer.RoundFixtures
+import com.culture.ticketing.show.round_performer.RoundPerformerFixtures
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.hamcrest.Matchers
 import org.spockframework.spring.SpringBean
@@ -69,9 +71,9 @@ class ShowControllerTest extends Specification {
         given:
         Long offset = 1L
         showService.findShows(offset, 3, null) >> [
-                ShowResponse.from(ShowFixtures.createShow(showId: 2L), PlaceFixtures.createPlace(placeId: 1L)),
-                ShowResponse.from(ShowFixtures.createShow(showId: 3L), PlaceFixtures.createPlace(placeId: 1L)),
-                ShowResponse.from(ShowFixtures.createShow(showId: 4L), PlaceFixtures.createPlace(placeId: 1L))
+                ShowResponse.from(ShowFixtures.createShow(showId: 2L), new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L))),
+                ShowResponse.from(ShowFixtures.createShow(showId: 3L), new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L))),
+                ShowResponse.from(ShowFixtures.createShow(showId: 4L), new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L)))
         ]
 
         expect:
@@ -93,8 +95,10 @@ class ShowControllerTest extends Specification {
         Long offset = 0;
         Category category = Category.CONCERT;
         showService.findShows(offset, 3, category) >> [
-                ShowResponse.from(ShowFixtures.createShow(showId: 1L, category: Category.CONCERT), PlaceFixtures.createPlace(placeId: 1L)),
-                ShowResponse.from(ShowFixtures.createShow(showId: 3L, category: Category.CONCERT), PlaceFixtures.createPlace(placeId: 1L))
+                ShowResponse.from(ShowFixtures.createShow(showId: 1L, category: Category.CONCERT),
+                        new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L))),
+                ShowResponse.from(ShowFixtures.createShow(showId: 3L, category: Category.CONCERT),
+                        new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L)))
         ]
 
         expect:
@@ -118,10 +122,23 @@ class ShowControllerTest extends Specification {
         showFacadeService.findShowById(1L) >> ShowFixtures.createShowDetailResponse(
                 showId: 1L,
                 placeId: 1L,
-                roundIds: [1L, 2L],
-                performerIds: [1L, 2L, 3L],
-                showSeatGradeIds: [1L, 2L],
-                showFloorGradeIds: [1L, 2L]
+                roundPerformers: [
+                        RoundPerformerFixtures.createRoundPerformer(roundPerformerId: 1L, roundId: 1L, performerId: 1L),
+                        RoundPerformerFixtures.createRoundPerformer(roundPerformerId: 2L, roundId: 1L, performerId: 2L),
+                        RoundPerformerFixtures.createRoundPerformer(roundPerformerId: 3L, roundId: 1L, performerId: 3L),
+                        RoundPerformerFixtures.createRoundPerformer(roundPerformerId: 4L, roundId: 2L, performerId: 1L),
+                        RoundPerformerFixtures.createRoundPerformer(roundPerformerId: 5L, roundId: 2L, performerId: 2L),
+                ],
+                rounds: [
+                        RoundFixtures.createRound(roundId: 1L),
+                        RoundFixtures.createRound(roundId: 2L),
+                ],
+                performers: [
+                        PerformerFixtures.createPerformer(performerId: 1L),
+                        PerformerFixtures.createPerformer(performerId: 2L),
+                        PerformerFixtures.createPerformer(performerId: 3L),
+                ],
+                showAreaGradeIds: [1L, 2L]
         );
 
         expect:
@@ -130,31 +147,10 @@ class ShowControllerTest extends Specification {
                 .andExpect(jsonPath("\$").exists())
                 .andExpect(jsonPath("\$.show.showId").value(1L))
                 .andExpect(jsonPath("\$.show.place.placeId").value(1L))
-                .andExpect(jsonPath("\$.rounds", Matchers.hasSize(2)))
-                .andExpect(jsonPath("\$.rounds[0].performers", Matchers.hasSize(3)))
-                .andExpect(jsonPath("\$.rounds[1].performers", Matchers.hasSize(3)))
-                .andExpect(jsonPath("\$.showSeatGrades", Matchers.hasSize(2)))
-                .andExpect(jsonPath("\$.showFloorGrades", Matchers.hasSize(2)))
-                .andDo(MockMvcResultHandlers.print())
-    }
-
-    def "공연 아이디로 구역 목록 조회"() {
-
-        given:
-        showFacadeService.findAreasByShowId(1L) >> [
-                ShowPlaceAreaResponse.from(AreaFixtures.createArea(areaId: 1L)),
-                ShowPlaceAreaResponse.from(AreaFixtures.createArea(areaId: 2L)),
-                ShowPlaceAreaResponse.from(AreaFixtures.createArea(areaId: 3L)),
-        ]
-
-        expect:
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/shows/1/place-areas"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("\$").exists())
-                .andExpect(jsonPath("\$", Matchers.hasSize(3)))
-                .andExpect(jsonPath("\$[0].areaId").value(1L))
-                .andExpect(jsonPath("\$[1].areaId").value(2L))
-                .andExpect(jsonPath("\$[2].areaId").value(3L))
+                .andExpect(jsonPath("\$.roundsWithPerformers", Matchers.hasSize(2)))
+                .andExpect(jsonPath("\$.roundsWithPerformers[0].performers", Matchers.hasSize(3)))
+                .andExpect(jsonPath("\$.roundsWithPerformers[1].performers", Matchers.hasSize(2)))
+                .andExpect(jsonPath("\$.showAreaGrades", Matchers.hasSize(2)))
                 .andDo(MockMvcResultHandlers.print())
     }
 }
