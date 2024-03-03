@@ -26,7 +26,7 @@ public class BookingShowSeatService {
     }
 
     @Transactional(readOnly = true)
-    public int getTotalPriceByShowIdAndShowSeatIds(Set<Long> showSeatIds) {
+    public int getTotalPriceByShowSeatIds(Set<Long> showSeatIds) {
         return showSeatService.getTotalPriceByShowSeatIds(showSeatIds);
     }
 
