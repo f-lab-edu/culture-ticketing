@@ -7,6 +7,7 @@ import com.culture.ticketing.show.round_performer.exception.RoundNotFoundExcepti
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class RoundsShowSeatCountsResponse {
@@ -15,16 +16,17 @@ public class RoundsShowSeatCountsResponse {
 
     public RoundsShowSeatCountsResponse(List<Long> roundIds, ShowSeatCountsResponse showSeatCounts,
                                         List<BookingShowSeat> bookingShowSeats, List<ShowSeat> showSeatsInBooking) {
-        Map<Long, Long> showSeatIdMapByRoundId = bookingShowSeats.stream()
-                .collect(Collectors.toMap(BookingShowSeat::getShowSeatId, bookingShowSeat -> bookingShowSeat.getBooking().getRoundId()));
+        Map<Long, ShowSeat> showSeatMapById = showSeatsInBooking.stream()
+                .collect(Collectors.toMap(ShowSeat::getShowSeatId, Function.identity()));
 
-        Map<Long, List<ShowSeat>> showSeatsInBookingMapByRoundId = showSeatsInBooking.stream()
-                .collect(Collectors.groupingBy(showSeat -> showSeatIdMapByRoundId.get(showSeat.getShowSeatId()), Collectors.toList()));
+        Map<Long, List<ShowSeat>> showSeatsMapByRoundId = bookingShowSeats.stream()
+                .collect(Collectors.groupingBy(bookingShowSeat -> bookingShowSeat.getBooking().getRoundId(),
+                        Collectors.mapping(bookingShowSeat -> showSeatMapById.get(bookingShowSeat.getShowSeatId()), Collectors.toList())));
 
         this.roundShowSeatCounts = roundIds.stream()
                 .map(roundId -> {
                     ShowSeatCountsResponse newShowSeatCounts = showSeatCounts.copy();
-                    newShowSeatCounts.minusShowSeatCount(showSeatsInBookingMapByRoundId.getOrDefault(roundId, List.of()));
+                    newShowSeatCounts.minusShowSeatCount(showSeatsMapByRoundId.getOrDefault(roundId, List.of()));
 
                     return new RoundShowSeatCountsResponse(roundId, newShowSeatCounts);
                 })
