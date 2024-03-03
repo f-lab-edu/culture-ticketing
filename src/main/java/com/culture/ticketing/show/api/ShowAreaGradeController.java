@@ -1,7 +1,6 @@
 package com.culture.ticketing.show.api;
 
 import com.culture.ticketing.show.application.ShowAreaGradeService;
-import com.culture.ticketing.show.application.dto.ShowAreaGradeResponse;
 import com.culture.ticketing.show.application.dto.ShowAreaGradeSaveRequest;
 import com.culture.ticketing.show.application.dto.ShowAreaGradesResponse;
 import org.springframework.web.bind.annotation.GetMapping;
