@@ -2,8 +2,8 @@ package com.culture.ticketing.show.round_performer.application
 
 import com.culture.ticketing.show.application.ShowService
 import com.culture.ticketing.show.round_performer.PerformerFixtures
+import com.culture.ticketing.show.round_performer.application.dto.PerformersResponse
 import com.culture.ticketing.show.round_performer.domain.Performer
-import com.culture.ticketing.show.round_performer.application.dto.PerformerResponse
 import com.culture.ticketing.show.round_performer.application.dto.PerformerSaveRequest
 import com.culture.ticketing.show.exception.ShowNotFoundException
 import com.culture.ticketing.show.round_performer.infra.PerformerRepository
@@ -90,7 +90,7 @@ class PerformerServiceTest extends Specification {
         e.message == String.format("존재하지 않는 공연입니다. (showId = %d)", showId)
     }
 
-    def "공연별 출연자 목록 조회"() {
+    def "공연 아이디로 출연자 목록 조회"() {
 
         given:
         performerRepository.findByShowId(1L) >> [
@@ -100,25 +100,10 @@ class PerformerServiceTest extends Specification {
         ]
 
         when:
-        List<PerformerResponse> response = performerService.findPerformersByShowId(1L);
+        PerformersResponse response = performerService.findPerformersByShowId(1L);
 
         then:
-        response.collect(performer -> performer.performerId) == [1L, 2L, 4L]
-    }
-
-    def "공연 아이디로 출연자 목록 조회"() {
-
-        given:
-        performerRepository.findByShowId(1L) >> [
-                PerformerFixtures.createPerformer(performerId: 1L, showId: 1L),
-                PerformerFixtures.createPerformer(performerId: 2L, showId: 1L)
-        ]
-
-        when:
-        List<PerformerResponse> foundPerformers = performerService.findPerformersByShowId(1L);
-
-        then:
-        foundPerformers.collect(performer -> performer.performerId) == [1L, 2L]
+        response.getPerformers().performerId == [1L, 2L, 4L]
     }
 
     def "출연자 목록 중 해당 공연 출연자가 아닌 경우 예외 발생"() {
