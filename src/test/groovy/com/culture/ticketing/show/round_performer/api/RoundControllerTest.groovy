@@ -80,8 +80,8 @@ class RoundControllerTest extends Specification {
 
         given:
         showFacadeService.findRoundsByShowIdAndRoundStartDate(1L, LocalDate.of(2024, 1, 1)) >> [
-                RoundFixtures.createRoundWithPerformersAndShowSeatsResponse(roundId: 1L, performerIds: [1L, 2L], showSeatGradeIds: [1L, 2L], showFloorGradeIds: [1L, 2L]),
-                RoundFixtures.createRoundWithPerformersAndShowSeatsResponse(roundId: 2L, performerIds: [1L, 2L], showSeatGradeIds: [1L, 2L], showFloorGradeIds: [1L, 2L])
+                RoundFixtures.createRoundWithPerformersAndShowSeatsResponse(roundId: 1L, performerIds: [1L, 2L], showSeatIds: [1L, 2L, 3L], showAreaIds: [1L, 2L], showAreaGradeIds: [1L, 2L]),
+                RoundFixtures.createRoundWithPerformersAndShowSeatsResponse(roundId: 2L, performerIds: [1L, 2L], showSeatIds: [1L, 2L, 3L], showAreaIds: [1L, 2L], showAreaGradeIds: [1L, 2L])
         ]
 
         expect:
@@ -93,12 +93,10 @@ class RoundControllerTest extends Specification {
                 .andExpect(jsonPath("\$", Matchers.hasSize(2)))
                 .andExpect(jsonPath("\$[0].roundId").value(1))
                 .andExpect(jsonPath("\$[0].performers", Matchers.hasSize(2)))
-                .andExpect(jsonPath("\$[0].showSeatGrades", Matchers.hasSize(2)))
-                .andExpect(jsonPath("\$[0].showFloorGrades", Matchers.hasSize(2)))
+                .andExpect(jsonPath("\$[0].showSeatCounts", Matchers.hasSize(2)))
                 .andExpect(jsonPath("\$[1].roundId").value(2))
                 .andExpect(jsonPath("\$[1].performers", Matchers.hasSize(2)))
-                .andExpect(jsonPath("\$[1].showSeatGrades", Matchers.hasSize(2)))
-                .andExpect(jsonPath("\$[1].showFloorGrades", Matchers.hasSize(2)))
+                .andExpect(jsonPath("\$[1].showSeatCounts", Matchers.hasSize(2)))
                 .andDo(MockMvcResultHandlers.print())
     }
 }
