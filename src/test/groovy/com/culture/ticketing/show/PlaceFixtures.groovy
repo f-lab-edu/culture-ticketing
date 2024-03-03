@@ -1,6 +1,6 @@
-package com.culture.ticketing.place
+package com.culture.ticketing.show
 
-import com.culture.ticketing.place.domain.Place;
+import com.culture.ticketing.show.domain.Place;
 
 class PlaceFixtures {
 

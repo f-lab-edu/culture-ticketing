@@ -1,7 +1,7 @@
-package com.culture.ticketing.place.infra
+package com.culture.ticketing.show.infra
 
-import com.culture.ticketing.place.PlaceFixtures
-import com.culture.ticketing.place.domain.Place
+import com.culture.ticketing.show.PlaceFixtures
+import com.culture.ticketing.show.domain.Place
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase

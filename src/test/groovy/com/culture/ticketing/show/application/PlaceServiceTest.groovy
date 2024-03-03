@@ -1,11 +1,12 @@
-package com.culture.ticketing.place.application
+package com.culture.ticketing.show.application
 
-import com.culture.ticketing.place.PlaceFixtures
-import com.culture.ticketing.place.application.dto.PlaceResponse
-import com.culture.ticketing.place.application.dto.PlaceSaveRequest
-import com.culture.ticketing.place.domain.Place
-import com.culture.ticketing.place.exception.PlaceNotFoundException
-import com.culture.ticketing.place.infra.PlaceRepository
+import com.culture.ticketing.show.PlaceFixtures
+import com.culture.ticketing.show.application.dto.PlaceResponse
+import com.culture.ticketing.show.application.dto.PlaceSaveRequest
+import com.culture.ticketing.show.application.dto.PlacesResponse
+import com.culture.ticketing.show.domain.Place
+import com.culture.ticketing.show.exception.PlaceNotFoundException
+import com.culture.ticketing.show.infra.PlaceRepository
 import spock.lang.Specification
 
 class PlaceServiceTest extends Specification {
@@ -23,10 +24,10 @@ class PlaceServiceTest extends Specification {
         ]
 
         when:
-        List<PlaceResponse> response = placeService.findPlaces(1L, 3);
+        PlacesResponse response = placeService.findPlaces(1L, 3);
 
         then:
-        response.collect(place -> place.placeId > 1L).size() == 3
+        response.getPlaces().collect(place -> place.placeId > 1L).size() == 3
     }
 
     def "장소 생성 시 요청 값에 null 이 존재하는 경우 예외 발생"() {
@@ -129,11 +130,11 @@ class PlaceServiceTest extends Specification {
         ]
 
         when:
-        List<Place> response = placeService.findPlacesByIds([1L, 2L, 3L, 4L, 5L]);
+        PlacesResponse response = placeService.findPlacesByIds([1L, 2L, 3L, 4L, 5L]);
 
         then:
-        response.size() == 5
-        response.collect(place -> place.placeId) == [1L, 2L, 3L, 4L, 5L]
+        response.getPlaces().size() == 5
+        response.getPlaces().collect(place -> place.placeId) == [1L, 2L, 3L, 4L, 5L]
     }
 
     def "장소 아이디로 장소 조회 시 없는 경우 예외 발생"() {
@@ -148,5 +149,28 @@ class PlaceServiceTest extends Specification {
         then:
         def e = thrown(PlaceNotFoundException.class)
         e.message == String.format("존재하지 않는 장소입니다. (placeId = %d)", placeId)
+    }
+
+    def "장소 아이디로 장소 조회 성공"() {
+
+        given:
+        Long placeId = 1L;
+        placeRepository.findById(placeId) >> Optional.of(PlaceFixtures.createPlace(
+                placeId: placeId,
+                placeName: "테스트",
+                address: "서울특별시",
+                latitude: 36.1,
+                longitude: 102.6
+        ));
+
+        when:
+        PlaceResponse response = placeService.findPlaceById(placeId);
+
+        then:
+        response.placeId == placeId
+        response.placeName == "테스트"
+        response.address == "서울특별시"
+        response.latitude == 36.1
+        response.longitude == 102.6
     }
 }
