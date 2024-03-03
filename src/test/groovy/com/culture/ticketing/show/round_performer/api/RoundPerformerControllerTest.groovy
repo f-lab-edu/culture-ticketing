@@ -1,6 +1,5 @@
 package com.culture.ticketing.show.round_performer.api
 
-import com.culture.ticketing.show.round_performer.api.RoundPerformerController
 import com.culture.ticketing.show.round_performer.application.RoundPerformerService
 import com.culture.ticketing.show.round_performer.application.dto.RoundPerformersSaveRequest
 import com.fasterxml.jackson.databind.ObjectMapper
