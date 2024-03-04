@@ -1,10 +1,8 @@
 package com.culture.ticketing.show.application.dto;
 
-import com.culture.ticketing.place.domain.Place;
 import com.culture.ticketing.show.domain.Show;
 import com.culture.ticketing.show.round_performer.application.dto.RoundWithPerformersResponse;
-import com.culture.ticketing.show.show_floor.application.dto.ShowFloorGradeResponse;
-import com.culture.ticketing.show.show_seat.application.dto.ShowSeatGradeResponse;
+import com.culture.ticketing.show.round_performer.application.dto.RoundsWithPerformersResponse;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,26 +12,21 @@ import java.util.List;
 public class ShowDetailResponse {
 
     private final ShowResponse show;
-    private final List<RoundWithPerformersResponse> rounds;
-    private final List<ShowSeatGradeResponse> showSeatGrades;
-    private final List<ShowFloorGradeResponse> showFloorGrades;
+    private final List<RoundWithPerformersResponse> roundsWithPerformers;
+    private final List<ShowAreaGradeResponse> showAreaGrades;
 
     @Builder
-    public ShowDetailResponse(ShowResponse show, List<RoundWithPerformersResponse> rounds,
-                              List<ShowSeatGradeResponse> showSeatGrades, List<ShowFloorGradeResponse> showFloorGrades) {
+    public ShowDetailResponse(ShowResponse show, RoundsWithPerformersResponse roundsWithPerformers, ShowAreaGradesResponse showAreaGrades) {
         this.show = show;
-        this.rounds = rounds;
-        this.showSeatGrades = showSeatGrades;
-        this.showFloorGrades = showFloorGrades;
+        this.roundsWithPerformers = roundsWithPerformers.getRoundWithPerformers();
+        this.showAreaGrades = showAreaGrades.getShowAreaGrades();
     }
 
-    public static ShowDetailResponse from(Show show, Place place, List<RoundWithPerformersResponse> rounds,
-                                          List<ShowSeatGradeResponse> showSeatGrades, List<ShowFloorGradeResponse> showFloorGrades) {
+    public static ShowDetailResponse from(Show show, PlaceResponse place, RoundsWithPerformersResponse roundsWithPerformers, ShowAreaGradesResponse showAreaGrades) {
         return ShowDetailResponse.builder()
                 .show(ShowResponse.from(show, place))
-                .rounds(rounds)
-                .showSeatGrades(showSeatGrades)
-                .showFloorGrades(showFloorGrades)
+                .roundsWithPerformers(roundsWithPerformers)
+                .showAreaGrades(showAreaGrades)
                 .build();
     }
 }
