@@ -4,7 +4,6 @@ import com.culture.ticketing.booking.domain.BookingShowSeat;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class BookingShowSeatsResponse {
 
@@ -21,6 +20,6 @@ public class BookingShowSeatsResponse {
 
     public boolean isAvailableShowSeat(Long showSeatId) {
         return bookingShowSeats.stream()
-                .noneMatch(bookingShowSeat -> bookingShowSeat.getShowSeatId().equals(showSeatId));
+                .noneMatch(bookingShowSeat -> bookingShowSeat.equalsShowSeatId(showSeatId));
     }
 }

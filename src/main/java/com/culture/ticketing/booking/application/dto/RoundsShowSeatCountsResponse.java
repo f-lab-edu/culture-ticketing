@@ -20,7 +20,7 @@ public class RoundsShowSeatCountsResponse {
                 .collect(Collectors.toMap(ShowSeat::getShowSeatId, Function.identity()));
 
         Map<Long, List<ShowSeat>> showSeatsMapByRoundId = bookingShowSeats.stream()
-                .collect(Collectors.groupingBy(bookingShowSeat -> bookingShowSeat.getBooking().getRoundId(),
+                .collect(Collectors.groupingBy(BookingShowSeat::getRoundId,
                         Collectors.mapping(bookingShowSeat -> showSeatMapById.get(bookingShowSeat.getShowSeatId()), Collectors.toList())));
 
         this.roundShowSeatCounts = roundIds.stream()
