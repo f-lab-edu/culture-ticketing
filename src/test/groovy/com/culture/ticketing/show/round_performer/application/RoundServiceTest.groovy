@@ -78,22 +78,45 @@ class RoundServiceTest extends Specification {
         e.message == expected
 
         where:
-        showId | roundStartDateTime || expected
-        null | LocalDateTime.of(2024, 1, 1, 10, 0, 0) || "공연 아이디를 입력해주세요."
-        1L | null || "시작 회차 일시를 입력해주세요."
+        showId | roundStartDateTime                     || expected
+        null   | LocalDateTime.of(2024, 1, 1, 10, 0, 0) || "공연 아이디를 입력해주세요."
+        1L     | null                                   || "시작 회차 일시를 입력해주세요."
     }
 
     def "회차 아이디로 회차 조회 시 존재하지 않는 경우 예외 발생"() {
 
         given:
-        roundRepository.findById(1L) >> Optional.empty()
+        Long roundId = 1L;
+        roundRepository.findById(roundId) >> Optional.empty()
 
         when:
-        roundService.findById(1L);
+        roundService.findById(roundId);
 
         then:
         def e = thrown(RoundNotFoundException.class)
-        e.message == "존재하지 않는 회차입니다. (roundId = 1)"
+        e.message == String.format("존재하지 않는 회차입니다. (roundId = %d)", roundId)
+    }
+
+    def "회차 아이디로 회차 조회"() {
+
+        given:
+        Long roundId = 1L;
+        roundRepository.findById(roundId) >> Optional.of(
+                RoundFixtures.createRound(
+                        roundId: 1L,
+                        showId: 1L,
+                        roundStartDateTime: LocalDateTime.of(2024, 1, 1, 10, 0, 0),
+                        roundEndDateTime: LocalDateTime.of(2024, 1, 1, 12, 0, 0))
+        )
+
+        when:
+        Round round = roundService.findById(roundId);
+
+        then:
+        round.roundId == 1L
+        round.showId == 1L
+        round.roundStartDateTime == LocalDateTime.of(2024, 1, 1, 10, 0, 0)
+        round.roundEndDateTime == LocalDateTime.of(2024, 1, 1, 12, 0, 0)
     }
 
     def "공연 아이디 값으로 회차 목록 조회"() {
@@ -111,7 +134,6 @@ class RoundServiceTest extends Specification {
         then:
         foundRounds.collect(round -> round.showId == 1L).size() == 3
         foundRounds.collect(round -> round.roundId) == [1L, 2L, 4L]
-
     }
 
     def "회차 생성 시 중복 회차 일시 있는 경우 예외 발생"() {
@@ -192,7 +214,6 @@ class RoundServiceTest extends Specification {
         then:
         foundRoundResponses.size() == 3
         foundRoundResponses.collect(round -> round.roundId) == [1L, 2L, 3L]
-
     }
 
     def "아이디에 해당하는 회차가 존재하는지 여부 확인"() {

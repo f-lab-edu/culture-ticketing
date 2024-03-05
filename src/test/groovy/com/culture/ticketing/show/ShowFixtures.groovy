@@ -1,16 +1,19 @@
 package com.culture.ticketing.show
 
-import com.culture.ticketing.place.PlaceFixtures
+import com.culture.ticketing.show.application.dto.PlaceResponse
+import com.culture.ticketing.show.application.dto.ShowAreaGradesResponse
 import com.culture.ticketing.show.application.dto.ShowDetailResponse
 import com.culture.ticketing.show.application.dto.ShowResponse
 import com.culture.ticketing.show.domain.AgeRestriction
 import com.culture.ticketing.show.domain.Category
 import com.culture.ticketing.show.domain.Show
+import com.culture.ticketing.show.round_performer.PerformerFixtures
 import com.culture.ticketing.show.round_performer.RoundFixtures
-import com.culture.ticketing.show.show_floor.ShowFloorGradeFixtures
-import com.culture.ticketing.show.show_floor.application.dto.ShowFloorGradeResponse
-import com.culture.ticketing.show.show_seat.ShowSeatGradeFixtures
-import com.culture.ticketing.show.show_seat.application.dto.ShowSeatGradeResponse
+import com.culture.ticketing.show.round_performer.application.dto.PerformersResponse
+import com.culture.ticketing.show.round_performer.application.dto.RoundsWithPerformersResponse
+import com.culture.ticketing.show.round_performer.domain.Performer
+import com.culture.ticketing.show.round_performer.domain.Round
+import com.culture.ticketing.show.round_performer.domain.RoundPerformer
 
 import java.time.LocalDate
 import java.util.stream.Collectors
@@ -34,7 +37,7 @@ class ShowFixtures {
     static ShowResponse createShowResponse(Map map = [:]) {
         return ShowResponse.from(
                 createShow(showId: map.getOrDefault("showId", 1L) as Long),
-                PlaceFixtures.createPlace(placeId: map.getOrDefault("placeId", 1L) as Long)
+                new PlaceResponse(PlaceFixtures.createPlace(placeId: map.getOrDefault("placeId", 1L) as Long))
         );
     }
 
@@ -44,18 +47,13 @@ class ShowFixtures {
                         showId: map.getOrDefault("showId", 1L) as Long,
                         placeId: map.getOrDefault("placeId", 1L)
                 ))
-                .rounds((map.getOrDefault("roundIds", []) as List<Long>).stream()
-                        .map(roundId -> RoundFixtures.createRoundWithPerformersResponse(
-                                roundId: roundId,
-                                performerIds: map.getOrDefault("performerIds", []) as List<Long>
-                        ))
-                        .collect(Collectors.toList()))
-                .showSeatGrades((map.getOrDefault("showSeatGradeIds", []) as List<Long>).stream()
-                        .map(showSeatGradeId -> new ShowSeatGradeResponse(ShowSeatGradeFixtures.createShowSeatGrade(showSeatGradeId: showSeatGradeId)))
-                        .collect(Collectors.toList()))
-                .showFloorGrades((map.getOrDefault("showFloorGradeIds", []) as List<Long>).stream()
-                        .map(showFloorGradeId -> new ShowFloorGradeResponse(ShowFloorGradeFixtures.createShowFloorGrade(showFloorGradeId: showFloorGradeId)))
-                        .collect(Collectors.toList()))
+                .roundsWithPerformers(new RoundsWithPerformersResponse(map.getOrDefault("roundPerformers", []) as List<RoundPerformer>,
+                        (map.getOrDefault("rounds", []) as List<Round>),
+                        new PerformersResponse((map.getOrDefault("performers", []) as List<Performer>)
+                )))
+                .showAreaGrades(new ShowAreaGradesResponse((map.getOrDefault("showAreaGradeIds", []) as List<Long>).stream()
+                        .map(showAreaGradeId -> ShowAreaGradeFixtures.createShowAreaGrade(showAreaGradeId: showAreaGradeId))
+                        .collect(Collectors.toList())))
                 .build();
     }
 }

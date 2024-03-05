@@ -2,7 +2,7 @@ package com.culture.ticketing.booking.api
 
 import com.culture.ticketing.booking.application.BookingService
 import com.culture.ticketing.booking.application.dto.BookingSaveRequest
-import com.culture.ticketing.booking.application.dto.BookingShowFloorSaveRequest
+
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.spockframework.spring.SpringBean
 import org.springframework.beans.factory.annotation.Autowired
@@ -32,16 +32,11 @@ class BookingControllerTest extends Specification {
     def "예약 생성 성공"() {
 
         given:
-        Set<Long> showSeatIds = [1L]
-        Set<BookingShowFloorSaveRequest> bookingShowFloors = [
-                new BookingShowFloorSaveRequest(1L, 100)
-        ]
         BookingSaveRequest request = BookingSaveRequest.builder()
                 .userId(1L)
                 .roundId(1L)
                 .totalPrice(260000)
-                .showSeatIds(showSeatIds)
-                .showFloors(bookingShowFloors)
+                .showSeatIds(Set.of(1L, 2L))
                 .build();
 
         expect:

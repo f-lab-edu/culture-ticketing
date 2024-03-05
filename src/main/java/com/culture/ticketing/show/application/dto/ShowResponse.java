@@ -1,7 +1,5 @@
 package com.culture.ticketing.show.application.dto;
 
-import com.culture.ticketing.place.application.dto.PlaceResponse;
-import com.culture.ticketing.place.domain.Place;
 import com.culture.ticketing.show.domain.Show;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -52,7 +50,7 @@ public class ShowResponse {
         this.place = place;
     }
 
-    public static ShowResponse from(Show show, Place place) {
+    public static ShowResponse from(Show show, PlaceResponse place) {
         return ShowResponse.builder()
                 .showId(show.getShowId())
                 .showName(show.getShowName())
@@ -64,7 +62,7 @@ public class ShowResponse {
                 .runningTime(show.getRunningTime())
                 .notice(show.getNotice())
                 .description(show.getDescription())
-                .place(new PlaceResponse(place))
+                .place(place)
                 .build();
     }
 }

@@ -45,17 +45,4 @@ public class BookingShowSeat extends BaseEntity {
         this.showSeatId = showSeatId;
         this.booking = booking;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BookingShowSeat that = (BookingShowSeat) o;
-        return bookingShowSeatId.equals(that.bookingShowSeatId) && showSeatId.equals(that.showSeatId) && booking.equals(that.booking);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(bookingShowSeatId, showSeatId, booking);
-    }
 }

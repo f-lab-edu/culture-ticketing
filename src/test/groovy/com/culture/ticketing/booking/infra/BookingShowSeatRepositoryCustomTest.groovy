@@ -26,7 +26,7 @@ class BookingShowSeatRepositoryCustomTest extends Specification {
         bookingRepository.deleteAll();
     }
 
-    def "회차 아이디와 공연 좌석 아이디 목록으로 "() {
+    def "회차 아이디와 공연 좌석 아이디 목록으로 완료된 예약 좌석 목록 조회"() {
 
         given:
         Booking booking = BookingFixtures.createBooking(roundId: 1L, bookingStatus: BookingStatus.SUCCESS);
@@ -46,7 +46,7 @@ class BookingShowSeatRepositoryCustomTest extends Specification {
         response.bookingShowSeatId == [bookingShowSeats.get(0).bookingShowSeatId, bookingShowSeats.get(1).bookingShowSeatId]
     }
 
-    def "회차 아이디 목록으로 예약 좌석 목록 조회"() {
+    def "회차 아이디 목록으로 완료된 예약 좌석 목록 조회"() {
 
         given:
         List<Booking> bookings = [
