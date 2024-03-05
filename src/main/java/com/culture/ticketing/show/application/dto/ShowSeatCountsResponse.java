@@ -3,7 +3,6 @@ package com.culture.ticketing.show.application.dto;
 import com.culture.ticketing.show.domain.ShowSeat;
 import lombok.Builder;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -31,23 +30,22 @@ public class ShowSeatCountsResponse {
         this.showAreas = showAreas;
     }
 
-    public ShowSeatCountsResponse copy() {
-        List<ShowSeatCountResponse> newShowSeatCounts = new ArrayList<>();
-        for (ShowSeatCountResponse showSeatCount : showSeatCounts) {
-            newShowSeatCounts.add(showSeatCount.copy());
-        }
-        return ShowSeatCountsResponse.builder()
-                .showSeatCounts(newShowSeatCounts)
-                .showAreas(showAreas)
-                .build();
-    }
-
-    public void minusShowSeatCount(List<ShowSeat> showSeats) {
+    public ShowSeatCountsResponse getSubtractedShowSeatCounts(List<ShowSeat> showSeats) {
 
         Map<Long, Long> showSeatCntMapByShowAreaGradeId = showSeats.stream()
                 .collect(Collectors.groupingBy(showSeat -> showAreas.getByShowAreaId(showSeat.getShowAreaId()).getShowAreaGradeId(), Collectors.counting()));
 
-        showSeatCounts.forEach(showSeatCount -> showSeatCount.minusAvailableSeatCount(showSeatCntMapByShowAreaGradeId.getOrDefault(showSeatCount.getShowAreaGradeId(), 0L)));
+        return ShowSeatCountsResponse.builder()
+                .showSeatCounts(this.showSeatCounts.stream()
+                        .map(showSeatCount -> ShowSeatCountResponse.builder()
+                                .showAreaGradeId(showSeatCount.getShowAreaGradeId())
+                                .showAreaGradeName(showSeatCount.getShowAreaGradeName())
+                                .price(showSeatCount.getPrice())
+                                .availableSeatCount(showSeatCount.getAvailableSeatCount() - showSeatCntMapByShowAreaGradeId.getOrDefault(showSeatCount.getShowAreaGradeId(), 0L))
+                                .build())
+                        .collect(Collectors.toList()))
+                .showAreas(showAreas)
+                .build();
     }
 
     public List<ShowSeatCountResponse> getShowSeatCounts() {

@@ -24,12 +24,10 @@ public class RoundsShowSeatCountsResponse {
                         Collectors.mapping(bookingShowSeat -> showSeatMapById.get(bookingShowSeat.getShowSeatId()), Collectors.toList())));
 
         this.roundShowSeatCounts = roundIds.stream()
-                .map(roundId -> {
-                    ShowSeatCountsResponse newShowSeatCounts = showSeatCounts.copy();
-                    newShowSeatCounts.minusShowSeatCount(showSeatsMapByRoundId.getOrDefault(roundId, List.of()));
-
-                    return new RoundShowSeatCountsResponse(roundId, newShowSeatCounts);
-                })
+                .map(roundId -> RoundShowSeatCountsResponse.builder()
+                        .roundId(roundId)
+                        .showSeatCounts(showSeatCounts.getSubtractedShowSeatCounts(showSeatsMapByRoundId.getOrDefault(roundId, List.of())))
+                        .build())
                 .collect(Collectors.toList());
     }
 
