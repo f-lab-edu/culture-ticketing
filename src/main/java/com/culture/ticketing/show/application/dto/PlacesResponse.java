@@ -2,13 +2,16 @@ package com.culture.ticketing.show.application.dto;
 
 import com.culture.ticketing.show.domain.Place;
 import com.culture.ticketing.show.exception.PlaceNotFoundException;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Schema(description = "장소 목록 응답 DTO")
 public class PlacesResponse {
 
+    @Schema(description = "장소 목록")
     private final List<PlaceResponse> places;
 
     public PlacesResponse(List<Place> places) {
