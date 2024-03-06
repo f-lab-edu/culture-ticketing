@@ -74,7 +74,11 @@ public class ShowService {
     @Transactional(readOnly = true)
     public List<ShowResponse> findShows(Long offset, int size, Category category) {
 
-        List<Show> shows = showRepository.findByShowIdGreaterThanLimitAndCategory(offset, size, category);
+        return getShowResponses(showRepository.findByShowIdGreaterThanLimitAndCategory(offset, size, category));
+    }
+
+    private List<ShowResponse> getShowResponses(List<Show> shows) {
+
         List<Long> placeIds = getPlaceIds(shows);
         List<PlaceResponse> places = placeService.findPlacesByIds(placeIds);
         Map<Long, PlaceResponse> placeMapById = getPlaceResponseMapById(places);
