@@ -11,6 +11,13 @@ public class ShowSeatResponse {
     private final int showSeatNumber;
     private final Boolean isAvailable;
 
+    public ShowSeatResponse(ShowSeat showSeat) {
+        this.showSeatId = showSeat.getShowSeatId();
+        this.showSeatRow = showSeat.getShowSeatRow();
+        this.showSeatNumber = showSeat.getShowSeatNumber();
+        this.isAvailable = true;
+    }
+
     public ShowSeatResponse(ShowSeat showSeat, Boolean isAvailable) {
         this.showSeatId = showSeat.getShowSeatId();
         this.showSeatRow = showSeat.getShowSeatRow();

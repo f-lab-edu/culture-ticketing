@@ -3,6 +3,7 @@ package com.culture.ticketing.show.application;
 import com.culture.ticketing.show.application.dto.ShowAreaGradeResponse;
 import com.culture.ticketing.show.application.dto.ShowAreaResponse;
 import com.culture.ticketing.show.application.dto.ShowSeatCountResponse;
+import com.culture.ticketing.show.application.dto.ShowSeatResponse;
 import com.culture.ticketing.show.application.dto.ShowSeatSaveRequest;
 import com.culture.ticketing.show.domain.ShowSeat;
 import com.culture.ticketing.show.exception.ShowAreaNotFoundException;
@@ -60,9 +61,9 @@ public class ShowSeatService {
     }
 
     @Transactional(readOnly = true)
-    public List<ShowSeat> findShowSeatsByShowAreaId(Long showAreaId) {
+    public List<ShowSeatResponse> findShowSeatsByShowAreaId(Long showAreaId) {
 
-        return showSeatRepository.findByShowAreaId(showAreaId);
+        return getShowSeatResponses(showSeatRepository.findByShowAreaId(showAreaId));
     }
 
     @Transactional(readOnly = true)
@@ -91,9 +92,16 @@ public class ShowSeatService {
     }
 
     @Transactional(readOnly = true)
-    public List<ShowSeat> findByIds(List<Long> showSeatIds) {
+    public List<ShowSeatResponse> findByIds(List<Long> showSeatIds) {
 
-        return showSeatRepository.findAllById(showSeatIds);
+        return getShowSeatResponses(showSeatRepository.findAllById(showSeatIds));
+    }
+
+    private List<ShowSeatResponse> getShowSeatResponses(List<ShowSeat> showSeats) {
+
+        return showSeats.stream()
+                .map(ShowSeatResponse::new)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
