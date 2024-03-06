@@ -71,7 +71,7 @@ public class ShowSeatService {
 
         List<ShowSeat> showSeats = showSeatRepository.findAllById(showSeatIds);
 
-        List<Long> showAreaIds = getShowAreaIdsByShowSeats(showSeats);
+        List<Long> showAreaIds = getShowAreaIds(showSeats, ShowSeat::getShowAreaId);
 
         List<ShowAreaResponse> showAreas = showAreaService.findShowAreasByShowAreaIds(showAreaIds);
 
@@ -82,13 +82,6 @@ public class ShowSeatService {
                 .map(showAreaMapById::get)
                 .mapToInt(ShowAreaResponse::getPrice)
                 .sum();
-    }
-
-    private List<Long> getShowAreaIdsByShowSeats(List<ShowSeat> showSeats) {
-
-        return showSeats.stream()
-                .map(ShowSeat::getShowAreaId)
-                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -122,7 +115,7 @@ public class ShowSeatService {
 
         Map<Long, ShowAreaResponse> showAreaMapById = getShowAreaResponseMapById(showAreas);
 
-        List<Long> showAreaIds = getShowAreaIdsByShowAreas(showAreas);
+        List<Long> showAreaIds = getShowAreaIds(showAreas, ShowAreaResponse::getShowAreaId);
 
         List<ShowSeat> showSeats = showSeatRepository.findByShowAreaIdIn(showAreaIds);
 
@@ -130,10 +123,10 @@ public class ShowSeatService {
                 .collect(Collectors.groupingBy(showSeat -> showAreaMapById.get(showSeat.getShowAreaId()).getShowAreaGradeId(), Collectors.counting()));
     }
 
-    private List<Long> getShowAreaIdsByShowAreas(List<ShowAreaResponse> showAreas) {
+    private <T, R> List<R> getShowAreaIds(List<T> list, Function<T, R> function) {
 
-        return showAreas.stream()
-                .map(ShowAreaResponse::getShowAreaId)
+        return list.stream()
+                .map(function)
                 .collect(Collectors.toList());
     }
 
