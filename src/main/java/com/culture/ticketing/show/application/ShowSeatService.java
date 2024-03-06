@@ -90,7 +90,7 @@ public class ShowSeatService {
     @Transactional(readOnly = true)
     public ShowSeatCountsResponse findShowSeatCountsByShowId(Long showId) {
 
-        ShowAreaGradesResponse showAreaGrades = showAreaGradeService.findShowAreaGradesByShowId(showId);
+        List<ShowAreaGradeResponse> showAreaGrades = showAreaGradeService.findShowAreaGradesByShowId(showId);
         ShowAreasResponse showAreas = showAreaService.findShowAreasByShowId(showId);
         List<ShowSeat> showSeats =  showSeatRepository.findByShowAreaIdIn(showAreas.getShowAreaIds());
 

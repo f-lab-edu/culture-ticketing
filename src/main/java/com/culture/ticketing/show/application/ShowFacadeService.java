@@ -4,9 +4,8 @@ import com.culture.ticketing.booking.application.BookingShowSeatService;
 import com.culture.ticketing.booking.application.dto.BookingShowSeatsResponse;
 import com.culture.ticketing.booking.application.dto.RoundsShowSeatCountsResponse;
 import com.culture.ticketing.show.application.dto.PlaceResponse;
-import com.culture.ticketing.show.application.dto.ShowAreaGradesResponse;
+import com.culture.ticketing.show.application.dto.ShowAreaGradeResponse;
 import com.culture.ticketing.show.application.dto.ShowSeatResponse;
-import com.culture.ticketing.show.domain.Place;
 import com.culture.ticketing.show.domain.ShowSeat;
 import com.culture.ticketing.show.round_performer.application.RoundPerformerService;
 import com.culture.ticketing.show.round_performer.application.RoundService;
@@ -52,7 +51,7 @@ public class ShowFacadeService {
         PlaceResponse place = placeService.findPlaceById(show.getPlaceId());
         List<Round> rounds = roundService.findByShowId(showId);
         RoundsWithPerformersResponse roundsWitPerformers = roundPerformerService.findRoundsWitPerformersByShowIdAndRounds(showId, rounds);
-        ShowAreaGradesResponse showAreaGrades = showAreaGradeService.findShowAreaGradesByShowId(showId);
+        List<ShowAreaGradeResponse> showAreaGrades = showAreaGradeService.findShowAreaGradesByShowId(showId);
 
         return ShowDetailResponse.from(show, place, roundsWitPerformers, showAreaGrades);
     }

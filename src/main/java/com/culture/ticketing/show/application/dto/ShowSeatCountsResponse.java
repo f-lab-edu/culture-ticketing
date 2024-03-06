@@ -19,12 +19,12 @@ public class ShowSeatCountsResponse {
         this.showAreas = showAreas;
     }
 
-    public ShowSeatCountsResponse(List<ShowSeat> showSeats, ShowAreasResponse showAreas, ShowAreaGradesResponse showAreaGrades) {
+    public ShowSeatCountsResponse(List<ShowSeat> showSeats, ShowAreasResponse showAreas, List<ShowAreaGradeResponse> showAreaGrades) {
 
         Map<Long, Long> showSeatCntMapByShowAreaGradeId = showSeats.stream()
                 .collect(Collectors.groupingBy(showSeat -> showAreas.getByShowAreaId(showSeat.getShowAreaId()).getShowAreaGradeId(), Collectors.counting()));
 
-        this.showSeatCounts = showAreaGrades.getShowAreaGrades().stream()
+        this.showSeatCounts = showAreaGrades.stream()
                 .map(showAreaGrade -> new ShowSeatCountResponse(showAreaGrade, showSeatCntMapByShowAreaGradeId.getOrDefault(showAreaGrade.getShowAreaGradeId(), 0L)))
                 .collect(Collectors.toList());
         this.showAreas = showAreas;

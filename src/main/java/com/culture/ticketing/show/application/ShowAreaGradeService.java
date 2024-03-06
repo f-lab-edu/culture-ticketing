@@ -1,7 +1,8 @@
 package com.culture.ticketing.show.application;
 
+import com.culture.ticketing.show.application.dto.ShowAreaGradeResponse;
 import com.culture.ticketing.show.application.dto.ShowAreaGradeSaveRequest;
-import com.culture.ticketing.show.application.dto.ShowAreaGradesResponse;
+import com.culture.ticketing.show.domain.ShowAreaGrade;
 import com.culture.ticketing.show.exception.ShowNotFoundException;
 import com.culture.ticketing.show.infra.ShowAreaGradeRepository;
 import com.google.common.base.Preconditions;
@@ -11,6 +12,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class ShowAreaGradeService {
@@ -48,14 +50,21 @@ public class ShowAreaGradeService {
     }
 
     @Transactional(readOnly = true)
-    public ShowAreaGradesResponse findShowAreaGradesByShowId(Long showId) {
+    public List<ShowAreaGradeResponse> findShowAreaGradesByShowId(Long showId) {
 
-        return new ShowAreaGradesResponse(showAreaGradeRepository.findByShowId(showId));
+        return getShowAreaGradeResponses(showAreaGradeRepository.findByShowId(showId));
     }
 
     @Transactional(readOnly = true)
-    public ShowAreaGradesResponse findShowAreaGradesByIds(List<Long> showAreaGradeIds) {
+    public List<ShowAreaGradeResponse> findShowAreaGradesByIds(List<Long> showAreaGradeIds) {
 
-        return new ShowAreaGradesResponse(showAreaGradeRepository.findAllById(showAreaGradeIds));
+        return getShowAreaGradeResponses(showAreaGradeRepository.findAllById(showAreaGradeIds));
+    }
+
+    private List<ShowAreaGradeResponse> getShowAreaGradeResponses(List<ShowAreaGrade> showAreaGrades) {
+
+        return showAreaGrades.stream()
+                .map(ShowAreaGradeResponse::new)
+                .collect(Collectors.toList());
     }
 }
