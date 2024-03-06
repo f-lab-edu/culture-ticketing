@@ -14,7 +14,7 @@ public class RoundWithPerformersResponse {
     private final LocalDateTime roundEndDateTime;
     private final List<PerformerResponse> performers;
 
-    public RoundWithPerformersResponse(Round round, List<PerformerResponse> performers) {
+    public RoundWithPerformersResponse(RoundResponse round, List<PerformerResponse> performers) {
         this.roundId = round.getRoundId();
         this.roundStartDateTime = round.getRoundStartDateTime();
         this.roundEndDateTime = round.getRoundEndDateTime();

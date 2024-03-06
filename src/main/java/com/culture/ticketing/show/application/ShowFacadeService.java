@@ -44,8 +44,8 @@ public class ShowFacadeService {
     public ShowDetailResponse findShowById(Long showId) {
 
         ShowResponse show = showService.findShowById(showId);
-        List<Round> rounds = roundService.findByShowId(showId);
-        RoundsWithPerformersResponse roundsWitPerformers = roundPerformerService.findRoundsWitPerformersByShowIdAndRounds(showId, rounds);
+        List<RoundResponse> rounds = roundService.findByShowId(showId);
+        List<RoundWithPerformersResponse> roundsWitPerformers = roundPerformerService.findRoundsWitPerformersByShowIdAndRounds(showId, rounds);
         List<ShowAreaGradeResponse> showAreaGrades = showAreaGradeService.findShowAreaGradesByShowId(showId);
 
         return new ShowDetailResponse(show, roundsWitPerformers, showAreaGrades);

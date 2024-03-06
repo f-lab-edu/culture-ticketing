@@ -2,6 +2,7 @@ package com.culture.ticketing.show.round_performer.application;
 
 import com.culture.ticketing.show.round_performer.application.dto.PerformerResponse;
 import com.culture.ticketing.show.round_performer.application.dto.RoundPerformersSaveRequest;
+import com.culture.ticketing.show.round_performer.application.dto.RoundResponse;
 import com.culture.ticketing.show.round_performer.application.dto.RoundWithPerformersResponse;
 import com.culture.ticketing.show.round_performer.domain.Round;
 import com.culture.ticketing.show.round_performer.domain.RoundPerformer;
@@ -47,7 +48,7 @@ public class RoundPerformerService {
     }
 
     @Transactional(readOnly = true)
-    public List<RoundWithPerformersResponse> findRoundsWitPerformersByShowIdAndRounds(Long showId, List<Round> rounds) {
+    public List<RoundWithPerformersResponse> findRoundsWitPerformersByShowIdAndRounds(Long showId, List<RoundResponse> rounds) {
 
         List<Long> roundIds = getRoundIds(rounds);
         List<RoundPerformer> roundPerformers = roundPerformerRepository.findByRoundIdIn(roundIds);
@@ -75,9 +76,9 @@ public class RoundPerformerService {
                 .collect(Collectors.toMap(PerformerResponse::getPerformerId, Function.identity()));
     }
 
-    private List<Long> getRoundIds(List<Round> rounds) {
+    private List<Long> getRoundIds(List<RoundResponse> rounds) {
         return rounds.stream()
-                .map(Round::getRoundId)
+                .map(RoundResponse::getRoundId)
                 .collect(Collectors.toList());
     }
 }
