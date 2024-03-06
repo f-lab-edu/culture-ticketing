@@ -1,12 +1,11 @@
 package com.culture.ticketing.show.application;
 
 import com.culture.ticketing.booking.application.BookingShowSeatService;
-import com.culture.ticketing.booking.application.dto.BookingShowSeatsResponse;
+import com.culture.ticketing.booking.application.dto.BookingShowSeatResponse;
 import com.culture.ticketing.booking.application.dto.RoundsShowSeatCountsResponse;
 import com.culture.ticketing.show.application.dto.ShowAreaGradeResponse;
 import com.culture.ticketing.show.application.dto.ShowResponse;
 import com.culture.ticketing.show.application.dto.ShowSeatResponse;
-import com.culture.ticketing.show.domain.ShowSeat;
 import com.culture.ticketing.show.round_performer.application.RoundPerformerService;
 import com.culture.ticketing.show.round_performer.application.RoundService;
 import com.culture.ticketing.show.round_performer.application.dto.RoundResponse;
@@ -18,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,6 +59,7 @@ public class ShowFacadeService {
         List<RoundWithPerformersResponse> roundsWitPerformers = roundPerformerService.findRoundsWitPerformersByShowIdAndRounds(showId, rounds);
 
         RoundsShowSeatCountsResponse roundsShowSeatCounts = bookingShowSeatService.findRoundsShowSeatCounts(showId, roundsWitPerformers.getRoundIds());
+        List<BookingShowSeatResponse> bookingShowSeats = bookingShowSeatService.findSuccessBookingShowSeatsByRoundIdIn()
 
         return roundsWitPerformers.getRoundWithPerformers().stream()
                 .map(roundWithPerformers -> new RoundWithPerformersAndShowAreaGradesResponse(
@@ -70,15 +72,20 @@ public class ShowFacadeService {
     @Transactional(readOnly = true)
     public List<ShowSeatResponse> findShowSeatsByShowAreaIdAndRoundId(Long showAreaId, Long roundId) {
 
-        List<ShowSeat> showSeats = showSeatService.findShowSeatsByShowAreaId(showAreaId);
-        List<Long> showSeatIds = showSeats.stream()
-                .map(ShowSeat::getShowSeatId)
-                .collect(Collectors.toList());
+        List<ShowSeatResponse> showSeats = showSeatService.findShowSeatsByShowAreaId(showAreaId);
+        Set<Long> showSeatIds = getShowSeatIds(showSeats, ShowSeatResponse::getShowSeatId);
 
-        BookingShowSeatsResponse bookingShowSeats = bookingShowSeatService.findByRoundIdAndShowSeatIds(roundId, showSeatIds);
+        List<BookingShowSeatResponse> bookingShowSeats = bookingShowSeatService.findSuccessBookingShowSeatsByRoundIdAndShowSeatIds(roundId, showSeatIds);
+        Set<Long> showSeatIdsInBooking = getShowSeatIds(bookingShowSeats, BookingShowSeatResponse::getBookingShowSeatId);
 
         return showSeats.stream()
-                .map(showSeat -> new ShowSeatResponse(showSeat, bookingShowSeats.isAvailableShowSeat(showSeat.getShowSeatId())))
+                .map(showSeat -> showSeat.getAvailabilityUpdatedShowSeatResponse(showSeatIdsInBooking.contains(showSeat.getShowSeatId())))
                 .collect(Collectors.toList());
+    }
+
+    private <T, R> Set<R> getShowSeatIds(List<T> list, Function<T, R> function) {
+        return list.stream()
+                .map(function)
+                .collect(Collectors.toSet());
     }
 }

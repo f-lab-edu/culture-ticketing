@@ -1,7 +1,7 @@
 package com.culture.ticketing.booking.application;
 
-import com.culture.ticketing.booking.application.dto.BookingShowSeatsResponse;
-import com.culture.ticketing.booking.application.dto.RoundsShowSeatCountsResponse;
+import com.culture.ticketing.booking.application.dto.BookingShowSeatResponse;
+import com.culture.ticketing.booking.application.dto.RoundShowSeatCountsResponse;
 import com.culture.ticketing.booking.domain.BookingShowSeat;
 import com.culture.ticketing.booking.infra.BookingShowSeatRepository;
 import com.culture.ticketing.show.application.ShowSeatService;
@@ -10,6 +10,7 @@ import com.culture.ticketing.show.domain.ShowSeat;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -36,9 +37,22 @@ public class BookingShowSeatService {
     }
 
     @Transactional(readOnly = true)
-    public BookingShowSeatsResponse findByRoundIdAndShowSeatIds(Long roundId, List<Long> showSeatIds) {
+    public List<BookingShowSeatResponse> findSuccessBookingShowSeatsByRoundIdAndShowSeatIds(Long roundId, Collection<Long> showSeatIds) {
 
-        return new BookingShowSeatsResponse(bookingShowSeatRepository.findSuccessBookingShowSeatsByRoundIdAndShowSeatIds(roundId, showSeatIds));
+        return getBookingShowSeatResponses(bookingShowSeatRepository.findSuccessBookingShowSeatsByRoundIdAndShowSeatIds(roundId, showSeatIds));
+    }
+
+    @Transactional(readOnly = true)
+    public List<BookingShowSeatResponse> findSuccessBookingShowSeatsByRoundIdIn(Collection<Long> roundIds) {
+
+        return getBookingShowSeatResponses(bookingShowSeatRepository.findSuccessBookingShowSeatsByRoundIdIn(roundIds));
+    }
+
+    private List<BookingShowSeatResponse> getBookingShowSeatResponses(List<BookingShowSeat> bookingShowSeats) {
+
+        return bookingShowSeats.stream()
+                .map(BookingShowSeatResponse::new)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
