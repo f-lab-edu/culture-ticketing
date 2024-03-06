@@ -5,6 +5,7 @@ import com.culture.ticketing.booking.application.dto.BookingShowSeatsResponse;
 import com.culture.ticketing.booking.application.dto.RoundsShowSeatCountsResponse;
 import com.culture.ticketing.show.application.dto.PlaceResponse;
 import com.culture.ticketing.show.application.dto.ShowAreaGradeResponse;
+import com.culture.ticketing.show.application.dto.ShowResponse;
 import com.culture.ticketing.show.application.dto.ShowSeatResponse;
 import com.culture.ticketing.show.domain.ShowSeat;
 import com.culture.ticketing.show.round_performer.application.RoundPerformerService;
@@ -28,18 +29,15 @@ public class ShowFacadeService {
     private final RoundService roundService;
     private final RoundPerformerService roundPerformerService;
     private final ShowAreaGradeService showAreaGradeService;
-    private final PlaceService placeService;
     private final BookingShowSeatService bookingShowSeatService;
     private final ShowSeatService showSeatService;
 
     public ShowFacadeService(ShowService showService, RoundService roundService, RoundPerformerService roundPerformerService,
-                             ShowAreaGradeService showAreaGradeService, PlaceService placeService,
-                             BookingShowSeatService bookingShowSeatService, ShowSeatService showSeatService) {
+                             ShowAreaGradeService showAreaGradeService, BookingShowSeatService bookingShowSeatService, ShowSeatService showSeatService) {
         this.showService = showService;
         this.roundService = roundService;
         this.roundPerformerService = roundPerformerService;
         this.showAreaGradeService = showAreaGradeService;
-        this.placeService = placeService;
         this.bookingShowSeatService = bookingShowSeatService;
         this.showSeatService = showSeatService;
     }
@@ -47,13 +45,12 @@ public class ShowFacadeService {
     @Transactional(readOnly = true)
     public ShowDetailResponse findShowById(Long showId) {
 
-        Show show = showService.findShowById(showId);
-        PlaceResponse place = placeService.findPlaceById(show.getPlaceId());
+        ShowResponse show = showService.findShowById(showId);
         List<Round> rounds = roundService.findByShowId(showId);
         RoundsWithPerformersResponse roundsWitPerformers = roundPerformerService.findRoundsWitPerformersByShowIdAndRounds(showId, rounds);
         List<ShowAreaGradeResponse> showAreaGrades = showAreaGradeService.findShowAreaGradesByShowId(showId);
 
-        return ShowDetailResponse.from(show, place, roundsWitPerformers, showAreaGrades);
+        return new ShowDetailResponse(show, roundsWitPerformers, showAreaGrades);
     }
 
     @Transactional(readOnly = true)

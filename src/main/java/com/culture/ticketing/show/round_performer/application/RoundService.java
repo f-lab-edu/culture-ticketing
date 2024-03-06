@@ -1,10 +1,10 @@
 package com.culture.ticketing.show.round_performer.application;
 
 import com.culture.ticketing.show.application.ShowService;
+import com.culture.ticketing.show.application.dto.ShowResponse;
 import com.culture.ticketing.show.round_performer.application.dto.RoundSaveRequest;
 import com.culture.ticketing.show.round_performer.application.dto.RoundResponse;
 import com.culture.ticketing.show.round_performer.domain.Round;
-import com.culture.ticketing.show.domain.Show;
 import com.culture.ticketing.show.round_performer.exception.DuplicatedRoundDateTimeException;
 import com.culture.ticketing.show.round_performer.exception.RoundNotFoundException;
 import com.culture.ticketing.show.round_performer.exception.OutOfRangeRoundDateTimeException;
@@ -47,7 +47,7 @@ public class RoundService {
 
         checkValidRoundSaveRequest(request);
 
-        Show show = showService.findShowById(request.getShowId());
+        ShowResponse show = showService.findShowById(request.getShowId());
         Round round = request.toEntity(show);
 
         checkOutOfRangeRoundDateTime(round, show);
@@ -71,7 +71,7 @@ public class RoundService {
         });
     }
 
-    private void checkOutOfRangeRoundDateTime(Round round, Show show) {
+    private void checkOutOfRangeRoundDateTime(Round round, ShowResponse show) {
         LocalDateTime showStartDateTime = LocalDateTime.of(show.getShowStartDate(), LocalTime.MIN);
         LocalDateTime showEndDateTime = LocalDateTime.of(show.getShowEndDate(), LocalTime.MAX);
         if (round.getRoundStartDateTime().isBefore(showStartDateTime)

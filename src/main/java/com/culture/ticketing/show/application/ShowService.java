@@ -55,11 +55,15 @@ public class ShowService {
     }
 
     @Transactional(readOnly = true)
-    public Show findShowById(Long showId) {
+    public ShowResponse findShowById(Long showId) {
 
-        return showRepository.findById(showId).orElseThrow(() -> {
+        Show show = showRepository.findById(showId).orElseThrow(() -> {
             throw new ShowNotFoundException(showId);
         });
+
+        PlaceResponse place = placeService.findPlaceById(show.getPlaceId());
+
+        return new ShowResponse(show, place);
     }
 
     @Transactional(readOnly = true)
