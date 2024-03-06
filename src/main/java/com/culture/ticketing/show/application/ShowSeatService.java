@@ -1,8 +1,7 @@
 package com.culture.ticketing.show.application;
 
-import com.culture.ticketing.show.application.dto.ShowAreaGradesResponse;
+import com.culture.ticketing.show.application.dto.ShowAreaGradeResponse;
 import com.culture.ticketing.show.application.dto.ShowAreaResponse;
-import com.culture.ticketing.show.application.dto.ShowAreasResponse;
 import com.culture.ticketing.show.application.dto.ShowSeatCountsResponse;
 import com.culture.ticketing.show.application.dto.ShowSeatSaveRequest;
 import com.culture.ticketing.show.domain.ShowSeat;
@@ -14,8 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -72,11 +73,13 @@ public class ShowSeatService {
                 .map(ShowSeat::getShowAreaId)
                 .collect(Collectors.toList());
 
-        ShowAreasResponse showAreas = showAreaService.findShowAreasByShowAreaIds(showAreaIds);
+        List<ShowAreaResponse> showAreas = showAreaService.findShowAreasByShowAreaIds(showAreaIds);
+        Map<Long, ShowAreaResponse> showAreaMapById = showAreas.stream()
+                .collect(Collectors.toMap(ShowAreaResponse::getShowAreaId, Function.identity()));
 
         return showSeatRepository.findAllById(showSeatIds).stream()
                 .map(ShowSeat::getShowAreaId)
-                .map(showAreas::getByShowAreaId)
+                .map(showAreaMapById::get)
                 .mapToInt(ShowAreaResponse::getPrice)
                 .sum();
     }
@@ -91,8 +94,11 @@ public class ShowSeatService {
     public ShowSeatCountsResponse findShowSeatCountsByShowId(Long showId) {
 
         List<ShowAreaGradeResponse> showAreaGrades = showAreaGradeService.findShowAreaGradesByShowId(showId);
-        ShowAreasResponse showAreas = showAreaService.findShowAreasByShowId(showId);
-        List<ShowSeat> showSeats =  showSeatRepository.findByShowAreaIdIn(showAreas.getShowAreaIds());
+        List<ShowAreaResponse> showAreas = showAreaService.findShowAreasByShowId(showId);
+        List<Long> showAreaIds = showAreas.stream()
+                .map(ShowAreaResponse::getShowAreaId)
+                .collect(Collectors.toList());
+        List<ShowSeat> showSeats = showSeatRepository.findByShowAreaIdIn(showAreaIds);
 
         return new ShowSeatCountsResponse(showSeats, showAreas, showAreaGrades);
     }
