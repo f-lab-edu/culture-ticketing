@@ -81,24 +81,20 @@ public class RoundService {
     }
 
     @Transactional(readOnly = true)
-    public List<Round> findByShowId(Long showId) {
+    public List<RoundResponse> findByShowId(Long showId) {
 
-        return roundRepository.findByShowId(showId);
+        return getRoundResponses(roundRepository.findByShowId(showId));
     }
 
     @Transactional(readOnly = true)
-    public List<RoundResponse> findRoundResponsesByShowId(Long showId) {
+    public List<RoundResponse> findByShowIdAndRoundStartDate(Long showId, LocalDate roundStartDate) {
 
-        List<Round> rounds = roundRepository.findByShowId(showId);
+        return getRoundResponses(roundRepository.findByShowIdAndRoundStartDate(showId, roundStartDate));
+    }
 
+    private List<RoundResponse> getRoundResponses(List<Round> rounds) {
         return rounds.stream()
-                .map(RoundResponse::from)
+                .map(RoundResponse::new)
                 .collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
-    public List<Round> findRoundsByShowIdAndRoundStartDate(Long showId, LocalDate roundStartDate) {
-
-        return roundRepository.findByShowIdAndRoundStartDate(showId, roundStartDate);
     }
 }

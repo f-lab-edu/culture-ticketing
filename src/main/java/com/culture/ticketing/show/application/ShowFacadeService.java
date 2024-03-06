@@ -9,10 +9,10 @@ import com.culture.ticketing.show.application.dto.ShowSeatResponse;
 import com.culture.ticketing.show.domain.ShowSeat;
 import com.culture.ticketing.show.round_performer.application.RoundPerformerService;
 import com.culture.ticketing.show.round_performer.application.RoundService;
+import com.culture.ticketing.show.round_performer.application.dto.RoundResponse;
 import com.culture.ticketing.show.round_performer.application.dto.RoundWithPerformersAndShowAreaGradesResponse;
 import com.culture.ticketing.show.application.dto.ShowDetailResponse;
 import com.culture.ticketing.show.round_performer.application.dto.RoundWithPerformersResponse;
-import com.culture.ticketing.show.round_performer.domain.Round;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,7 +54,7 @@ public class ShowFacadeService {
     @Transactional(readOnly = true)
     public List<RoundWithPerformersAndShowAreaGradesResponse> findRoundsByShowIdAndRoundStartDate(Long showId, LocalDate roundStartDate) {
 
-        List<Round> rounds = roundService.findRoundsByShowIdAndRoundStartDate(showId, roundStartDate);
+        List<RoundResponse> rounds = roundService.findByShowIdAndRoundStartDate(showId, roundStartDate);
         List<RoundWithPerformersResponse> roundsWitPerformers = roundPerformerService.findRoundsWitPerformersByShowIdAndRounds(showId, rounds);
 
         RoundsShowSeatCountsResponse roundsShowSeatCounts = bookingShowSeatService.findRoundsShowSeatCounts(showId, roundsWitPerformers.getRoundIds());
