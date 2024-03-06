@@ -3,7 +3,6 @@ package com.culture.ticketing.show.api;
 import com.culture.ticketing.show.application.PlaceService;
 import com.culture.ticketing.show.application.dto.PlaceResponse;
 import com.culture.ticketing.show.application.dto.PlaceSaveRequest;
-import com.culture.ticketing.show.application.dto.PlacesResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,8 +24,8 @@ public class PlaceController {
     }
 
     @GetMapping
-    public PlacesResponse getPlaces(@RequestParam(name = "offset") Long offset,
-                                    @RequestParam(name = "size") int size) {
+    public List<PlaceResponse> getPlaces(@RequestParam(name = "offset") Long offset,
+                                         @RequestParam(name = "size") int size) {
 
         return placeService.findPlaces(offset, size);
     }

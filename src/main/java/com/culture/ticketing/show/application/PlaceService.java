@@ -2,7 +2,7 @@ package com.culture.ticketing.show.application;
 
 import com.culture.ticketing.show.application.dto.PlaceResponse;
 import com.culture.ticketing.show.application.dto.PlaceSaveRequest;
-import com.culture.ticketing.show.application.dto.PlacesResponse;
+import com.culture.ticketing.show.domain.Place;
 import com.culture.ticketing.show.exception.PlaceNotFoundException;
 import com.culture.ticketing.show.infra.PlaceRepository;
 import com.google.common.base.Preconditions;
@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class PlaceService {
@@ -48,8 +49,8 @@ public class PlaceService {
         return placeRepository.findById(placeId)
                 .map(PlaceResponse::new)
                 .orElseThrow(() -> {
-            throw new PlaceNotFoundException(placeId);
-        });
+                    throw new PlaceNotFoundException(placeId);
+                });
     }
 
     @Transactional(readOnly = true)
@@ -58,14 +59,21 @@ public class PlaceService {
     }
 
     @Transactional(readOnly = true)
-    public PlacesResponse findPlaces(Long offset, int size) {
+    public List<PlaceResponse> findPlaces(Long offset, int size) {
 
-        return new PlacesResponse(placeRepository.findByPlaceIdGreaterThanLimit(offset, size));
+        return getPlaceResponses(placeRepository.findByPlaceIdGreaterThanLimit(offset, size));
     }
 
     @Transactional(readOnly = true)
-    public PlacesResponse findPlacesByIds(List<Long> placeIds) {
+    public List<PlaceResponse> findPlacesByIds(List<Long> placeIds) {
 
-        return new PlacesResponse(placeRepository.findAllById(placeIds));
+        return getPlaceResponses(placeRepository.findAllById(placeIds));
+    }
+
+    private List<PlaceResponse> getPlaceResponses(List<Place> places) {
+
+        return places.stream()
+                .map(PlaceResponse::new)
+                .collect(Collectors.toList());
     }
 }
