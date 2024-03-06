@@ -3,7 +3,6 @@ package com.culture.ticketing.show.application;
 import com.culture.ticketing.booking.application.BookingShowSeatService;
 import com.culture.ticketing.booking.application.dto.BookingShowSeatsResponse;
 import com.culture.ticketing.booking.application.dto.RoundsShowSeatCountsResponse;
-import com.culture.ticketing.show.application.dto.PlaceResponse;
 import com.culture.ticketing.show.application.dto.ShowAreaGradeResponse;
 import com.culture.ticketing.show.application.dto.ShowResponse;
 import com.culture.ticketing.show.application.dto.ShowSeatResponse;
@@ -12,8 +11,7 @@ import com.culture.ticketing.show.round_performer.application.RoundPerformerServ
 import com.culture.ticketing.show.round_performer.application.RoundService;
 import com.culture.ticketing.show.round_performer.application.dto.RoundWithPerformersAndShowAreaGradesResponse;
 import com.culture.ticketing.show.application.dto.ShowDetailResponse;
-import com.culture.ticketing.show.domain.Show;
-import com.culture.ticketing.show.round_performer.application.dto.RoundsWithPerformersResponse;
+import com.culture.ticketing.show.round_performer.application.dto.RoundWithPerformersResponse;
 import com.culture.ticketing.show.round_performer.domain.Round;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,7 +55,7 @@ public class ShowFacadeService {
     public List<RoundWithPerformersAndShowAreaGradesResponse> findRoundsByShowIdAndRoundStartDate(Long showId, LocalDate roundStartDate) {
 
         List<Round> rounds = roundService.findRoundsByShowIdAndRoundStartDate(showId, roundStartDate);
-        RoundsWithPerformersResponse roundsWitPerformers = roundPerformerService.findRoundsWitPerformersByShowIdAndRounds(showId, rounds);
+        List<RoundWithPerformersResponse> roundsWitPerformers = roundPerformerService.findRoundsWitPerformersByShowIdAndRounds(showId, rounds);
 
         RoundsShowSeatCountsResponse roundsShowSeatCounts = bookingShowSeatService.findRoundsShowSeatCounts(showId, roundsWitPerformers.getRoundIds());
 
