@@ -1,6 +1,5 @@
 package com.culture.ticketing.show.round_performer.application.dto;
 
-import com.culture.ticketing.show.round_performer.domain.Round;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
