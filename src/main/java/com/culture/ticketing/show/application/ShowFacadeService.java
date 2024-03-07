@@ -112,7 +112,7 @@ public class ShowFacadeService {
 
         return showSeatCounts.stream()
                 .map(showSeatCount -> showSeatCount.getSubtractedShowSeatCountResponse(
-                        bookingShowSeatCountMapByShowAreaGradeId.get(showSeatCount.getShowAreaGradeId())
+                        bookingShowSeatCountMapByShowAreaGradeId.getOrDefault(showSeatCount.getShowAreaGradeId(), 0L)
                 ))
                 .collect(Collectors.toList());
     }
