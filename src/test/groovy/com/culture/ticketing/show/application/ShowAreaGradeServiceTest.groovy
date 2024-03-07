@@ -1,9 +1,8 @@
 package com.culture.ticketing.show.application
 
-
 import com.culture.ticketing.show.ShowAreaGradeFixtures
+import com.culture.ticketing.show.application.dto.ShowAreaGradeResponse
 import com.culture.ticketing.show.application.dto.ShowAreaGradeSaveRequest
-import com.culture.ticketing.show.application.dto.ShowAreaGradesResponse
 import com.culture.ticketing.show.domain.ShowAreaGrade
 import com.culture.ticketing.show.exception.ShowNotFoundException
 import com.culture.ticketing.show.infra.ShowAreaGradeRepository
@@ -121,11 +120,11 @@ class ShowAreaGradeServiceTest extends Specification {
         ]
 
         when:
-        ShowAreaGradesResponse response = showAreaGradeService.findShowAreaGradesByShowId(1L);
+        List<ShowAreaGradeResponse> response = showAreaGradeService.findShowAreaGradesByShowId(1L);
 
         then:
-        response.getShowAreaGrades().size() == 3
-        response.getShowAreaGrades().showAreaGradeId == [1L, 2L, 3L]
+        response.size() == 3
+        response.showAreaGradeId == [1L, 2L, 3L]
     }
 
     def "공연 구역 등급 아이디 목록으로 공연 구역 등급 목록 조회"() {
@@ -138,10 +137,10 @@ class ShowAreaGradeServiceTest extends Specification {
         ]
 
         when:
-        ShowAreaGradesResponse response = showAreaGradeService.findShowAreaGradesByIds(showAreaGradeIds);
+        List<ShowAreaGradeResponse> response = showAreaGradeService.findShowAreaGradesByIds(showAreaGradeIds);
 
         then:
-        response.getShowAreaGrades().size() == 2
-        response.getShowAreaGrades().showAreaGradeId == [1L, 2L]
+        response.size() == 2
+        response.showAreaGradeId == [1L, 2L]
     }
 }
