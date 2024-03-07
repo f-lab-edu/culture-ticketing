@@ -135,10 +135,10 @@ public class ShowFacadeService {
         Set<Long> showSeatIds = getIds(showSeats, ShowSeatResponse::getShowSeatId);
 
         List<BookingShowSeatResponse> bookingShowSeats = bookingShowSeatService.findSuccessBookingShowSeatsByRoundIdAndShowSeatIds(roundId, showSeatIds);
-        Set<Long> showSeatIdsInBooking = getIds(bookingShowSeats, BookingShowSeatResponse::getBookingShowSeatId);
+        Set<Long> showSeatIdsInBooking = getIds(bookingShowSeats, BookingShowSeatResponse::getShowSeatId);
 
         return showSeats.stream()
-                .map(showSeat -> showSeat.getAvailabilityUpdatedShowSeatResponse(showSeatIdsInBooking.contains(showSeat.getShowSeatId())))
+                .map(showSeat -> showSeat.getAvailabilityUpdatedShowSeatResponse(!showSeatIdsInBooking.contains(showSeat.getShowSeatId())))
                 .collect(Collectors.toList());
     }
 
