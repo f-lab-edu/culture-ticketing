@@ -2,10 +2,9 @@ package com.culture.ticketing.show.application
 
 import com.culture.ticketing.show.ShowAreaFixtures
 import com.culture.ticketing.show.ShowAreaGradeFixtures
-import com.culture.ticketing.show.application.dto.ShowAreaGradesResponse
+import com.culture.ticketing.show.application.dto.ShowAreaGradeResponse
+import com.culture.ticketing.show.application.dto.ShowAreaResponse
 import com.culture.ticketing.show.application.dto.ShowAreaSaveRequest
-import com.culture.ticketing.show.application.dto.ShowAreasResponse
-import com.culture.ticketing.show.exception.PlaceNotFoundException
 import com.culture.ticketing.show.exception.ShowAreaGradeNotFoundException
 import com.culture.ticketing.show.exception.ShowNotFoundException
 import com.culture.ticketing.show.infra.ShowAreaRepository
@@ -147,17 +146,17 @@ class ShowAreaServiceTest extends Specification {
                 ShowAreaFixtures.createShowArea(showAreaId: 2L, showAreaGradeId: 1L),
                 ShowAreaFixtures.createShowArea(showAreaId: 3L, showAreaGradeId: 2L),
         ]
-        showAreaGradeService.findShowAreaGradesByShowId(1L) >> new ShowAreaGradesResponse([
-                ShowAreaGradeFixtures.createShowAreaGrade(showAreaGradeId: 1L),
-                ShowAreaGradeFixtures.createShowAreaGrade(showAreaGradeId: 2L),
-        ])
+        showAreaGradeService.findShowAreaGradesByIds([1L, 1L, 2L]) >> [
+                new ShowAreaGradeResponse(ShowAreaGradeFixtures.createShowAreaGrade(showAreaGradeId: 1L)),
+                new ShowAreaGradeResponse(ShowAreaGradeFixtures.createShowAreaGrade(showAreaGradeId: 2L)),
+        ]
 
         when:
-        ShowAreasResponse response = showAreaService.findShowAreasByShowId(1L);
+        List<ShowAreaResponse> response = showAreaService.findShowAreasByShowId(1L);
 
         then:
-        response.getShowAreaIds().size() == 3
-        response.getShowAreaIds() == [1L, 2L, 3L]
+        response.size() == 3
+        response.showAreaId == [1L, 2L, 3L]
     }
 
     def "공연 구역 아이디 목록으로 공연 구역 목록 조회"() {
@@ -168,16 +167,16 @@ class ShowAreaServiceTest extends Specification {
                 ShowAreaFixtures.createShowArea(showAreaId: 2L, showAreaGradeId: 1L),
                 ShowAreaFixtures.createShowArea(showAreaId: 3L, showAreaGradeId: 2L),
         ]
-        showAreaGradeService.findShowAreaGradesByIds([1L, 1L, 2L]) >> new ShowAreaGradesResponse([
-                ShowAreaGradeFixtures.createShowAreaGrade(showAreaGradeId: 1L),
-                ShowAreaGradeFixtures.createShowAreaGrade(showAreaGradeId: 2L),
-        ])
+        showAreaGradeService.findShowAreaGradesByIds([1L, 1L, 2L]) >> [
+                new ShowAreaGradeResponse(ShowAreaGradeFixtures.createShowAreaGrade(showAreaGradeId: 1L)),
+                new ShowAreaGradeResponse(ShowAreaGradeFixtures.createShowAreaGrade(showAreaGradeId: 2L)),
+        ]
 
         when:
-        ShowAreasResponse response = showAreaService.findShowAreasByShowAreaIds([1L, 2L, 3L]);
+        List<ShowAreaResponse> response = showAreaService.findShowAreasByShowAreaIds([1L, 2L, 3L]);
 
         then:
-        response.getShowAreaIds().size() == 3
-        response.getShowAreaIds() == [1L, 2L, 3L]
+        response.size() == 3
+        response.showAreaId == [1L, 2L, 3L]
     }
 }
