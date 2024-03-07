@@ -10,6 +10,7 @@ import com.culture.ticketing.show.round_performer.infra.RoundPerformerRepository
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -48,7 +49,22 @@ public class RoundPerformerService {
     }
 
     @Transactional(readOnly = true)
-    public List<RoundWithPerformersResponse> findRoundsWitPerformersByShowIdAndRounds(Long showId, List<RoundResponse> rounds) {
+    public List<RoundWithPerformersResponse> findRoundsWitPerformersByShowId(Long showId) {
+
+        List<RoundResponse> rounds = roundService.findByShowId(showId);
+
+        return getRoundsWitPerformersByShowIdAndRounds(showId, rounds);
+    }
+
+    @Transactional(readOnly = true)
+    public List<RoundWithPerformersResponse> findRoundsWithPerformersByShowIdAndRoundStartDate(Long showId, LocalDate roundStartDate) {
+
+        List<RoundResponse> rounds = roundService.findByShowIdAndRoundStartDate(showId, roundStartDate);
+
+        return getRoundsWitPerformersByShowIdAndRounds(showId, rounds);
+    }
+
+    private List<RoundWithPerformersResponse> getRoundsWitPerformersByShowIdAndRounds(Long showId, List<RoundResponse> rounds) {
 
         List<Long> roundIds = getRoundIds(rounds);
         List<RoundPerformer> roundPerformers = roundPerformerRepository.findByRoundIdIn(roundIds);
