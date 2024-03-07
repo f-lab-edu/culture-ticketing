@@ -1,8 +1,6 @@
 package com.culture.ticketing.show.application;
 
-import com.culture.ticketing.show.application.dto.ShowAreaGradeResponse;
 import com.culture.ticketing.show.application.dto.ShowAreaResponse;
-import com.culture.ticketing.show.application.dto.ShowSeatCountResponse;
 import com.culture.ticketing.show.application.dto.ShowSeatResponse;
 import com.culture.ticketing.show.application.dto.ShowSeatSaveRequest;
 import com.culture.ticketing.show.domain.ShowSeat;
@@ -13,6 +11,7 @@ import com.google.common.base.Preconditions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -25,12 +24,10 @@ public class ShowSeatService {
 
     private final ShowSeatRepository showSeatRepository;
     private final ShowAreaService showAreaService;
-    private final ShowAreaGradeService showAreaGradeService;
 
-    public ShowSeatService(ShowSeatRepository showSeatRepository, ShowAreaService showAreaService, ShowAreaGradeService showAreaGradeService) {
+    public ShowSeatService(ShowSeatRepository showSeatRepository, ShowAreaService showAreaService) {
         this.showSeatRepository = showSeatRepository;
         this.showAreaService = showAreaService;
-        this.showAreaGradeService = showAreaGradeService;
     }
 
     @Transactional
@@ -71,7 +68,7 @@ public class ShowSeatService {
 
         List<ShowSeat> showSeats = showSeatRepository.findAllById(showSeatIds);
 
-        List<Long> showAreaIds = getShowAreaIds(showSeats, ShowSeat::getShowAreaId);
+        List<Long> showAreaIds = getShowAreaIds(showSeats);
 
         List<ShowAreaResponse> showAreas = showAreaService.findShowAreasByShowAreaIds(showAreaIds);
 
@@ -84,8 +81,20 @@ public class ShowSeatService {
                 .sum();
     }
 
+    private List<Long> getShowAreaIds(List<ShowSeat> showSeats) {
+        return showSeats.stream()
+                .map(ShowSeat::getShowAreaId)
+                .collect(Collectors.toList());
+    }
+
     @Transactional(readOnly = true)
-    public List<ShowSeatResponse> findByIds(List<Long> showSeatIds) {
+    public List<ShowSeatResponse> findByShowAreaIds(Collection<Long> showAreaIds) {
+
+        return getShowSeatResponses(showSeatRepository.findByShowAreaIdIn(showAreaIds));
+    }
+
+    @Transactional(readOnly = true)
+    public List<ShowSeatResponse> findByIds(Collection<Long> showSeatIds) {
 
         return getShowSeatResponses(showSeatRepository.findAllById(showSeatIds));
     }
@@ -94,39 +103,6 @@ public class ShowSeatService {
 
         return showSeats.stream()
                 .map(ShowSeatResponse::new)
-                .collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
-    public List<ShowSeatCountResponse> findShowSeatCountsByShowId(Long showId) {
-
-        List<ShowAreaGradeResponse> showAreaGrades = showAreaGradeService.findShowAreaGradesByShowId(showId);
-
-        Map<Long, Long> showSeatCountMapByShowAreaGradeId = getShowSeatCountMapByShowAreaGradeId(showId);
-
-        return showAreaGrades.stream()
-                .map(showAreaGrade -> new ShowSeatCountResponse(showAreaGrade, showSeatCountMapByShowAreaGradeId.getOrDefault(showAreaGrade.getShowAreaGradeId(), 0L)))
-                .collect(Collectors.toList());
-    }
-
-    private Map<Long, Long> getShowSeatCountMapByShowAreaGradeId(Long showId) {
-
-        List<ShowAreaResponse> showAreas = showAreaService.findShowAreasByShowId(showId);
-
-        Map<Long, ShowAreaResponse> showAreaMapById = getShowAreaResponseMapById(showAreas);
-
-        List<Long> showAreaIds = getShowAreaIds(showAreas, ShowAreaResponse::getShowAreaId);
-
-        List<ShowSeat> showSeats = showSeatRepository.findByShowAreaIdIn(showAreaIds);
-
-        return showSeats.stream()
-                .collect(Collectors.groupingBy(showSeat -> showAreaMapById.get(showSeat.getShowAreaId()).getShowAreaGradeId(), Collectors.counting()));
-    }
-
-    private <T, R> List<R> getShowAreaIds(List<T> list, Function<T, R> function) {
-
-        return list.stream()
-                .map(function)
                 .collect(Collectors.toList());
     }
 
