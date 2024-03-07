@@ -1,7 +1,6 @@
 package com.culture.ticketing.show.round_performer.api
 
 import com.culture.ticketing.show.round_performer.RoundFixtures
-import com.culture.ticketing.show.round_performer.api.RoundController
 import com.culture.ticketing.show.round_performer.application.RoundService
 import com.culture.ticketing.show.application.ShowFacadeService
 import com.culture.ticketing.show.round_performer.application.dto.RoundResponse
@@ -58,10 +57,10 @@ class RoundControllerTest extends Specification {
     def "공연별 회차 목록 조회 성공"() {
 
         given:
-        roundService.findRoundResponsesByShowId(1L) >> [
-                RoundResponse.from(RoundFixtures.createRound(roundId: 1L, showId: 1L)),
-                RoundResponse.from(RoundFixtures.createRound(roundId: 2L, showId: 1L)),
-                RoundResponse.from(RoundFixtures.createRound(roundId: 3L, showId: 1L))
+        roundService.findByShowId(1L) >> [
+                new RoundResponse(RoundFixtures.createRound(roundId: 1L, showId: 1L)),
+                new RoundResponse(RoundFixtures.createRound(roundId: 2L, showId: 1L)),
+                new RoundResponse(RoundFixtures.createRound(roundId: 3L, showId: 1L))
         ]
 
         expect:
@@ -80,8 +79,8 @@ class RoundControllerTest extends Specification {
 
         given:
         showFacadeService.findRoundsByShowIdAndRoundStartDate(1L, LocalDate.of(2024, 1, 1)) >> [
-                RoundFixtures.createRoundWithPerformersAndShowSeatsResponse(roundId: 1L, performerIds: [1L, 2L], showSeatIds: [1L, 2L, 3L], showAreaIds: [1L, 2L], showAreaGradeIds: [1L, 2L]),
-                RoundFixtures.createRoundWithPerformersAndShowSeatsResponse(roundId: 2L, performerIds: [1L, 2L], showSeatIds: [1L, 2L, 3L], showAreaIds: [1L, 2L], showAreaGradeIds: [1L, 2L])
+                RoundFixtures.createRoundWithPerformersAndShowSeatsResponse(roundId: 1L, performerIds: [1L, 2L], showAreaGradeIds: [1L, 2L]),
+                RoundFixtures.createRoundWithPerformersAndShowSeatsResponse(roundId: 2L, performerIds: [1L, 2L], showAreaGradeIds: [1L, 2L])
         ]
 
         expect:
