@@ -71,9 +71,9 @@ class ShowControllerTest extends Specification {
         given:
         Long offset = 1L
         showService.findShows(offset, 3, null) >> [
-                ShowResponse.from(ShowFixtures.createShow(showId: 2L), new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L))),
-                ShowResponse.from(ShowFixtures.createShow(showId: 3L), new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L))),
-                ShowResponse.from(ShowFixtures.createShow(showId: 4L), new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L)))
+                new ShowResponse(ShowFixtures.createShow(showId: 2L), new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L))),
+                new ShowResponse(ShowFixtures.createShow(showId: 3L), new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L))),
+                new ShowResponse(ShowFixtures.createShow(showId: 4L), new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L)))
         ]
 
         expect:
@@ -95,9 +95,9 @@ class ShowControllerTest extends Specification {
         Long offset = 0;
         Category category = Category.CONCERT;
         showService.findShows(offset, 3, category) >> [
-                ShowResponse.from(ShowFixtures.createShow(showId: 1L, category: Category.CONCERT),
+                new ShowResponse(ShowFixtures.createShow(showId: 1L, category: Category.CONCERT),
                         new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L))),
-                ShowResponse.from(ShowFixtures.createShow(showId: 3L, category: Category.CONCERT),
+                new ShowResponse(ShowFixtures.createShow(showId: 3L, category: Category.CONCERT),
                         new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L)))
         ]
 
@@ -122,22 +122,8 @@ class ShowControllerTest extends Specification {
         showFacadeService.findShowById(1L) >> ShowFixtures.createShowDetailResponse(
                 showId: 1L,
                 placeId: 1L,
-                roundPerformers: [
-                        RoundPerformerFixtures.createRoundPerformer(roundPerformerId: 1L, roundId: 1L, performerId: 1L),
-                        RoundPerformerFixtures.createRoundPerformer(roundPerformerId: 2L, roundId: 1L, performerId: 2L),
-                        RoundPerformerFixtures.createRoundPerformer(roundPerformerId: 3L, roundId: 1L, performerId: 3L),
-                        RoundPerformerFixtures.createRoundPerformer(roundPerformerId: 4L, roundId: 2L, performerId: 1L),
-                        RoundPerformerFixtures.createRoundPerformer(roundPerformerId: 5L, roundId: 2L, performerId: 2L),
-                ],
-                rounds: [
-                        RoundFixtures.createRound(roundId: 1L),
-                        RoundFixtures.createRound(roundId: 2L),
-                ],
-                performers: [
-                        PerformerFixtures.createPerformer(performerId: 1L),
-                        PerformerFixtures.createPerformer(performerId: 2L),
-                        PerformerFixtures.createPerformer(performerId: 3L),
-                ],
+                roundIds: [1L, 2L],
+                performerIds: [1L, 2L, 3L],
                 showAreaGradeIds: [1L, 2L]
         );
 
@@ -148,9 +134,19 @@ class ShowControllerTest extends Specification {
                 .andExpect(jsonPath("\$.show.showId").value(1L))
                 .andExpect(jsonPath("\$.show.place.placeId").value(1L))
                 .andExpect(jsonPath("\$.roundsWithPerformers", Matchers.hasSize(2)))
+                .andExpect(jsonPath("\$.roundsWithPerformers[0].roundId").value(1L))
+                .andExpect(jsonPath("\$.roundsWithPerformers[1].roundId").value(2L))
                 .andExpect(jsonPath("\$.roundsWithPerformers[0].performers", Matchers.hasSize(3)))
-                .andExpect(jsonPath("\$.roundsWithPerformers[1].performers", Matchers.hasSize(2)))
+                .andExpect(jsonPath("\$.roundsWithPerformers[0].performers[0].performerId").value(1L))
+                .andExpect(jsonPath("\$.roundsWithPerformers[0].performers[1].performerId").value(2L))
+                .andExpect(jsonPath("\$.roundsWithPerformers[0].performers[2].performerId").value(3L))
+                .andExpect(jsonPath("\$.roundsWithPerformers[1].performers", Matchers.hasSize(3)))
+                .andExpect(jsonPath("\$.roundsWithPerformers[1].performers[0].performerId").value(1L))
+                .andExpect(jsonPath("\$.roundsWithPerformers[1].performers[1].performerId").value(2L))
+                .andExpect(jsonPath("\$.roundsWithPerformers[1].performers[2].performerId").value(3L))
                 .andExpect(jsonPath("\$.showAreaGrades", Matchers.hasSize(2)))
+                .andExpect(jsonPath("\$.showAreaGrades[0].showAreaGradeId").value(1L))
+                .andExpect(jsonPath("\$.showAreaGrades[1].showAreaGradeId").value(2L))
                 .andDo(MockMvcResultHandlers.print())
     }
 }
