@@ -10,13 +10,15 @@ public class ShowSeatResponse {
     private final Long showSeatId;
     private final String showSeatRow;
     private final int showSeatNumber;
+    private final Long showAreaId;
     private final Boolean isAvailable;
 
     @Builder
-    public ShowSeatResponse(Long showSeatId, String showSeatRow, int showSeatNumber, Boolean isAvailable) {
+    public ShowSeatResponse(Long showSeatId, String showSeatRow, int showSeatNumber, Long showAreaId, Boolean isAvailable) {
         this.showSeatId = showSeatId;
         this.showSeatRow = showSeatRow;
         this.showSeatNumber = showSeatNumber;
+        this.showAreaId = showAreaId;
         this.isAvailable = isAvailable;
     }
 
@@ -24,6 +26,7 @@ public class ShowSeatResponse {
         this.showSeatId = showSeat.getShowSeatId();
         this.showSeatRow = showSeat.getShowSeatRow();
         this.showSeatNumber = showSeat.getShowSeatNumber();
+        this.showAreaId = showSeat.getShowAreaId();
         this.isAvailable = true;
     }
 
@@ -33,6 +36,7 @@ public class ShowSeatResponse {
                 .showSeatId(showSeatId)
                 .showSeatRow(showSeatRow)
                 .showSeatNumber(showSeatNumber)
+                .showAreaId(showAreaId)
                 .isAvailable(isAvailable)
                 .build();
     }

@@ -25,4 +25,14 @@ public class ShowSeatCountResponse {
         this.price = showAreaGrade.getPrice();
         this.availableSeatCount = availableSeatCount;
     }
+
+    public ShowSeatCountResponse getSubtractedShowSeatCountResponse(long unavailableSeatCount) {
+
+        return ShowSeatCountResponse.builder()
+                .showAreaGradeId(showAreaGradeId)
+                .showAreaGradeName(showAreaGradeName)
+                .price(price)
+                .availableSeatCount(availableSeatCount - unavailableSeatCount)
+                .build();
+    }
 }
