@@ -1,13 +1,14 @@
 package com.culture.ticketing.show.round_performer.application
 
+import com.culture.ticketing.show.PlaceFixtures
+import com.culture.ticketing.show.ShowFixtures
 import com.culture.ticketing.show.application.ShowService
+import com.culture.ticketing.show.application.dto.PlaceResponse
+import com.culture.ticketing.show.application.dto.ShowResponse
 import com.culture.ticketing.show.round_performer.RoundFixtures
 import com.culture.ticketing.show.round_performer.application.dto.RoundResponse
 import com.culture.ticketing.show.round_performer.application.dto.RoundSaveRequest
-import com.culture.ticketing.show.domain.AgeRestriction
-import com.culture.ticketing.show.domain.Category
 import com.culture.ticketing.show.round_performer.domain.Round
-import com.culture.ticketing.show.domain.Show
 import com.culture.ticketing.show.round_performer.exception.DuplicatedRoundDateTimeException
 import com.culture.ticketing.show.round_performer.exception.OutOfRangeRoundDateTimeException
 import com.culture.ticketing.show.round_performer.exception.RoundNotFoundException
@@ -31,21 +32,10 @@ class RoundServiceTest extends Specification {
                 .roundStartDateTime(LocalDateTime.of(2024, 1, 1, 10, 0, 0))
                 .build();
 
-        Show show = Show.builder()
-                .showId(1L)
-                .category(Category.CONCERT)
-                .ageRestriction(AgeRestriction.ALL)
-                .placeId(1L)
-                .showStartDate(LocalDate.of(2024, 1, 1))
-                .showEndDate(LocalDate.of(2024, 2, 20))
-                .showName("테스트 공연")
-                .posterImgUrl("http://abc.jpg")
-                .runningTime(120)
-                .build();
+        ShowResponse show = new ShowResponse(ShowFixtures.createShow(showId: 1L), new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L)))
+        showService.findShowById(1L) >> show
 
         Round round = request.toEntity(show);
-
-        showService.findShowById(1L) >> show
         roundRepository.findByShowIdAndDuplicatedRoundDateTime(round.getShowId(), round.getRoundStartDateTime(), round.getRoundEndDateTime()) >> Optional.empty()
 
         when:
@@ -129,10 +119,10 @@ class RoundServiceTest extends Specification {
         ]
 
         when:
-        List<Round> foundRounds = roundService.findByShowId(1L);
+        List<RoundResponse> foundRounds = roundService.findByShowId(1L);
 
         then:
-        foundRounds.collect(round -> round.showId == 1L).size() == 3
+        foundRounds.size() == 3
         foundRounds.collect(round -> round.roundId) == [1L, 2L, 4L]
     }
 
@@ -144,21 +134,10 @@ class RoundServiceTest extends Specification {
                 .roundStartDateTime(LocalDateTime.of(2024, 1, 1, 10, 0, 0))
                 .build();
 
-        Show show = Show.builder()
-                .showId(1L)
-                .category(Category.CONCERT)
-                .ageRestriction(AgeRestriction.ALL)
-                .placeId(1L)
-                .showStartDate(LocalDate.of(2024, 1, 1))
-                .showEndDate(LocalDate.of(2024, 2, 20))
-                .showName("테스트 공연")
-                .posterImgUrl("http://abc.jpg")
-                .runningTime(120)
-                .build();
+        ShowResponse show = new ShowResponse(ShowFixtures.createShow(showId: 1L), new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L)))
+        showService.findShowById(1L) >> show
 
         Round round = request.toEntity(show);
-
-        showService.findShowById(1L) >> show
         roundRepository.findByShowIdAndDuplicatedRoundDateTime(round.getShowId(), round.getRoundStartDateTime(), round.getRoundEndDateTime()) >> Optional.of(round)
 
         when:
@@ -177,18 +156,11 @@ class RoundServiceTest extends Specification {
                 .roundStartDateTime(LocalDateTime.of(2024, 1, 1, 10, 0, 0))
                 .build();
 
-        Show show = Show.builder()
-                .showId(1L)
-                .category(Category.CONCERT)
-                .ageRestriction(AgeRestriction.ALL)
-                .placeId(1L)
-                .showStartDate(LocalDate.of(2024, 1, 5))
-                .showEndDate(LocalDate.of(2024, 2, 20))
-                .showName("테스트 공연")
-                .posterImgUrl("http://abc.jpg")
-                .runningTime(120)
-                .build();
-
+        ShowResponse show = new ShowResponse(ShowFixtures.createShow(
+                showId: 1L,
+                showStartDate: LocalDate.of(2024, 1, 5),
+                showEndDate: LocalDate.of(2024, 1, 20)
+        ), new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L)))
         showService.findShowById(1L) >> show
 
         when:
@@ -209,7 +181,7 @@ class RoundServiceTest extends Specification {
         ]
 
         when:
-        List<RoundResponse> foundRoundResponses = roundService.findRoundResponsesByShowId(1L);
+        List<RoundResponse> foundRoundResponses = roundService.findByShowId(1L);
 
         then:
         foundRoundResponses.size() == 3
@@ -246,7 +218,7 @@ class RoundServiceTest extends Specification {
         ]
 
         when:
-        List<Round> response = roundService.findRoundsByShowIdAndRoundStartDate(1L, LocalDate.of(2024, 1, 1));
+        List<RoundResponse> response = roundService.findByShowIdAndRoundStartDate(1L, LocalDate.of(2024, 1, 1));
 
         then:
         response.size() == 2

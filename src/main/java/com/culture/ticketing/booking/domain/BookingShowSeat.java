@@ -45,4 +45,12 @@ public class BookingShowSeat extends BaseEntity {
         this.showSeatId = showSeatId;
         this.booking = booking;
     }
+
+    public boolean equalsShowSeatId(Long showSeatId) {
+        return this.showSeatId.equals(showSeatId);
+    }
+
+    public Long getRoundId() {
+        return booking.getRoundId();
+    }
 }

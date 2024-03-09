@@ -37,7 +37,7 @@ public class RoundController {
     @GetMapping
     public List<RoundResponse> getRoundsByShowId(@RequestParam("showId") Long showId) {
 
-        return roundService.findRoundResponsesByShowId(showId);
+        return roundService.findByShowId(showId);
     }
 
     @GetMapping("/detail")

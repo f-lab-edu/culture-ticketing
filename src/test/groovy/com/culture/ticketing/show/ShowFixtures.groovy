@@ -1,7 +1,6 @@
 package com.culture.ticketing.show
 
 import com.culture.ticketing.show.application.dto.PlaceResponse
-import com.culture.ticketing.show.application.dto.ShowAreaGradesResponse
 import com.culture.ticketing.show.application.dto.ShowDetailResponse
 import com.culture.ticketing.show.application.dto.ShowResponse
 import com.culture.ticketing.show.domain.AgeRestriction
@@ -9,8 +8,9 @@ import com.culture.ticketing.show.domain.Category
 import com.culture.ticketing.show.domain.Show
 import com.culture.ticketing.show.round_performer.PerformerFixtures
 import com.culture.ticketing.show.round_performer.RoundFixtures
-import com.culture.ticketing.show.round_performer.application.dto.PerformersResponse
-import com.culture.ticketing.show.round_performer.application.dto.RoundsWithPerformersResponse
+import com.culture.ticketing.show.round_performer.application.dto.PerformerResponse
+import com.culture.ticketing.show.round_performer.application.dto.RoundResponse
+import com.culture.ticketing.show.round_performer.application.dto.RoundWithPerformersResponse
 import com.culture.ticketing.show.round_performer.domain.Performer
 import com.culture.ticketing.show.round_performer.domain.Round
 import com.culture.ticketing.show.round_performer.domain.RoundPerformer
@@ -34,26 +34,20 @@ class ShowFixtures {
                 .build();
     }
 
-    static ShowResponse createShowResponse(Map map = [:]) {
-        return ShowResponse.from(
-                createShow(showId: map.getOrDefault("showId", 1L) as Long),
-                new PlaceResponse(PlaceFixtures.createPlace(placeId: map.getOrDefault("placeId", 1L) as Long))
-        );
-    }
-
     static ShowDetailResponse createShowDetailResponse(Map map = [:]) {
-        return ShowDetailResponse.builder()
-                .show(createShowResponse(
-                        showId: map.getOrDefault("showId", 1L) as Long,
-                        placeId: map.getOrDefault("placeId", 1L)
-                ))
-                .roundsWithPerformers(new RoundsWithPerformersResponse(map.getOrDefault("roundPerformers", []) as List<RoundPerformer>,
-                        (map.getOrDefault("rounds", []) as List<Round>),
-                        new PerformersResponse((map.getOrDefault("performers", []) as List<Performer>)
-                )))
-                .showAreaGrades(new ShowAreaGradesResponse((map.getOrDefault("showAreaGradeIds", []) as List<Long>).stream()
+        return new ShowDetailResponse(
+                new ShowResponse(createShow(showId: map.getOrDefault("showId", 1L) as Long),
+                        new PlaceResponse(PlaceFixtures.createPlace(placeId: map.getOrDefault("placeId", 1L) as Long))),
+                (map.getOrDefault("roundIds", []) as List<Long>).stream()
+                        .map(roundId -> new RoundWithPerformersResponse(new RoundResponse(RoundFixtures.createRound(
+                                roundId: roundId)), (map.getOrDefault("performerIds", []) as List<Long>).stream()
+                                .map(performerId -> new PerformerResponse(PerformerFixtures.createPerformer(performerId: performerId)))
+                                .collect(Collectors.toList())
+                        ))
+                        .collect(Collectors.toList()),
+                (map.getOrDefault("showAreaGradeIds", []) as List<Long>).stream()
                         .map(showAreaGradeId -> ShowAreaGradeFixtures.createShowAreaGrade(showAreaGradeId: showAreaGradeId))
-                        .collect(Collectors.toList())))
-                .build();
+                        .collect(Collectors.toList())
+        );
     }
 }
