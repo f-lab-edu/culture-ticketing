@@ -1,16 +1,21 @@
 package com.culture.ticketing.show.application.dto;
 
 import com.culture.ticketing.show.domain.ShowSeat;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Schema(description = "공연 좌석 생성 요청 DTO")
 @Getter
 @NoArgsConstructor
 public class ShowSeatSaveRequest {
 
+    @Schema(description = "공연 좌석 열")
     private String showSeatRow;
+    @Schema(description = "공연 좌석 번호")
     private int showSeatNumber;
+    @Schema(description = "공연 구역 아이디")
     private Long showAreaId;
 
     @Builder
