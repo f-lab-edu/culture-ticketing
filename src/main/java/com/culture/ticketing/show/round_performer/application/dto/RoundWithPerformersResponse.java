@@ -1,6 +1,5 @@
 package com.culture.ticketing.show.round_performer.application.dto;
 
-import com.culture.ticketing.show.round_performer.domain.Round;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
@@ -20,7 +19,7 @@ public class RoundWithPerformersResponse {
     @Schema(description = "출연자 목록 정보")
     private final List<PerformerResponse> performers;
 
-    public RoundWithPerformersResponse(Round round, List<PerformerResponse> performers) {
+    public RoundWithPerformersResponse(RoundResponse round, List<PerformerResponse> performers) {
         this.roundId = round.getRoundId();
         this.roundStartDateTime = round.getRoundStartDateTime();
         this.roundEndDateTime = round.getRoundEndDateTime();

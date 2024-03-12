@@ -1,6 +1,6 @@
 package com.culture.ticketing.show.application;
 
-import com.culture.ticketing.show.application.dto.PlacesResponse;
+import com.culture.ticketing.show.application.dto.PlaceResponse;
 import com.culture.ticketing.show.exception.PlaceNotFoundException;
 import com.culture.ticketing.show.application.dto.ShowResponse;
 import com.culture.ticketing.show.application.dto.ShowSaveRequest;
@@ -14,7 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,11 +55,15 @@ public class ShowService {
     }
 
     @Transactional(readOnly = true)
-    public Show findShowById(Long showId) {
+    public ShowResponse findShowById(Long showId) {
 
-        return showRepository.findById(showId).orElseThrow(() -> {
+        Show show = showRepository.findById(showId).orElseThrow(() -> {
             throw new ShowNotFoundException(showId);
         });
+
+        PlaceResponse place = placeService.findPlaceById(show.getPlaceId());
+
+        return new ShowResponse(show, place);
     }
 
     @Transactional(readOnly = true)
@@ -68,15 +74,30 @@ public class ShowService {
     @Transactional(readOnly = true)
     public List<ShowResponse> findShows(Long offset, int size, Category category) {
 
-        List<Show> shows = showRepository.findByShowIdGreaterThanLimitAndCategory(offset, size, category);
+        return getShowResponses(showRepository.findByShowIdGreaterThanLimitAndCategory(offset, size, category));
+    }
 
-        List<Long> placeIds = shows.stream()
-                .map(Show::getPlaceId)
-                .collect(Collectors.toList());
-        PlacesResponse places = placeService.findPlacesByIds(placeIds);
+    private List<ShowResponse> getShowResponses(List<Show> shows) {
+
+        List<Long> placeIds = getPlaceIds(shows);
+        List<PlaceResponse> places = placeService.findPlacesByIds(placeIds);
+        Map<Long, PlaceResponse> placeMapById = getPlaceResponseMapById(places);
 
         return shows.stream()
-                .map(show -> ShowResponse.from(show, places.getByPlaceId(show.getPlaceId())))
+                .map(show -> new ShowResponse(show, placeMapById.get(show.getPlaceId())))
+                .collect(Collectors.toList());
+    }
+
+    private Map<Long, PlaceResponse> getPlaceResponseMapById(List<PlaceResponse> places) {
+
+        return places.stream()
+                .collect(Collectors.toMap(PlaceResponse::getPlaceId, Function.identity()));
+    }
+
+    private List<Long> getPlaceIds(List<Show> shows) {
+
+        return shows.stream()
+                .map(Show::getPlaceId)
                 .collect(Collectors.toList());
     }
 }

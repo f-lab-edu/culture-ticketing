@@ -43,7 +43,7 @@ public class RoundController {
     @GetMapping
     public List<RoundResponse> getRoundsByShowId(@ApiParam(value = "공연 아이디") @RequestParam("showId") Long showId) {
 
-        return roundService.findRoundResponsesByShowId(showId);
+        return roundService.findByShowId(showId);
     }
 
     @ApiOperation(value = "공연 아이디와 날짜로 회차 목록 조회 API")

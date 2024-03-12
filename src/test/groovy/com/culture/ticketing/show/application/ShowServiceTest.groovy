@@ -1,7 +1,7 @@
 package com.culture.ticketing.show.application
 
 import com.culture.ticketing.show.PlaceFixtures
-import com.culture.ticketing.show.application.dto.PlacesResponse
+import com.culture.ticketing.show.application.dto.PlaceResponse
 import com.culture.ticketing.show.infra.ShowRepository
 import com.culture.ticketing.show.exception.PlaceNotFoundException
 import com.culture.ticketing.show.ShowFixtures
@@ -160,10 +160,10 @@ class ShowServiceTest extends Specification {
                 ShowFixtures.createShow(showId: 3L, placeId: 2L),
                 ShowFixtures.createShow(showId: 4L, placeId: 2L)
         ]
-        placeService.findPlacesByIds([1L, 2L, 2L]) >> new PlacesResponse([
-                PlaceFixtures.createPlace(placeId: 1L),
-                PlaceFixtures.createPlace(placeId: 2L),
-        ])
+        placeService.findPlacesByIds([1L, 2L, 2L]) >> [
+                new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L)),
+                new PlaceResponse(PlaceFixtures.createPlace(placeId: 2L)),
+        ]
         when:
         List<ShowResponse> response = showService.findShows(1L, 3, null);
 
@@ -178,9 +178,10 @@ class ShowServiceTest extends Specification {
                 ShowFixtures.createShow(showId: 3L, category: Category.CONCERT, placeId: 1L),
                 ShowFixtures.createShow(showId: 5L, category: Category.CONCERT, placeId: 2L)
         ]
+
         placeService.findPlacesByIds([1L, 2L]) >> [
-                PlaceFixtures.createPlace(placeId: 1L),
-                PlaceFixtures.createPlace(placeId: 2L)
+                new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L)),
+                new PlaceResponse(PlaceFixtures.createPlace(placeId: 2L))
         ]
 
         when:
@@ -191,6 +192,7 @@ class ShowServiceTest extends Specification {
     }
 
     def "공연 아이디로 공연 조회 시 없는 경우 예외 발생"() {
+
         given:
         Long showId = 1L;
         showRepository.findById(showId) >> Optional.empty()
@@ -201,5 +203,20 @@ class ShowServiceTest extends Specification {
         then:
         def e = thrown(ShowNotFoundException.class);
         e.message == String.format("존재하지 않는 공연입니다. (showId = %d)", showId)
+    }
+
+    def "공연 아이디로 공연 조회 성공"() {
+
+        given:
+        Long showId = 1L;
+        showRepository.findById(showId) >> Optional.of(ShowFixtures.createShow(showId: 1L, placeId: 1L));
+        placeService.findPlaceById(1L) >> new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L));
+
+        when:
+        ShowResponse response = showService.findShowById(showId);
+
+        then:
+        response.showId == 1L
+        response.place.placeId == 1L
     }
 }

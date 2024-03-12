@@ -1,15 +1,13 @@
 package com.culture.ticketing.booking.application;
 
-import com.culture.ticketing.booking.application.dto.BookingShowSeatsResponse;
-import com.culture.ticketing.booking.application.dto.RoundsShowSeatCountsResponse;
+import com.culture.ticketing.booking.application.dto.BookingShowSeatResponse;
 import com.culture.ticketing.booking.domain.BookingShowSeat;
 import com.culture.ticketing.booking.infra.BookingShowSeatRepository;
 import com.culture.ticketing.show.application.ShowSeatService;
-import com.culture.ticketing.show.application.dto.ShowSeatCountsResponse;
-import com.culture.ticketing.show.domain.ShowSeat;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -36,22 +34,21 @@ public class BookingShowSeatService {
     }
 
     @Transactional(readOnly = true)
-    public BookingShowSeatsResponse findByRoundIdAndShowSeatIds(Long roundId, List<Long> showSeatIds) {
+    public List<BookingShowSeatResponse> findSuccessBookingShowSeatsByRoundIdAndShowSeatIds(Long roundId, Collection<Long> showSeatIds) {
 
-        return new BookingShowSeatsResponse(bookingShowSeatRepository.findSuccessBookingShowSeatsByRoundIdAndShowSeatIds(roundId, showSeatIds));
+        return getBookingShowSeatResponses(bookingShowSeatRepository.findSuccessBookingShowSeatsByRoundIdAndShowSeatIds(roundId, showSeatIds));
     }
 
     @Transactional(readOnly = true)
-    public RoundsShowSeatCountsResponse findRoundsShowSeatCounts(Long showId, List<Long> roundIds) {
+    public List<BookingShowSeatResponse> findSuccessBookingShowSeatsByRoundIdIn(Collection<Long> roundIds) {
 
-        ShowSeatCountsResponse showSeatCounts = showSeatService.findShowSeatCountsByShowId(showId);
+        return getBookingShowSeatResponses(bookingShowSeatRepository.findSuccessBookingShowSeatsByRoundIdIn(roundIds));
+    }
 
-        List<BookingShowSeat> bookingShowSeats = bookingShowSeatRepository.findSuccessBookingShowSeatsByRoundIdIn(roundIds);
-        List<Long> showSeatIds = bookingShowSeats.stream()
-                .map(BookingShowSeat::getShowSeatId)
+    private List<BookingShowSeatResponse> getBookingShowSeatResponses(List<BookingShowSeat> bookingShowSeats) {
+
+        return bookingShowSeats.stream()
+                .map(BookingShowSeatResponse::new)
                 .collect(Collectors.toList());
-        List<ShowSeat> showSeatsInBooking = showSeatService.findByIds(showSeatIds);
-
-        return new RoundsShowSeatCountsResponse(roundIds, showSeatCounts, bookingShowSeats, showSeatsInBooking);
     }
 }

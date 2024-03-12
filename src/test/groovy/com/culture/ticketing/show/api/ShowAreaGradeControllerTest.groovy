@@ -2,8 +2,9 @@ package com.culture.ticketing.show.api
 
 import com.culture.ticketing.show.ShowAreaGradeFixtures
 import com.culture.ticketing.show.application.ShowAreaGradeService
+import com.culture.ticketing.show.application.dto.ShowAreaGradeResponse
 import com.culture.ticketing.show.application.dto.ShowAreaGradeSaveRequest
-import com.culture.ticketing.show.application.dto.ShowAreaGradesResponse
+
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.hamcrest.Matchers
 import org.spockframework.spring.SpringBean
@@ -52,21 +53,21 @@ class ShowAreaGradeControllerTest extends Specification {
     def "공연 아이디로 공연 구역 등급 목록 조회"() {
 
         given:
-        showAreaGradeService.findShowAreaGradesByShowId(1L) >> new ShowAreaGradesResponse([
-                ShowAreaGradeFixtures.createShowAreaGrade(showAreaGradeId: 1L),
-                ShowAreaGradeFixtures.createShowAreaGrade(showAreaGradeId:  2L),
-                ShowAreaGradeFixtures.createShowAreaGrade(showAreaGradeId:  3L),
-        ])
+        showAreaGradeService.findShowAreaGradesByShowId(1L) >> [
+                new ShowAreaGradeResponse(ShowAreaGradeFixtures.createShowAreaGrade(showAreaGradeId: 1L)),
+                new ShowAreaGradeResponse(ShowAreaGradeFixtures.createShowAreaGrade(showAreaGradeId: 2L)),
+                new ShowAreaGradeResponse(ShowAreaGradeFixtures.createShowAreaGrade(showAreaGradeId: 3L)),
+        ]
 
         expect:
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/show-area-grades")
                 .param("showId", "1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("\$").exists())
-                .andExpect(jsonPath("\$.showAreaGrades", Matchers.hasSize(3)))
-                .andExpect(jsonPath("\$.showAreaGrades[0].showAreaGradeId").value(1L))
-                .andExpect(jsonPath("\$.showAreaGrades[1].showAreaGradeId").value(2L))
-                .andExpect(jsonPath("\$.showAreaGrades[2].showAreaGradeId").value(3L))
+                .andExpect(jsonPath("\$", Matchers.hasSize(3)))
+                .andExpect(jsonPath("\$[0].showAreaGradeId").value(1L))
+                .andExpect(jsonPath("\$[1].showAreaGradeId").value(2L))
+                .andExpect(jsonPath("\$[2].showAreaGradeId").value(3L))
                 .andDo(MockMvcResultHandlers.print())
     }
 }

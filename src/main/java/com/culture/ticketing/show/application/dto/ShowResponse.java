@@ -2,7 +2,6 @@ package com.culture.ticketing.show.application.dto;
 
 import com.culture.ticketing.show.domain.Show;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -34,35 +33,23 @@ public class ShowResponse {
     @Schema(description = "장소 정보")
     private final PlaceResponse place;
 
-    @Builder
-    public ShowResponse(Long showId, String showName, String posterImgUrl, String categoryName, LocalDate showStartDate, LocalDate showEndDate,
-                        String ageRestrictionName, int runningTime, String notice, String description, PlaceResponse place) {
-        this.showId = showId;
-        this.showName = showName;
-        this.posterImgUrl = posterImgUrl;
-        this.categoryName = categoryName;
-        this.showStartDate = showStartDate;
-        this.showEndDate = showEndDate;
-        this.ageRestrictionName = ageRestrictionName;
-        this.runningTime = runningTime;
-        this.notice = notice;
-        this.description = description;
+    public ShowResponse(Show show, PlaceResponse place) {
+
+        this.showId = show.getShowId();
+        this.showName = show.getShowName();
+        this.posterImgUrl = show.getPosterImgUrl();
+        this.categoryName = show.getCategory().getCategoryName();
+        this.showStartDate = show.getShowStartDate();
+        this.showEndDate = show.getShowEndDate();
+        this.ageRestrictionName = show.getAgeRestriction().getAgeRestrictionName();
+        this.runningTime = show.getRunningTime();
+        this.notice = show.getNotice();
+        this.description = show.getDescription();
         this.place = place;
     }
 
-    public static ShowResponse from(Show show, PlaceResponse place) {
-        return ShowResponse.builder()
-                .showId(show.getShowId())
-                .showName(show.getShowName())
-                .posterImgUrl(show.getPosterImgUrl())
-                .categoryName(show.getCategory().getCategoryName())
-                .showStartDate(show.getShowStartDate())
-                .showEndDate(show.getShowEndDate())
-                .ageRestrictionName(show.getAgeRestriction().getAgeRestrictionName())
-                .runningTime(show.getRunningTime())
-                .notice(show.getNotice())
-                .description(show.getDescription())
-                .place(place)
-                .build();
+    public Long getPlaceId() {
+
+        return place.getPlaceId();
     }
 }

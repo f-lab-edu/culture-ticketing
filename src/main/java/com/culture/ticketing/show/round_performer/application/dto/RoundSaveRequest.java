@@ -1,7 +1,7 @@
 package com.culture.ticketing.show.round_performer.application.dto;
 
+import com.culture.ticketing.show.application.dto.ShowResponse;
 import com.culture.ticketing.show.round_performer.domain.Round;
-import com.culture.ticketing.show.domain.Show;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,7 +25,7 @@ public class RoundSaveRequest {
         this.roundStartDateTime = roundStartDateTime;
     }
 
-    public Round toEntity(Show show) {
+    public Round toEntity(ShowResponse show) {
         return Round.builder()
                 .showId(show.getShowId())
                 .roundStartDateTime(roundStartDateTime)

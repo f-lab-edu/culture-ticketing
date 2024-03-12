@@ -3,9 +3,9 @@ package com.culture.ticketing.show.application
 import com.culture.ticketing.show.ShowAreaFixtures
 import com.culture.ticketing.show.ShowAreaGradeFixtures
 import com.culture.ticketing.show.ShowSeatFixtures
-import com.culture.ticketing.show.application.dto.ShowAreaGradesResponse
-import com.culture.ticketing.show.application.dto.ShowAreasResponse
-import com.culture.ticketing.show.application.dto.ShowSeatCountsResponse
+import com.culture.ticketing.show.application.dto.ShowAreaGradeResponse
+import com.culture.ticketing.show.application.dto.ShowAreaResponse
+import com.culture.ticketing.show.application.dto.ShowSeatResponse
 import com.culture.ticketing.show.application.dto.ShowSeatSaveRequest
 import com.culture.ticketing.show.exception.ShowAreaNotFoundException
 import com.culture.ticketing.show.exception.DuplicatedShowSeatException
@@ -17,8 +17,7 @@ class ShowSeatServiceTest extends Specification {
 
     private ShowSeatRepository showSeatRepository = Mock();
     private ShowAreaService showAreaService = Mock();
-    private ShowAreaGradeService showAreaGradeService = Mock();
-    private ShowSeatService showSeatService = new ShowSeatService(showSeatRepository, showAreaService, showAreaGradeService);
+    private ShowSeatService showSeatService = new ShowSeatService(showSeatRepository, showAreaService);
 
     def "공연 좌석 생성 성공"() {
         given:
@@ -125,7 +124,7 @@ class ShowSeatServiceTest extends Specification {
         ]
 
         when:
-        List<ShowSeat> response = showSeatService.findShowSeatsByShowAreaId(1L);
+        List<ShowSeatResponse> response = showSeatService.findShowSeatsByShowAreaId(1L);
 
         then:
         response.size() == 3
@@ -135,7 +134,7 @@ class ShowSeatServiceTest extends Specification {
     def "공연 좌석 아이디 목록으로 공연 좌석 목록 조회"() {
 
         given:
-        List<Long> showSeatIds = [1L, 2L, 3L, 4L, 5L]
+        List<Long> showSeatIds = [1L, 2L, 3L]
         showSeatRepository.findAllById(showSeatIds) >> [
                 ShowSeatFixtures.creatShowSeat(showSeatId: 1L),
                 ShowSeatFixtures.creatShowSeat(showSeatId: 2L),
@@ -143,7 +142,7 @@ class ShowSeatServiceTest extends Specification {
         ]
 
         when:
-        List<ShowSeat> response = showSeatService.findByIds(showSeatIds);
+        List<ShowSeatResponse> response = showSeatService.findByIds(showSeatIds);
 
         then:
         response.size() == 3
@@ -153,21 +152,24 @@ class ShowSeatServiceTest extends Specification {
     def "공연 좌석 아이디 목록으로 총 가격 조회"() {
 
         given:
-        Set<Long> showSeatIds = [1L, 2L, 3L, 4L, 5L]
+        Set<Long> showSeatIds = [1L, 2L, 3L]
+
         showSeatRepository.findAllById(showSeatIds) >> [
                 ShowSeatFixtures.creatShowSeat(showSeatId: 1L, showAreaId: 1L),
                 ShowSeatFixtures.creatShowSeat(showSeatId: 2L, showAreaId: 2L),
                 ShowSeatFixtures.creatShowSeat(showSeatId: 3L, showAreaId: 3L)
         ]
-        ShowAreaGradesResponse showAreaGrades = new ShowAreaGradesResponse([
-                ShowAreaGradeFixtures.createShowAreaGrade(showAreaGradeId: 1L, price: 100000),
-                ShowAreaGradeFixtures.createShowAreaGrade(showAreaGradeId: 2L, price: 50000),
-        ])
-        showAreaService.findShowAreasByShowAreaIds([1L, 2L, 3L]) >> new ShowAreasResponse([
-                ShowAreaFixtures.createShowArea(showAreaId: 1L, showAreaGradeId: 1L),
-                ShowAreaFixtures.createShowArea(showAreaId: 2L, showAreaGradeId: 1L),
-                ShowAreaFixtures.createShowArea(showAreaId: 3L, showAreaGradeId: 2L),
-        ], showAreaGrades)
+
+        List<ShowAreaGradeResponse> showAreaGrades = [
+                new ShowAreaGradeResponse(ShowAreaGradeFixtures.createShowAreaGrade(showAreaGradeId: 1L, price: 100000)),
+                new ShowAreaGradeResponse(ShowAreaGradeFixtures.createShowAreaGrade(showAreaGradeId: 2L, price: 50000)),
+        ]
+
+        showAreaService.findShowAreasByShowAreaIds([1L, 2L, 3L]) >> [
+                new ShowAreaResponse(ShowAreaFixtures.createShowArea(showAreaId: 1L, showAreaGradeId: 1L), showAreaGrades.get(0)),
+                new ShowAreaResponse(ShowAreaFixtures.createShowArea(showAreaId: 2L, showAreaGradeId: 1L), showAreaGrades.get(0)),
+                new ShowAreaResponse(ShowAreaFixtures.createShowArea(showAreaId: 3L, showAreaGradeId: 2L), showAreaGrades.get(1)),
+        ]
 
         when:
         int response = showSeatService.getTotalPriceByShowSeatIds(showSeatIds);
@@ -176,33 +178,21 @@ class ShowSeatServiceTest extends Specification {
         response == 250000
     }
 
-    def "공연 아이디로 공연 좌석 수 조회"() {
+    def "공연 구역 아이디 목록으로 공연 좌석 목록 조회"() {
 
         given:
-        Long showId = 1L
-        ShowAreaGradesResponse showAreaGrades = new ShowAreaGradesResponse([
-                ShowAreaGradeFixtures.createShowAreaGrade(showAreaGradeId: 1L, price: 100000),
-                ShowAreaGradeFixtures.createShowAreaGrade(showAreaGradeId: 2L, price: 50000),
-        ])
-        showAreaGradeService.findShowAreaGradesByShowId(showId) >> showAreaGrades
-        showAreaService.findShowAreasByShowId(showId) >> new ShowAreasResponse([
-                ShowAreaFixtures.createShowArea(showAreaId: 1L, showAreaGradeId: 1L),
-                ShowAreaFixtures.createShowArea(showAreaId: 2L, showAreaGradeId: 1L),
-                ShowAreaFixtures.createShowArea(showAreaId: 3L, showAreaGradeId: 2L),
-        ], showAreaGrades)
-        showSeatRepository.findByShowAreaIdIn([1L, 2L, 3L]) >> [
+        List<Long> showAreaIds = [1L, 2L, 3L];
+        showSeatRepository.findByShowAreaIdIn(showAreaIds) >> [
                 ShowSeatFixtures.creatShowSeat(showSeatId: 1L, showAreaId: 1L),
                 ShowSeatFixtures.creatShowSeat(showSeatId: 2L, showAreaId: 2L),
                 ShowSeatFixtures.creatShowSeat(showSeatId: 3L, showAreaId: 3L)
         ]
 
         when:
-        ShowSeatCountsResponse response = showSeatService.findShowSeatCountsByShowId(showId);
+        List<ShowSeatResponse> response = showSeatService.findByShowAreaIds(showAreaIds);
 
         then:
-        response.getShowSeatCounts().size() == 2
-        response.getShowSeatCounts().showAreaGradeId == [1L, 2L]
-        response.getShowSeatCounts().price == [100000, 50000]
-        response.getShowSeatCounts().availableSeatCount == [2, 1]
+        response.size() == 3
+        response.showSeatId == [1L, 2L, 3L]
     }
 }

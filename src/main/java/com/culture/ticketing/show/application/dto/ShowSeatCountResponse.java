@@ -32,16 +32,13 @@ public class ShowSeatCountResponse {
         this.availableSeatCount = availableSeatCount;
     }
 
-    public void minusAvailableSeatCount(Long count) {
-        this.availableSeatCount -= count;
-    }
+    public ShowSeatCountResponse getSubtractedShowSeatCountResponse(long unavailableSeatCount) {
 
-    public ShowSeatCountResponse copy() {
         return ShowSeatCountResponse.builder()
                 .showAreaGradeId(showAreaGradeId)
                 .showAreaGradeName(showAreaGradeName)
                 .price(price)
-                .availableSeatCount(availableSeatCount)
+                .availableSeatCount(availableSeatCount - unavailableSeatCount)
                 .build();
     }
 }

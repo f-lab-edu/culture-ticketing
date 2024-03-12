@@ -1,10 +1,7 @@
 package com.culture.ticketing.show.application.dto;
 
-import com.culture.ticketing.show.domain.Show;
 import com.culture.ticketing.show.round_performer.application.dto.RoundWithPerformersResponse;
-import com.culture.ticketing.show.round_performer.application.dto.RoundsWithPerformersResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
@@ -20,18 +17,10 @@ public class ShowDetailResponse {
     @Schema(description = "공연 구역 등급 목록 정보")
     private final List<ShowAreaGradeResponse> showAreaGrades;
 
-    @Builder
-    public ShowDetailResponse(ShowResponse show, RoundsWithPerformersResponse roundsWithPerformers, ShowAreaGradesResponse showAreaGrades) {
-        this.show = show;
-        this.roundsWithPerformers = roundsWithPerformers.getRoundWithPerformers();
-        this.showAreaGrades = showAreaGrades.getShowAreaGrades();
-    }
+    public ShowDetailResponse(ShowResponse show, List<RoundWithPerformersResponse> roundsWithPerformers, List<ShowAreaGradeResponse> showAreaGrades) {
 
-    public static ShowDetailResponse from(Show show, PlaceResponse place, RoundsWithPerformersResponse roundsWithPerformers, ShowAreaGradesResponse showAreaGrades) {
-        return ShowDetailResponse.builder()
-                .show(ShowResponse.from(show, place))
-                .roundsWithPerformers(roundsWithPerformers)
-                .showAreaGrades(showAreaGrades)
-                .build();
+        this.show = show;
+        this.roundsWithPerformers = roundsWithPerformers;
+        this.showAreaGrades = showAreaGrades;
     }
 }

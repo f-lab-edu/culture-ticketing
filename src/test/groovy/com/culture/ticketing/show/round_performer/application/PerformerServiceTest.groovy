@@ -2,7 +2,7 @@ package com.culture.ticketing.show.round_performer.application
 
 import com.culture.ticketing.show.application.ShowService
 import com.culture.ticketing.show.round_performer.PerformerFixtures
-import com.culture.ticketing.show.round_performer.application.dto.PerformersResponse
+import com.culture.ticketing.show.round_performer.application.dto.PerformerResponse
 import com.culture.ticketing.show.round_performer.domain.Performer
 import com.culture.ticketing.show.round_performer.application.dto.PerformerSaveRequest
 import com.culture.ticketing.show.exception.ShowNotFoundException
@@ -100,10 +100,10 @@ class PerformerServiceTest extends Specification {
         ]
 
         when:
-        PerformersResponse response = performerService.findPerformersByShowId(1L);
+        List<PerformerResponse> response = performerService.findPerformersByShowId(1L);
 
         then:
-        response.getPerformers().performerId == [1L, 2L, 4L]
+        response.performerId == [1L, 2L, 4L]
     }
 
     def "출연자 목록 중 해당 공연 출연자가 아닌 경우 예외 발생"() {

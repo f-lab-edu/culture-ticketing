@@ -2,8 +2,9 @@ package com.culture.ticketing.show.round_performer.api
 
 import com.culture.ticketing.show.round_performer.PerformerFixtures
 import com.culture.ticketing.show.round_performer.application.PerformerService
+import com.culture.ticketing.show.round_performer.application.dto.PerformerResponse
 import com.culture.ticketing.show.round_performer.application.dto.PerformerSaveRequest
-import com.culture.ticketing.show.round_performer.application.dto.PerformersResponse
+
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.hamcrest.Matchers
 import org.spockframework.spring.SpringBean
@@ -51,21 +52,21 @@ class PerformerControllerTest extends Specification {
     def "공연별 출연자 목록 조회 성공"() {
 
         given:
-        performerService.findPerformersByShowId(1L) >> new PerformersResponse([
-                PerformerFixtures.createPerformer(performerId: 1L, showId: 1L),
-                PerformerFixtures.createPerformer(performerId: 2L, showId: 1L),
-                PerformerFixtures.createPerformer(performerId: 4L, showId: 1L)
-        ])
+        performerService.findPerformersByShowId(1L) >> [
+                new PerformerResponse(PerformerFixtures.createPerformer(performerId: 1L, showId: 1L)),
+                new PerformerResponse(PerformerFixtures.createPerformer(performerId: 2L, showId: 1L)),
+                new PerformerResponse(PerformerFixtures.createPerformer(performerId: 4L, showId: 1L))
+        ]
 
         expect:
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/performers")
                 .param("showId", "1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("\$.performers").isArray())
-                .andExpect(jsonPath("\$.performers", Matchers.hasSize(3)))
-                .andExpect(jsonPath("\$.performers[0].performerId").value(1))
-                .andExpect(jsonPath("\$.performers[1].performerId").value(2))
-                .andExpect(jsonPath("\$.performers[2].performerId").value(4))
+                .andExpect(jsonPath("\$").isArray())
+                .andExpect(jsonPath("\$", Matchers.hasSize(3)))
+                .andExpect(jsonPath("\$[0].performerId").value(1))
+                .andExpect(jsonPath("\$[1].performerId").value(2))
+                .andExpect(jsonPath("\$[2].performerId").value(4))
                 .andDo(MockMvcResultHandlers.print())
     }
 }

@@ -3,9 +3,10 @@ package com.culture.ticketing.show.api
 import com.culture.ticketing.show.ShowAreaFixtures
 import com.culture.ticketing.show.ShowAreaGradeFixtures
 import com.culture.ticketing.show.application.ShowAreaService
-import com.culture.ticketing.show.application.dto.ShowAreaGradesResponse
+import com.culture.ticketing.show.application.dto.ShowAreaGradeResponse
+import com.culture.ticketing.show.application.dto.ShowAreaResponse
 import com.culture.ticketing.show.application.dto.ShowAreaSaveRequest
-import com.culture.ticketing.show.application.dto.ShowAreasResponse
+
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.hamcrest.Matchers
 import org.spockframework.spring.SpringBean
@@ -54,29 +55,29 @@ class ShowAreaControllerTest extends Specification {
     def "공연 아이디로 장소 구역 목록 조회"() {
 
         given:
-        ShowAreaGradesResponse showAreaGrades = new ShowAreaGradesResponse([
-                ShowAreaGradeFixtures.createShowAreaGrade(showAreaGradeId: 1L),
-                ShowAreaGradeFixtures.createShowAreaGrade(showAreaGradeId: 2L),
-        ])
+        List<ShowAreaGradeResponse> showAreaGrades = [
+                new ShowAreaGradeResponse(ShowAreaGradeFixtures.createShowAreaGrade(showAreaGradeId: 1L)),
+                new ShowAreaGradeResponse(ShowAreaGradeFixtures.createShowAreaGrade(showAreaGradeId: 2L)),
+        ]
 
-        showAreaService.findShowAreasByShowId(1L) >> new ShowAreasResponse([
-                ShowAreaFixtures.createShowArea(showAreaId: 1L, showAreaGradeId: 1L),
-                ShowAreaFixtures.createShowArea(showAreaId: 2L, showAreaGradeId: 1L),
-                ShowAreaFixtures.createShowArea(showAreaId: 3L, showAreaGradeId: 2L),
-        ], showAreaGrades)
+        showAreaService.findShowAreasByShowId(1L) >> [
+                new ShowAreaResponse(ShowAreaFixtures.createShowArea(showAreaId: 1L, showAreaGradeId: 1L), showAreaGrades.get(0)),
+                new ShowAreaResponse(ShowAreaFixtures.createShowArea(showAreaId: 2L, showAreaGradeId: 1L), showAreaGrades.get(0)),
+                new ShowAreaResponse(ShowAreaFixtures.createShowArea(showAreaId: 3L, showAreaGradeId: 2L), showAreaGrades.get(1)),
+        ]
 
         expect:
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/show-areas")
                 .param("showId", "1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("\$.showAreas").isArray())
-                .andExpect(jsonPath("\$.showAreas", Matchers.hasSize(3)))
-                .andExpect(jsonPath("\$.showAreas[0].showAreaId").value(1L))
-                .andExpect(jsonPath("\$.showAreas[0].showAreaGradeId").value(1L))
-                .andExpect(jsonPath("\$.showAreas[1].showAreaId").value(2L))
-                .andExpect(jsonPath("\$.showAreas[1].showAreaGradeId").value(1L))
-                .andExpect(jsonPath("\$.showAreas[2].showAreaId").value(3L))
-                .andExpect(jsonPath("\$.showAreas[2].showAreaGradeId").value(2L))
+                .andExpect(jsonPath("\$").isArray())
+                .andExpect(jsonPath("\$", Matchers.hasSize(3)))
+                .andExpect(jsonPath("\$[0].showAreaId").value(1L))
+                .andExpect(jsonPath("\$[0].showAreaGradeId").value(1L))
+                .andExpect(jsonPath("\$[1].showAreaId").value(2L))
+                .andExpect(jsonPath("\$[1].showAreaGradeId").value(1L))
+                .andExpect(jsonPath("\$[2].showAreaId").value(3L))
+                .andExpect(jsonPath("\$[2].showAreaGradeId").value(2L))
                 .andDo(MockMvcResultHandlers.print())
     }
 }

@@ -1,10 +1,10 @@
 package com.culture.ticketing.show.round_performer.application;
 
 import com.culture.ticketing.show.application.ShowService;
+import com.culture.ticketing.show.application.dto.ShowResponse;
 import com.culture.ticketing.show.round_performer.application.dto.RoundSaveRequest;
 import com.culture.ticketing.show.round_performer.application.dto.RoundResponse;
 import com.culture.ticketing.show.round_performer.domain.Round;
-import com.culture.ticketing.show.domain.Show;
 import com.culture.ticketing.show.round_performer.exception.DuplicatedRoundDateTimeException;
 import com.culture.ticketing.show.round_performer.exception.RoundNotFoundException;
 import com.culture.ticketing.show.round_performer.exception.OutOfRangeRoundDateTimeException;
@@ -47,7 +47,7 @@ public class RoundService {
 
         checkValidRoundSaveRequest(request);
 
-        Show show = showService.findShowById(request.getShowId());
+        ShowResponse show = showService.findShowById(request.getShowId());
         Round round = request.toEntity(show);
 
         checkOutOfRangeRoundDateTime(round, show);
@@ -71,7 +71,7 @@ public class RoundService {
         });
     }
 
-    private void checkOutOfRangeRoundDateTime(Round round, Show show) {
+    private void checkOutOfRangeRoundDateTime(Round round, ShowResponse show) {
         LocalDateTime showStartDateTime = LocalDateTime.of(show.getShowStartDate(), LocalTime.MIN);
         LocalDateTime showEndDateTime = LocalDateTime.of(show.getShowEndDate(), LocalTime.MAX);
         if (round.getRoundStartDateTime().isBefore(showStartDateTime)
@@ -81,24 +81,20 @@ public class RoundService {
     }
 
     @Transactional(readOnly = true)
-    public List<Round> findByShowId(Long showId) {
+    public List<RoundResponse> findByShowId(Long showId) {
 
-        return roundRepository.findByShowId(showId);
+        return getRoundResponses(roundRepository.findByShowId(showId));
     }
 
     @Transactional(readOnly = true)
-    public List<RoundResponse> findRoundResponsesByShowId(Long showId) {
+    public List<RoundResponse> findByShowIdAndRoundStartDate(Long showId, LocalDate roundStartDate) {
 
-        List<Round> rounds = roundRepository.findByShowId(showId);
+        return getRoundResponses(roundRepository.findByShowIdAndRoundStartDate(showId, roundStartDate));
+    }
 
+    private List<RoundResponse> getRoundResponses(List<Round> rounds) {
         return rounds.stream()
-                .map(RoundResponse::from)
+                .map(RoundResponse::new)
                 .collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
-    public List<Round> findRoundsByShowIdAndRoundStartDate(Long showId, LocalDate roundStartDate) {
-
-        return roundRepository.findByShowIdAndRoundStartDate(showId, roundStartDate);
     }
 }

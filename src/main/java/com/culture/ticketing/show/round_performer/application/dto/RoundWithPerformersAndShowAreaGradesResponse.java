@@ -1,7 +1,6 @@
 package com.culture.ticketing.show.round_performer.application.dto;
 
 import com.culture.ticketing.show.application.dto.ShowSeatCountResponse;
-import com.culture.ticketing.show.application.dto.ShowSeatCountsResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
@@ -23,11 +22,11 @@ public class RoundWithPerformersAndShowAreaGradesResponse {
     @Schema(description = "공연 구역 등급별 이용 가능 공연 좌석 갯수 목록")
     private final List<ShowSeatCountResponse> showSeatCounts;
 
-    public RoundWithPerformersAndShowAreaGradesResponse(RoundWithPerformersResponse roundWithPerformers, ShowSeatCountsResponse showSeatCounts) {
+    public RoundWithPerformersAndShowAreaGradesResponse(RoundWithPerformersResponse roundWithPerformers, List<ShowSeatCountResponse> showSeatCounts) {
         this.roundId = roundWithPerformers.getRoundId();
         this.roundStartDateTime = roundWithPerformers.getRoundStartDateTime();
         this.roundEndDateTime = roundWithPerformers.getRoundEndDateTime();
         this.performers = roundWithPerformers.getPerformers();
-        this.showSeatCounts = showSeatCounts.getShowSeatCounts();
+        this.showSeatCounts = showSeatCounts;
     }
 }

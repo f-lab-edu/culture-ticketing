@@ -2,8 +2,9 @@ package com.culture.ticketing.show.api
 
 import com.culture.ticketing.show.PlaceFixtures
 import com.culture.ticketing.show.application.PlaceService
+import com.culture.ticketing.show.application.dto.PlaceResponse
 import com.culture.ticketing.show.application.dto.PlaceSaveRequest
-import com.culture.ticketing.show.application.dto.PlacesResponse
+
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.hamcrest.Matchers
 import org.spockframework.spring.SpringBean
@@ -35,22 +36,22 @@ class PlaceControllerTest extends Specification {
 
         given:
         Long offset = 1L
-        placeService.findPlaces(offset, 3) >> new PlacesResponse([
-                PlaceFixtures.createPlace(placeId: 2L),
-                PlaceFixtures.createPlace(placeId: 3L),
-                PlaceFixtures.createPlace(placeId: 4L)
-        ])
+        placeService.findPlaces(offset, 3) >> [
+                new PlaceResponse(PlaceFixtures.createPlace(placeId: 2L)),
+                new PlaceResponse(PlaceFixtures.createPlace(placeId: 3L)),
+                new PlaceResponse(PlaceFixtures.createPlace(placeId: 4L))
+        ]
 
         expect:
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/places")
                 .param("offset", offset.toString())
                 .param("size", "3"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("\$.places").isArray())
-                .andExpect(jsonPath("\$.places", Matchers.hasSize(3)))
-                .andExpect(jsonPath("\$.places[0].placeId", Matchers.greaterThan(offset.toInteger())))
-                .andExpect(jsonPath("\$.places[1].placeId", Matchers.greaterThan(offset.toInteger())))
-                .andExpect(jsonPath("\$.places[2].placeId", Matchers.greaterThan(offset.toInteger())))
+                .andExpect(jsonPath("\$").isArray())
+                .andExpect(jsonPath("\$", Matchers.hasSize(3)))
+                .andExpect(jsonPath("\$[0].placeId", Matchers.greaterThan(offset.toInteger())))
+                .andExpect(jsonPath("\$[1].placeId", Matchers.greaterThan(offset.toInteger())))
+                .andExpect(jsonPath("\$[2].placeId", Matchers.greaterThan(offset.toInteger())))
                 .andDo(MockMvcResultHandlers.print())
 
     }

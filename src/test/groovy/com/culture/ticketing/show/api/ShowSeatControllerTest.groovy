@@ -56,9 +56,9 @@ class ShowSeatControllerTest extends Specification {
 
         given:
         showFacadeService.findShowSeatsByShowAreaIdAndRoundId(1L, 1L) >> [
-                new ShowSeatResponse(ShowSeatFixtures.creatShowSeat(showSeatId: 1L), true),
-                new ShowSeatResponse(ShowSeatFixtures.creatShowSeat(showSeatId: 2L), true),
-                new ShowSeatResponse(ShowSeatFixtures.creatShowSeat(showSeatId: 3L), false),
+                new ShowSeatResponse(ShowSeatFixtures.creatShowSeat(showSeatId: 1L)),
+                new ShowSeatResponse(ShowSeatFixtures.creatShowSeat(showSeatId: 2L)),
+                new ShowSeatResponse(ShowSeatFixtures.creatShowSeat(showSeatId: 3L)).getAvailabilityUpdatedShowSeatResponse(false),
         ]
 
         expect:

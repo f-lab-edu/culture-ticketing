@@ -1,9 +1,7 @@
 package com.culture.ticketing.show.application;
 
-import com.culture.ticketing.show.application.dto.ShowAreaGradesResponse;
 import com.culture.ticketing.show.application.dto.ShowAreaResponse;
-import com.culture.ticketing.show.application.dto.ShowAreasResponse;
-import com.culture.ticketing.show.application.dto.ShowSeatCountsResponse;
+import com.culture.ticketing.show.application.dto.ShowSeatResponse;
 import com.culture.ticketing.show.application.dto.ShowSeatSaveRequest;
 import com.culture.ticketing.show.domain.ShowSeat;
 import com.culture.ticketing.show.exception.ShowAreaNotFoundException;
@@ -13,9 +11,12 @@ import com.google.common.base.Preconditions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,12 +24,10 @@ public class ShowSeatService {
 
     private final ShowSeatRepository showSeatRepository;
     private final ShowAreaService showAreaService;
-    private final ShowAreaGradeService showAreaGradeService;
 
-    public ShowSeatService(ShowSeatRepository showSeatRepository, ShowAreaService showAreaService, ShowAreaGradeService showAreaGradeService) {
+    public ShowSeatService(ShowSeatRepository showSeatRepository, ShowAreaService showAreaService) {
         this.showSeatRepository = showSeatRepository;
         this.showAreaService = showAreaService;
-        this.showAreaGradeService = showAreaGradeService;
     }
 
     @Transactional
@@ -59,41 +58,58 @@ public class ShowSeatService {
     }
 
     @Transactional(readOnly = true)
-    public List<ShowSeat> findShowSeatsByShowAreaId(Long showAreaId) {
+    public List<ShowSeatResponse> findShowSeatsByShowAreaId(Long showAreaId) {
 
-        return showSeatRepository.findByShowAreaId(showAreaId);
+        return getShowSeatResponses(showSeatRepository.findByShowAreaId(showAreaId));
     }
 
     @Transactional(readOnly = true)
     public int getTotalPriceByShowSeatIds(Set<Long> showSeatIds) {
 
         List<ShowSeat> showSeats = showSeatRepository.findAllById(showSeatIds);
-        List<Long> showAreaIds = showSeats.stream()
-                .map(ShowSeat::getShowAreaId)
-                .collect(Collectors.toList());
 
-        ShowAreasResponse showAreas = showAreaService.findShowAreasByShowAreaIds(showAreaIds);
+        List<Long> showAreaIds = getShowAreaIds(showSeats);
 
-        return showSeatRepository.findAllById(showSeatIds).stream()
+        List<ShowAreaResponse> showAreas = showAreaService.findShowAreasByShowAreaIds(showAreaIds);
+
+        Map<Long, ShowAreaResponse> showAreaMapById = getShowAreaResponseMapById(showAreas);
+
+        return showSeats.stream()
                 .map(ShowSeat::getShowAreaId)
-                .map(showAreas::getByShowAreaId)
+                .map(showAreaMapById::get)
                 .mapToInt(ShowAreaResponse::getPrice)
                 .sum();
     }
 
-    @Transactional(readOnly = true)
-    public List<ShowSeat> findByIds(List<Long> showSeatIds) {
-
-        return showSeatRepository.findAllById(showSeatIds);
+    private List<Long> getShowAreaIds(List<ShowSeat> showSeats) {
+        return showSeats.stream()
+                .map(ShowSeat::getShowAreaId)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public ShowSeatCountsResponse findShowSeatCountsByShowId(Long showId) {
+    public List<ShowSeatResponse> findByShowAreaIds(Collection<Long> showAreaIds) {
 
-        ShowAreaGradesResponse showAreaGrades = showAreaGradeService.findShowAreaGradesByShowId(showId);
-        ShowAreasResponse showAreas = showAreaService.findShowAreasByShowId(showId);
-        List<ShowSeat> showSeats =  showSeatRepository.findByShowAreaIdIn(showAreas.getShowAreaIds());
-
-        return new ShowSeatCountsResponse(showSeats, showAreas, showAreaGrades);
+        return getShowSeatResponses(showSeatRepository.findByShowAreaIdIn(showAreaIds));
     }
+
+    @Transactional(readOnly = true)
+    public List<ShowSeatResponse> findByIds(Collection<Long> showSeatIds) {
+
+        return getShowSeatResponses(showSeatRepository.findAllById(showSeatIds));
+    }
+
+    private List<ShowSeatResponse> getShowSeatResponses(List<ShowSeat> showSeats) {
+
+        return showSeats.stream()
+                .map(ShowSeatResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    private Map<Long, ShowAreaResponse> getShowAreaResponseMapById(List<ShowAreaResponse> showAreas) {
+
+        return showAreas.stream()
+                .collect(Collectors.toMap(ShowAreaResponse::getShowAreaId, Function.identity()));
+    }
+
 }

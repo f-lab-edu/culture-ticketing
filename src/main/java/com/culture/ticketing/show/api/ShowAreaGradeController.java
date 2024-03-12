@@ -1,8 +1,8 @@
 package com.culture.ticketing.show.api;
 
 import com.culture.ticketing.show.application.ShowAreaGradeService;
+import com.culture.ticketing.show.application.dto.ShowAreaGradeResponse;
 import com.culture.ticketing.show.application.dto.ShowAreaGradeSaveRequest;
-import com.culture.ticketing.show.application.dto.ShowAreaGradesResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @Api(tags = {"공연 구역 등급 Controller"})
 @RestController
 @RequestMapping("/api/v1/show-area-grades")
@@ -20,7 +22,7 @@ public class ShowAreaGradeController {
 
     private final ShowAreaGradeService showAreaGradeService;
 
-    public  ShowAreaGradeController(ShowAreaGradeService showAreaGradeService) {
+    public ShowAreaGradeController(ShowAreaGradeService showAreaGradeService) {
         this.showAreaGradeService = showAreaGradeService;
     }
 
@@ -33,7 +35,7 @@ public class ShowAreaGradeController {
 
     @ApiOperation(value = "공연 구역 등급 목록 조회 API")
     @GetMapping
-    public ShowAreaGradesResponse getShowAreaGradesByShowId(@ApiParam(value = "공연 아이디") @RequestParam("showId") Long showId) {
+    public List<ShowAreaGradeResponse> getShowAreaGradesByShowId(@ApiParam(value = "공연 아이디") @RequestParam("showId") Long showId) {
 
         return showAreaGradeService.findShowAreaGradesByShowId(showId);
     }
