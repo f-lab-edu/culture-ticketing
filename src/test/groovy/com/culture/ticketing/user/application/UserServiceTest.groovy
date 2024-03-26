@@ -1,6 +1,7 @@
 package com.culture.ticketing.user.application
 
 import com.culture.ticketing.user.application.dto.UserSaveRequest
+import com.culture.ticketing.user.domain.Role
 import com.culture.ticketing.user.domain.User
 import com.culture.ticketing.user.exception.DuplicatedUserEmailException
 import com.culture.ticketing.user.infra.UserRepository
@@ -21,6 +22,7 @@ class UserServiceTest extends Specification {
                 .password("password")
                 .userName("테스터")
                 .phoneNumber("01000000000")
+                .role(Role.USER)
                 .build();
         userRepository.findByEmail("test@naver.com") >> Optional.empty()
 
@@ -47,6 +49,7 @@ class UserServiceTest extends Specification {
                 .password(password)
                 .userName(userName)
                 .phoneNumber(phoneNumber)
+                .role(Role.USER)
                 .build();
 
         when:
@@ -76,6 +79,7 @@ class UserServiceTest extends Specification {
                 .password("password")
                 .userName("테스터")
                 .phoneNumber("01000000000")
+                .role(Role.USER)
                 .build();
 
         userRepository.findByEmail("test@naver.com") >> Optional.of(request.toEntity(passwordEncoder))
