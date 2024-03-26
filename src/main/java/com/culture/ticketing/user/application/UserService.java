@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.Objects;
+
 @Service
 public class UserService {
 
@@ -64,5 +66,13 @@ public class UserService {
         user.checkPassword(request.getPassword(), passwordEncoder);
 
         return user.getUserId();
+    }
+
+    @Transactional(readOnly = true)
+    public User findByUserId(Long userId) {
+
+        return userRepository.findById(userId).orElseThrow(() -> {
+            throw new UserNotFoundException(userId);
+        });
     }
 }

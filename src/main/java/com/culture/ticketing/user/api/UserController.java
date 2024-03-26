@@ -2,15 +2,26 @@ package com.culture.ticketing.user.api;
 
 import com.culture.ticketing.user.application.UserService;
 import com.culture.ticketing.user.application.dto.UserLoginRequest;
+import com.culture.ticketing.user.application.dto.UserProfileResponse;
 import com.culture.ticketing.user.application.dto.UserSaveRequest;
+import com.culture.ticketing.user.domain.SecurityUser;
+import com.culture.ticketing.user.domain.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Api(tags = {"회원 API"})
@@ -19,9 +30,11 @@ import javax.servlet.http.HttpSession;
 public class UserController {
 
     private final UserService userService;
+    private final UserDetailsService userDetailsService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserDetailsService userDetailsService) {
         this.userService = userService;
+        this.userDetailsService = userDetailsService;
     }
 
     @ApiOperation(value = "회원 생성")
@@ -33,12 +46,14 @@ public class UserController {
 
     @ApiOperation(value = "회원 로그인")
     @PostMapping("/login")
-    public void login(@RequestBody UserLoginRequest request, HttpServletRequest httpRequest) {
+    public void login(@RequestBody UserLoginRequest request, final HttpSession session) {
 
         Long userId = userService.login(request);
 
-        HttpSession session = httpRequest.getSession();
-        session.setAttribute("userId", userId);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(String.valueOf(userId));
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
         session.setMaxInactiveInterval(3600);
     }
 
@@ -47,5 +62,15 @@ public class UserController {
     public void logout(HttpSession session) {
 
         session.invalidate();
+    }
+
+    @ApiOperation(value = "회원 정보 조회")
+    @GetMapping("/{userId}")
+    public UserProfileResponse getUser(@PathVariable Long userId, final HttpSession session) {
+
+        SecurityContext securityContext = (SecurityContext) session.getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
+        User user = ((SecurityUser) securityContext.getAuthentication().getPrincipal()).getUser();
+
+        return UserProfileResponse.from(user);
     }
 }
