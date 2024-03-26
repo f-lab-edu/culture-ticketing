@@ -1,5 +1,6 @@
 package com.culture.ticketing.show.api
 
+import com.culture.ticketing.common.config.SecurityConfig
 import com.culture.ticketing.show.PlaceFixtures
 import com.culture.ticketing.show.application.PlaceService
 import com.culture.ticketing.show.application.dto.PlaceResponse
@@ -9,10 +10,13 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.hamcrest.Matchers
 import org.spockframework.spring.SpringBean
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.data.redis.AutoConfigureDataRedis
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.context.annotation.Import
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext
 import org.springframework.http.MediaType
+import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
@@ -21,6 +25,8 @@ import spock.lang.Specification
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 
 @WebMvcTest(PlaceController.class)
+@AutoConfigureDataRedis
+@Import(SecurityConfig.class)
 @MockBean(JpaMetamodelMappingContext.class)
 class PlaceControllerTest extends Specification {
 
@@ -31,7 +37,7 @@ class PlaceControllerTest extends Specification {
     @SpringBean
     private PlaceService placeService = Mock()
 
-
+    @WithMockUser(roles = "ADMIN")
     def "장소 목록 조회"() {
 
         given:
@@ -56,6 +62,7 @@ class PlaceControllerTest extends Specification {
 
     }
 
+    @WithMockUser(roles = "ADMIN")
     def "장소 생성 성공"() {
 
         given:

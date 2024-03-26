@@ -1,12 +1,17 @@
 package com.culture.ticketing.user.api
 
+import com.culture.ticketing.common.config.SecurityConfig
+import com.culture.ticketing.user.UserFixtures
+import com.culture.ticketing.user.application.CustomUserDetailsService
 import com.culture.ticketing.user.application.UserService
 import com.culture.ticketing.user.application.dto.UserSaveRequest
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.spockframework.spring.SpringBean
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.data.redis.AutoConfigureDataRedis
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.context.annotation.Import
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
@@ -18,6 +23,8 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @WebMvcTest(UserController.class)
+@AutoConfigureDataRedis
+@Import(SecurityConfig.class)
 @MockBean(JpaMetamodelMappingContext.class)
 class UserControllerTest extends Specification {
 
