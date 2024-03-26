@@ -1,6 +1,7 @@
 package com.culture.ticketing.user.application.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,4 +14,10 @@ public class UserLoginRequest {
     private String email;
     @Schema(description = "비밀번호")
     private String password;
+
+    @Builder
+    public UserLoginRequest(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
 }
