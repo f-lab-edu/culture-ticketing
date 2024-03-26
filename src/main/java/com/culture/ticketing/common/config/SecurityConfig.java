@@ -3,6 +3,7 @@ package com.culture.ticketing.common.config;
 import com.culture.ticketing.user.domain.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,7 +28,19 @@ public class SecurityConfig {
                 .antMatchers("/swagger-ui.html").permitAll()
                 .antMatchers("/swagger-resources/**").permitAll()
                 .antMatchers("/v2/api-docs/**").permitAll()
-                .antMatchers("/api/bookings/**").hasRole(Role.USER.name())
+                .antMatchers("/api/v1/bookings/**").hasRole(Role.USER.name())
+                .antMatchers("/api/v1/places/**").hasRole(Role.ADMIN.name())
+                .antMatchers(HttpMethod.POST, "/api/v1/show-areas/**").hasRole(Role.ADMIN.name())
+                .antMatchers(HttpMethod.GET, "/api/v1/show-areas/**").hasAnyRole(Role.USER.name(), Role.ADMIN.name())
+                .antMatchers(HttpMethod.POST, "/api/v1/show-area-grades/**").hasRole(Role.ADMIN.name())
+                .antMatchers(HttpMethod.POST, "/api/v1/shows/**").hasRole(Role.ADMIN.name())
+                .antMatchers(HttpMethod.POST, "/api/v1/show-seats/**").hasRole(Role.ADMIN.name())
+                .antMatchers(HttpMethod.GET, "/api/v1/show-seats/**").hasRole(Role.USER.name())
+                .antMatchers(HttpMethod.POST, "/api/v1/performers/**").hasRole(Role.ADMIN.name())
+                .antMatchers(HttpMethod.POST, "/api/v1/rounds/**").hasRole(Role.ADMIN.name())
+                .antMatchers(HttpMethod.GET, "/api/v1/rounds/detail").hasRole(Role.USER.name())
+                .antMatchers("/api/v1/round-performers/**").hasRole(Role.ADMIN.name())
+                .antMatchers("/api/v1/users/profile").hasRole(Role.USER.name())
                 .antMatchers("/api/**").permitAll()
                 .anyRequest().authenticated();
         return http.build();

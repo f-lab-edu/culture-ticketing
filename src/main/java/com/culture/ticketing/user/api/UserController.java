@@ -65,8 +65,8 @@ public class UserController {
     }
 
     @ApiOperation(value = "회원 정보 조회")
-    @GetMapping("/{userId}")
-    public UserProfileResponse getUser(@PathVariable Long userId, final HttpSession session) {
+    @GetMapping("/profile")
+    public UserProfileResponse getUser(final HttpSession session) {
 
         SecurityContext securityContext = (SecurityContext) session.getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
         User user = ((SecurityUser) securityContext.getAuthentication().getPrincipal()).getUser();
