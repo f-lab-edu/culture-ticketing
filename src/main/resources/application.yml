@@ -1,3 +1,8 @@
+server:
+  servlet:
+    session:
+      timeout: 54000
+
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -17,6 +22,20 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+
+  main:
+    allow-bean-definition-overriding: true
+
+  session:
+    store-type: redis
+    redis:
+      flush-mode: on_save
+      namespace: spring:session
+
+  redis:
+    host: localhost
+    port: 16379
+    password: 1234
 
 management:
   endpoints:
