@@ -36,6 +36,7 @@ public class UserService {
 
     private void checkValidUserSaveRequest(UserSaveRequest request) {
 
+        Objects.requireNonNull(request.getRole(), "권한을 입력해주세요.");
         Preconditions.checkArgument(StringUtils.hasText(request.getEmail()), "이메일을 입력해주세요.");
         Preconditions.checkArgument(StringUtils.hasText(request.getPassword()), "비밀번호를 입력해주세요.");
         Preconditions.checkArgument(StringUtils.hasText(request.getUserName()), "이름을 입력해주세요.");

@@ -1,5 +1,6 @@
 package com.culture.ticketing.common.config;
 
+import com.culture.ticketing.user.domain.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,6 +27,7 @@ public class SecurityConfig {
                 .antMatchers("/swagger-ui.html").permitAll()
                 .antMatchers("/swagger-resources/**").permitAll()
                 .antMatchers("/v2/api-docs/**").permitAll()
+                .antMatchers("/api/bookings/**").hasRole(Role.USER.name())
                 .antMatchers("/api/**").permitAll()
                 .anyRequest().authenticated();
         return http.build();
