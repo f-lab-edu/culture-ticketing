@@ -1,6 +1,7 @@
 package com.culture.ticketing.user.domain;
 
 import com.culture.ticketing.common.entity.BaseEntity;
+import com.culture.ticketing.user.exception.PasswordNotMatchException;
 import com.google.common.base.Preconditions;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -57,5 +58,12 @@ public class User extends BaseEntity {
     public void changePassword(String password, PasswordEncoder passwordEncoder) {
         Preconditions.checkArgument(StringUtils.hasText(password), "비밀번호를 입력해주세요.");
         this.password = passwordEncoder.encode(password);
+    }
+
+    public void checkPassword(String password, PasswordEncoder passwordEncoder) {
+
+        if (!passwordEncoder.matches(password, this.password)) {
+            throw new PasswordNotMatchException();
+        }
     }
 }

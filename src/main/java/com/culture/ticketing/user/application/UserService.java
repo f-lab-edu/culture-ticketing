@@ -1,8 +1,10 @@
 package com.culture.ticketing.user.application;
 
+import com.culture.ticketing.user.application.dto.UserLoginRequest;
 import com.culture.ticketing.user.application.dto.UserSaveRequest;
 import com.culture.ticketing.user.domain.User;
 import com.culture.ticketing.user.exception.DuplicatedUserEmailException;
+import com.culture.ticketing.user.exception.UserNotFoundException;
 import com.culture.ticketing.user.infra.UserRepository;
 import com.google.common.base.Preconditions;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -51,4 +53,15 @@ public class UserService {
         return !userRepository.existsById(userId);
     }
 
+    @Transactional(readOnly = true)
+    public Long login(UserLoginRequest request) {
+
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> {
+            throw new UserNotFoundException(request.getEmail());
+        });
+
+        user.checkPassword(request.getPassword(), passwordEncoder);
+
+        return user.getUserId();
+    }
 }
