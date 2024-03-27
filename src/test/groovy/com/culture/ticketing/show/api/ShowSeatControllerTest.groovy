@@ -1,5 +1,6 @@
 package com.culture.ticketing.show.api
 
+import com.culture.ticketing.common.config.SecurityConfig
 import com.culture.ticketing.show.ShowSeatFixtures
 import com.culture.ticketing.show.application.ShowFacadeService
 import com.culture.ticketing.show.application.ShowSeatService
@@ -9,10 +10,13 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.hamcrest.Matchers
 import org.spockframework.spring.SpringBean
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.data.redis.AutoConfigureDataRedis
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.context.annotation.Import
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext
 import org.springframework.http.MediaType
+import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
@@ -22,6 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @WebMvcTest(ShowSeatController.class)
+@AutoConfigureDataRedis
+@Import(SecurityConfig.class)
 @MockBean(JpaMetamodelMappingContext.class)
 class ShowSeatControllerTest extends Specification {
 
@@ -34,6 +40,7 @@ class ShowSeatControllerTest extends Specification {
     @SpringBean
     private ShowFacadeService showFacadeService = Mock();
 
+    @WithMockUser(roles = "ADMIN")
     def "공연 좌석 생성 성공"() {
 
         given:
@@ -52,6 +59,7 @@ class ShowSeatControllerTest extends Specification {
                 .andDo(MockMvcResultHandlers.print())
     }
 
+    @WithMockUser(roles = "USER")
     def "공연 구역 아이디와 회차 아이디로 공연 좌석 목록 조회"() {
 
         given:

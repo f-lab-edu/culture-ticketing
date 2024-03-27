@@ -1,14 +1,18 @@
 package com.culture.ticketing.show.round_performer.api
 
+import com.culture.ticketing.common.config.SecurityConfig
 import com.culture.ticketing.show.round_performer.application.RoundPerformerService
 import com.culture.ticketing.show.round_performer.application.dto.RoundPerformersSaveRequest
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.spockframework.spring.SpringBean
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.data.redis.AutoConfigureDataRedis
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.context.annotation.Import
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext
 import org.springframework.http.MediaType
+import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
@@ -17,6 +21,8 @@ import spock.lang.Specification
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @WebMvcTest(RoundPerformerController.class)
+@AutoConfigureDataRedis
+@Import(SecurityConfig.class)
 @MockBean(JpaMetamodelMappingContext.class)
 class RoundPerformerControllerTest extends Specification {
 
@@ -27,6 +33,7 @@ class RoundPerformerControllerTest extends Specification {
     @SpringBean
     private RoundPerformerService roundPerformerService = Mock();
 
+    @WithMockUser(roles = "ADMIN")
     def "회차 출연자 목록 생성 성공"() {
 
         given:

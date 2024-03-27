@@ -12,6 +12,7 @@ class UserTest extends Specification {
                 .password(password)
                 .userName(userName)
                 .phoneNumber(phoneNumber)
+                .role(Role.USER)
                 .build();
 
         then:

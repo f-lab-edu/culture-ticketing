@@ -4,11 +4,13 @@ import com.culture.ticketing.show.PlaceFixtures
 import com.culture.ticketing.show.domain.Place
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.data.redis.AutoConfigureDataRedis
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import spock.lang.Specification
 
 @DataJpaTest
+@AutoConfigureDataRedis
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class PlaceRepositoryCustomTest extends Specification {
 

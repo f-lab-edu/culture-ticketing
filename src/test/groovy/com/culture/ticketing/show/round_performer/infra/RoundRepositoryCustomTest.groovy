@@ -3,6 +3,7 @@ package com.culture.ticketing.show.round_performer.infra
 import com.culture.ticketing.show.round_performer.domain.Round
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.data.redis.AutoConfigureDataRedis
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import spock.lang.Specification
@@ -11,6 +12,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 @DataJpaTest
+@AutoConfigureDataRedis
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class RoundRepositoryCustomTest extends Specification {
 

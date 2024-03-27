@@ -1,14 +1,18 @@
 package com.culture.ticketing.user.application;
 
+import com.culture.ticketing.user.application.dto.UserLoginRequest;
 import com.culture.ticketing.user.application.dto.UserSaveRequest;
 import com.culture.ticketing.user.domain.User;
 import com.culture.ticketing.user.exception.DuplicatedUserEmailException;
+import com.culture.ticketing.user.exception.UserNotFoundException;
 import com.culture.ticketing.user.infra.UserRepository;
 import com.google.common.base.Preconditions;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+
+import java.util.Objects;
 
 @Service
 public class UserService {
@@ -34,6 +38,7 @@ public class UserService {
 
     private void checkValidUserSaveRequest(UserSaveRequest request) {
 
+        Objects.requireNonNull(request.getRole(), "권한을 입력해주세요.");
         Preconditions.checkArgument(StringUtils.hasText(request.getEmail()), "이메일을 입력해주세요.");
         Preconditions.checkArgument(StringUtils.hasText(request.getPassword()), "비밀번호를 입력해주세요.");
         Preconditions.checkArgument(StringUtils.hasText(request.getUserName()), "이름을 입력해주세요.");
@@ -51,4 +56,23 @@ public class UserService {
         return !userRepository.existsById(userId);
     }
 
+    @Transactional(readOnly = true)
+    public Long login(UserLoginRequest request) {
+
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> {
+            throw new UserNotFoundException(request.getEmail());
+        });
+
+        user.checkPassword(request.getPassword(), passwordEncoder);
+
+        return user.getUserId();
+    }
+
+    @Transactional(readOnly = true)
+    public User findByUserId(Long userId) {
+
+        return userRepository.findById(userId).orElseThrow(() -> {
+            throw new UserNotFoundException(userId);
+        });
+    }
 }

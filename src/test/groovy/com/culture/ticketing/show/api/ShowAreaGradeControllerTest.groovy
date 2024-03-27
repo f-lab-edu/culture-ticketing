@@ -1,5 +1,6 @@
 package com.culture.ticketing.show.api
 
+import com.culture.ticketing.common.config.SecurityConfig
 import com.culture.ticketing.show.ShowAreaGradeFixtures
 import com.culture.ticketing.show.application.ShowAreaGradeService
 import com.culture.ticketing.show.application.dto.ShowAreaGradeResponse
@@ -9,10 +10,13 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.hamcrest.Matchers
 import org.spockframework.spring.SpringBean
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.data.redis.AutoConfigureDataRedis
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.context.annotation.Import
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext
 import org.springframework.http.MediaType
+import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
@@ -22,6 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @WebMvcTest(ShowAreaGradeController.class)
+@AutoConfigureDataRedis
+@Import(SecurityConfig.class)
 @MockBean(JpaMetamodelMappingContext.class)
 class ShowAreaGradeControllerTest extends Specification {
 
@@ -32,6 +38,7 @@ class ShowAreaGradeControllerTest extends Specification {
     @SpringBean
     private ShowAreaGradeService showAreaGradeService = Mock();
 
+    @WithMockUser(roles = "ADMIN")
     def "공연 구역 등급 생성"() {
 
         given:
