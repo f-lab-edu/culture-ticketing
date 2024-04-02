@@ -2,19 +2,25 @@ package com.culture.ticketing.show.application;
 
 import com.culture.ticketing.booking.application.BookingShowSeatService;
 import com.culture.ticketing.booking.application.dto.BookingShowSeatResponse;
+import com.culture.ticketing.common.utils.MailService;
 import com.culture.ticketing.show.application.dto.ShowAreaGradeResponse;
 import com.culture.ticketing.show.application.dto.ShowAreaResponse;
 import com.culture.ticketing.show.application.dto.ShowResponse;
 import com.culture.ticketing.show.application.dto.ShowSeatCountResponse;
 import com.culture.ticketing.show.application.dto.ShowSeatResponse;
+import com.culture.ticketing.show.domain.Show;
+import com.culture.ticketing.show.domain.ShowLike;
 import com.culture.ticketing.show.round_performer.application.RoundPerformerService;
 import com.culture.ticketing.show.round_performer.application.dto.RoundWithPerformersAndShowAreaGradesResponse;
 import com.culture.ticketing.show.application.dto.ShowDetailResponse;
 import com.culture.ticketing.show.round_performer.application.dto.RoundWithPerformersResponse;
+import com.culture.ticketing.user.application.UserService;
+import com.culture.ticketing.user.domain.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -31,15 +37,22 @@ public class ShowFacadeService {
     private final ShowAreaService showAreaService;
     private final BookingShowSeatService bookingShowSeatService;
     private final ShowSeatService showSeatService;
+    private final MailService mailService;
+    private final ShowLikeService showLikeService;
+    private final UserService userService;
 
     public ShowFacadeService(ShowService showService, RoundPerformerService roundPerformerService, ShowAreaGradeService showAreaGradeService,
-                             ShowAreaService showAreaService, BookingShowSeatService bookingShowSeatService, ShowSeatService showSeatService) {
+                             ShowAreaService showAreaService, BookingShowSeatService bookingShowSeatService, ShowSeatService showSeatService,
+                             MailService mailService, ShowLikeService showLikeService, UserService userService) {
         this.showService = showService;
         this.roundPerformerService = roundPerformerService;
         this.showAreaGradeService = showAreaGradeService;
         this.showAreaService = showAreaService;
         this.bookingShowSeatService = bookingShowSeatService;
         this.showSeatService = showSeatService;
+        this.mailService = mailService;
+        this.showLikeService = showLikeService;
+        this.userService = userService;
     }
 
     @Transactional(readOnly = true)
@@ -146,5 +159,35 @@ public class ShowFacadeService {
         return list.stream()
                 .map(function)
                 .collect(Collectors.toSet());
+    }
+
+
+    @Transactional(readOnly = true)
+    public void sendShowBookingStartMails() {
+
+        List<Show> shows = showService.findByBookingStartDateTimeLessThanAnHour(LocalDateTime.now());
+        List<Long> showIds = shows.stream()
+                .map(Show::getShowId)
+                .collect(Collectors.toList());
+        Map<Long, Show> showMapById = shows.stream()
+                .collect(Collectors.toMap(Show::getShowId, Function.identity()));
+        List<ShowLike> showLikes = showLikeService.findByShowIds(showIds);
+        Map<Long, List<Long>> userIdsMapByShowId = showLikes.stream()
+                .collect(Collectors.groupingBy(ShowLike::getShowId, Collectors.mapping(showLike -> showLike.getUserId(), Collectors.toList())));
+        List<Long> userIds = showLikes.stream()
+                .map(ShowLike::getUserId)
+                .distinct()
+                .collect(Collectors.toList());
+        List<User> users = userService.findByUserIds(userIds);
+        Map<Long, User> userMapById = users.stream()
+                .collect(Collectors.toMap(User::getUserId, Function.identity()));
+
+        userIdsMapByShowId.keySet()
+                .forEach(showId -> {
+                    userIdsMapByShowId.get(showId)
+                            .forEach(userId -> {
+                                mailService.sendMail(mailService.getBookingStartAlarmText(userMapById.get(userId), showMapById.get(showId)));
+                            });
+                });
     }
 }

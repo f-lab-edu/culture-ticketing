@@ -5,6 +5,7 @@ import com.culture.ticketing.show.domain.Category;
 import com.culture.ticketing.show.domain.Show;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.culture.ticketing.common.utils.QueryUtils.ifNotNull;
@@ -23,6 +24,16 @@ public class ShowRepositoryImpl extends BaseRepositoryImpl implements ShowReposi
                 .where(show.showId.gt(showId),
                         ifNotNull(show.category::eq, category))
                 .limit(size)
+                .fetch();
+    }
+
+    @Override
+    public List<Show> findByBookingStartDateTimeLessThanAnHour(LocalDateTime now) {
+
+        return queryFactory
+                .selectFrom(show)
+                .where(show.bookingStartDateTime.gt(now)
+                        .and(show.bookingStartDateTime.loe(now.plusHours(1))))
                 .fetch();
     }
 }
