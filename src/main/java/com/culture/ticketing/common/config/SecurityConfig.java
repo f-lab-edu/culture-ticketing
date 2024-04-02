@@ -29,6 +29,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.POST, "/api/v1/show-areas/**").hasRole(Role.ADMIN.name())
                 .antMatchers(HttpMethod.GET, "/api/v1/show-areas/**").hasAnyRole(Role.USER.name(), Role.ADMIN.name())
                 .antMatchers(HttpMethod.POST, "/api/v1/show-area-grades/**").hasRole(Role.ADMIN.name())
+                .antMatchers( "/api/v1/shows/**/likes").hasRole(Role.USER.name())
                 .antMatchers(HttpMethod.POST, "/api/v1/shows/**").hasRole(Role.ADMIN.name())
                 .antMatchers(HttpMethod.POST, "/api/v1/show-seats/**").hasRole(Role.ADMIN.name())
                 .antMatchers(HttpMethod.GET, "/api/v1/show-seats/**").hasRole(Role.USER.name())
