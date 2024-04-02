@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Schema(description = "공연 응답 DTO")
 @Getter
@@ -22,6 +23,10 @@ public class ShowResponse {
     private final LocalDate showStartDate;
     @Schema(description = "공연 종료일")
     private final LocalDate showEndDate;
+    @Schema(description = "예약 시작 일시")
+    private final LocalDateTime bookingStartDateTime;
+    @Schema(description = "예약 종료 일시")
+    private final LocalDateTime bookingEndDateTime;
     @Schema(description = "관람연령제한가")
     private final String ageRestrictionName;
     @Schema(description = "러닝타임")
@@ -41,6 +46,8 @@ public class ShowResponse {
         this.categoryName = show.getCategory().getCategoryName();
         this.showStartDate = show.getShowStartDate();
         this.showEndDate = show.getShowEndDate();
+        this.bookingStartDateTime = show.getBookingStartDateTime();
+        this.bookingEndDateTime = show.getBookingEndDateTime();
         this.ageRestrictionName = show.getAgeRestriction().getAgeRestrictionName();
         this.runningTime = show.getRunningTime();
         this.notice = show.getNotice();
