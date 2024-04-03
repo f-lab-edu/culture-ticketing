@@ -11,6 +11,8 @@ services:
       - "53306:3306"
     volumes:
       - ./mysql/conf.d:/etc/mysql/conf.d # MySQL 설정 파일 위치
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d
     command:
       - "mysqld"
       - "--character-set-server=utf8mb4"

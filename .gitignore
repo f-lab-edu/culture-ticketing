@@ -6,6 +6,7 @@ build/
 !**/src/test/**/build/
 src/main/generated/
 src/main/resources/application.yml
+mysql/data/
 
 ### STS ###
 .apt_generated
