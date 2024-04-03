@@ -49,10 +49,11 @@ public class ShowFacadeService {
     public ShowDetailResponse findShowById(Long showId) {
 
         ShowResponse show = showService.findShowById(showId);
+        int showLikeCnt = showLikeService.countShowLikesByShowId(showId);
         List<RoundWithPerformersResponse> roundsWitPerformers = roundPerformerService.findRoundsWitPerformersByShowId(showId);
         List<ShowAreaGradeResponse> showAreaGrades = showAreaGradeService.findShowAreaGradesByShowId(showId);
 
-        return new ShowDetailResponse(show, roundsWitPerformers, showAreaGrades);
+        return new ShowDetailResponse(show, showLikeCnt, roundsWitPerformers, showAreaGrades);
     }
 
     @Transactional(readOnly = true)
