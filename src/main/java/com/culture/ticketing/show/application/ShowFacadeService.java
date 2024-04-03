@@ -11,6 +11,7 @@ import com.culture.ticketing.show.round_performer.application.RoundPerformerServ
 import com.culture.ticketing.show.round_performer.application.dto.RoundWithPerformersAndShowAreaGradesResponse;
 import com.culture.ticketing.show.application.dto.ShowDetailResponse;
 import com.culture.ticketing.show.round_performer.application.dto.RoundWithPerformersResponse;
+import com.culture.ticketing.user.domain.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,14 +47,15 @@ public class ShowFacadeService {
     }
 
     @Transactional(readOnly = true)
-    public ShowDetailResponse findShowById(Long showId) {
+    public ShowDetailResponse findShowById(User user, Long showId) {
 
         ShowResponse show = showService.findShowById(showId);
         int showLikeCnt = showLikeService.countShowLikesByShowId(showId);
+        Boolean isShowLikeUser = showLikeService.isShowLikeUser(user, showId);
         List<RoundWithPerformersResponse> roundsWitPerformers = roundPerformerService.findRoundsWitPerformersByShowId(showId);
         List<ShowAreaGradeResponse> showAreaGrades = showAreaGradeService.findShowAreaGradesByShowId(showId);
 
-        return new ShowDetailResponse(show, showLikeCnt, roundsWitPerformers, showAreaGrades);
+        return new ShowDetailResponse(show, showLikeCnt, isShowLikeUser, roundsWitPerformers, showAreaGrades);
     }
 
     @Transactional(readOnly = true)

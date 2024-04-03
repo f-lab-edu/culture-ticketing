@@ -57,4 +57,12 @@ public class ShowLikeService {
 
         return userIds == null ? 0 : userIds.size();
     }
+
+    @Transactional(readOnly = true)
+    public Boolean isShowLikeUser(User user, Long showId) {
+
+        Set<Long> userIds = redisTemplate.opsForValue().get(showId);
+
+        return user != null && userIds != null && userIds.contains(user.getUserId());
+    }
 }

@@ -50,9 +50,14 @@ public class ShowController {
 
     @ApiOperation(value = "공연 상세 조회 API")
     @GetMapping("/{showId}")
-    public ShowDetailResponse getShowById(@PathVariable("showId") Long showId) {
+    public ShowDetailResponse getShowById(@PathVariable("showId") Long showId, final Authentication authentication) {
 
-        return showFacadeService.findShowById(showId);
+        User user = null;
+        if (authentication != null) {
+            user = ((SecurityUser) authentication.getPrincipal()).getUser();
+        }
+
+        return showFacadeService.findShowById(user, showId);
     }
 
     @ApiOperation(value = "공연 좋아요 생성 API")
