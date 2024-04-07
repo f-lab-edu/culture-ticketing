@@ -51,3 +51,11 @@ services:
       - ./redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
     command: redis-server /usr/local/etc/redis/redis.conf
     restart: always
+
+  jenkins:
+    container_name: jenkins
+    image: jenkins/jenkins
+    volumes:
+      - ./jenkins/:/var/jenkins_home
+    ports:
+      - "18080:8080"
