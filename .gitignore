@@ -46,3 +46,6 @@ prometheus/config/query_log_file.log
 
 ### redis
 redis/data/
+
+### Jenkins
+jenkins/
