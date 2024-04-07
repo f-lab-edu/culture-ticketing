@@ -62,19 +62,19 @@ public class ShowController {
 
     @ApiOperation(value = "공연 좋아요 생성 API")
     @PostMapping("/{showId}/likes")
-    public void createShowLike(@PathVariable("showId") Long showId, final Authentication authentication) {
+    public int createShowLike(@PathVariable("showId") Long showId, final Authentication authentication) {
 
         User user = ((SecurityUser) authentication.getPrincipal()).getUser();
 
-        showLikeService.createShowLike(user, showId);
+        return showLikeService.createShowLike(user, showId);
     }
 
     @ApiOperation(value = "공연 좋아요 삭제 API")
     @DeleteMapping("/{showId}/likes")
-    public void deleteShowLike(@PathVariable("showId") Long showId, final Authentication authentication) {
+    public int deleteShowLike(@PathVariable("showId") Long showId, final Authentication authentication) {
 
         User user = ((SecurityUser) authentication.getPrincipal()).getUser();
 
-        showLikeService.deleteShowLike(user, showId);
+        return showLikeService.deleteShowLike(user, showId);
     }
 }

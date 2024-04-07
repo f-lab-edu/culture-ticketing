@@ -18,17 +18,21 @@ public class ShowLikeService {
     }
 
     @Transactional
-    public void createShowLike(User user, Long showId) {
+    public int createShowLike(User user, Long showId) {
 
         SetOperations<Long, Long> setOperations = redisTemplate.opsForSet();
         setOperations.add(showId, user.getUserId());
+
+        return countShowLikesByShowId(showId);
     }
 
     @Transactional
-    public void deleteShowLike(User user, Long showId) {
+    public int deleteShowLike(User user, Long showId) {
 
         SetOperations<Long, Long> setOperations = redisTemplate.opsForSet();
         setOperations.remove(showId, user.getUserId());
+
+        return countShowLikesByShowId(showId);
     }
 
     @Transactional(readOnly = true)
