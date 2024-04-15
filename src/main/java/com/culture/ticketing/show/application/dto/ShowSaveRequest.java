@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Schema(description = "공연 생성 요청 DTO")
 @Getter
@@ -34,12 +35,17 @@ public class ShowSaveRequest {
     private LocalDate showStartDate;
     @Schema(description = "공연 종료일")
     private LocalDate showEndDate;
+    @Schema(description = "예약 시작 일시")
+    private LocalDateTime bookingStartDateTime;
+    @Schema(description = "예약 종료 일시")
+    private LocalDateTime bookingEndDateTime;
     @Schema(description = "장소 아이디")
     private Long placeId;
 
     @Builder
     public ShowSaveRequest(Category category, String showName, AgeRestriction ageRestriction, int runningTime, String notice,
-                           String posterImgUrl, String description, LocalDate showStartDate, LocalDate showEndDate, Long placeId) {
+                           String posterImgUrl, String description, LocalDate showStartDate, LocalDate showEndDate,
+                           LocalDateTime bookingStartDateTime, LocalDateTime bookingEndDateTime, Long placeId) {
         this.category = category;
         this.showName = showName;
         this.ageRestriction = ageRestriction;
@@ -49,6 +55,8 @@ public class ShowSaveRequest {
         this.description = description;
         this.showStartDate = showStartDate;
         this.showEndDate = showEndDate;
+        this.bookingStartDateTime = bookingStartDateTime;
+        this.bookingEndDateTime = bookingEndDateTime;
         this.placeId = placeId;
     }
 
@@ -63,6 +71,8 @@ public class ShowSaveRequest {
                 .description(description)
                 .showStartDate(showStartDate)
                 .showEndDate(showEndDate)
+                .bookingStartDateTime(bookingStartDateTime)
+                .bookingEndDateTime(bookingEndDateTime)
                 .placeId(placeId)
                 .build();
     }

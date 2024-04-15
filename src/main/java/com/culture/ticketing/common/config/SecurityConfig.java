@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class SecurityConfig {
@@ -20,19 +21,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors()
-                .and()
+                .cors().disable()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/swagger-ui/**").permitAll()
-                .antMatchers("/swagger-ui.html").permitAll()
-                .antMatchers("/swagger-resources/**").permitAll()
-                .antMatchers("/v2/api-docs/**").permitAll()
                 .antMatchers("/api/v1/bookings/**").hasRole(Role.USER.name())
                 .antMatchers("/api/v1/places/**").hasRole(Role.ADMIN.name())
                 .antMatchers(HttpMethod.POST, "/api/v1/show-areas/**").hasRole(Role.ADMIN.name())
                 .antMatchers(HttpMethod.GET, "/api/v1/show-areas/**").hasAnyRole(Role.USER.name(), Role.ADMIN.name())
                 .antMatchers(HttpMethod.POST, "/api/v1/show-area-grades/**").hasRole(Role.ADMIN.name())
+                .antMatchers( "/api/v1/shows/**/likes").hasRole(Role.USER.name())
                 .antMatchers(HttpMethod.POST, "/api/v1/shows/**").hasRole(Role.ADMIN.name())
                 .antMatchers(HttpMethod.POST, "/api/v1/show-seats/**").hasRole(Role.ADMIN.name())
                 .antMatchers(HttpMethod.GET, "/api/v1/show-seats/**").hasRole(Role.USER.name())
@@ -41,8 +38,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET, "/api/v1/rounds/detail").hasRole(Role.USER.name())
                 .antMatchers("/api/v1/round-performers/**").hasRole(Role.ADMIN.name())
                 .antMatchers("/api/v1/users/profile").hasRole(Role.USER.name())
-                .antMatchers("/api/**").permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().permitAll();
         return http.build();
     }
 }

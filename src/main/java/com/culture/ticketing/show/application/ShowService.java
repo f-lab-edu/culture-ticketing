@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -99,5 +100,11 @@ public class ShowService {
         return shows.stream()
                 .map(Show::getPlaceId)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<Show> findByBookingStartDateTimeLessThanAnHour(LocalDateTime now) {
+
+        return showRepository.findByBookingStartDateTimeLessThanAnHour(now);
     }
 }

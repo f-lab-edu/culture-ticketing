@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -74,5 +76,11 @@ public class UserService {
         return userRepository.findById(userId).orElseThrow(() -> {
             throw new UserNotFoundException(userId);
         });
+    }
+
+    @Transactional(readOnly = true)
+    public List<User> findByUserIds(Collection<Long> userIds) {
+
+        return userRepository.findAllById(userIds);
     }
 }
