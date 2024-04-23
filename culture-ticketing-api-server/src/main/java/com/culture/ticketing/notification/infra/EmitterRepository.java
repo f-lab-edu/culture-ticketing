@@ -4,17 +4,43 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Repository
-public interface EmitterRepository {
+public class EmitterRepository {
 
-    SseEmitter save(String emitterId, SseEmitter sseEmitter);
+    private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
+    private final Map<String, Object> eventCache = new ConcurrentHashMap<>();
 
-    void saveEventCache(String emitterId, Object event);
+    public SseEmitter save(String emitterId, SseEmitter sseEmitter) {
 
-    void deleteById(String emitterId);
+        emitters.put(emitterId, sseEmitter);
+        return sseEmitter;
+    }
 
-    Map<String, Object> findAllEventCacheStartWithById(String userId);
+    public void saveEventCache(String emitterId, Object event) {
 
-    Map<String, SseEmitter> findAllEmitterStartWithById(String userId);
+        eventCache.put(emitterId, event);
+    }
+
+    public void deleteById(String emitterId) {
+
+        emitters.remove(emitterId);
+    }
+
+    public Map<String, Object> findAllEventCacheStartWithById(String userId) {
+
+        return eventCache.entrySet().stream()
+                .filter(entry -> entry.getKey().startsWith(userId))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    public Map<String, SseEmitter> findAllEmitterStartWithById(String userId) {
+
+        return emitters.entrySet().stream()
+                .filter(entry -> entry.getKey().startsWith(userId))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
 }
