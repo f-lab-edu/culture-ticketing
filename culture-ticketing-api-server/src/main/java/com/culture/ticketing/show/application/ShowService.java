@@ -103,8 +103,8 @@ public class ShowService {
     }
 
     @Transactional(readOnly = true)
-    public List<Show> findByBookingStartDateTimeLessThanAnHour(LocalDateTime now) {
+    public List<Show> findByBookingStartDateTimeLeftAnHour(LocalDateTime now) {
 
-        return showRepository.findByBookingStartDateTimeLessThanAnHour(now);
+        return showRepository.findByBookingStartDateTimeLeftAnHour(now);
     }
 }

@@ -10,6 +10,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import spock.lang.Specification
 
+import java.time.LocalDateTime
+
 @DataJpaTest
 @AutoConfigureDataRedis
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -59,5 +61,36 @@ class ShowRepositoryCustomTest extends Specification {
         then:
         foundShows.size() == 2
         foundShows.collect(show -> show.showId > shows.get(0).showId && show.category == Category.CONCERT).size() == 2
+    }
+
+    def "예약 시작 시간까지 1시간 남은 공연 목록 조회"() {
+
+        given:
+        List<Show> shows = [
+                ShowFixtures.createShow(category: Category.CONCERT,
+                        bookingStartDateTime: LocalDateTime.of(2024, 1, 1, 20, 0, 0),
+                        bookingEndDateTime: LocalDateTime.of(2024, 1, 1, 22, 0, 0)
+                ),
+                ShowFixtures.createShow(category: Category.CONCERT,
+                        bookingStartDateTime: LocalDateTime.of(2024, 1, 1, 19, 0, 0),
+                        bookingEndDateTime: LocalDateTime.of(2024, 1, 1, 22, 0, 0)
+                ),
+                ShowFixtures.createShow(category: Category.CONCERT,
+                        bookingStartDateTime: LocalDateTime.of(2024, 1, 1, 20, 1, 0),
+                        bookingEndDateTime: LocalDateTime.of(2024, 1, 1, 22, 0, 0)
+                ),
+                ShowFixtures.createShow(category: Category.CONCERT,
+                        bookingStartDateTime: LocalDateTime.of(2024, 1, 1, 20, 0, 59),
+                        bookingEndDateTime: LocalDateTime.of(2024, 1, 1, 22, 0, 0)
+                ),
+        ]
+        showRepository.saveAll(shows);
+
+        when:
+        List<Show> foundShows = showRepository.findByBookingStartDateTimeLeftAnHour(LocalDateTime.of(2024, 1, 1, 19, 0, 0));
+
+        then:
+        foundShows.size() == 2
+        foundShows.showId == [shows.get(0).showId, shows.get(3).showId]
     }
 }

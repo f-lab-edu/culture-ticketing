@@ -28,12 +28,11 @@ public class ShowRepositoryImpl extends BaseRepositoryImpl implements ShowReposi
     }
 
     @Override
-    public List<Show> findByBookingStartDateTimeLessThanAnHour(LocalDateTime now) {
+    public List<Show> findByBookingStartDateTimeLeftAnHour(LocalDateTime now) {
 
         return queryFactory
                 .selectFrom(show)
-                .where(show.bookingStartDateTime.gt(now)
-                        .and(show.bookingStartDateTime.loe(now.plusHours(1))))
+                .where(show.bookingStartDateTime.between(now.plusHours(1).withSecond(0), now.plusHours(1).withSecond(59)))
                 .fetch();
     }
 }

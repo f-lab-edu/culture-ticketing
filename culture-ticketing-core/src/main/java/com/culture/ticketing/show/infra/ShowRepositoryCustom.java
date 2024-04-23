@@ -10,5 +10,5 @@ public interface ShowRepositoryCustom {
 
     List<Show> findByShowIdGreaterThanLimitAndCategory(Long showId, int size, Category category);
 
-    List<Show> findByBookingStartDateTimeLessThanAnHour(LocalDateTime now);
+    List<Show> findByBookingStartDateTimeLeftAnHour(LocalDateTime now);
 }
