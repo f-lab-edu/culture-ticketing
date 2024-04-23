@@ -1,6 +1,6 @@
 package com.culture.ticketing.show.round_performer.api
 
-import com.culture.ticketing.common.config.SecurityConfig
+import com.culture.ticketing.config.SecurityConfig
 import com.culture.ticketing.show.round_performer.RoundFixtures
 import com.culture.ticketing.show.round_performer.application.RoundService
 import com.culture.ticketing.show.application.ShowFacadeService

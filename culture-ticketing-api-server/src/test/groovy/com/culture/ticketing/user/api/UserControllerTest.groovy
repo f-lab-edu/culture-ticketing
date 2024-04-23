@@ -1,6 +1,6 @@
 package com.culture.ticketing.user.api
 
-import com.culture.ticketing.common.config.SecurityConfig
+import com.culture.ticketing.config.SecurityConfig
 import com.culture.ticketing.user.UserFixtures
 import com.culture.ticketing.user.application.CustomUserDetailsService
 import com.culture.ticketing.user.application.UserService

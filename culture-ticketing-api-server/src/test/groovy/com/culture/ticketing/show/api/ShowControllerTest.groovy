@@ -1,6 +1,6 @@
 package com.culture.ticketing.show.api
 
-import com.culture.ticketing.common.config.SecurityConfig
+import com.culture.ticketing.config.SecurityConfig
 import com.culture.ticketing.show.PlaceFixtures
 import com.culture.ticketing.show.ShowFixtures
 import com.culture.ticketing.show.application.ShowFacadeService
@@ -11,8 +11,6 @@ import com.culture.ticketing.show.application.dto.ShowResponse
 import com.culture.ticketing.show.application.dto.ShowSaveRequest
 import com.culture.ticketing.show.domain.AgeRestriction
 import com.culture.ticketing.show.domain.Category
-import com.culture.ticketing.user.UserFixtures
-import com.culture.ticketing.user.domain.User
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.hamcrest.Matchers
 import org.spockframework.spring.SpringBean

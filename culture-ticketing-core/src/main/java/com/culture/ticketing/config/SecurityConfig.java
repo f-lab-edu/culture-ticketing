@@ -1,4 +1,4 @@
-package com.culture.ticketing.common.config;
+package com.culture.ticketing.config;
 
 import com.culture.ticketing.user.domain.Role;
 import org.springframework.context.annotation.Bean;

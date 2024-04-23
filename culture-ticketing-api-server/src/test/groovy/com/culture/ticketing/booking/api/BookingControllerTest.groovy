@@ -2,7 +2,7 @@ package com.culture.ticketing.booking.api
 
 import com.culture.ticketing.booking.application.BookingService
 import com.culture.ticketing.booking.application.dto.BookingSaveRequest
-import com.culture.ticketing.common.config.SecurityConfig
+import com.culture.ticketing.config.SecurityConfig
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.spockframework.spring.SpringBean
 import org.springframework.beans.factory.annotation.Autowired

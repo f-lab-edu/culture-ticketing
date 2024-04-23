@@ -1,6 +1,6 @@
 package com.culture.ticketing.show.round_performer.api
 
-import com.culture.ticketing.common.config.SecurityConfig
+import com.culture.ticketing.config.SecurityConfig
 import com.culture.ticketing.show.round_performer.application.RoundPerformerService
 import com.culture.ticketing.show.round_performer.application.dto.RoundPerformersSaveRequest
 import com.fasterxml.jackson.databind.ObjectMapper

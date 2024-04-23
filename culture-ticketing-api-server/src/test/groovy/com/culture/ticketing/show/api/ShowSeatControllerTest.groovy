@@ -1,6 +1,6 @@
 package com.culture.ticketing.show.api
 
-import com.culture.ticketing.common.config.SecurityConfig
+import com.culture.ticketing.config.SecurityConfig
 import com.culture.ticketing.show.ShowSeatFixtures
 import com.culture.ticketing.show.application.ShowFacadeService
 import com.culture.ticketing.show.application.ShowSeatService

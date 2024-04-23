@@ -1,6 +1,6 @@
 package com.culture.ticketing.show.api
 
-import com.culture.ticketing.common.config.SecurityConfig
+import com.culture.ticketing.config.SecurityConfig
 import com.culture.ticketing.show.PlaceFixtures
 import com.culture.ticketing.show.application.PlaceService
 import com.culture.ticketing.show.application.dto.PlaceResponse

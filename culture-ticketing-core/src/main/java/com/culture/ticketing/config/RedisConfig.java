@@ -1,4 +1,4 @@
-package com.culture.ticketing.common.config;
+package com.culture.ticketing.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
