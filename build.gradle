@@ -108,7 +108,7 @@ project(':culture-ticketing-api-server') {
         testImplementation 'org.springframework.security:spring-security-test'
         implementation 'org.springframework.boot:spring-boot-starter-data-redis'
         implementation 'org.springframework.session:spring-session-data-redis'
-        implementation 'org.springframework.boot:spring-boot-starter-mail'
+        implementation 'org.springframework.kafka:spring-kafka'
 
         // Swagger
         implementation 'io.springfox:springfox-boot-starter:3.0.0'
@@ -136,5 +136,7 @@ project(':culture-ticketing-batch-server') {
         implementation project(':culture-ticketing-core')
         implementation 'org.springframework.boot:spring-boot-starter-batch'
         testImplementation 'org.springframework.batch:spring-batch-test'
+        implementation 'org.springframework.kafka:spring-kafka'
+        implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     }
 }
