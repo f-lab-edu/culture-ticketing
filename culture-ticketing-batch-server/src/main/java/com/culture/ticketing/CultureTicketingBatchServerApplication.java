@@ -9,7 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class CultureTicketingBatchServerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CultureTicketingBatchServerApplication.class, args);
+		System.exit(SpringApplication.exit(SpringApplication.run(CultureTicketingBatchServerApplication.class, args)));
 	}
-
 }
