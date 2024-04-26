@@ -42,6 +42,7 @@ public class BatchConfig {
 
                     return RepeatStatus.FINISHED;
                 })
+                .allowStartIfComplete(true)
                 .build();
     }
 }
