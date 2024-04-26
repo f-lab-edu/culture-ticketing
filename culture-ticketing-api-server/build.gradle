@@ -1,1 +1,21 @@
+dependencies {
+    implementation project(':culture-ticketing-core')
+    implementation 'org.springframework.boot:spring-boot-starter'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.session:spring-session-data-redis'
+    implementation 'org.springframework.kafka:spring-kafka'
 
+    // Swagger
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+
+    // prometheus & grafana
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // Spock
+    testImplementation 'org.spockframework.spock:spock-core:spock-2.3'
+    testImplementation 'org.spockframework.spock:spock-spring:spock-2.3'
+}
