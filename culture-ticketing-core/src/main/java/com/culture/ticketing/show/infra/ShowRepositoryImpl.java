@@ -32,7 +32,8 @@ public class ShowRepositoryImpl extends BaseRepositoryImpl implements ShowReposi
 
         return queryFactory
                 .selectFrom(show)
-                .where(show.bookingStartDateTime.between(now.plusHours(1).withSecond(0), now.plusHours(1).withSecond(59)))
+                .where(show.bookingStartDateTime.goe(now.plusHours(1).withSecond(0).withNano(0))
+                                .and(show.bookingStartDateTime.lt(now.plusHours(1).plusMinutes(1).withSecond(0).withNano(0))))
                 .fetch();
     }
 }
