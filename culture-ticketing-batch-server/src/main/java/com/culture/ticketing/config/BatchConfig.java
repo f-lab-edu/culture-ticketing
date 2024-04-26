@@ -25,9 +25,9 @@ public class BatchConfig {
     }
 
     @Bean
-    public Job makeBookingStartAlarmForShowLiker() {
+    public Job makeBookingStartAlarm() {
 
-        return jobBuilderFactory.get("makeBookingStartAlarmForShowLiker")
+        return jobBuilderFactory.get("makeBookingStartAlarm")
                 .start(firstStep())
                 .build();
     }
