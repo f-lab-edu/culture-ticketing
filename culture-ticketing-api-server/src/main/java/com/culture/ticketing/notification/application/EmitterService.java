@@ -22,7 +22,7 @@ public class EmitterService {
     @KafkaListener(topics = "booking-start-notifications", groupId = "group_1")
     public void listen(BookingStartNotification notification) {
 
-        String userId = String.valueOf(notification.getUser().getUserId());
+        String userId = String.valueOf(notification.getUserId());
 
         Map<String, SseEmitter> sseEmitters = emitterRepository.findAllEmitterStartWithById(userId);
 

@@ -21,11 +21,11 @@ import java.util.stream.Collectors;
 public class ProducerService {
 
     private final RedisTemplate<Long, Long> redisTemplate;
-    private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final KafkaTemplate<String, BookingStartNotification> kafkaTemplate;
     private final ShowService showService;
     private final UserService userService;
 
-    public ProducerService(RedisTemplate<Long, Long> redisTemplate, KafkaTemplate<String, Object> kafkaTemplate, ShowService showService, UserService userService) {
+    public ProducerService(RedisTemplate<Long, Long> redisTemplate, KafkaTemplate<String, BookingStartNotification> kafkaTemplate, ShowService showService, UserService userService) {
         this.redisTemplate = redisTemplate;
         this.kafkaTemplate = kafkaTemplate;
         this.showService = showService;
@@ -51,8 +51,10 @@ public class ProducerService {
                 for (Long userId : userIdsByShowId) {
                     kafkaTemplate.send("booking-start-notifications",
                             BookingStartNotification.builder()
-                                    .user(userMapById.get(userId))
-                                    .show(show)
+                                    .userId(userId)
+                                    .userName(userMapById.get(userId).getUserName())
+                                    .showId(show.getShowId())
+                                    .showName(show.getShowName())
                                     .build());
                 }
             }
