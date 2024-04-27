@@ -1,6 +1,6 @@
 package com.culture.ticketing.application;
 
-import com.culture.ticketing.application.dto.BookingStartNotification;
+import com.culture.ticketing.notification.dto.BookingStartNotification;
 import com.culture.ticketing.show.domain.Show;
 import com.culture.ticketing.user.domain.User;
 import org.springframework.data.redis.core.RedisTemplate;

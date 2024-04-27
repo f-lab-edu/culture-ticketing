@@ -1,6 +1,6 @@
 package com.culture.ticketing.config;
 
-import com.culture.ticketing.application.dto.BookingStartNotification;
+import com.culture.ticketing.notification.dto.BookingStartNotification;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;

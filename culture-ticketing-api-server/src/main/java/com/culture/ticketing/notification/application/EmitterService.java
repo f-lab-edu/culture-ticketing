@@ -1,6 +1,6 @@
 package com.culture.ticketing.notification.application;
 
-import com.culture.ticketing.notification.application.dto.BookingStartNotification;
+import com.culture.ticketing.notification.dto.BookingStartNotification;
 import com.culture.ticketing.notification.infra.EmitterRepository;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;

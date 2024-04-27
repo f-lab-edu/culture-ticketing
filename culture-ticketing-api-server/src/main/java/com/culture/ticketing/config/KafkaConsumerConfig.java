@@ -1,6 +1,6 @@
 package com.culture.ticketing.config;
 
-import com.culture.ticketing.notification.application.dto.BookingStartNotification;
+import com.culture.ticketing.notification.dto.BookingStartNotification;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +25,7 @@ public class KafkaConsumerConfig {
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 
         JsonDeserializer<BookingStartNotification> deserializer = new JsonDeserializer<>(BookingStartNotification.class);
-        deserializer.addTrustedPackages("com.culture.ticketing");
+        deserializer.addTrustedPackages("com.culture.ticketing.*");
 
         return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(), deserializer);
     }

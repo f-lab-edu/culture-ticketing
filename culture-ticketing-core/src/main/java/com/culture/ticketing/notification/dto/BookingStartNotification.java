@@ -1,4 +1,4 @@
-package com.culture.ticketing.application.dto;
+package com.culture.ticketing.notification.dto;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -20,5 +20,10 @@ public class BookingStartNotification {
         this.userName = userName;
         this.showId = showId;
         this.showName = showName;
+    }
+
+    public String getMessage() {
+
+        return String.format("%s 님이 관심 있어하는 '%s' 공연 예매가 곧 시작됩니다.", userName, showName);
     }
 }
