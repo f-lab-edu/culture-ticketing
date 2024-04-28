@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -32,7 +33,7 @@ public class ProducerService {
         this.userService = userService;
     }
 
-    public void createShowBookingStartNotifications() {
+    public void createShowBookingStartNotifications() throws ExecutionException, InterruptedException {
 
         List<Show> shows = showService.findByBookingStartDateTimeLeftAnHour(LocalDateTime.now());
 
@@ -55,7 +56,8 @@ public class ProducerService {
                                     .userName(userMapById.get(userId).getUserName())
                                     .showId(show.getShowId())
                                     .showName(show.getShowName())
-                                    .build());
+                                    .build())
+                            .get();
                 }
             }
         }
