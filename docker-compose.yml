@@ -71,8 +71,14 @@ services:
     container_name: kafka
     ports:
       - "9092:9092"
+    depends_on:
+      - zookeeper
+    links:
+      - zookeeper:zookeeper
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
+      KAFKA_ADVERTISED_HOST_NAME: localhost
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
     volumes:
       - ./kafka/run/docker.sock:/var/run/docker.sock
