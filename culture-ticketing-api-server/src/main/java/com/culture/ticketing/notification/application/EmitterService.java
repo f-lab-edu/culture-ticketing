@@ -13,18 +13,20 @@ import java.util.Map;
 @Service
 public class EmitterService {
 
+    private final NotificationService notificationService;
     private final EmitterRepository emitterRepository;
 
-    public EmitterService(EmitterRepository emitterRepository) {
+    public EmitterService(EmitterRepository emitterRepository, NotificationService notificationService) {
         this.emitterRepository = emitterRepository;
+        this.notificationService = notificationService;
     }
 
     @KafkaListener(topics = "booking-start-notifications", groupId = "group_1")
     public void listen(BookingStartNotification notification) {
 
-        String userId = String.valueOf(notification.getUserId());
+        notificationService.createNotification(notification.getUserId(), notification.getMessage());
 
-        Map<String, SseEmitter> sseEmitters = emitterRepository.findAllEmitterStartWithById(userId);
+        Map<String, SseEmitter> sseEmitters = emitterRepository.findAllEmitterStartWithById(String.valueOf(notification.getUserId()));
 
         sseEmitters.forEach((key, emitter) -> {
             emitterRepository.saveEventCache(key, notification.getMessage());
@@ -43,6 +45,8 @@ public class EmitterService {
         emitter.onTimeout(() -> {
             emitterRepository.deleteById(emitterId);
         });
+
+        sendToClient(emitter, emitterId, "connected!"); // 503 에러방지 더미 데이터
 
         if (StringUtils.hasText(lastEventId)) {
             Map<String, Object> events = emitterRepository.findAllEventCacheStartWithById(userId);
