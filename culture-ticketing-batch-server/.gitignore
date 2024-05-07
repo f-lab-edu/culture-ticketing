@@ -4,9 +4,6 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-src/main/generated/
-src/main/resources/application.yml
-mysql/data/
 
 ### STS ###
 .apt_generated
@@ -38,14 +35,3 @@ out/
 
 ### VS Code ###
 .vscode/
-
-### prometheus & grafana
-grafana/
-prometheus/volume/
-prometheus/config/query_log_file.log
-
-### redis
-redis/data/
-
-### Jenkins
-jenkins/

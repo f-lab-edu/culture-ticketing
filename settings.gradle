@@ -1,1 +1,4 @@
-rootProject.name = 'ticketing'
+rootProject.name = 'culture-ticketing'
+include 'culture-ticketing-api-server'
+include 'culture-ticketing-batch-server'
+include 'culture-ticketing-core'
