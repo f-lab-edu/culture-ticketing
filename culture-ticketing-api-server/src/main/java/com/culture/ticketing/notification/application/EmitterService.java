@@ -2,58 +2,54 @@ package com.culture.ticketing.notification.application;
 
 import com.culture.ticketing.notification.dto.BookingStartNotification;
 import com.culture.ticketing.notification.infra.EmitterRepository;
+import com.culture.ticketing.show.application.ShowService;
+import com.culture.ticketing.show.application.dto.ShowResponse;
+import com.culture.ticketing.user.application.UserService;
+import com.culture.ticketing.user.domain.User;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
-import java.util.Map;
 
 @Service
 public class EmitterService {
 
     private final NotificationService notificationService;
+    private final ShowService showService;
+    private final UserService userService;
     private final EmitterRepository emitterRepository;
 
-    public EmitterService(EmitterRepository emitterRepository, NotificationService notificationService) {
+    public EmitterService(EmitterRepository emitterRepository, ShowService showService, UserService userService, NotificationService notificationService) {
         this.emitterRepository = emitterRepository;
+        this.showService = showService;
+        this.userService = userService;
         this.notificationService = notificationService;
     }
 
     @KafkaListener(topics = "booking-start-notifications", groupId = "group_1")
     public void listen(BookingStartNotification notification) {
 
-        notificationService.createNotification(notification.getUserId(), notification.getMessage());
+        ShowResponse show = showService.findShowById(notification.getShowId());
+        User user = userService.findByUserId(notification.getUserId());
 
-        Map<String, SseEmitter> sseEmitters = emitterRepository.findAllEmitterStartWithById(String.valueOf(notification.getUserId()));
-
-        sseEmitters.forEach((key, emitter) -> {
-            emitterRepository.saveEventCache(key, notification.getMessage());
-            sendToClient(emitter, key, notification.getMessage());
-        });
+        notificationService.createNotification(
+                notification.getUserId(),
+                String.format("%s 님이 관심 있어하는 '%s' 공연 예매가 곧 시작됩니다.", user.getUserName(), show.getShowName()));
     }
 
-    public SseEmitter addEmitter(String userId, String lastEventId) {
+    public SseEmitter addEmitter(String userId) {
 
-        String emitterId = userId + "_" + System.currentTimeMillis();
-        SseEmitter emitter = emitterRepository.save(emitterId, new SseEmitter(3600L));
+        SseEmitter emitter = emitterRepository.save(userId, new SseEmitter(3600L));
 
         emitter.onCompletion(() -> {
-            emitterRepository.deleteById(emitterId);
+            emitterRepository.deleteById(userId);
         });
         emitter.onTimeout(() -> {
-            emitterRepository.deleteById(emitterId);
+            emitterRepository.deleteById(userId);
         });
 
-        sendToClient(emitter, emitterId, "connected!"); // 503 에러방지 더미 데이터
-
-        if (StringUtils.hasText(lastEventId)) {
-            Map<String, Object> events = emitterRepository.findAllEventCacheStartWithById(userId);
-            events.entrySet().stream()
-                    .filter(entry -> lastEventId.compareTo(entry.getKey()) < 0)
-                    .forEach(entry -> sendToClient(emitter, entry.getKey(), entry.getValue()));
-        }
+        sendToClient(emitter, userId, "connected!"); // 503 에러방지 더미 데이터
 
         return emitter;
     }
