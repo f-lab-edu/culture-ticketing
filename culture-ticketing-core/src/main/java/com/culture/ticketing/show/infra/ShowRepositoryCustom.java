@@ -9,6 +9,4 @@ import java.util.List;
 public interface ShowRepositoryCustom {
 
     List<Show> findByShowIdGreaterThanLimitAndCategory(Long showId, int size, Category category);
-
-    List<Show> findByBookingStartDateTimeLeftAnHour(LocalDateTime now);
 }
