@@ -7,6 +7,7 @@ import com.culture.ticketing.show.application.dto.ShowDetailResponse;
 import com.culture.ticketing.show.application.dto.ShowResponse;
 import com.culture.ticketing.show.application.dto.ShowSaveRequest;
 import com.culture.ticketing.show.domain.Category;
+import com.culture.ticketing.show.domain.ShowOrderBy;
 import com.culture.ticketing.user.domain.SecurityUser;
 import com.culture.ticketing.user.domain.User;
 import io.swagger.annotations.Api;
@@ -51,9 +52,10 @@ public class ShowController {
     public List<ShowResponse> getShows(@ApiParam(value = "처음 시작 위치") @RequestParam(name = "offset") Long offset,
                                        @ApiParam(value = "사이즈") @RequestParam(name = "size") int size,
                                        @ApiParam(value = "카테고리") @RequestParam(name = "category", required = false) Category category,
-                                       @ApiParam(value = "검색어") @RequestParam(name = "showName", required = false) String showName) {
+                                       @ApiParam(value = "검색어") @RequestParam(name = "showName", required = false) String showName,
+                                       @ApiParam(value = "정렬(최신순=NEWEST/가나다순=SHOW_NAME_ASC)") @RequestParam(name = "orderBy", required = false) ShowOrderBy orderBy) {
 
-        return showService.findShows(offset, size, category, showName);
+        return showService.searchShows(offset, size, category, showName, orderBy);
     }
 
     @ApiOperation(value = "공연 상세 조회 API")

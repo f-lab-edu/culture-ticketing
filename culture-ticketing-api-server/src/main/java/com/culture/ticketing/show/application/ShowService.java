@@ -5,6 +5,7 @@ import com.culture.ticketing.show.application.dto.ShowResponse;
 import com.culture.ticketing.show.application.dto.ShowSaveRequest;
 import com.culture.ticketing.show.domain.Category;
 import com.culture.ticketing.show.domain.Show;
+import com.culture.ticketing.show.domain.ShowOrderBy;
 import com.culture.ticketing.show.exception.PlaceNotFoundException;
 import com.culture.ticketing.show.exception.ShowNotFoundException;
 import com.culture.ticketing.show.infra.ShowRepository;
@@ -72,9 +73,9 @@ public class ShowService {
     }
 
     @Transactional(readOnly = true)
-    public List<ShowResponse> findShows(Long offset, int size, Category category, String showName) {
+    public List<ShowResponse> searchShows(Long offset, int size, Category category, String showName, ShowOrderBy orderBy) {
 
-        return getShowResponses(showRepository.searchShowsWithPaging(offset, size, category, showName));
+        return getShowResponses(showRepository.searchShowsWithPaging(offset, size, category, showName, orderBy));
     }
 
     private List<ShowResponse> getShowResponses(List<Show> shows) {
