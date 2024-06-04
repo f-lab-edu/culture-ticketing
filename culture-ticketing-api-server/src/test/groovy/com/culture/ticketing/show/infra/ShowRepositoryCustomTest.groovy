@@ -3,6 +3,7 @@ package com.culture.ticketing.show.infra
 import com.culture.ticketing.show.ShowFixtures
 import com.culture.ticketing.show.domain.Category
 import com.culture.ticketing.show.domain.Show
+import com.culture.ticketing.show.domain.ShowOrderBy
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.redis.AutoConfigureDataRedis
@@ -37,7 +38,7 @@ class ShowRepositoryCustomTest extends Specification {
         ]);
 
         when:
-        List<Show> foundShows = showRepository.searchShowsWithPaging(1L, 3, null, null);
+        List<Show> foundShows = showRepository.searchShowsWithPaging(1L, 3, null, null, null);
 
         then:
         foundShows.collect(show -> show.showId > 1L).size() == 3
@@ -56,7 +57,7 @@ class ShowRepositoryCustomTest extends Specification {
         showRepository.saveAll(shows);
 
         when:
-        List<Show> foundShows = showRepository.searchShowsWithPaging(shows.get(0).showId, 3, Category.CONCERT, null);
+        List<Show> foundShows = showRepository.searchShowsWithPaging(shows.get(0).showId, 3, Category.CONCERT, null, null);
 
         then:
         foundShows.size() == 2
@@ -76,11 +77,30 @@ class ShowRepositoryCustomTest extends Specification {
         showRepository.saveAll(shows);
 
         when:
-        List<Show> foundShows = showRepository.searchShowsWithPaging(shows.get(0).showId, 3, null, "공연");
+        List<Show> foundShows = showRepository.searchShowsWithPaging(shows.get(0).showId, 3, null, "공연", null);
 
         then:
         foundShows.size() == 2
         foundShows.collect(show -> show.showId > shows.get(0).showId && show.showName.contains("공연")).size() == 2
+    }
+
+    def "공연 목록 조회 정렬 테스트 특정한 아이디보다 크고 사이즈 제한"() {
+
+        given:
+        List<Show> shows = [
+                ShowFixtures.createShow(showName: "공연3"),
+                ShowFixtures.createShow(showName: "공연2"),
+                ShowFixtures.createShow(showName: "공연1"),
+        ]
+        showRepository.saveAll(shows);
+
+        when:
+        List<Show> foundShows = showRepository.searchShowsWithPaging(shows.get(0).showId, 3, null, null, ShowOrderBy.SHOW_NAME_ASC);
+
+        then:
+        foundShows.size() == 2
+        foundShows.get(0).showName == "공연1"
+        foundShows.get(1).showName == "공연2"
     }
 
     def "예약 시작 시간까지 1시간 남은 공연 목록 조회"() {

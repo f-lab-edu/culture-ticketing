@@ -11,6 +11,7 @@ import com.culture.ticketing.show.application.dto.ShowResponse
 import com.culture.ticketing.show.application.dto.ShowSaveRequest
 import com.culture.ticketing.show.domain.AgeRestriction
 import com.culture.ticketing.show.domain.Category
+import com.culture.ticketing.show.domain.ShowOrderBy
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.hamcrest.Matchers
 import org.spockframework.spring.SpringBean
@@ -80,7 +81,7 @@ class ShowControllerTest extends Specification {
 
         given:
         Long offset = 1L
-        showService.findShows(offset, 3, null, null) >> [
+        showService.searchShows(offset, 3, null, null, null) >> [
                 new ShowResponse(ShowFixtures.createShow(showId: 2L), new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L))),
                 new ShowResponse(ShowFixtures.createShow(showId: 3L), new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L))),
                 new ShowResponse(ShowFixtures.createShow(showId: 4L), new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L)))
@@ -104,7 +105,7 @@ class ShowControllerTest extends Specification {
         given:
         Long offset = 0;
         Category category = Category.CONCERT;
-        showService.findShows(offset, 3, category, null) >> [
+        showService.searchShows(offset, 3, category, null, null) >> [
                 new ShowResponse(ShowFixtures.createShow(showId: 1L, category: Category.CONCERT),
                         new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L))),
                 new ShowResponse(ShowFixtures.createShow(showId: 3L, category: Category.CONCERT),
@@ -130,7 +131,7 @@ class ShowControllerTest extends Specification {
 
         given:
         Long offset = 0;
-        showService.findShows(offset, 3, null, "공연") >> [
+        showService.searchShows(offset, 3, null, "공연", null) >> [
                 new ShowResponse(ShowFixtures.createShow(showId: 1L, showName: "공연1"),
                         new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L))),
                 new ShowResponse(ShowFixtures.createShow(showId: 3L, showName: "공연2"),
@@ -149,6 +150,32 @@ class ShowControllerTest extends Specification {
                 .andExpect(jsonPath("\$[1].showId", Matchers.greaterThan(offset.toInteger())))
                 .andExpect(jsonPath("\$[0].showName", Matchers.containsString("공연")))
                 .andExpect(jsonPath("\$[1].showName", Matchers.containsString("공연")))
+                .andDo(MockMvcResultHandlers.print())
+    }
+
+    def "공연 목록 조회 정렬"() {
+
+        given:
+        Long offset = 0;
+        showService.searchShows(offset, 3, null, null, ShowOrderBy.SHOW_NAME_ASC) >> [
+                new ShowResponse(ShowFixtures.createShow(showId: 1L, showName: "공연1"),
+                        new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L))),
+                new ShowResponse(ShowFixtures.createShow(showId: 3L, showName: "공연2"),
+                        new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L)))
+        ]
+
+        expect:
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/shows")
+                .param("offset", offset.toString())
+                .param("size", "3")
+                .param("orderBy", "SHOW_NAME_ASC"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("\$").isArray())
+                .andExpect(jsonPath("\$", Matchers.hasSize(2)))
+                .andExpect(jsonPath("\$[0].showId", Matchers.greaterThan(offset.toInteger())))
+                .andExpect(jsonPath("\$[1].showId", Matchers.greaterThan(offset.toInteger())))
+                .andExpect(jsonPath("\$[0].showName").value("공연1"))
+                .andExpect(jsonPath("\$[1].showName").value("공연2"))
                 .andDo(MockMvcResultHandlers.print())
     }
 
