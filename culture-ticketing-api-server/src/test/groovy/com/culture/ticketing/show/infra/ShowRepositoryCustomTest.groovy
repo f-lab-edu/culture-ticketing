@@ -37,7 +37,7 @@ class ShowRepositoryCustomTest extends Specification {
         ]);
 
         when:
-        List<Show> foundShows = showRepository.findByShowIdGreaterThanLimitAndCategory(1L, 3, null);
+        List<Show> foundShows = showRepository.searchShowsWithPaging(1L, 3, null, null);
 
         then:
         foundShows.collect(show -> show.showId > 1L).size() == 3
@@ -56,11 +56,31 @@ class ShowRepositoryCustomTest extends Specification {
         showRepository.saveAll(shows);
 
         when:
-        List<Show> foundShows = showRepository.findByShowIdGreaterThanLimitAndCategory(shows.get(0).showId, 3, Category.CONCERT);
+        List<Show> foundShows = showRepository.searchShowsWithPaging(shows.get(0).showId, 3, Category.CONCERT, null);
 
         then:
         foundShows.size() == 2
         foundShows.collect(show -> show.showId > shows.get(0).showId && show.category == Category.CONCERT).size() == 2
+    }
+
+    def "검색어 포함 공연 목록 조회 테스트 특정한 아이디보다 크고 사이즈 제한"() {
+
+        given:
+        List<Show> shows = [
+                ShowFixtures.createShow(showName: "공연1"),
+                ShowFixtures.createShow(showName: "테스트1"),
+                ShowFixtures.createShow(showName: "공연2"),
+                ShowFixtures.createShow(showName: "테스트2"),
+                ShowFixtures.createShow(showName: "공연3"),
+        ]
+        showRepository.saveAll(shows);
+
+        when:
+        List<Show> foundShows = showRepository.searchShowsWithPaging(shows.get(0).showId, 3, null, "공연");
+
+        then:
+        foundShows.size() == 2
+        foundShows.collect(show -> show.showId > shows.get(0).showId && show.showName.contains("공연")).size() == 2
     }
 
     def "예약 시작 시간까지 1시간 남은 공연 목록 조회"() {
