@@ -50,9 +50,10 @@ public class ShowController {
     @GetMapping
     public List<ShowResponse> getShows(@ApiParam(value = "처음 시작 위치") @RequestParam(name = "offset") Long offset,
                                        @ApiParam(value = "사이즈") @RequestParam(name = "size") int size,
-                                       @ApiParam(value = "카테고리") @RequestParam(name = "category", required = false) Category category) {
+                                       @ApiParam(value = "카테고리") @RequestParam(name = "category", required = false) Category category,
+                                       @ApiParam(value = "검색어") @RequestParam(name = "showName", required = false) String showName) {
 
-        return showService.findShows(offset, size, category);
+        return showService.findShows(offset, size, category, showName);
     }
 
     @ApiOperation(value = "공연 상세 조회 API")

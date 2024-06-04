@@ -72,9 +72,9 @@ public class ShowService {
     }
 
     @Transactional(readOnly = true)
-    public List<ShowResponse> findShows(Long offset, int size, Category category) {
+    public List<ShowResponse> findShows(Long offset, int size, Category category, String showName) {
 
-        return getShowResponses(showRepository.findByShowIdGreaterThanLimitAndCategory(offset, size, category));
+        return getShowResponses(showRepository.searchShowsWithPaging(offset, size, category, showName));
     }
 
     private List<ShowResponse> getShowResponses(List<Show> shows) {

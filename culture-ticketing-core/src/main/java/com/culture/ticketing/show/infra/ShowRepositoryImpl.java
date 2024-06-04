@@ -18,11 +18,12 @@ public class ShowRepositoryImpl extends BaseRepositoryImpl implements ShowReposi
     }
 
     @Override
-    public List<Show> findByShowIdGreaterThanLimitAndCategory(Long showId, int size, Category category) {
+    public List<Show> searchShowsWithPaging(Long showId, int size, Category category, String showName) {
 
         return queryFactory.selectFrom(show)
                 .where(show.showId.gt(showId),
-                        ifNotNull(show.category::eq, category))
+                        ifNotNull(show.category::eq, category),
+                        ifNotNull(show.showName::contains, showName))
                 .limit(size)
                 .fetch();
     }

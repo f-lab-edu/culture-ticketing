@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ShowRepositoryCustom {
 
-    List<Show> findByShowIdGreaterThanLimitAndCategory(Long showId, int size, Category category);
+    List<Show> searchShowsWithPaging(Long showId, int size, Category category, String showName);
 
     List<Show> findByBookingStartDateTimeLeftAnHour(LocalDateTime now);
 }
