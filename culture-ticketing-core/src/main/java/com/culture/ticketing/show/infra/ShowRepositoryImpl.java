@@ -29,24 +29,8 @@ public class ShowRepositoryImpl extends BaseRepositoryImpl implements ShowReposi
                         ifNotNull(show.category::eq, category),
                         ifNotNull(show.showName::contains, showName))
                 .limit(size)
-                .orderBy(getOrderSpecifier(orderBy))
+                .orderBy(ShowOrderBy.getOrderSpecifier(orderBy))
                 .fetch();
-    }
-
-    private OrderSpecifier getOrderSpecifier(ShowOrderBy orderBy) {
-
-        if (orderBy == null) {
-            return new OrderSpecifier<>(Order.ASC, show.showId);
-        }
-
-        switch (orderBy) {
-            case NEWEST:
-                return new OrderSpecifier<>(Order.DESC, show.createdAt);
-            case SHOW_NAME_ASC:
-                return new OrderSpecifier<>(Order.ASC, show.showName);
-            default:
-                return new OrderSpecifier<>(Order.ASC, show.showId);
-        }
     }
 
     @Override
