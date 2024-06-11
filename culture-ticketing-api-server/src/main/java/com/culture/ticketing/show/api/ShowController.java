@@ -53,7 +53,7 @@ public class ShowController {
                                        @ApiParam(value = "사이즈") @RequestParam(name = "size") int size,
                                        @ApiParam(value = "카테고리") @RequestParam(name = "category", required = false) Category category,
                                        @ApiParam(value = "검색어") @RequestParam(name = "showName", required = false) String showName,
-                                       @ApiParam(value = "정렬(최신순=NEWEST/가나다순=SHOW_NAME_ASC)") @RequestParam(name = "orderBy", required = false) ShowOrderBy orderBy) {
+                                       @ApiParam(value = "정렬(최신순=NEWEST/가나다순=SHOW_NAME_ASC)") @RequestParam(name = "orderBy", required = false, defaultValue = "NEWEST") ShowOrderBy orderBy) {
 
         return showService.searchShows(offset, size, category, showName, orderBy);
     }

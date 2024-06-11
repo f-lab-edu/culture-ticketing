@@ -29,7 +29,7 @@ public class ShowRepositoryImpl extends BaseRepositoryImpl implements ShowReposi
                         ifNotNull(show.category::eq, category),
                         ifNotNull(show.showName::contains, showName))
                 .limit(size)
-                .orderBy(ShowOrderBy.getOrderSpecifier(orderBy))
+                .orderBy(orderBy.getOrderSpecifier())
                 .fetch();
     }
 

@@ -9,13 +9,9 @@ public enum ShowOrderBy {
     NEWEST,
     SHOW_NAME_ASC;
 
-    public static OrderSpecifier getOrderSpecifier(ShowOrderBy orderBy) {
+    public OrderSpecifier getOrderSpecifier() {
 
-        if (orderBy == null) {
-            return new OrderSpecifier<>(Order.ASC, show.showId);
-        }
-
-        switch (orderBy) {
+        switch (this) {
             case NEWEST:
                 return new OrderSpecifier<>(Order.DESC, show.createdAt);
             case SHOW_NAME_ASC:
