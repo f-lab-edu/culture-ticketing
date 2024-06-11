@@ -81,7 +81,7 @@ class ShowControllerTest extends Specification {
 
         given:
         Long offset = 1L
-        showService.searchShows(offset, 3, null, null, null) >> [
+        showService.searchShows(offset, 3, null, null, ShowOrderBy.NEWEST) >> [
                 new ShowResponse(ShowFixtures.createShow(showId: 2L), new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L))),
                 new ShowResponse(ShowFixtures.createShow(showId: 3L), new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L))),
                 new ShowResponse(ShowFixtures.createShow(showId: 4L), new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L)))
@@ -105,7 +105,7 @@ class ShowControllerTest extends Specification {
         given:
         Long offset = 0;
         Category category = Category.CONCERT;
-        showService.searchShows(offset, 3, category, null, null) >> [
+        showService.searchShows(offset, 3, category, null, ShowOrderBy.NEWEST) >> [
                 new ShowResponse(ShowFixtures.createShow(showId: 1L, category: Category.CONCERT),
                         new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L))),
                 new ShowResponse(ShowFixtures.createShow(showId: 3L, category: Category.CONCERT),
@@ -131,7 +131,7 @@ class ShowControllerTest extends Specification {
 
         given:
         Long offset = 0;
-        showService.searchShows(offset, 3, null, "공연", null) >> [
+        showService.searchShows(offset, 3, null, "공연", ShowOrderBy.NEWEST) >> [
                 new ShowResponse(ShowFixtures.createShow(showId: 1L, showName: "공연1"),
                         new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L))),
                 new ShowResponse(ShowFixtures.createShow(showId: 3L, showName: "공연2"),

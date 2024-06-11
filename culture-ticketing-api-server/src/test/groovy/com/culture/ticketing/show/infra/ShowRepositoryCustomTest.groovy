@@ -38,7 +38,7 @@ class ShowRepositoryCustomTest extends Specification {
         ]);
 
         when:
-        List<Show> foundShows = showRepository.searchShowsWithPaging(1L, 3, null, null, null);
+        List<Show> foundShows = showRepository.searchShowsWithPaging(1L, 3, null, null, ShowOrderBy.NEWEST);
 
         then:
         foundShows.collect(show -> show.showId > 1L).size() == 3
@@ -57,7 +57,7 @@ class ShowRepositoryCustomTest extends Specification {
         showRepository.saveAll(shows);
 
         when:
-        List<Show> foundShows = showRepository.searchShowsWithPaging(shows.get(0).showId, 3, Category.CONCERT, null, null);
+        List<Show> foundShows = showRepository.searchShowsWithPaging(shows.get(0).showId, 3, Category.CONCERT, null, ShowOrderBy.NEWEST);
 
         then:
         foundShows.size() == 2
@@ -77,7 +77,7 @@ class ShowRepositoryCustomTest extends Specification {
         showRepository.saveAll(shows);
 
         when:
-        List<Show> foundShows = showRepository.searchShowsWithPaging(shows.get(0).showId, 3, null, "공연", null);
+        List<Show> foundShows = showRepository.searchShowsWithPaging(shows.get(0).showId, 3, null, "공연", ShowOrderBy.NEWEST);
 
         then:
         foundShows.size() == 2
