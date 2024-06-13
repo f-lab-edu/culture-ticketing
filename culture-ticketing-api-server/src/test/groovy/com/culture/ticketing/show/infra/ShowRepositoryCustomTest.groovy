@@ -3,6 +3,7 @@ package com.culture.ticketing.show.infra
 import com.culture.ticketing.show.ShowFixtures
 import com.culture.ticketing.show.domain.Category
 import com.culture.ticketing.show.domain.Show
+import com.culture.ticketing.show.domain.ShowFilter
 import com.culture.ticketing.show.domain.ShowOrderBy
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
@@ -38,7 +39,7 @@ class ShowRepositoryCustomTest extends Specification {
         ]);
 
         when:
-        List<Show> foundShows = showRepository.searchShowsWithPaging(1L, 3, null, null, ShowOrderBy.NEWEST);
+        List<Show> foundShows = showRepository.searchShowsWithPaging(1L, 3, new ShowFilter(null, null), ShowOrderBy.NEWEST);
 
         then:
         foundShows.collect(show -> show.showId > 1L).size() == 3
@@ -57,7 +58,7 @@ class ShowRepositoryCustomTest extends Specification {
         showRepository.saveAll(shows);
 
         when:
-        List<Show> foundShows = showRepository.searchShowsWithPaging(shows.get(0).showId, 3, Category.CONCERT, null, ShowOrderBy.NEWEST);
+        List<Show> foundShows = showRepository.searchShowsWithPaging(shows.get(0).showId, 3, new ShowFilter(Category.CONCERT, null), ShowOrderBy.NEWEST);
 
         then:
         foundShows.size() == 2
@@ -77,7 +78,7 @@ class ShowRepositoryCustomTest extends Specification {
         showRepository.saveAll(shows);
 
         when:
-        List<Show> foundShows = showRepository.searchShowsWithPaging(shows.get(0).showId, 3, null, "공연", ShowOrderBy.NEWEST);
+        List<Show> foundShows = showRepository.searchShowsWithPaging(shows.get(0).showId, 3, new ShowFilter(null, "공연"), ShowOrderBy.NEWEST);
 
         then:
         foundShows.size() == 2
@@ -95,7 +96,7 @@ class ShowRepositoryCustomTest extends Specification {
         showRepository.saveAll(shows);
 
         when:
-        List<Show> foundShows = showRepository.searchShowsWithPaging(shows.get(0).showId, 3, null, null, ShowOrderBy.SHOW_NAME_ASC);
+        List<Show> foundShows = showRepository.searchShowsWithPaging(shows.get(0).showId, 3, new ShowFilter(null, null), ShowOrderBy.SHOW_NAME_ASC);
 
         then:
         foundShows.size() == 2

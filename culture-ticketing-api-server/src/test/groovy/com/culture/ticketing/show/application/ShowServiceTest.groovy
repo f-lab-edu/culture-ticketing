@@ -2,6 +2,7 @@ package com.culture.ticketing.show.application
 
 import com.culture.ticketing.show.PlaceFixtures
 import com.culture.ticketing.show.application.dto.PlaceResponse
+import com.culture.ticketing.show.domain.ShowFilter
 import com.culture.ticketing.show.domain.ShowOrderBy
 import com.culture.ticketing.show.infra.ShowRepository
 import com.culture.ticketing.show.exception.PlaceNotFoundException
@@ -159,7 +160,7 @@ class ShowServiceTest extends Specification {
     def "전체 공연 목록 조회"() {
 
         given:
-        showRepository.searchShowsWithPaging(1L, 3, null, null, null) >> [
+        showRepository.searchShowsWithPaging(1L, 3, _, null) >> [
                 ShowFixtures.createShow(showId: 2L, placeId: 1L),
                 ShowFixtures.createShow(showId: 3L, placeId: 2L),
                 ShowFixtures.createShow(showId: 4L, placeId: 2L)
@@ -178,7 +179,7 @@ class ShowServiceTest extends Specification {
     def "카테고리 별 공연 목록 조회"() {
 
         given:
-        showRepository.searchShowsWithPaging(1L, 3, Category.CONCERT, null, null) >> [
+        showRepository.searchShowsWithPaging(1L, 3, _, null) >> [
                 ShowFixtures.createShow(showId: 3L, category: Category.CONCERT, placeId: 1L),
                 ShowFixtures.createShow(showId: 5L, category: Category.CONCERT, placeId: 2L)
         ]
@@ -198,7 +199,7 @@ class ShowServiceTest extends Specification {
     def "검색어로 공연 목록 조회"() {
 
         given:
-        showRepository.searchShowsWithPaging(1L, 3, null, "공연", null) >> [
+        showRepository.searchShowsWithPaging(1L, 3, _, null) >> [
                 ShowFixtures.createShow(showId: 3L, placeId: 1L, showName: "공연1"),
                 ShowFixtures.createShow(showId: 5L, placeId: 2L, showName: "공연2")
         ]
@@ -218,7 +219,7 @@ class ShowServiceTest extends Specification {
     def "공연 목록 조회 정렬"() {
 
         given:
-        showRepository.searchShowsWithPaging(1L, 3, null, null, ShowOrderBy.SHOW_NAME_ASC) >> [
+        showRepository.searchShowsWithPaging(1L, 3, _, ShowOrderBy.SHOW_NAME_ASC) >> [
                 ShowFixtures.createShow(showId: 3L, placeId: 1L, showName: "공연1"),
                 ShowFixtures.createShow(showId: 5L, placeId: 2L, showName: "공연2")
         ]
