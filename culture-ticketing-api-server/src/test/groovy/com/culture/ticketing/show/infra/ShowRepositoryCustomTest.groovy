@@ -3,6 +3,8 @@ package com.culture.ticketing.show.infra
 import com.culture.ticketing.show.ShowFixtures
 import com.culture.ticketing.show.domain.Category
 import com.culture.ticketing.show.domain.Show
+import com.culture.ticketing.show.domain.ShowFilter
+import com.culture.ticketing.show.domain.ShowOrderBy
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.redis.AutoConfigureDataRedis
@@ -37,7 +39,7 @@ class ShowRepositoryCustomTest extends Specification {
         ]);
 
         when:
-        List<Show> foundShows = showRepository.findByShowIdGreaterThanLimitAndCategory(1L, 3, null);
+        List<Show> foundShows = showRepository.searchShowsWithPaging(1L, 3, new ShowFilter(null, null), ShowOrderBy.NEWEST);
 
         then:
         foundShows.collect(show -> show.showId > 1L).size() == 3
@@ -56,11 +58,50 @@ class ShowRepositoryCustomTest extends Specification {
         showRepository.saveAll(shows);
 
         when:
-        List<Show> foundShows = showRepository.findByShowIdGreaterThanLimitAndCategory(shows.get(0).showId, 3, Category.CONCERT);
+        List<Show> foundShows = showRepository.searchShowsWithPaging(shows.get(0).showId, 3, new ShowFilter(Category.CONCERT, null), ShowOrderBy.NEWEST);
 
         then:
         foundShows.size() == 2
         foundShows.collect(show -> show.showId > shows.get(0).showId && show.category == Category.CONCERT).size() == 2
+    }
+
+    def "검색어 포함 공연 목록 조회 테스트 특정한 아이디보다 크고 사이즈 제한"() {
+
+        given:
+        List<Show> shows = [
+                ShowFixtures.createShow(showName: "공연1"),
+                ShowFixtures.createShow(showName: "테스트1"),
+                ShowFixtures.createShow(showName: "공연2"),
+                ShowFixtures.createShow(showName: "테스트2"),
+                ShowFixtures.createShow(showName: "공연3"),
+        ]
+        showRepository.saveAll(shows);
+
+        when:
+        List<Show> foundShows = showRepository.searchShowsWithPaging(shows.get(0).showId, 3, new ShowFilter(null, "공연"), ShowOrderBy.NEWEST);
+
+        then:
+        foundShows.size() == 2
+        foundShows.collect(show -> show.showId > shows.get(0).showId && show.showName.contains("공연")).size() == 2
+    }
+
+    def "공연 목록 조회 정렬 테스트 특정한 아이디보다 크고 사이즈 제한"() {
+
+        given:
+        List<Show> shows = [
+                ShowFixtures.createShow(showName: "공연3"),
+                ShowFixtures.createShow(showName: "공연2"),
+                ShowFixtures.createShow(showName: "공연1"),
+        ]
+        showRepository.saveAll(shows);
+
+        when:
+        List<Show> foundShows = showRepository.searchShowsWithPaging(shows.get(0).showId, 3, new ShowFilter(null, null), ShowOrderBy.SHOW_NAME_ASC);
+
+        then:
+        foundShows.size() == 2
+        foundShows.get(0).showName == "공연1"
+        foundShows.get(1).showName == "공연2"
     }
 
     def "예약 시작 시간까지 1시간 남은 공연 목록 조회"() {
@@ -87,7 +128,7 @@ class ShowRepositoryCustomTest extends Specification {
         showRepository.saveAll(shows);
 
         when:
-        List<Show> foundShows = showRepository.findByBookingStartDateTimeLeftAnHour(LocalDateTime.of(2024, 1, 1, 19, 0, 0));
+        List<Show> foundShows = showRepository.findByBookingStartDateTimeLeftAnHour(LocalDateTime.of(2024, 1, 1, 19, 0, 0), 10, 0);
 
         then:
         foundShows.size() == 2
