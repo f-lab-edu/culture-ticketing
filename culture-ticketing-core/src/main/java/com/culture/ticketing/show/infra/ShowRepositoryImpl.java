@@ -5,6 +5,7 @@ import com.culture.ticketing.show.domain.Category;
 import com.culture.ticketing.show.domain.Show;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.culture.ticketing.common.utils.QueryUtils.ifNotNull;
@@ -25,4 +26,17 @@ public class ShowRepositoryImpl extends BaseRepositoryImpl implements ShowReposi
                 .limit(size)
                 .fetch();
     }
+
+    @Override
+    public List<Show> findByBookingStartDateTimeLeftAnHour(LocalDateTime now, int pageSize, long offset) {
+
+        return queryFactory
+                .selectFrom(show)
+                .where(show.bookingStartDateTime.goe(now.plusHours(1).withSecond(0).withNano(0))
+                        .and(show.bookingStartDateTime.lt(now.plusHours(1).plusMinutes(1).withSecond(0).withNano(0))))
+                .limit(pageSize)
+                .offset(offset)
+                .fetch();
+    }
+
 }

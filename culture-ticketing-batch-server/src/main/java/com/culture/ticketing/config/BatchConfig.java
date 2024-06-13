@@ -1,21 +1,19 @@
 package com.culture.ticketing.config;
 
 import com.culture.ticketing.application.ProducerService;
+import com.culture.ticketing.infra.ShowRepositoryItemReader;
 import com.culture.ticketing.show.domain.Show;
+import com.culture.ticketing.show.infra.ShowRepository;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.database.JpaPagingItemReader;
-import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.persistence.EntityManagerFactory;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 
 @Configuration
@@ -25,13 +23,13 @@ public class BatchConfig {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
     private final ProducerService producerService;
-    private final EntityManagerFactory entityManagerFactory;
+    private final ShowRepository showRepository;
 
-    public BatchConfig(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory, ProducerService producerService, EntityManagerFactory entityManagerFactory) {
+    public BatchConfig(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory, ProducerService producerService, ShowRepository showRepository) {
         this.jobBuilderFactory = jobBuilderFactory;
         this.stepBuilderFactory = stepBuilderFactory;
         this.producerService = producerService;
-        this.entityManagerFactory = entityManagerFactory;
+        this.showRepository = showRepository;
     }
 
     @Bean
@@ -54,22 +52,9 @@ public class BatchConfig {
     }
 
     @Bean
-    public JpaPagingItemReader<Show> reader() {
+    public ShowRepositoryItemReader reader() {
 
-        LocalDateTime now = LocalDateTime.now();
-        HashMap<String, Object> paramValues = new HashMap<>();
-        paramValues.put("dateTimeStartLimit", now.plusHours(1).withSecond(0).withNano(0));
-        paramValues.put("dateTimeEndLimit", now.plusHours(1).plusMinutes(1).withSecond(0).withNano(0));
-
-        return new JpaPagingItemReaderBuilder<Show>()
-                .name("jpaBookingStartDateTimeLeftAnHour")
-                .entityManagerFactory(entityManagerFactory)
-                .pageSize(500)
-                .queryString("select s from Show s " +
-                        "where s.bookingStartDateTime >= :dateTimeStartLimit " +
-                        "and s.bookingStartDateTime < :dateTimeEndLimit")
-                .parameterValues(paramValues)
-                .build();
+        return new ShowRepositoryItemReader(showRepository, LocalDateTime.now(), 500);
     }
 
     @Bean
