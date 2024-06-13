@@ -1,18 +1,14 @@
 package com.culture.ticketing.show.infra;
 
 import com.culture.ticketing.common.infra.BaseRepositoryImpl;
-import com.culture.ticketing.show.domain.Category;
 import com.culture.ticketing.show.domain.Show;
+import com.culture.ticketing.show.domain.ShowFilter;
 import com.culture.ticketing.show.domain.ShowOrderBy;
-import com.querydsl.core.types.NullExpression;
-import com.querydsl.core.types.Order;
-import com.querydsl.core.types.OrderSpecifier;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.culture.ticketing.common.utils.QueryUtils.ifNotNull;
 import static com.culture.ticketing.show.domain.QShow.show;
 
 public class ShowRepositoryImpl extends BaseRepositoryImpl implements ShowRepositoryCustom {
@@ -22,12 +18,10 @@ public class ShowRepositoryImpl extends BaseRepositoryImpl implements ShowReposi
     }
 
     @Override
-    public List<Show> searchShowsWithPaging(Long showId, int size, Category category, String showName, ShowOrderBy orderBy) {
+    public List<Show> searchShowsWithPaging(Long showId, int size, ShowFilter showFilter, ShowOrderBy orderBy) {
 
         return queryFactory.selectFrom(show)
-                .where(show.showId.gt(showId),
-                        ifNotNull(show.category::eq, category),
-                        ifNotNull(show.showName::contains, showName))
+                .where(show.showId.gt(showId), showFilter.getShowFilter())
                 .limit(size)
                 .orderBy(orderBy.getOrderSpecifier())
                 .fetch();
