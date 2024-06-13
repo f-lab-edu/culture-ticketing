@@ -64,7 +64,7 @@ public class BatchConfig {
             @Override
             public void write(List<? extends Show> shows) {
                 for (Show show : shows) {
-                    producerService.createShowBookingStartNotifications(show);
+                    producerService.publishShowBookingStartNotifications(show);
                 }
             }
         };

@@ -20,7 +20,7 @@ public class ProducerService {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void createShowBookingStartNotifications(Show show) {
+    public void publishShowBookingStartNotifications(Show show) {
 
         SetOperations<Long, Long> setOperations = redisTemplate.opsForSet();
 
