@@ -77,7 +77,7 @@ public class BatchConfig {
 
         return new ItemWriter<Show>() {
             @Override
-            public void write(List<? extends Show> shows) throws Exception {
+            public void write(List<? extends Show> shows) {
                 for (Show show : shows) {
                     producerService.createShowBookingStartNotifications(show);
                 }

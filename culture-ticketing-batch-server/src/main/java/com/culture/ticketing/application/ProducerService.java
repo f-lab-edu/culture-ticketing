@@ -8,7 +8,6 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
 
 @Service
 public class ProducerService {
@@ -21,20 +20,21 @@ public class ProducerService {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void createShowBookingStartNotifications(Show show) throws ExecutionException, InterruptedException {
+    public void createShowBookingStartNotifications(Show show) {
 
         SetOperations<Long, Long> setOperations = redisTemplate.opsForSet();
 
         Set<Long> userIdsByShowId = setOperations.members(show.getShowId());
-        if (userIdsByShowId != null) {
-            for (Long userId : userIdsByShowId) {
-                kafkaTemplate.send("booking-start-notifications",
-                                BookingStartNotification.builder()
-                                        .userId(userId)
-                                        .showId(show.getShowId())
-                                        .build())
-                        .get();
-            }
+        if (userIdsByShowId == null) {
+            return;
+        }
+
+        for (Long userId : userIdsByShowId) {
+            kafkaTemplate.send("booking-start-notifications",
+                    BookingStartNotification.builder()
+                            .userId(userId)
+                            .showId(show.getShowId())
+                            .build());
         }
     }
 }
