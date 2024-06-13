@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @Configuration
 @EnableBatchProcessing
@@ -62,7 +63,7 @@ public class BatchConfig {
 
         return new ItemWriter<Show>() {
             @Override
-            public void write(List<? extends Show> shows) {
+            public void write(List<? extends Show> shows) throws ExecutionException, InterruptedException {
                 for (Show show : shows) {
                     producerService.publishShowBookingStartNotifications(show);
                 }
