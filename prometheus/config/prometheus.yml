@@ -10,3 +10,6 @@ scrape_configs:
     scheme: 'http'
     static_configs:
       - targets: ["host.docker.internal:8080"]
+  - job_name: "mysqld-exporter"
+    static_configs:
+      - targets: ["host.docker.internal:9104"]

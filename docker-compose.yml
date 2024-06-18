@@ -1,8 +1,8 @@
 version: '3'
 
 services:
-  database:
-    container_name: mysql_db
+  mysql:
+    container_name: mysql
     image: mysql
     restart: always
     env_file:
@@ -17,6 +17,16 @@ services:
       - "mysqld"
       - "--character-set-server=utf8mb4"
       - "--collation-server=utf8mb4_unicode_ci"
+  mysql-exporter:
+    container_name: mysql-exporter
+    image: prom/mysqld-exporter
+    command:
+      - "--mysqld.username=root:1234"
+      - "--mysqld.address=mysql:3306"
+    ports:
+      - "9104:9104"
+    depends_on:
+      - mysql
 
   prometheus:
     image: prom/prometheus
