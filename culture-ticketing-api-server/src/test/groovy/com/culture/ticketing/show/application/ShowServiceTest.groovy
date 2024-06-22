@@ -2,6 +2,8 @@ package com.culture.ticketing.show.application
 
 import com.culture.ticketing.show.PlaceFixtures
 import com.culture.ticketing.show.application.dto.PlaceResponse
+import com.culture.ticketing.show.domain.ShowFilter
+import com.culture.ticketing.show.domain.ShowOrderBy
 import com.culture.ticketing.show.infra.ShowRepository
 import com.culture.ticketing.show.exception.PlaceNotFoundException
 import com.culture.ticketing.show.ShowFixtures
@@ -158,7 +160,7 @@ class ShowServiceTest extends Specification {
     def "전체 공연 목록 조회"() {
 
         given:
-        showRepository.findByShowIdGreaterThanLimitAndCategory(1L, 3, null) >> [
+        showRepository.searchShowsWithPaging(1L, 3, _, null) >> [
                 ShowFixtures.createShow(showId: 2L, placeId: 1L),
                 ShowFixtures.createShow(showId: 3L, placeId: 2L),
                 ShowFixtures.createShow(showId: 4L, placeId: 2L)
@@ -168,7 +170,7 @@ class ShowServiceTest extends Specification {
                 new PlaceResponse(PlaceFixtures.createPlace(placeId: 2L)),
         ]
         when:
-        List<ShowResponse> response = showService.findShows(1L, 3, null);
+        List<ShowResponse> response = showService.searchShows(1L, 3, null, null, null);
 
         then:
         response.collect(show -> show.showId > 1L).size() == 3
@@ -177,7 +179,7 @@ class ShowServiceTest extends Specification {
     def "카테고리 별 공연 목록 조회"() {
 
         given:
-        showRepository.findByShowIdGreaterThanLimitAndCategory(1L, 3, Category.CONCERT) >> [
+        showRepository.searchShowsWithPaging(1L, 3, _, null) >> [
                 ShowFixtures.createShow(showId: 3L, category: Category.CONCERT, placeId: 1L),
                 ShowFixtures.createShow(showId: 5L, category: Category.CONCERT, placeId: 2L)
         ]
@@ -188,10 +190,50 @@ class ShowServiceTest extends Specification {
         ]
 
         when:
-        List<ShowResponse> response = showService.findShows(1L, 3, Category.CONCERT);
+        List<ShowResponse> response = showService.searchShows(1L, 3, Category.CONCERT, null, null);
 
         then:
         response.collect(show -> show.showId > 1L && show.categoryName == Category.CONCERT.getCategoryName()).size() == 2
+    }
+
+    def "검색어로 공연 목록 조회"() {
+
+        given:
+        showRepository.searchShowsWithPaging(1L, 3, _, null) >> [
+                ShowFixtures.createShow(showId: 3L, placeId: 1L, showName: "공연1"),
+                ShowFixtures.createShow(showId: 5L, placeId: 2L, showName: "공연2")
+        ]
+
+        placeService.findPlacesByIds([1L, 2L]) >> [
+                new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L)),
+                new PlaceResponse(PlaceFixtures.createPlace(placeId: 2L))
+        ]
+
+        when:
+        List<ShowResponse> response = showService.searchShows(1L, 3, null, "공연", null);
+
+        then:
+        response.collect(show -> show.showId > 1L && show.showName.contains("공연")).size() == 2
+    }
+
+    def "공연 목록 조회 정렬"() {
+
+        given:
+        showRepository.searchShowsWithPaging(1L, 3, _, ShowOrderBy.SHOW_NAME_ASC) >> [
+                ShowFixtures.createShow(showId: 3L, placeId: 1L, showName: "공연1"),
+                ShowFixtures.createShow(showId: 5L, placeId: 2L, showName: "공연2")
+        ]
+
+        placeService.findPlacesByIds([1L, 2L]) >> [
+                new PlaceResponse(PlaceFixtures.createPlace(placeId: 1L)),
+                new PlaceResponse(PlaceFixtures.createPlace(placeId: 2L))
+        ]
+
+        when:
+        List<ShowResponse> response = showService.searchShows(1L, 3, null, null, ShowOrderBy.SHOW_NAME_ASC);
+
+        then:
+        response.collect(show -> show.showId > 1L).size() == 2
     }
 
     def "공연 아이디로 공연 조회 시 없는 경우 예외 발생"() {

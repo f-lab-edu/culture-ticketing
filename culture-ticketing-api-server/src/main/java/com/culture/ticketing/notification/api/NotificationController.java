@@ -27,6 +27,6 @@ public class NotificationController {
 
         User user = ((SecurityUser) authentication.getPrincipal()).getUser();
 
-        return emitterService.addEmitter(String.valueOf(user.getUserId()), lastEventId);
+        return emitterService.addEmitter(String.valueOf(user.getUserId()));
     }
 }

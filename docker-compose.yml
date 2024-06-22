@@ -1,8 +1,8 @@
 version: '3'
 
 services:
-  database:
-    container_name: mysql_db
+  mysql:
+    container_name: mysql
     image: mysql
     restart: always
     env_file:
@@ -17,6 +17,16 @@ services:
       - "mysqld"
       - "--character-set-server=utf8mb4"
       - "--collation-server=utf8mb4_unicode_ci"
+  mysql-exporter:
+    container_name: mysql-exporter
+    image: prom/mysqld-exporter
+    command:
+      - "--mysqld.username=root:1234"
+      - "--mysqld.address=mysql:3306"
+    ports:
+      - "9104:9104"
+    depends_on:
+      - mysql
 
   prometheus:
     image: prom/prometheus
@@ -71,14 +81,16 @@ services:
     container_name: kafka
     ports:
       - "9092:9092"
+      - "9094:9094"
     depends_on:
       - zookeeper
     links:
       - zookeeper:zookeeper
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: localhost
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:9094
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,EXTERNAL://localhost:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
     volumes:
       - ./kafka/run/docker.sock:/var/run/docker.sock
