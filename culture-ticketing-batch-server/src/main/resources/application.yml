@@ -15,7 +15,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        dialect: com.culture.ticketing.common.infra.MySQL8DialectCustom
 
   redis:
     host: host.docker.internal
