@@ -5,10 +5,19 @@ plugins {
     id 'groovy'
 }
 
-subprojects {
+allprojects {
 
     group = 'com.culture'
     version = '0.0.1-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+        // jitpack.io를 저장소로 추가
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+subprojects {
 
     apply plugin: 'java'
     apply plugin: 'org.springframework.boot'
@@ -21,12 +30,6 @@ subprojects {
         compileOnly {
             extendsFrom annotationProcessor
         }
-    }
-
-    repositories {
-        mavenCentral()
-        // jitpack.io를 저장소로 추가
-        maven { url 'https://jitpack.io' }
     }
 
     dependencies {
